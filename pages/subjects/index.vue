@@ -89,13 +89,10 @@
               </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-              <v-btn color="success" @click="addClasses(item)">
-                เพิ่มห้องเรียน
-              </v-btn>
-              <v-btn small class="mr-2" @click="editItem(item)">
+              <v-btn small class="mr-2 info" @click="editItem(item)">
                 แก้ไข
               </v-btn>
-              <v-btn small @click="deleteItem(item)">
+              <v-btn class="error" small @click="deleteItem(item)">
                 ลบ
               </v-btn>
             </template>

@@ -117,11 +117,8 @@ export default {
   middleware: 'authentication',
   mounted() {
     this.classItem = this.$route.query
-    console.log('route params', this.$route.query)
-    // this.schoolYear = this.$route.params.year
-    // this.term = this.$route.params.term
+    // console.log('route params', this.$route.query)
     this.getDataFromApi(this.classItem).then(result => (this.items = result))
-    // this.getAcademicYear().then(result => (this.year = result))
   },
   computed: {
     formTitle() {
@@ -258,7 +255,7 @@ export default {
     addStudent(item) {
       console.log('item id ', item.objectId)
       this.$router.push({
-        name: 'classes-id',
+        name: 'classes-add_student',
         params: { id: item.objectId }
       })
     }

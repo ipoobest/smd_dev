@@ -77,6 +77,11 @@ export default {
           to: `/academic_year`
         },
         {
+          icon: `mdi-book-plus`,
+          title: `การเรียนการสอน`,
+          to: `/teach`
+        },
+        {
           icon: `mdi-account-tie`,
           title: `ครู`,
           to: `/teachers`
@@ -116,7 +121,7 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'SMD'
+      title: 'ระบบตัดเกรด'
     }
   },
   methods: {

@@ -49,10 +49,9 @@ export const actions = {
       }
     })
   },
-  async getSubjects({ commit }, conditions) {
+  async getSubjects({ commit }) {
     return new Promise(async (resolve, reject) => {
       try {
-        const where = JSON.stringify(conditions)
         const result = this.$axios.$get(`${process.env.parseUrl}/classes/${classes.subjects}`)
 
         commit('setSubjects', result)

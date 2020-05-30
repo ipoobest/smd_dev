@@ -154,11 +154,11 @@ export default {
     },
     async getClasses(){
       const response = await this.$store.dispatch(`classes/getClasses`)
-      console.log('classes')
+      // console.log('classes')
       let results = response.results.map(a => a.studentId)
-      console.log('result map ', results)
+      // console.log('result map ', results)
       let merged = [].concat.apply([], results)
-      console.log('merged', merged)
+      // console.log('merged', merged)
       return merged
     },
     async addStudents() {
