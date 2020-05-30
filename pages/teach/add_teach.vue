@@ -65,7 +65,7 @@
                           <v-col cols="12" sm="6" md="4">
                             <v-text-field
                               outlined
-                              label="อาจารย์ประจำชั้น"
+                              label="อาจารย์ผู้สอน"
                             ></v-text-field>
                           </v-col>
                         </v-row>
