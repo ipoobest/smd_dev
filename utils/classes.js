@@ -7,6 +7,6 @@ export default {
   teachers: `Teachers`,
   teacherSubjects: `TeacherSubjects`,
   users: `_User`,
-  academicYear: `AcademicYear`
-
+  academicYear: `AcademicYear`,
+  teach: `Teach`
 }

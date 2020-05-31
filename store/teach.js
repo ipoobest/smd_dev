@@ -1,0 +1,99 @@
+import classes from '~/utils/classes'
+
+export const state = () => {
+  return {
+    teach: null,
+    subjects: null,
+    error: null
+  }
+}
+
+export const mutations = {
+  setTeach (state, data) {
+    state.teach = data
+  },
+  setSubjects (state, data) {
+    state.subjects = data
+  },
+  setError (state, error) {
+    state.error = error
+  }
+}
+
+export const actions = {
+  async createTeach ({ commit }, object) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = this.$axios.$post(`${process.env.parseUrl}/classes/${classes.teach}`, object)
+        console.log('result xxxx', result)
+        commit('setTeach', result)
+        resolve(result)
+      } catch (error) {
+        console.log({ error })
+        commit(`setError`, error)
+        reject(error)
+      }
+    })
+  },
+  async getSubjects ({ commit }) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = this.$axios.$get(`${process.env.parseUrl}/classes/${classes.teach}/`)
+
+        commit('setSubjects', result)
+        resolve(result)
+      } catch (error) {
+        console.log({ error })
+        commit(`setError`, error)
+        reject(error)
+      }
+    })
+  },
+  async getSubjectsByTerm ({ commit }, conditions) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const where = JSON.stringify(conditions)
+        console.log('where', where)
+        const result = this.$axios.$get(`${process.env.parseUrl}/classes/${classes.teach}/?where=${where}`)
+
+        commit('setSubjects', result)
+        resolve(result)
+      } catch (error) {
+        console.log({ error })
+        commit(`setError`, error)
+        reject(error)
+      }
+    })
+  },
+  async getSubjectsByClass ({ commit }, classId) {
+    return await this.getSubjects({ class: classId })
+  },
+  async updateSubject ({ commit }, object) {
+    return new Promise(async (resolve, reject) => {
+      console.log('update object', object)
+      try {
+        const result = this.$axios.$put(`${process.env.parseUrl}/classes/${classes.subjects}/${object.objectId}`, object)
+
+        commit('setSubject', result)
+        resolve(result)
+      } catch (error) {
+        console.log({ error })
+        commit(`setError`, error)
+        reject(error)
+      }
+    })
+  },
+  async deleteSubjectInTeach ({ commit }, object) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        console.log('data', object)
+        const result = this.$axios.$delete(`${process.env.parseUrl}/classes/${classes.teach}/${object}`)
+        commit('setSubjects', null)
+        resolve(result)
+      } catch (error) {
+        commit(`setError`, error)
+        reject(error)
+      }
+    })
+  }
+}

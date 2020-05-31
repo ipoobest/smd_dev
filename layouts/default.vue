@@ -72,14 +72,14 @@ export default {
           to: `/users`
         },
         {
-          icon: `mdi-format-align-justify`,
-          title: `ปีการศึกษา`,
-          to: `/academic_year`
-        },
-        {
           icon: `mdi-book-plus`,
           title: `การเรียนการสอน`,
           to: `/teach`
+        },
+        {
+          icon: `mdi-format-align-justify`,
+          title: `ปีการศึกษา`,
+          to: `/academic_year`
         },
         {
           icon: `mdi-account-tie`,

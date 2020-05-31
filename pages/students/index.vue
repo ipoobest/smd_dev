@@ -4,6 +4,9 @@
       <v-col cols="12">
         <v-card>
           <v-card-title>
+            <v-btn class="mr-5" color="primary" fab small dark @click="back" >
+                <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>              
             {{ title }}
             <v-spacer></v-spacer>
             <v-text-field
@@ -67,6 +70,9 @@ export default {
     async getDataFromApi(limit = 50, skip = 0) {
       const response = await this.$store.dispatch(`students/getStudent`)
       return response.results
+    },
+    back() {
+      this.$router.push({name: 'index'})
     },
     editItem(item) {
       console.log('item id ', item)

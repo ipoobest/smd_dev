@@ -4,6 +4,9 @@
       <v-col cols="12">
         <v-card>
           <v-card-title>
+            <v-btn class="mr-5" color="primary" fab small dark @click="back" >
+                <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>                     
             {{ title }}
             <v-spacer></v-spacer>
             <v-text-field
@@ -215,6 +218,9 @@ export default {
       const index = this.items.indexOf(item)
       confirm('ยืนยีนการลบบัญชีผู้ใช้') && this.deleteTeacher(item.objectId)
       this.items.splice(index, 1)
+    },
+    back() {
+      this.$router.push({name: 'index'})
     },
     close() {
       console.log('closd')

@@ -4,6 +4,9 @@
       <v-col cols="12">
         <v-card>
           <v-card-title>
+            <v-btn class="mr-5" color="primary" fab small dark @click="back" >
+                <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>                 
             {{ title }}
             <v-spacer></v-spacer>
             <v-text-field
@@ -146,6 +149,9 @@ export default {
       this.close()
 
     },
+    back() {
+      this.$router.push({name: 'index'})
+    },    
     close() {
       setTimeout(() => {
         this.dialogCreateYear = false

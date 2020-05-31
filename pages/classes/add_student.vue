@@ -195,8 +195,8 @@ export default {
     },
     save() {
       console.log('save',this.items)
-      for (var i = 0; i < this.items.length; i++) {
-        this.studentId.push(this.items[i].objectId)
+      for (var index = 0; index < this.items.length; index++) {
+        this.studentId.push(this.items[index].objectId)
       }
       console.log('looper', this.studentId)
       this.addStudents(this.studentId)

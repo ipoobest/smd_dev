@@ -4,6 +4,9 @@
       <v-col cols="12">
         <v-card>
           <v-card-title>
+            <v-btn class="mr-5" color="primary" fab small dark @click="back" >
+                <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>                 
             {{ title }}
             <v-spacer> </v-spacer>
             <v-text-field
@@ -149,13 +152,13 @@ export default {
   },
   methods: {
     async getdataFromApi(limit = 50, skip = 0) {
-    const variable = await this.$store.dispatch(`subjects/getSubjects`)
-    console.log('variable', variable)
-    return variable.results
+    const response = await this.$store.dispatch(`subjects/getSubjects`)
+    console.log('variable', response)
+    return response.results
     },
     async createSubject(data) {
-      const variable = await this.$store.dispatch(`subjects/createSubject`, data)
-      console.log('createSubject ', variable)
+      const response = await this.$store.dispatch(`subjects/createSubject`, data)
+      console.log('createSubject ', response)
     },
     async updateSubject(data) {
       console.log('data put subjest ', data.objectId)
@@ -183,6 +186,9 @@ export default {
       const index = this.items.indexOf(item)
       confirm('ยืนยีนการลบบัญชีผู้ใช้') && this.deleteSubject(item.objectId) 
       this.items.splice(index, 1)
+    },
+    back() {
+      this.$router.push({name: 'index'})
     },
     close() {
       console.log('closd')

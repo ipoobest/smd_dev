@@ -4,6 +4,9 @@
       <v-col cols="12">
         <v-card>
           <v-card-title>
+            <v-btn class="mr-5" color="primary" fab small dark @click="back" >
+                <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>                     
             {{ title }}
             <v-spacer></v-spacer>
             <v-text-field
@@ -68,9 +71,11 @@ export default {
       console.log('response', response)
       return response.results
     },
+    back() {
+      this.$router.push({name: 'index'})
+    },
     async addSubject(item) {
-      // console.log('teach', item)
-      this.$router.push({ name: 'teach-add_teach', query:{ schoolYear: item.schoolYear, term: item.term} })
+      this.$router.push({ name: 'teach-add_subjects', query:{ schoolYear: item.schoolYear, term: item.term} })
     }
   }
 }
