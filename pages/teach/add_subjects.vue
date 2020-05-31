@@ -7,7 +7,7 @@
             <v-btn class="mr-5" color="primary" fab small dark @click="back" >
                 <v-icon>mdi-arrow-left</v-icon>
             </v-btn>  
-            {{ title }} ของปีการศีกษา {{ query.schoolYear }} เทอม {{ query.term }}
+            {{ title }} ของปีการศีกษา {{query.schoolYear }} เทอม {{ query.term }}
             <v-spacer></v-spacer>
             <v-col cols="12" sm="6" md="3">
             <v-text-field
@@ -71,7 +71,7 @@
               </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-              <v-btn color="info" @click="addStudent(item)">
+              <v-btn color="info" @click="addClasses(item)">
                 เพิ่มห้องเรียน/ครูผู้สอน
               </v-btn>
               <!-- <v-icon small class="mr-2" @click="editItem(item)">
@@ -92,6 +92,9 @@
   export default {
     mounted() {
       this.query = this.$route.query
+      // this.schoolYear = this.$store.state.academic_year.schoolYear
+      // this.term = this.$store.state.academic_year.term
+
       this.getSubjectsFromTeach().then(result => (this.subjectsInTerm = result))
       this.getSubjects().then(result => (this.subjects = result))
     },
@@ -134,28 +137,28 @@
     methods: {
       async getSubjects() {
         const response = await this.$store.dispatch(`subjects/getSubjects`)
-        console.log('response get subject', response.results)
+        // console.log('response get subject', response.results)
         return response.results
       },
       async getSubjectsFromTeach() {
         const condition = {
-          schoolYears: this.query.schoolYear,
+          schoolYear: this.query.schoolYear,
           term: this.query.term
         }
         const response = await this.$store.dispatch(`teach/getSubjectsByTerm`,condition)
-        console.log('response get subject xxx ', response)
+        // console.log('response get subject xxx ', response)
         return response.results
       },
       async addSubjectToTeach(data) {
         const response = await this.$store.dispatch(`teach/createTeach`, data)
-        console.log('response get subject', response)
+        // console.log('response get subject', response)
       },
        addSubjects() {
         console.log('add subject', this.items)
         for(var index = 0; index < this.items.length; index++) {
           console.log('add subject', this.items[index])
           const data = {
-            schoolYears: this.query.schoolYear,
+            schoolYear: this.query.schoolYear,
             term: this.query.term,
             code: this.items[index].code,
             codet: this.items[index].codet,
@@ -164,15 +167,22 @@
         this.addSubjectToTeach(data)
         this.subjectsInTerm.push(data)
         }
-        // this.getSubjectsFromTeach().then(result => (this.subjectsInTerm = result))
         this.close()
       },
       async deleteSubject(objectId) {
         var response = await this.$store.dispatch(`teach/deleteSubjectInTeach`, objectId)
-        console.log('response', response)
+        // console.log('response', response)
       },
-      addStudent() {
-        console.log('save')
+      addClasses(item) {
+        // console.log('save', item)
+        // this.$store.commit('teach/setClassId', item.objectId)
+        this.$router.push({name:'teach-add_classes', 
+        query:{ 
+          classId: item.objectId, 
+          schoolYear: this.query.schoolYear,
+          term: this.query.term
+          }
+        })
       },
       deleteItem(item) {
         const index = this.subjectsInTerm.indexOf(item)
@@ -188,7 +198,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

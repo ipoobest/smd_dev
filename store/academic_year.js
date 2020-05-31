@@ -3,6 +3,8 @@ import classes from '~/utils/classes'
 export const store = () => {
   return {
     academicYear: null,
+    schoolYear: null,
+    term: null,
     error: null
   }
 }
@@ -10,6 +12,12 @@ export const store = () => {
 export const mutations = {
   setAcademicYear(state, data) {
     state.academicYear = data
+  },
+  setSchoolYear (state, data) {
+    state.schoolYear = data
+  },
+  setTerm (state, data) {
+    state.term = data
   },
   setError (state, error) {
     state.error = error

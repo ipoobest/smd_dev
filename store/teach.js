@@ -4,6 +4,7 @@ export const state = () => {
   return {
     teach: null,
     subjects: null,
+    classId: null,
     error: null
   }
 }
@@ -14,6 +15,9 @@ export const mutations = {
   },
   setSubjects (state, data) {
     state.subjects = data
+  },
+  setClassId (state, data) {
+    state.classId = data
   },
   setError (state, error) {
     state.error = error

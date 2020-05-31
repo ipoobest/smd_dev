@@ -62,6 +62,21 @@ export const actions = {
       }
     })
   },
+  async getClassesByAcademicYears ({ commit }, conditions) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const where = JSON.stringify(conditions)
+        const result = this.$axios.$get(`${process.env.parseUrl}/classes/${classes.class}/?where=${where}`)
+
+        commit('setClasses', result)
+        resolve(result)
+      } catch (error) {
+        console.log({ error })
+        commit(`setError`, error)
+        reject(error)
+      }
+    })
+  },  
   async updateClasses ({ commit }, object) {
     return new Promise(async (resolve, reject) => {
       try {
