@@ -138,9 +138,10 @@ export default {
     },
     deleteItem(item) {
       const index = this.items.indexOf(item)
-      confirm('ยืนยีนการลบปีการศึกษา')
-      this.deteleAcademicYear(item.objectId)
-      this.items.splice(index, 1)
+      if (confirm('ยืนยีนการลบปีการศึกษา')) {
+        this.deteleAcademicYear(item.objectId)
+        this.items.splice(index, 1)     
+      }
     },
     addAcademicYear() {
       this.createAcademicYear(this.academicYear)

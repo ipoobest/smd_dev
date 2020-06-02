@@ -59,9 +59,9 @@
               </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-              <v-icon small @click="deleteItem(item)">
-                mdi-delete
-              </v-icon>
+              <v-btn class="error" small @click="deleteItem(item)">
+                ลบ
+              </v-btn>
             </template>
           </v-data-table>
         </v-card>
@@ -73,7 +73,7 @@
 <script>
 export default {
   async mounted() {
-    this.id = this.$route.params.id
+    this.id = this.$route.query.id
     this.studentInClassId = await this.getClasses()
     this.student = await this.getDataFromApi(this.id)
     this.items = await this.getStudents(this.student.studentId)
@@ -91,7 +91,7 @@ export default {
         { text: 'รหัสประจำตัว', value: 'idstd' },
         { text: 'ชื่อ', value: 'namet' },
         { text: 'นามสกุล', value: 'snamet' },
-        { text: 'ลบ', value: 'actions', sortable: false }
+        { text: 'actions', value: 'actions', sortable: false }
       ],
       headerStudents: [
         { text: 'รหัสประจำตัว', value: 'idstd' },
@@ -174,15 +174,15 @@ export default {
     async deleteItem(item) {
       // console.log('delete id', item.objectId)
       const index = this.items.indexOf(item)
-      confirm('ยืนยีนการลบนักเรียนออกจากชั้นเรียน')
-      this.items.splice(index, 1)
-      console.log('item delete', this.items.length, this.items)
-      for (var i = 0; i < this.items.length; i++) {
-        this.studentId.push(this.items[i].objectId)
+      if(confirm('ยืนยีนการลบนักเรียนออกจากชั้นเรียน')){
+        this.items.splice(index, 1)
+        // console.log('item delete', this.items.length, this.items)
+        for (var i = 0; i < this.items.length; i++) {
+          this.studentId.push(this.items[i].objectId)
+        }
+        // console.log('item push', this.studentId)
+        this.addStudents(this.studentId)
       }
-      console.log('item push', this.studentId)
-      this.addStudents(this.studentId)
-     
     },
     back() {
       this.$router.go(-1)

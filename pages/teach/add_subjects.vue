@@ -37,11 +37,47 @@
 
                   <v-card>
                     <v-card-title>
-                      <span class="headline" >เลือกวิชา</span>
+                      <span class="headline" >สร้างการเรียน</span>
                     </v-card-title>
 
                     <v-card-text>
-                      <v-data-table
+                      <v-container>
+                        <v-row>
+                          <v-col cols="12" sm="6" md="6">
+                            <v-select
+                              v-model="input.classSubject"
+                              :items="classSubject"
+                              outlined
+                              label="วิชา"
+                            ></v-select>
+                          </v-col>
+                          <v-col cols="12" sm="6" md="6">
+                            <v-select
+                              v-model="input.classTeacher"
+                              :items="itemTeachers"
+                              outlined
+                              label="ครูผู้สอน"
+                            ></v-select>
+                          </v-col>
+                          <v-col cols="12" sm="6" md="6">
+                            <v-select
+                              v-model="input.classRoomLevel"
+                              :items="classRoomLevel"
+                              outlined
+                              label="ระดับชั้น"
+                            ></v-select>
+                          </v-col>
+                          <v-col cols="12" sm="6" md="6">
+                            <v-select
+                              v-model="input.classRoomName"
+                              :items="classRoomName"
+                              outlined
+                              label="ห้องเรียน"
+                            ></v-select>
+                          </v-col>
+                        </v-row>
+                      </v-container>                          
+                      <!-- <v-data-table
                         v-model="items"
                         :headers="headersAddSubjects"
                         :items="subjects"
@@ -50,7 +86,7 @@
                         show-select
                         class="elevation-1"
                       >
-                      </v-data-table>
+                      </v-data-table> -->
                     </v-card-text>
 
                     <v-card-actions>
@@ -62,7 +98,7 @@
                         class="success"
                         color=" darken-1"
                         text
-                        @click="addSubjects"
+                        @click="addSubject"
                         >บันทึก</v-btn
                       >
                     </v-card-actions>
@@ -71,9 +107,9 @@
               </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-              <v-btn color="info" @click="addClasses(item)">
-                เพิ่มห้องเรียน/ครูผู้สอน
-              </v-btn>
+              <!-- <v-btn color="info" @click="addClasses(item)">
+                แก้ไข
+              </v-btn> -->
               <!-- <v-icon small class="mr-2" @click="editItem(item)">
                 mdi-pencil
               </v-icon> -->
@@ -90,13 +126,20 @@
 
 <script>
   export default {
-    mounted() {
+    async mounted() {
       this.query = this.$route.query
       // this.schoolYear = this.$store.state.academic_year.schoolYear
       // this.term = this.$store.state.academic_year.term
 
-      this.getSubjectsFromTeach().then(result => (this.subjectsInTerm = result))
-      this.getSubjects().then(result => (this.subjects = result))
+      await this.getSubjectsFromTeach().then(result => (this.subjectsInTerm = result))
+
+      await this.getSubjects().then(result => (this.subjects = result))
+      await this.getClass().then(result => (this.classes = result))
+      await this.getTeacher().then(result => (this.teachers = result))
+
+      await this.selectInputSubjects()
+      await this.selectInputClasses()
+      await this.selectInputTeacher()
     },
     computed: {
       selectSubject() {
@@ -111,17 +154,18 @@
         title: 'การจัดการวิชา',
         search: '',
         headers:  [
-          { text: 'รหัสวิชา', value: 'codet', align:'center'},
-          { text: 'ชื่อวิขา', value: 'sname', align:'center' },
-          { text: 'หน่วยกิจ', value: 'credit', align:'center' },
+          { text: 'รหัส/ชื่อวิขา', value: 'sname', align:'center' },
+          { text: 'ระดับชั้น', value: 'classRoomLevel', align:'center'},
+          { text: 'ห้องเรียน', value: 'classRoomName', align:'center'},
+          { text: 'ครูผู้สอน', value: 'teacher', align:'center' },
           // { text: 'จำนวนนักเรียน', value: 'teatherId', align:'center' },
           { text: 'Actions', value: 'actions', sortable: false, align:'center'}
         ],
-        headersAddSubjects: [
-          { text: 'รหัสวิชา', value: 'codet', align:'center'},
-          { text: 'ชื่อวิขา', value: 'sname', align:'center' },
-          { text: 'หน่วยกิจ', value: 'credit', align:'center' },
-        ],
+        // headersAddSubjects: [
+        //   { text: 'รหัสวิชา', value: 'codet', align:'center'},
+        //   { text: 'ชื่อวิขา', value: 'sname', align:'center' },
+        //   { text: 'หน่วยกิจ', value: 'credit', align:'center' },
+        // ],
         dialogCreateTeach: false,
         singleSelect: false,
         items: [],
@@ -131,10 +175,34 @@
         query: {
           schoolYear: '', 
           term: ''
-        }
+        },
+        input: {
+          classSubject: '',
+          classRoomLevel: '',
+          classRoomName: '',
+          classTeacher: ''
+        },
+        classSubject: [],
+        classRoomLevel: [],
+        classRoomName: [],
+        itemTeachers: []        
       }
     },
     methods: {
+      async getClass() {
+        const conditions = {
+          schoolYear: this.query.schoolYear,
+          term: this.query.term
+        }
+        const response = await  this.$store.dispatch(`classes/getClassesByAcademicYears`, conditions)
+        // console.log('classes', response.results)
+        return response.results
+      },
+      async getTeacher() {
+        const response = await this.$store.dispatch(`teachers/getTeacher`)
+        // console.log('teacher', response.results)
+        return response.results
+      },      
       async getSubjects() {
         const response = await this.$store.dispatch(`subjects/getSubjects`)
         // console.log('response get subject', response.results)
@@ -153,26 +221,48 @@
         const response = await this.$store.dispatch(`teach/createTeach`, data)
         // console.log('response get subject', response)
       },
-       addSubjects() {
-        console.log('add subject', this.items)
-        for(var index = 0; index < this.items.length; index++) {
-          console.log('add subject', this.items[index])
-          const data = {
-            schoolYear: this.query.schoolYear,
-            term: this.query.term,
-            code: this.items[index].code,
-            codet: this.items[index].codet,
-            sname: this.items[index].sname
-          }
+      async addSubject() {
+        const data = {
+          schoolYear: this.query.schoolYear,
+          term: this.query.term,
+          sname: this.input.classSubject,   
+          classRoomLevel: this.input.classRoomLevel,   
+          classRoomName: this.input.classRoomName,   
+          teacher: this.input.classTeacher,
+          // codeSubjectId: '',
+          // teacherId: '',
+          // classId: ''
+        }
+
         this.addSubjectToTeach(data)
         this.subjectsInTerm.push(data)
-        }
         this.close()
       },
       async deleteSubject(objectId) {
-        var response = await this.$store.dispatch(`teach/deleteSubjectInTeach`, objectId)
+        const response = await this.$store.dispatch(`teach/deleteSubjectInTeach`, objectId)
         // console.log('response', response)
       },
+      selectInputSubjects() {
+        for (var index = 0; index < this.subjects.length; index++) {
+          this.classSubject.push(this.subjects[index].codet + " " + this.subjects[index].sname )
+        }
+        console.log('classSubject index', this.classSubject)
+      },
+      selectInputClasses() {
+        console.log('this classes', this.classes)
+        for (var index = 0; index < this.classes.length; index++) {
+          this.classRoomLevel.push(this.classes[index].classRoomLevel)
+          this.classRoomName.push(this.classes[index].classRoomName)
+        }
+        console.log('classRoomLevel index', this.classRoomLevel)
+      },
+      selectInputTeacher() {
+        for (var index = 0; index < this.teachers.length; index++) {
+          this.itemTeachers.push(this.teachers[index].title + " " +
+          this.teachers[index].firstName + " " +
+          this.teachers[index].lastName )
+        }
+      },      
       addClasses(item) {
         // console.log('save', item)
         // this.$store.commit('teach/setClassId', item.objectId)
@@ -186,8 +276,11 @@
       },
       deleteItem(item) {
         const index = this.subjectsInTerm.indexOf(item)
-        confirm('ยืนยีนการวิชาเรียน') && this.deleteSubject(item.objectId) 
-        this.subjectsInTerm.splice(index, 1)
+        if (confirm('ยืนยีนการวิชาเรียน')){
+          this.subjectsInTerm.splice(index, 1)  
+          this.deleteSubject(item.objectId)
+          // this.getSubjectsFromTeach().then(result => (this.subjectsInTerm = result))
+        }
       },
       back() {
         this.$router.go(-1)

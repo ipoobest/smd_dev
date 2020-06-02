@@ -66,11 +66,11 @@ export default {
           title: 'Welcome',
           to: '/'
         },
-        {
-          icon: `mdi-account`,
-          title: `ผู้ใช้งาน`,
-          to: `/users`
-        },
+        // {
+        //   icon: `mdi-account`,
+        //   title: `ผู้ใช้งาน`,
+        //   to: `/users`
+        // },
         {
           icon: `mdi-book-plus`,
           title: `การเรียนการสอน`,

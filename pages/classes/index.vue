@@ -207,9 +207,15 @@ export default {
     },
     deleteItem(item) {
       const index = this.items.indexOf(item)
-      confirm('ยืนยีนการลบห้องเรียน')
-      this.deteleClasses(item.objectId)
-      this.items.splice(index, 1)
+
+      if(confirm('ยืนยีนการลบ')) {
+        this.deteleClasses(item.objectId)
+        //delete user ด้วย
+        this.items.splice(index, 1)
+      } 
+      // confirm('ยืนยีนการลบห้องเรียน')
+      // this.deteleClasses(item.objectId)
+      // this.items.splice(index, 1)
     },
     back() {
       this.$router.go(-1)
@@ -256,7 +262,7 @@ export default {
       console.log('item id ', item.objectId)
       this.$router.push({
         name: 'classes-add_student',
-        params: { id: item.objectId }
+        query: { id: item.objectId }
       })
     }
   }

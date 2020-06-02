@@ -21,11 +21,12 @@ export const mutations = {
 }
 
 export const actions = {
-  async createUser ({ commit }, { username, password, type , techerId}) {
+  async createUser ({ commit }, object) {
     return new Promise(async (resolve, reject) => {
       try {
-        console.log('parms', { username, password, type, techerId })
-        const result = this.$axios.$post(`${process.env.parseUrl}/users`, { username, password, type, techerId})
+        // const where = JSON.stringify()
+        // console.log('parms', { username, password, type, techerId })
+        const result = this.$axios.$post(`${process.env.parseUrl}/users`, object)
         console.log('create store user ', result)
         commit('setUser', result)
         resolve(result)
@@ -78,10 +79,10 @@ export const actions = {
       }
     })
   },
-  async deleteUser ({ commit }, { objectId, object }) {
+  async deleteUser ({ commit }, objectId) {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = this.$axios.$put(`${process.env.parseUrl}/classes/${classes.students}/${objectId}`, object)
+        const result = this.$axios.$put(`${process.env.parseUrl}/users/${objectId}`)
 
         commit('setUser', null)
         resolve(result)
