@@ -48,11 +48,10 @@ export const actions = {
       }
     })
   },
-  async getClasses ({ commit }) {
+  async getListClasses ({ commit } ) {
     return new Promise(async (resolve, reject) => {
       try {
         const result = this.$axios.$get(`${process.env.parseUrl}/classes/${classes.class}`)
-
         commit('setClasses', result)
         resolve(result)
       } catch (error) {
@@ -62,6 +61,7 @@ export const actions = {
       }
     })
   },
+
   async getClassesByAcademicYears ({ commit }, conditions) {
     return new Promise(async (resolve, reject) => {
       try {

@@ -74,7 +74,7 @@
 export default {
   async mounted() {
     this.id = this.$route.query.id
-    this.studentInClassId = await this.getClasses()
+    this.studentInClassId = await this.getListClasses()
     this.student = await this.getDataFromApi(this.id)
     this.items = await this.getStudents(this.student.studentId)
     this.students = await this.getStudentsNotIn(this.studentInClassId)
@@ -152,8 +152,8 @@ export default {
       console.log('response', response)
       return response.results
     },
-    async getClasses(){
-      const response = await this.$store.dispatch(`classes/getClasses`)
+    async getListClasses(){
+      const response = await this.$store.dispatch(`classes/getListClasses`)
       // console.log('classes')
       let results = response.results.map(a => a.studentId)
       // console.log('result map ', results)

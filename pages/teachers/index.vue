@@ -127,36 +127,9 @@
               <v-btn  class="mr-2 info" @click="editItem(item)">
                 แก้ไข
               </v-btn>
-              <v-btn class="error" @click="editItemDialog = true" >
+              <v-btn class="error" @click="deleteItem(item)" >
                 ลบ
               </v-btn>
-              <v-dialog
-                v-model="editItemDialog"
-                max-width="350"
-              >
-                <v-card>
-                  <v-card-title class="headline">ยืนยันการลบ</v-card-title>
-                  <v-card-text>
-                   ยืนยันการลบข้อมูล  
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      class="info"
-                      text
-                      @click="close()"
-                    >
-                      ยกเลิก
-                    </v-btn>
-                    <v-btn
-                      class="error"
-                      text
-                      @click="deleteItem(item)">
-                      ยืนยัน
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>              
             </template>
           </v-data-table>
         </v-card>
@@ -175,7 +148,6 @@ export default {
     return {
       dialog: false,
       submitted: false,
-      editItemDialog: false,
       headers: [
         {
           text: 'หมายเลขประจำตัว',
@@ -261,10 +233,11 @@ export default {
     deleteItem(item) {
 
     const index = this.items.indexOf(item)
-    // this.deleteTeacher(item.objectId)
         //delete user ด้วย
-    this.items.splice(index, 1)
-    this.editItemDialog = false
+      if (confirm('ยืนยีนการลบข้อมูลครู')) {
+        // this.deleteTeacher(item.objectId)
+        this.items.splice(index, 1)   
+      }
     },
     back() {
       this.$router.push({name: 'index'})

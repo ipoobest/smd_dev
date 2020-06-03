@@ -41,6 +41,7 @@
                     </v-card-title>
 
                     <v-card-text>
+                      <v-form ref="form" validation>
                       <v-container>
                         <v-row>
                           <v-col cols="12" sm="6" md="4">
@@ -48,6 +49,8 @@
                               v-model="classItem.classRoomId"
                               outlined
                               label="รหัสห้อง"
+                              required
+                              :rules="[v => !!v || 'กรุณากรอก รหัสห้อง']"
                             ></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" md="4">
@@ -56,6 +59,8 @@
                               :items="itemLevel"
                               outlined
                               label="ระดับชั้น"
+                              required
+                              :rules="[v => !!v || 'กรุณากรอก ระดับชั้น']"
                             ></v-select>
                           </v-col>
                           <v-col cols="12" sm="6" md="4">
@@ -63,6 +68,8 @@
                               v-model="classItem.classRoomName"
                               outlined
                               label="ห้อง"
+                              required
+                              :rules="[v => !!v || 'กรุณากรอก ห้องเรียน']"
                             ></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" md="4">
@@ -70,10 +77,13 @@
                               v-model="classItem.teatherId"
                               outlined
                               label="อาจารย์ประจำชั้น"
+                              required
+                              :rules="[v => !!v || 'กรุณากรอก อาจารย์ประจำชั้น']"
                             ></v-text-field>
                           </v-col>
                         </v-row>
                       </v-container>
+                      </v-form>
                     </v-card-text>
 
                     <v-card-actions>
@@ -117,7 +127,7 @@ export default {
   mounted() {
     this.classItem = this.$route.query
     // console.log('route params', this.$route.query)
-    this.getDataFromApi(this.classItem).then(result => (this.items = result))
+    this.getListClass(this.classItem).then(result => (this.items = result))
   },
   computed: {
     formTitle() {
@@ -165,9 +175,9 @@ export default {
     }
   },
   methods: {
-    async getDataFromApi(classItem) {
+    async getListClass(classItem) {
       console.log('classItem', classItem)
-      const response = await this.$store.dispatch(`classes/getClasses`, classItem)
+      const response = await this.$store.dispatch(`classes/getClassesByAcademicYears`, classItem)
       console.log(response.results)
       return response.results
     },
@@ -177,26 +187,26 @@ export default {
       console.log('res create', response)
     },
     async updateClasses(data) {
-      console.log('data update ', data)
-      console.log('res ', response)
+      // console.log('data update ', data)
+      // console.log('res ', response)
     },
     async deteleClasses(itemId) {
       console.log('delete ', itemId)
       const response = await this.$store.dispatch(`classes/deleteClass`, itemId)
-      console.log('res ', response)
+      // console.log('res ', response)
     },
     async getAcademicYear() {
       const response = await this.$store.dispatch(`academic_year/getAcademicYear`)
-      console.log('response academicYear', response.results)
+      // console.log('response academicYear', response.results)
       return response.results
     },    
     async createAcademicYear(object) {
       const response = await this.$store.dispatch(
         `academic_year/createAcademicYear`, object)
-      console.log('create years reuslt', response)  
+      // console.log('create years reuslt', response)  
     },
     editItem(item) {
-      console.log('item id ', item)
+      // console.log('item id ', item)
       this.editedIndex = this.items.indexOf(item)
       this.classItem = Object.assign({}, item)
 
@@ -204,15 +214,10 @@ export default {
     },
     deleteItem(item) {
       const index = this.items.indexOf(item)
-
-      if(confirm('ยืนยีนการลบ')) {
+      if(confirm('ยืนยีนการลบข้อมูล')) {
         this.deteleClasses(item.objectId)
-        //delete user ด้วย
         this.items.splice(index, 1)
       } 
-      // confirm('ยืนยีนการลบห้องเรียน')
-      // this.deteleClasses(item.objectId)
-      // this.items.splice(index, 1)
     },
     back() {
       this.$router.go(-1)
@@ -243,11 +248,13 @@ export default {
         }
         this.updateClasses(editData)
       } else {
-        // console.log('classItem', this.classItem)
-        this.createClasses(this.classItem)
-        this.items.push(this.classItem)
+        if(this.$refs.form.validate()){
+          this.createClasses(this.classItem)
+          this.items.push(this.classItem)
+          this.classItem = {}
+          this.close()
+        }
       }
-      this.close()
     },
     addYears() {
       this.createAcademicYear(this.academicYear)
