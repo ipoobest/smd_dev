@@ -37,24 +37,30 @@
                     </v-card-title>
 
                     <v-card-text>
-                      <v-container>
-                        <v-row>
-                          <v-col cols="12" sm="6" md="6">
-                            <v-text-field
-                              v-model="academicYear.schoolYear"
-                              outlined
-                              label="ปีการศึกษา"
-                            ></v-text-field>
-                          </v-col>
-                          <v-col cols="12" sm="6" md="6">
-                            <v-text-field
-                              v-model="academicYear.term"
-                              outlined
-                              label="เทอม"
-                            ></v-text-field>
-                          </v-col>
-                        </v-row>
-                      </v-container>
+                      <v-form ref="form" validation>
+                        <v-container>
+                          <v-row>
+                            <v-col cols="12" sm="6" md="6">
+                              <v-text-field
+                                v-model="academicYear.schoolYear"
+                                outlined
+                                label="ปีการศึกษา"
+                                required
+                                :rules="[v => !!v || 'กรุณากรอกข้อมูล ปีการศึกษา']"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="6">
+                              <v-text-field
+                                v-model="academicYear.term"
+                                outlined
+                                label="เทอม"
+                                required
+                               :rules="[v => !!v || 'กรุณากรอกข้อมูล เทอม']"
+                              ></v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-form>
                     </v-card-text>
 
                     <v-card-actions>
@@ -66,7 +72,7 @@
                         class="success"
                         color="darken-1"
                         text
-                        @click="addAcademicYear"
+                        @click="save"
                         >บันทึก</v-btn
                       >
                     </v-card-actions>
@@ -143,12 +149,13 @@ export default {
         this.items.splice(index, 1)     
       }
     },
-    addAcademicYear() {
-      this.createAcademicYear(this.academicYear)
-      this.items.push(this.academicYear)
-      this.academicYear = {}
-      this.close()
-
+    save() {
+      if(this.$refs.form.validate()){
+        this.createAcademicYear(this.academicYear)
+        this.items.push(this.academicYear)
+        this.academicYear = {}
+        this.close()
+      }
     },
     back() {
       this.$router.push({name: 'index'})

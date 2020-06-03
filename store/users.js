@@ -37,12 +37,12 @@ export const actions = {
       }
     })
   },
-  async getUser ({ commit }, objectId) {
+  async getUsers ({ commit }, objectId) {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = this.$axios.$get(`${process.env.parseUrl}/users`)
+        const result = this.$axios.$get(`${process.env.parseUrl}/userst/${objectId}`)
 
-        commit('setUser', result)
+        commit('setUsers', result)
         resolve(result)
       } catch (error) {
         console.log({ error })
@@ -51,12 +51,12 @@ export const actions = {
       }
     })
   },
-  async getUsers ({ commit }, objectId) {
+  async getListUser ({ commit }, objectId) {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = this.$axios.$get(`${process.env.parseUrl}/userst/${objectId}`)
+        const result = this.$axios.$get(`${process.env.parseUrl}/users`)
 
-        commit('setUsers', result)
+        commit('setUser', result)
         resolve(result)
       } catch (error) {
         console.log({ error })
