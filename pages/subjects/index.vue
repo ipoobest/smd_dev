@@ -110,7 +110,6 @@
 </template>
 
 <script>
-import * as SubjectApi from '@/utils/subjects'
 export default {
   // middleware: 'authentication',
   data() {

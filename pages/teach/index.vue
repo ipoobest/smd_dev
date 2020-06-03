@@ -79,7 +79,7 @@ export default {
       // this.$store.commit('academic_year/setSchoolYear', item.schoolYear)
       // this.$store.commit('academic_year/setTerm', item.term)
       // console.log('item after commit', this.$store.state.academic_year.schoolYear)
-      this.$router.push({ name: 'teach-add_subjects', query: {schoolYear: item.schoolYear, term: item.term} })
+      this.$router.push({ name: 'teach-add_subjects', query: { schoolYear: item.schoolYear, term: item.term} })
     }
   }
 }

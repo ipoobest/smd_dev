@@ -158,7 +158,6 @@
           { text: 'ระดับชั้น', value: 'classRoomLevel', align:'center'},
           { text: 'ห้องเรียน', value: 'classRoomName', align:'center'},
           { text: 'ครูผู้สอน', value: 'teacher', align:'center' },
-          // { text: 'จำนวนนักเรียน', value: 'teatherId', align:'center' },
           { text: 'Actions', value: 'actions', sortable: false, align:'center'}
         ],
         // headersAddSubjects: [
@@ -258,7 +257,7 @@
       },
       selectInputTeacher() {
         for (var index = 0; index < this.teachers.length; index++) {
-          this.itemTeachers.push(this.teachers[index].title + " " +
+          this.itemTeachers.push(this.teachers[index].teacherTitle + " " +
           this.teachers[index].firstName + " " +
           this.teachers[index].lastName )
         }

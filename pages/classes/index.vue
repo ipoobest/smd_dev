@@ -112,7 +112,6 @@
 </template>
 
 <script>
-import * as ClassesApi from '@/utils/class'
 export default {
   middleware: 'authentication',
   mounted() {
@@ -179,13 +178,11 @@ export default {
     },
     async updateClasses(data) {
       console.log('data update ', data)
-      const response = await ClassesApi.update(data)
       console.log('res ', response)
     },
     async deteleClasses(itemId) {
       console.log('delete ', itemId)
       const response = await this.$store.dispatch(`classes/deleteClass`, itemId)
-      // const response = await ClassesApi.deleteClasses(itemId)
       console.log('res ', response)
     },
     async getAcademicYear() {

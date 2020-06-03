@@ -1,6 +1,7 @@
 <template>
   <v-card-text>
     <h3>ข้อมูลส่วนตัว</h3>
+    <v-form ref="form" validation>
     <v-row>
       <v-col cols="12">
         <v-row justify="center">
@@ -32,6 +33,8 @@
               dense
               outlined
               label="คำนำหน้า (ภาษาไทย)"
+              required
+              :rules="[v => !!v || 'เลือกคำนำหน้า']"
             />
           </v-col>
           <v-col class="pt-0 pb-0" cols="5">
@@ -40,6 +43,8 @@
               dense
               outlined
               label="ชื่อ (ภาษาไทย)"
+              required
+              :rules="[v => !!v || 'กรุณากรอกชื่อภาษาไทย']"
             />
           </v-col>
           <v-col class="pt-0 pb-0" cols="5">
@@ -48,6 +53,8 @@
               dense
               outlined
               label="นามสกุล (ภาษาไทย)"
+              required
+              :rules="[v => !!v || 'กรุณากรอกนามสกุลภาษาไทย']"
             />
           </v-col>
         </v-row>
@@ -62,6 +69,8 @@
               dense
               outlined
               label="คำนำหน้า (ภาษาอังกฤษ)"
+              required
+              :rules="[v => !!v || 'กรุณาเลือกคำนำหน้า (ภาษาอังกฤษ)']"
             />
           </v-col>
           <v-col class="pt-0 pb-0" cols="5">
@@ -70,6 +79,8 @@
               dense
               outlined
               label="ชื่อ (ภาษาอังกฤษ)"
+              required
+              :rules="[v => !!v || 'กรุณากรอกชื่อภาษาอังกฤษ']"
             />
           </v-col>
           <v-col class="pt-0 pb-0" cols="5">
@@ -78,6 +89,8 @@
               dense
               outlined
               label="นามสกุล (ภาษาอังกฤษ)"
+              required
+              :rules="[v => !!v || 'กรุณากรอกนามสกุลภาษาอังกฤษ']"
             />
           </v-col>
         </v-row>
@@ -91,6 +104,8 @@
               dense
               outlined
               label="ชื่อเล่น"
+              required
+              :rules="[v => !!v || 'กรุณากรอกชื่อเล่น']"
             />
           </v-col>
           <v-col class="pt-0 pb-0" cols="4">
@@ -100,6 +115,8 @@
               dense
               outlined
               label="เพศ"
+              required
+              :rules="[v => !!v || 'กรุณาเลือกเพศ']"
             />
           </v-col>
         </v-row>
@@ -108,6 +125,8 @@
           dense
           outlined
           label="รหัสนักเรียน (* รหัสประจำตัวใหม่จากประกาศ 6 หลัก)"
+          required
+          :rules="[v => !!v || 'กรุณากรอกรหัสนักเรียน']"
         />
 
         <v-row>
@@ -117,6 +136,8 @@
               dense
               outlined
               label="หลักสูตร"
+              required
+              :rules="[v => !!v || 'กรุณากรอกหลักสูตร']"
             />
           </v-col>
           <v-col class="pt-0 pb-0" cols="6">
@@ -126,6 +147,8 @@
               dense
               outlined
               label="ระดับชั้น"
+              required
+              :rules="[v => !!v || 'กรุณาเลือกระดับชั้น']"              
             />
           </v-col>
         </v-row>
@@ -134,6 +157,8 @@
           dense
           outlined
           label="จบชั้น ป.6 จากโรงเรียน"
+          required
+          :rules="[v => !!v || 'กรุณากรอกข้อมูล จบชั้น ป.6 จากโรงเรียน']"                   
         />
       </v-col>
 
@@ -143,6 +168,8 @@
           dense
           outlined
           label="รหัสประจำตัวประชาชน"
+          required
+          :rules="[v => !!v || 'กรุณากรอกข้อมูล รหัสประจำตัวประชาชน']"     
         />
         <v-row>
           <v-col class="pt-0 pb-0" cols="3">
@@ -151,6 +178,8 @@
               dense
               outlined
               label="อายุ (ปี)"
+              required
+              :rules="[v => !!v || 'กรุณากรอกข้อมูล อายุ']"   
             />
           </v-col>
           <v-col class="pt-0 pb-0" cols="3">
@@ -159,6 +188,8 @@
               dense
               outlined
               label="เดือน"
+              required
+              :rules="[v => !!v || 'กรุณากรอกข้อมูล เดือน']"   
             />
           </v-col>
           <v-col class="pt-0 pb-0" cols="3">
@@ -167,6 +198,8 @@
               dense
               outlined
               label="สัญชาติ"
+              required
+              :rules="[v => !!v || 'กรุณากรอกข้อมูล สัญชาติ']"   
             />
           </v-col>
           <v-col class="pt-0 pb-0" cols="3">
@@ -175,6 +208,8 @@
               dense
               outlined
               label="เชื้อสาย"
+              required
+              :rules="[v => !!v || 'กรุณากรอกข้อมูล เชื้อสาย']"   
             />
           </v-col>
         </v-row>
@@ -185,13 +220,14 @@
               dense
               outlined
               label="ศาสนา"
+              required
+              :rules="[v => !!v || 'กรุณากรอกข้อมูล ศาสนา']"                 
             />
           </v-col>
           <v-col class="pt-0 pb-0" cols="6">
             <v-menu
               v-model="fromDateMenu"
               :close-on-content-click="false"
-              lazy
               transition="scale-transition"
               offset-y
             >
@@ -202,6 +238,8 @@
                   readonly
                   :value="fromDateDisp"
                   v-on="on"
+                  required
+                  :rules="[v => !!v || 'กรุณากรอกเลือก วัน/เดือน/ปี/ เกิด']"         
                 ></v-text-field>
               </template>
               <v-date-picker
@@ -221,6 +259,8 @@
               dense
               outlined
               label="สถานที่เกิด"
+              required
+              :rules="[v => !!v || 'กรุณากรอกกรอกข้อมูล สถานที่เกิด']"                    
             />
           </v-col>
           <v-col class="pt-0 pb-0" cols="6">
@@ -229,6 +269,8 @@
               dense
               outlined
               label="จังหวัดที่เกิด"
+              required
+              :rules="[v => !!v || 'กรุณากรอกกรอกข้อมูล จังหวัดที่เกิด']"                        
             />
           </v-col>
         </v-row>
@@ -240,6 +282,7 @@
         </div>
       </v-row>
     </v-row>
+    </v-form>
   </v-card-text>
 </template>
 
@@ -310,8 +353,16 @@ export default {
       this.saved = true
     },
     save() {
+      if(this.saving == false){
+        alert('กรุณาอัพโหลดรูปภาพ')
+      }else{
+        console.log('saving ', this.saving )
+      }
       // console.log('title ', this.personalData.birth)
-      this.$emit('savePersonal', this.personalData, this.tab)
+      if(this.$refs.form.validate()){
+        this.$emit('savePersonal', this.personalData, this.tab)
+      }
+      
     }
   }
 }

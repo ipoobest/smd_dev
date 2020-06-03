@@ -21,7 +21,6 @@
             :headers="headers"
             :items="items"
             :search="search"
-            @click:row="editItem"
           >
             <template v-slot:top>
               <v-toolbar flat color="white">
@@ -43,7 +42,7 @@
 </template>
 
 <script>
-import * as StudentsApi from '@/utils/students'
+
 export default {
   middleware: 'authentication',
   data() {
