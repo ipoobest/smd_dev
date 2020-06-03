@@ -60,7 +60,7 @@
                             </v-col>
                           </v-row>
                         </v-container>
-                      </v-form>
+                      </v-form >
                     </v-card-text>
 
                     <v-card-actions>
@@ -72,7 +72,7 @@
                         class="success"
                         color="darken-1"
                         text
-                        @click="save"
+                        @click="addAcademicYear"
                         >บันทึก</v-btn
                       >
                     </v-card-actions>
@@ -83,37 +83,9 @@
             <template v-slot:item.actions="{ item }" >
               <v-btn  color="success" dark class="mr-2" @click="addClasses(item)">
                 เพิ่มชั้นเรียน</v-btn>
-              <v-btn color="error" @click="deleteItemDialog = true">
+              <v-btn color="error" @click="deleteItem(item)">
                 ลบ
               </v-btn>
-              <v-dialog
-                v-model="deleteItemDialog"
-                max-width="360"
-              >
-                <v-card>
-                  <v-card-title class="headline">ยืนยันการลบ</v-card-title>
-                  <v-card-text>
-                   ยืนยันการลบข้อมูลปีการศึกษา  {{ item.schoolYear + " เทอม " + item.term }}
-                  </v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-
-                    <v-btn
-                      class="info"
-                      text
-                      @click="deleteItemDialog = false"
-                    >
-                      ยกเลิก
-                    </v-btn>
-                    <v-btn
-                      class="error"
-                      text
-                      @click="deleteItem(item)">
-                      ยืนยัน
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>       
-              </v-dialog>       
             </template>
           </v-data-table>
         </v-card>
@@ -141,7 +113,6 @@ export default {
         { text: 'Actions', value: 'actions', sortable: false, align: 'center' }
       ],
       dialogCreateYear: false,
-      deleteItemDialog: false,
       items: [],
       search: ``,
       title: `ปีการศึกษา`,
@@ -173,17 +144,17 @@ export default {
     },
     deleteItem(item) {
       const index = this.items.indexOf(item)
+      if (confirm('ยืนยีนการลบปีการศึกษา')) {
         this.deteleAcademicYear(item.objectId)
-        console.log('delete log')
-        this.items.splice(index, 1)
-        this.deleteItemDialog = false
-    },
-    save() {
-      if(this.$refs.form.validate()){
-        this.createAcademicYear(this.academicYear)
-        this.items.push(this.academicYear)
-        this.academicYear = {}
+        this.items.splice(index, 1)     
       }
+    },
+    addAcademicYear() {
+      this.createAcademicYear(this.academicYear)
+      this.items.push(this.academicYear)
+      this.academicYear = {}
+      this.close()
+
     },
     back() {
       this.$router.push({name: 'index'})

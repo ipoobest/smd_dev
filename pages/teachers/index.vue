@@ -132,20 +132,19 @@
               </v-btn>
               <v-dialog
                 v-model="editItemDialog"
-                max-width="360"
+                max-width="350"
               >
                 <v-card>
                   <v-card-title class="headline">ยืนยันการลบ</v-card-title>
                   <v-card-text>
-                   ยืนยันการลบข้อมูล  {{ item.teacherTitle + " " + item.firstName + " " +  item.lastName}}
+                   ยืนยันการลบข้อมูล  
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-
                     <v-btn
                       class="info"
                       text
-                      @click="editItemDialog = false"
+                      @click="close()"
                     >
                       ยกเลิก
                     </v-btn>
@@ -270,8 +269,7 @@ export default {
     back() {
       this.$router.push({name: 'index'})
     },
-    close() {
-      console.log('closd')
+    close(item) {
       this.dialog = false
       setTimeout(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
@@ -281,7 +279,7 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.editedItem)
-        console.log('put xx ', this.editedItem)
+        // console.log('put xx ', this.editedItem)
         const editData = {
           objectId: this.editedItem.objectId,
           teacherId: this.editedItem.teacherId,

@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     async getDataFromApi(limit = 50, skip = 0) {
-      const variable = await this.$store.dispatch(`users/getUsers`)
+      // const variable = await this.$store.dispatch(`users/getUsers`)
 
       return variable.results
     },
