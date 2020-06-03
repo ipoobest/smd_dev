@@ -113,10 +113,10 @@
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn color="blue darken-1" text @click="close"
-                        >Cancel</v-btn
+                        >ยกเลิก</v-btn
                       >
                       <v-btn color="blue darken-1" text @click="save"
-                        >Save</v-btn
+                        >บันทึก</v-btn
                       >
                     </v-card-actions>
                   </v-card>
@@ -132,12 +132,12 @@
               </v-btn>
               <v-dialog
                 v-model="editItemDialog"
-                max-width="290"
+                max-width="360"
               >
                 <v-card>
                   <v-card-title class="headline">ยืนยันการลบ</v-card-title>
                   <v-card-text>
-                   ยืนยันการลบ
+                   ยืนยันการลบข้อมูล  {{ item.teacherTitle + " " + item.firstName + " " +  item.lastName}}
                   </v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
