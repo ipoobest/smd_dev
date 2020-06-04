@@ -24,7 +24,6 @@ export const actions = {
   async createUser ({ commit }, object) {
     return new Promise(async (resolve, reject) => {
       try {
-        // const where = JSON.stringify()
         // console.log('parms', { username, password, type, techerId })
         const result = this.$axios.$post(`${process.env.parseUrl}/users`, object)
         console.log('create store user ', result)

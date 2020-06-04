@@ -73,13 +73,14 @@
                             ></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" md="4">
-                            <v-text-field
+                            <v-select
                               v-model="classItem.teatherId"
+                              :items="teachers"
                               outlined
                               label="อาจารย์ประจำชั้น"
                               required
                               :rules="[v => !!v || 'กรุณากรอก อาจารย์ประจำชั้น']"
-                            ></v-text-field>
+                            ></v-select>
                           </v-col>
                         </v-row>
                       </v-container>
@@ -128,6 +129,7 @@ export default {
     this.classItem = this.$route.query
     // console.log('route params', this.$route.query)
     this.getListClass(this.classItem).then(result => (this.items = result))
+    this.getListTeacher().then(result => (this.teacher = results))
   },
   computed: {
     formTitle() {
@@ -168,6 +170,7 @@ export default {
         term: ''
       },
       selectAcademic: [],
+      teachers: [],
       year: [],
       schoolYear: '',
       term: '',
@@ -179,6 +182,10 @@ export default {
       console.log('classItem', classItem)
       const response = await this.$store.dispatch(`classes/getClassesByAcademicYears`, classItem)
       console.log(response.results)
+      return response.results
+    },
+    async getListTeacher(){
+      const response = await this.$store.dispatch(`teacher/getTeacher`)
       return response.results
     },
     async createClasses(data) {

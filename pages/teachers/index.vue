@@ -115,7 +115,7 @@
                       <v-btn color="blue darken-1" text @click="close"
                         >ยกเลิก</v-btn
                       >
-                      <v-btn color="blue darken-1" text @click="save"
+                      <v-btn class="success" text @click="save"
                         >บันทึก</v-btn
                       >
                     </v-card-actions>
@@ -139,9 +139,6 @@
 </template>
 
 <script>
-// import { validationMixin } from 'vuelidate'
-// import { required, maxLength, email } from 'vuelidate/lib/validators'
-
 export default {
   middleware: 'authentication',
   data() {
@@ -197,31 +194,32 @@ export default {
 
     },
     async createUser(data){
-      console.log('create user teacher', data)
-      const response = await this.$store.dispatch(`users/createUser`, data)
-      if(response){
-        console.log('error create user', response)
+      console.log('create user teacher', data.username, data.password)
+      const user = {
+        username: data.username,
+        password: data.password,
+        type: 'teacher',
+        teacherId: data.teacherId
       }
+      const response = await this.$store.dispatch(`users/createUser`, user)
       console.log('create result', response)
     },
     async createTeacher(data) {
-      console.log('create teacher ', data)
       const response = await this.$store.dispatch(`teachers/createTeacher`, data)
-      console.log('res create', response)
-      this.createUser(data)
+      console.log('res create teacher', response)
+      this.getDataFromApi().then((result) => (this.items = result))
+      // this.createUser(data)
     },
     async updateTeacher(data) {
-      console.log('data update ', data)
-      // const response = await TeachersApi.update(data)
+      // console.log('data update ', data)
       const response = await this.$store.dispatch(`teachers/updateTeacher`, data)
-      console.log('res ', response)
-      return
+      // console.log('res ', response)
+     this.getDataFromApi().then((result) => (this.items = result))
     },
     async deleteTeacher(itemId) {
-      console.log('delete update ', itemId)
+      // console.log('delete update ', itemId)
       const response = await this.$store.dispatch(`teachers/deleteTeacher`, itemId)
-      console.log('res ', response)
-      return
+      // console.log('res ', response)
     },
     editItem(item) {
       console.log('item id ', item)
@@ -235,14 +233,14 @@ export default {
     const index = this.items.indexOf(item)
         //delete user ด้วย
       if (confirm('ยืนยีนการลบข้อมูลครู')) {
-        // this.deleteTeacher(item.objectId)
+        this.deleteTeacher(item.objectId)
         this.items.splice(index, 1)   
       }
     },
     back() {
       this.$router.push({name: 'index'})
     },
-    close(item) {
+    close() {
       this.dialog = false
       setTimeout(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
@@ -252,7 +250,6 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.editedItem)
-        // console.log('put xx ', this.editedItem)
         const editData = {
           objectId: this.editedItem.objectId,
           teacherId: this.editedItem.teacherId,
@@ -262,16 +259,14 @@ export default {
           lastName: this.editedItem.lastName
         }
         this.updateTeacher(editData)
+        this.close()
       } else {
         if(this.$refs.form.validate()){
           this.createTeacher(this.editedItem)
-          this.items.push(this.editedItem)
           this.editedItem = {}
           this.close()
         }
-        //  alert('กรุณากรอกข้อมูลให้ครบทุกช่อง')
       }
-      // this.close()
     }
   }
 }
