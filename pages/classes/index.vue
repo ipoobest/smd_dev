@@ -72,14 +72,14 @@
                               :rules="[v => !!v || 'กรุณากรอก ห้องเรียน']"
                             ></v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6" md="4">
+                          <v-col cols="12" sm="6" md="6">
                             <v-select
-                              v-model="classItem.teatherId"
-                              :items="teachers"
+                              v-model="classItem.teatherName"
+                              :items="selectItemTeacher"
                               outlined
                               label="อาจารย์ประจำชั้น"
                               required
-                              :rules="[v => !!v || 'กรุณากรอก อาจารย์ประจำชั้น']"
+                              :rules="[v => !!v || 'กรุณาเลือก อาจารย์ประจำชั้น']"
                             ></v-select>
                           </v-col>
                         </v-row>
@@ -125,11 +125,12 @@
 <script>
 export default {
   middleware: 'authentication',
-  mounted() {
+  async mounted() {
     this.classItem = this.$route.query
     // console.log('route params', this.$route.query)
-    this.getListClass(this.classItem).then(result => (this.items = result))
-    this.getListTeacher().then(result => (this.teacher = results))
+    await this.getListClass(this.classItem).then(result => (this.items = result))
+    await this.getListTeacher().then(result => (this.teachers = result))
+    await this.selectItemTeachers()
   },
   computed: {
     formTitle() {
@@ -163,7 +164,7 @@ export default {
         classRoomLevel: '',
         classRoomName: '',
         studentId: [],
-        teatherId: ''
+        teatherName: ''
       },
       academicYear: {
         schoolYear: '',
@@ -174,7 +175,8 @@ export default {
       year: [],
       schoolYear: '',
       term: '',
-      itemLevel: ['ม.1','ม.2','ม.3','ม.4','ม.5','ม.6',]
+      itemLevel: ['ม.1','ม.2','ม.3','ม.4','ม.5','ม.6',],
+      selectItemTeacher: []
     }
   },
   methods: {
@@ -185,7 +187,7 @@ export default {
       return response.results
     },
     async getListTeacher(){
-      const response = await this.$store.dispatch(`teacher/getTeacher`)
+      const response = await this.$store.dispatch(`teachers/getTeacher`)
       return response.results
     },
     async createClasses(data) {
@@ -210,7 +212,17 @@ export default {
     async createAcademicYear(object) {
       const response = await this.$store.dispatch(
         `academic_year/createAcademicYear`, object)
-      // console.log('create years reuslt', response)  
+      // console.log('create years reuslt', response)
+      this.getListClass(this.classItem).then(result => (this.items = result))
+    },
+    selectItemTeachers() {
+      console.log('select item teacher', this.teachers)
+      for(var index = 0; index < this.teachers.length; index++){
+        this.selectItemTeacher.push(this.teachers[index].teacherTitle + " " + 
+        this.teachers[index].firstName + " " + 
+        this.teachers[index].lastName)
+      }
+      console.log('resss', this.selectItemTeacher)
     },
     editItem(item) {
       // console.log('item id ', item)
@@ -265,7 +277,7 @@ export default {
     },
     addYears() {
       this.createAcademicYear(this.academicYear)
-      this.selectAcademic.push(`${this.academicYear.schoolYear} เทอม  ${this.academicYear.term}`)
+      // this.selectAcademic.push(`${this.academicYear.schoolYear} เทอม  ${this.academicYear.term}`)
       this.close()
 
     },

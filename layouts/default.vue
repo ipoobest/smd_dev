@@ -58,7 +58,7 @@ export default {
   data () {
     return {
       clipped: true,
-      drawer: false,
+      drawer: true,
       fixed: true,
       items: [
         {
@@ -72,14 +72,14 @@ export default {
         //   to: `/users`
         // },
         {
-          icon: `mdi-book-plus`,
-          title: `การเรียนการสอน`,
-          to: `/teach`
-        },
-        {
           icon: `mdi-format-align-justify`,
           title: `ปีการศึกษา`,
           to: `/academic_year`
+        },
+        {
+          icon: `mdi-book-plus`,
+          title: `การเรียนการสอน`,
+          to: `/teach`
         },
         {
           icon: `mdi-account-tie`,

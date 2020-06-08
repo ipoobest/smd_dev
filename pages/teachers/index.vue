@@ -70,22 +70,24 @@
                             ></v-text-field>
                           </v-col>
                           <v-col cols="12" sm="6" md="4">
-                            <v-text-field
+                            <v-select
                               v-model="editedItem.teacherPosition"
+                              :items="selectItemPosition"
                               outlined
                               label="ตำแหน่ง"
                               required
                               :rules="[v => !!v || 'กรุณากรอกตำแหน่ง']"
-                            ></v-text-field>
+                            ></v-select>
                           </v-col>
                           <v-col cols="12" sm="6" md="4">
-                            <v-text-field
+                            <v-select
                               v-model="editedItem.teacherTitle"
+                              :items="selectItemTitle"
                               outlined
                               label="คำนำหน้า"
                               required
                               :rules="[v => !!v || 'กรุณากรอกคำนำหน้า']"
-                            ></v-text-field>
+                            ></v-select>
                           </v-col>
                           <v-col cols="12" sm="6" md="6">
                             <v-text-field
@@ -170,7 +172,29 @@ export default {
         firstName: '',
         lastName: '',
         type: 'teacher'
-      }
+      },
+      selectItemPosition: [
+        'ครูอัตราจ้าง' ,
+        'ครูผู้ช่วย',
+        'ครู ค.ศ 1' ,
+        'ครูชำนาญการ' ,
+        'ครูชำนาญการพิเศษ' ,
+        'ครูเชี่ยวชาญ' ,
+        'ครูเชียวชาญพิเศษ' ,
+        'ผู้ช่วยศาสตราจารย์', 
+        'รองสาสตราจารย์' ,
+        'ศาสตราจารย์' ,
+        'ศาสตราจารย์เกียรติคุณ' ,
+        'ผู้ช่วยศาสตราจารย์' ,
+        'รองสาสตราจารย์' ,
+        'ศาสตราจารย์' 
+      ],
+      selectItemTitle:[
+        'ดร.',
+        'นาย',
+        'นาง',
+        'นางสาว'
+      ]
     }
   },
   computed: {
