@@ -131,6 +131,7 @@ export default {
     async createAcademicYear(data) {
       const response = await this.$store.dispatch(`academic_year/createAcademicYear`, data)
       console.log('res create', response)
+      this.getDataFromApi().then(result => (this.items = result))
     },
     async deteleAcademicYear(itemId) {
       const response = await this.$store.dispatch(`academic_year/deleteAcademicYear`, itemId)
@@ -151,15 +152,18 @@ export default {
     },
     addAcademicYear() {
       this.createAcademicYear(this.academicYear)
-      this.items.push(this.academicYear)
-      this.academicYear = {}
+      this.resetForm()
       this.close()
 
     },
     back() {
       this.$router.push({name: 'index'})
-    },    
+    },
+    resetForm() {
+      this.$refs.form.reset()
+    },
     close() {
+      this.resetForm()
       setTimeout(() => {
         this.dialogCreateYear = false
       }, 300)

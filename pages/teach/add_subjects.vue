@@ -41,6 +41,7 @@
                     </v-card-title>
 
                     <v-card-text>
+                      <v-form ref="form" validation>
                       <v-container>
                         <v-row>
                           <v-col cols="12" sm="6" md="6">
@@ -49,6 +50,8 @@
                               :items="classSubject"
                               outlined
                               label="วิชา"
+                              required
+                              :rules="[v => !!v || 'กรุณาเลือกวิชา']"
                             ></v-select>
                           </v-col>
                           <v-col cols="12" sm="6" md="6">
@@ -57,6 +60,8 @@
                               :items="itemTeachers"
                               outlined
                               label="ครูผู้สอน"
+                              required
+                              :rules="[v => !!v || 'กรุณาเลือกครูผู้สอน']"
                             ></v-select>
                           </v-col>
                           <v-col cols="12" sm="6" md="6">
@@ -65,6 +70,8 @@
                               :items="classRoomLevel"
                               outlined
                               label="ระดับชั้น"
+                              required
+                              :rules="[v => !!v || 'กรุณาเลือกระดับชั้น']"
                             ></v-select>
                           </v-col>
                           <v-col cols="12" sm="6" md="6">
@@ -73,20 +80,13 @@
                               :items="classRoomName"
                               outlined
                               label="ห้องเรียน"
+                              required
+                              :rules="[v => !!v || 'กรุณาเลือกระดับชั้น']" 
                             ></v-select>
                           </v-col>
                         </v-row>
-                      </v-container>                          
-                      <!-- <v-data-table
-                        v-model="items"
-                        :headers="headersAddSubjects"
-                        :items="subjects"
-                        :single-select="singleSelect"
-                        item-key="objectId"
-                        show-select
-                        class="elevation-1"
-                      >
-                      </v-data-table> -->
+                      </v-container>
+                      </v-form>                      
                     </v-card-text>
 
                     <v-card-actions>
@@ -128,9 +128,6 @@
   export default {
     async mounted() {
       this.query = this.$route.query
-      // this.schoolYear = this.$store.state.academic_year.schoolYear
-      // this.term = this.$store.state.academic_year.term
-
       await this.getSubjectsFromTeach().then(result => (this.subjectsInTerm = result))
 
       await this.getSubjects().then(result => (this.subjects = result))
@@ -219,6 +216,7 @@
       async addSubjectToTeach(data) {
         const response = await this.$store.dispatch(`teach/createTeach`, data)
         // console.log('response get subject', response)
+        await this.getSubjectsFromTeach().then(result => (this.subjectsInTerm = result))
       },
       async addSubject() {
         const data = {
@@ -234,7 +232,8 @@
         }
 
         this.addSubjectToTeach(data)
-        this.subjectsInTerm.push(data)
+        // this.subjectsInTerm.push(data)
+        this.resetForm()
         this.close()
       },
       async deleteSubject(objectId) {
@@ -263,8 +262,6 @@
         }
       },      
       addClasses(item) {
-        // console.log('save', item)
-        // this.$store.commit('teach/setClassId', item.objectId)
         this.$router.push({name:'teach-add_classes', 
         query:{ 
           classId: item.objectId, 
@@ -278,11 +275,13 @@
         if (confirm('ยืนยีนการวิชาเรียน')){
           this.subjectsInTerm.splice(index, 1)  
           this.deleteSubject(item.objectId)
-          // this.getSubjectsFromTeach().then(result => (this.subjectsInTerm = result))
         }
       },
       back() {
         this.$router.go(-1)
+      },
+      resetForm() {
+        this.$refs.form.reset()
       },
       close() {
         this.dialogCreateTeach = false

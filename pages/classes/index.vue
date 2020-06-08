@@ -123,6 +123,7 @@
 </template>
 
 <script>
+
 export default {
   middleware: 'authentication',
   async mounted() {
@@ -243,6 +244,8 @@ export default {
     },
     close() {
       console.log('closd')
+      this.$refs.form.reset()
+      console.log('class item after close ', this.classItem)
       if(this.dialogAddClass) {
         this.dialogAddClass = false 
       } else if(this.dialogCreateYear) {
@@ -256,7 +259,6 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.classItem)
-        console.log('put xx ', this.classItem)
         const editData = {
           objectId: this.classItem.objectId,
           ClassesId: this.classItem.ClassesId,
@@ -266,11 +268,14 @@ export default {
           lastName: this.classItem.lastName
         }
         this.updateClasses(editData)
+        this.resetForm()
+        this.close()
       } else {
         if(this.$refs.form.validate()){
           this.createClasses(this.classItem)
-          this.items.push(this.classItem)
-          this.classItem = {}
+          this.resetForm()
+          // this.items.push(this.classItem)
+          // this.classItem = {}
           this.close()
         }
       }
@@ -287,6 +292,9 @@ export default {
         name: 'classes-add_student',
         query: { id: item.objectId }
       })
+    },
+    resetForm() {
+      this.$refs.form.reset()
     }
   }
 }
