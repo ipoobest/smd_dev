@@ -6,14 +6,14 @@
         <v-row justify="center">
           <v-col class="pt-0 pb-0" cols="8">
             <v-select
-              v-model="AdderessData.residential"
+              v-model="addressData.residential"
               :items="itemResidence"
               dense
               outlined
               label="ประเภทที่อยู่อาศัย"
             />
             <v-textarea
-              v-model="AdderessData.domicile"
+              v-model="addressData.domicile"
               label="ภูมิลำเนา"
               auto-grow
               outlined
@@ -21,7 +21,7 @@
               row-height="25"
             ></v-textarea>
             <v-textarea
-              v-model="AdderessData.dorm"
+              v-model="addressData.dorm"
               label="หอพัก"
               auto-grow
               outlined
@@ -29,7 +29,7 @@
               row-height="25"
             ></v-textarea>
             <v-text-field
-              v-model="AdderessData.stell"
+              v-model="addressData.stell"
               dense
               outlined
               label="หมายเลขโทรศัพท์"
@@ -54,23 +54,14 @@
 <script>
 export default {
   name: 'AddressForm',
-  components: {},
-    props: {
-    AdderessData: {
-      type: Array
+  props: {
+    addressData: {
+      type: Object
     }
   },
   data() {
     return {
       tab: '',
-      // AdderessData: {
-      //   residential: '',
-      //   domicile: '',
-      //   dormitory: '',
-      //   addres: '',
-      //   dorm: '',
-      //   stell: ''
-      // },
       itemResidence: ['บ้าน', 'หอพัก']
     }
   },
@@ -78,12 +69,12 @@ export default {
     back() {
       this.tab = 'personalData'
       console.log('black')
-      this.$emit('saveAddress', this.AdderessData, this.tab)
+      this.$emit('saveAddress', this.addressData, this.tab)
     },
     save() {
       console.log('go')
       this.tab = 'familyData'
-      this.$emit('saveAddress', this.AdderessData, this.tab)
+      this.$emit('saveAddress', this.addressData, this.tab)
     }
   }
 }
