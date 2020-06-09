@@ -75,9 +75,13 @@ export default {
     this.getDataFromApi().then((result) => (this.items = result))
   },
   methods: {
-    async getDataFromApi(limit = 50, skip = 0) {
+    async getDataFromApi() {
       const response = await this.$store.dispatch(`students/getStudent`)
       return response.results
+    },
+    async deleteStudent(objectId) {
+      const response = await this.$store.dispatch(`students/deleteStudent`, objectId)
+      return 
     },
     back() {
       this.$router.push({name: 'index'})
@@ -88,6 +92,15 @@ export default {
         name: 'students-id',
         params: { id: item.objectId }
       })
+    },
+    deleteItem(item) {
+      console.log('delete', item.objectId)
+       const index = this.items.indexOf(item)
+        //delete user ด้วย
+      if (confirm('ยืนยีนการลบข้อมูลนักเรียน')) {
+        this.deleteStudent(item.objectId)
+        this.items.splice(index, 1)   
+      }
     }
   }
 }
