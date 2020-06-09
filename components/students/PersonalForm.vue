@@ -358,11 +358,11 @@ export default {
       this.saved = true
     },
     save() {
-      if(this.saving == false){
-        alert('กรุณาอัพโหลดรูปภาพ')
-      }else{
-        console.log('saving ', this.saving )
-      }
+      // if(this.saving == false){
+      //   alert('กรุณาอัพโหลดรูปภาพ')
+      // }else{
+      //   console.log('saving ', this.saving )
+      // }
       // console.log('title ', this.personalData.birth)
       if(this.$refs.form.validate()){
         this.$emit('savePersonal', this.personalData, this.tab)

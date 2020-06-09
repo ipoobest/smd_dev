@@ -9,19 +9,25 @@
           </v-btn>    
             {{ title }}
           </v-card-title>
-          <v-tabs fixed-tabs >
+          <!-- <v-tabs fixed-tabs >
             <v-tab>ข้อมูลส่วนตัว</v-tab>
             <v-tab>ที่อยู่อาศัย</v-tab>
             <v-tab>ข้อมูลครอบครัว</v-tab>
             <v-tab>ข้อมูลสุขภาพ</v-tab>
-            <v-tab>สิทธิการเบิกค่าเล่าเรียน</v-tab>
+            <v-tab>สิทธิการเบิกค่าเล่าเรียน</v-tab> -->
 
+          <v-tabs v-model="tab" fixed-tabs>
+            <v-tab href="#personalData">ข้อมูลส่วนตัว</v-tab>
+            <v-tab href="#addressData">ที่อยู่อาศัย</v-tab>
+            <v-tab href="#familyData">ข้อมูลครอบครัว</v-tab>
+            <v-tab href="#withdrawData">สิทธิการเบิกค่าเล่าเรียน</v-tab>
+            <v-tab href="#healthData">ข้อมูลสุขภาพ</v-tab>
 
-            <v-tab-item><Personal :personalData="data" @savePersonal="handlePersonalData"/></v-tab-item>
-            <v-tab-item><Address :addressData="data" @saveAddress="handleAddressData"/></v-tab-item>
-            <v-tab-item><Family :familyData="data" @saveFamily="handleFamilyData"/></v-tab-item>
-            <v-tab-item><Health :healthData="data" @saveHealth="handleHealthData"/></v-tab-item>
-            <v-tab-item><Withdraw :withdrawData="data" @saveWithdraw="handleWithdrawData"/></v-tab-item>
+            <v-tab-item value="personalData"><Personal :personalData="data" @savePersonal="handlePersonalData"/></v-tab-item>
+            <v-tab-item value="addressData"><Address :addressData="data" @saveAddress="handleAddressData"/></v-tab-item>
+            <v-tab-item value="familyData"><Family :familyData="data" @saveFamily="handleFamilyData"/></v-tab-item>
+            <v-tab-item value="withdrawData"><Health :healthData="data" @saveHealth="handleHealthData"/></v-tab-item>
+            <v-tab-item value="healthData"><Withdraw :withdrawData="data" @saveWithdraw="handleWithdrawData"/></v-tab-item>
           </v-tabs>
         </v-card>
       </v-col>
@@ -47,11 +53,11 @@ export default {
   mounted() {
     this.getStudentById(this.$route.params.id).then(result => (this.data = result))
     console.log('data xx', this.data)
-    this.mapPersonalData()
   },
   data() {
     return {
       title: `แก้ไข ข้อมูลส่วนตัวนักเรียน`,
+      tab: ``,
       data: {},
       personal: {},
       family: {},
@@ -69,8 +75,8 @@ export default {
      handlePersonalData(PersonalForm, tab) {
       //todo this kept in store
       this.personal = PersonalForm
+      console.log('main ', this.personal, tab)
       this.changeTab(tab)
-      console.log('main ', this.personal)
     },
     handleAddressData(AdderessData, tab) {
       this.address = AdderessData
@@ -90,35 +96,70 @@ export default {
     handleHealthData(HealthData, tab) {
       this.health = HealthData
       console.log('main handleHealthData ', this.health)
-      this.saveData()
+      this.updateData()
     },
-    mapPersonalData() {
-     this.personal = {
-        tth: this.data.tth,
-        namet: this.data.namet,
-        snamet: this.data.snamet,
-        nickName: this.data.nickName,
-        sex: this.data.sex,
-        idstd: this.data.idstd,
-        course: this.data.course,
-        class: this.data.class,
-        study: this.data.study,
-        ten: this.data.ten,
-        namee: this.data.namee,
-        snamee: this.data.snamee,
-        idCard: this.data.idCard,
-        stage: this.data.stage,
-        stmonth: this.data.stmonth,
-        nation: this.data.nation,
-        race: this.data.race,
-        religian: this.data.religian,
-        bday: this.data.bday,
-        badd: this.data.badd,
-        bprovince: this.data.bprovince,
-        profile: this.data.profile,
-        saving: false,
-        saved: false
+      async updateData() {
+      const data = {
+        tth: this.personal.tth,
+        namet: this.personal.namet,
+        snamet: this.personal.snamet,
+        nickName: this.personal.nickName,
+        sex: this.personal.sex,
+        idstd: this.personal.idstd,
+        course: this.personal.course,
+        class: this.personal.class,
+        study: this.personal.study,
+        ten: this.personal.ten,
+        namee: this.personal.namee,
+        snamee: this.personal.snamee,
+        idCard: this.personal.idCard,
+        stage: this.personal.stage,
+        stmonth: this.personal.stmonth,
+        nation: this.personal.nation,
+        race: this.personal.race,
+        religian: this.personal.religian,
+        bday: this.personal.bday,
+        badd: this.personal.badd,
+        bprovince: this.personal.bprovince,
+        profile: this.personal.profile.imageURL,
+        fname: this.family.fname,
+        fsername: this.family.fsername,
+        fage: this.family.fage,
+        feducation: this.family.feducation,
+        fwork: this.family.fwork,
+        fcareer: this.family.fcareer,
+        fpost: this.family.fpost,
+        fbeloin: this.family.fbeloin,
+        fatwork: this.family.fatwork,
+        ftell: this.family.ftell,
+        fphone: this.family.fphone,
+        fsalary: this.family.fsalary,
+        mname: this.family.mname,
+        msername: this.family.msername,
+        mage: this.family.mage,
+        meducation: this.family.meducation,
+        mwork: this.family.mwork,
+        mcareer: this.family.mcareer,
+        mpost: this.family.mpost,
+        mbeloin: this.family.mbeloin,
+        matwork: this.family.matwork,
+        mtell: this.family.mtell,
+        mphone: this.family.mphone,
+        msalary: this.family.msalary,
+        residential: this.address.residential,
+        domicile: this.address.domicile,
+        addres: this.address.addres,
+        dorm: this.address.dorm,
+        stell: this.address.stell,
+        privileage: this.withdraw.privileage,
+        welfare: this.withdraw.welfare,
+        blood: this.health.blood,
+        disease: this.health.disease,
+        treatment: this.health.treatment,
+        healthpb: this.health.healthpb
       }
+      console.log('data updateData', data.fname)
+      // this.updateData(data)
     },
     changeTab(tab) {
       this.tab = tab
