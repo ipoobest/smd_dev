@@ -34,6 +34,14 @@
                 </v-card-title>
               </v-toolbar>
             </template>
+            <template v-slot:item.actions="{ item }">
+              <v-btn small class="mr-2 info" @click="editItem(item)">
+                แก้ไข
+              </v-btn>
+              <v-btn class="error" small @click="deleteItem(item)">
+                ลบ
+              </v-btn>
+            </template>
           </v-data-table>
         </v-card>
       </v-col>
@@ -53,7 +61,8 @@ export default {
         { text: 'ชื่อ', value: 'namet' },
         { text: 'นามสกุล', value: 'snamet' },
         { text: 'หลักสูตร', value: 'course' },
-        { text: 'ระดับชั้น', value: 'class' }
+        { text: 'ระดับชั้น', value: 'class' },
+        { text: 'Actions', value: 'actions', sortable: false }
       ],
       items: [],
       search: ``,

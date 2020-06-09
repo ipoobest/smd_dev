@@ -3,7 +3,12 @@
     <v-row align="center">
       <v-col cols="12">
         <v-card>
-          <v-card-title>{{ title }}</v-card-title>
+          <v-card-title>
+          <v-btn class="mr-5" color="primary" fab small dark @click="back" >
+            <v-icon>mdi-arrow-left</v-icon>
+          </v-btn>    
+            {{ title }}
+          </v-card-title>
           <v-tabs fixed-tabs >
             <v-tab>ข้อมูลส่วนตัว</v-tab>
             <v-tab>ข้อมูลสุขภาพ</v-tab>
@@ -43,11 +48,13 @@ export default {
   },
   data() {
     return {
-      title: ``
+      title: `แก้ไข ข้อมูลส่วนตัวนักเรียน`
     }
   },
   methods: {
-
+    black() {
+      this.$router.go(-1)
+    }
   },
   mounted() {
 
