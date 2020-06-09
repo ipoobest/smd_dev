@@ -170,8 +170,8 @@ export default {
     },
     async createSubject(data) {
       const response = await this.$store.dispatch(`subjects/createSubject`, data)
-      // console.log('createSubject ', response)
-      this.getdataFromApi().then(result => (this.items = result))
+      // this.getdataFromApi().then(result => (this.items = result))
+      this.items = [...this.items, data]
     },
     async updateSubject(data) {
       const response = await this.$store.dispatch(`subjects/updateSubject`, data)
@@ -205,6 +205,9 @@ export default {
     back() {
       this.$router.push({name: 'index'})
     },
+    resetForm() {
+      this.$refs.form.reset() 
+    },
     close() {
       this.dialog = false
       this.datas = {}
@@ -215,7 +218,9 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.datas)
-        // console.log('put data user ', this.items)
+        console.log('put data user ', this.items)
+        // this.items = [...this.datas, data]
+         console.log('this datas', editdatass)
         const editdatas = {
           objectId: this.datas.objectId,
           code: this.datas.code,
@@ -225,7 +230,6 @@ export default {
           hour: this.datas.hour,
         }
         this.updateSubject(editdatas)
-        this.editdatas = {}
         this.close()
       } else {
         if(this.$refs.form.validate()){

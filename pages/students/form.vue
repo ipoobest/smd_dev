@@ -25,7 +25,7 @@
               ><Family :familyData="family" @saveFamily="handleFamilyData"
             /></v-tab-item>
             <v-tab-item value="withdrawData"
-              ><Withdraw :withdarwData="withdraw" @saveWithdraw="handleWithdrawData"
+              ><Withdraw :withdrawData="withdraw" @saveWithdraw="handleWithdrawData"
             /></v-tab-item>
             <v-tab-item value="healthData"
               ><Health :healthData="health" @saveHealth="handleHealthData"
@@ -62,7 +62,8 @@ export default {
       family: {},
       address: {},
       withdraw: {},
-      health: {}
+      health: {},
+      data: {}
     }
   },
   mounted() {},
@@ -71,7 +72,7 @@ export default {
       const response = await this.$store.dispatch(`students/createStudent`, data)
       console.log('response', data)
       this.createUser(data.idstd, data.idstd, 'student', data.objecId)
-      // this.$router.replace({name: 'students'})
+      this.$router.replace({name: 'students'})
 
     },
     async createUser(username, password, type, objecId) {
@@ -80,71 +81,20 @@ export default {
       this.$router.replace({name: 'students'})
     },
     async saveData() {
-      const data = {
-        tth: this.personal.tth,
-        namet: this.personal.namet,
-        snamet: this.personal.snamet,
-        nickName: this.personal.nickName,
-        sex: this.personal.sex,
-        idstd: this.personal.idstd,
-        course: this.personal.course,
-        class: this.personal.class,
-        study: this.personal.study,
-        ten: this.personal.ten,
-        namee: this.personal.namee,
-        snamee: this.personal.snamee,
-        idCard: this.personal.idCard,
-        stage: this.personal.stage,
-        stmonth: this.personal.stmonth,
-        nation: this.personal.nation,
-        race: this.personal.race,
-        religian: this.personal.religian,
-        bday: this.personal.bday,
-        badd: this.personal.badd,
-        bprovince: this.personal.bprovince,
-        profile: this.personal.profile.imageURL,
-        fname: this.family.fname,
-        fsername: this.family.fsername,
-        fage: this.family.fage,
-        feducation: this.family.feducation,
-        fwork: this.family.fwork,
-        fcareer: this.family.fcareer,
-        fpost: this.family.fpost,
-        fbeloin: this.family.fbeloin,
-        fatwork: this.family.fatwork,
-        ftell: this.family.ftell,
-        fphone: this.family.fphone,
-        fsalary: this.family.fsalary,
-        mname: this.family.mname,
-        msername: this.family.msername,
-        mage: this.family.mage,
-        meducation: this.family.meducation,
-        mwork: this.family.mwork,
-        mcareer: this.family.mcareer,
-        mpost: this.family.mpost,
-        mbeloin: this.family.mbeloin,
-        matwork: this.family.matwork,
-        mtell: this.family.mtell,
-        mphone: this.family.mphone,
-        msalary: this.family.msalary,
-        residential: this.address.residential,
-        domicile: this.address.domicile,
-        addres: this.address.addres,
-        dorm: this.address.dorm,
-        stell: this.address.stell,
-        privileage: this.withdraw.privileage,
-        welfare: this.withdraw.welfare,
-        blood: this.health.blood,
-        disease: this.health.disease,
-        treatment: this.health.treatment,
-        healthpb: this.health.healthpb
+       this.data = {
+          ...this.personal, 
+          ...this.family, 
+          ...this.address, 
+          ...this.withdraw, 
+          ...this.health 
       }
-      console.log('data students', data.fname)
+      console.log('data students', this.data)
       this.createStudent(data)
     },
     handlePersonalData(PersonalForm, tab) {
       //todo this kept in store
       this.personal = PersonalForm
+
       this.changeTab(tab)
       console.log('main ', this.personal)
     },
