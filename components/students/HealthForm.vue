@@ -62,14 +62,19 @@
 <script>
 export default {
   name: 'AddressForm',
+  props: {
+    healthData: {
+      type: Object
+    }
+  },
   data() {
     return {
-      healthData: {
-        blood: '',
-        disease: '',
-        treatment: '',
-        healthpb: ''
-      }
+      // healthData: {
+      //   blood: '',
+      //   disease: '',
+      //   treatment: '',
+      //   healthpb: ''
+      // }
     }
   },
 

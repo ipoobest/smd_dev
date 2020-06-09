@@ -16,11 +16,12 @@
             <v-tab>ข้อมูลสุขภาพ</v-tab>
             <v-tab>สิทธิการเบิกค่าเล่าเรียน</v-tab>
 
+
             <v-tab-item><Personal :personalData="data" @savePersonal="handlePersonalData"/></v-tab-item>
             <v-tab-item><Address :addressData="data" @saveAddress="handleAddressData"/></v-tab-item>
             <v-tab-item><Family :familyData="data" @saveFamily="handleFamilyData"/></v-tab-item>
-            <v-tab-item><Withdraw :withdrawData="withdraw" @saveWithdraw="handleWithdrawData"/></v-tab-item>
-            <v-tab-item><Health :healthData="health" @saveHealth="handleHealthData"/></v-tab-item>
+            <v-tab-item><Health :healthData="data" @saveHealth="handleHealthData"/></v-tab-item>
+            <v-tab-item><Withdraw :withdrawData="data" @saveWithdraw="handleWithdrawData"/></v-tab-item>
           </v-tabs>
         </v-card>
       </v-col>

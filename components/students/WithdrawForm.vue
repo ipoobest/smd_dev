@@ -6,14 +6,14 @@
         <v-row justify="center">
           <v-col class="pt-0 pb-0" cols="8">
             <v-select
-              v-model="WithdrawData.privileage"
+              v-model="withdrawData.privileage"
               :items="itemsPrivileage"
               dense
               outlined
               label="สิทธิ์การเบิกค่าเล่าเรียน"
             />
             <v-select
-              v-model="WithdrawData.welfare"
+              v-model="withdrawData.welfare"
               :items="itemsWelfare"
               dense
               outlined
@@ -38,13 +38,18 @@
 
 <script>
 export default {
+  props: {
+    withdrawData: {
+      type: Object
+    }
+  },
   data() {
     return {
       tab: '',
-      WithdrawData: {
-        privileage: '',
-        welfare: ''
-      },
+      // withdrawData: {
+      //   privileage: '',
+      //   welfare: ''
+      // },
       itemsPrivileage: ['เบิกค่าเล่าเรียนได้', 'เบิกค่าเล่าเรียนไม่ได้'],
       itemsWelfare: [
         '*สวัสดิการ มข. (บุตรข้าราชราช มข.)',
@@ -56,12 +61,12 @@ export default {
     back() {
       this.tab = 'familyData'
       console.log('black', this.tab)
-      this.$emit('saveWithdraw', this.WithdrawData, this.tab)
+      this.$emit('saveWithdraw', this.withdrawData, this.tab)
     },
     save() {
       console.log('go')
       this.tab = 'healthData'
-      this.$emit('saveWithdraw', this.WithdrawData, this.tab)
+      this.$emit('saveWithdraw', this.withdrawData, this.tab)
     }
   }
 }
