@@ -16,19 +16,19 @@
             <v-tab href="#healthData">ข้อมูลสุขภาพ</v-tab>
 
             <v-tab-item value="personalData"
-              ><Personal @savePersonal="handlePersonalData"
+              ><Personal :personalData="personal" @savePersonal="handlePersonalData"
             /></v-tab-item>
             <v-tab-item value="addressData"
-              ><Address @saveAddress="handleAddressData"
+              ><Address :addressData="address" @saveAddress="handleAddressData"
             /></v-tab-item>
             <v-tab-item value="familyData"
-              ><Family @saveFamily="handleFamilyData"
+              ><Family :familyData="family" @saveFamily="handleFamilyData"
             /></v-tab-item>
             <v-tab-item value="withdrawData"
-              ><Withdraw @saveWithdraw="handleWithdrawData"
+              ><Withdraw :withdarwData="withdraw" @saveWithdraw="handleWithdrawData"
             /></v-tab-item>
             <v-tab-item value="healthData"
-              ><Health @saveHealth="handleHealthData"
+              ><Health :healthData="health" @saveHealth="handleHealthData"
             /></v-tab-item>
           </v-tabs>
           <!-- <v-btn @click="changeTab('tab-2')">Go to item2</v-btn> -->
@@ -54,16 +54,15 @@ export default {
     Personal,
     Withdraw
   },
-  async asyncData() {},
   data() {
     return {
       tab: '',
       title: 'ข้อมูลส่วนตัวนักเรียน',
-      personal: [],
-      family:[],
-      address:[],
-      withdraw:[],
-      health:[]
+      personal: {},
+      family: {},
+      address: {},
+      withdraw: {},
+      health: {}
     }
   },
   mounted() {},

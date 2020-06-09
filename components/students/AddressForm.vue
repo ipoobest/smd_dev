@@ -55,17 +55,22 @@
 export default {
   name: 'AddressForm',
   components: {},
+    props: {
+    AdderessData: {
+      type: Array
+    }
+  },
   data() {
     return {
       tab: '',
-      AdderessData: {
-        residential: '',
-        domicile: '',
-        dormitory: '',
-        addres: '',
-        dorm: '',
-        stell: ''
-      },
+      // AdderessData: {
+      //   residential: '',
+      //   domicile: '',
+      //   dormitory: '',
+      //   addres: '',
+      //   dorm: '',
+      //   stell: ''
+      // },
       itemResidence: ['บ้าน', 'หอพัก']
     }
   },

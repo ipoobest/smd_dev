@@ -45,11 +45,12 @@ export default {
   },
   mounted() {
     this.getStudentById(this.$route.params.id).then(result => (this.data = result))
+    console.log('data xx', this.data)
   },
   data() {
     return {
       title: `แก้ไข ข้อมูลส่วนตัวนักเรียน`,
-      data: []
+      data: {}
     }
   },
   methods: {

@@ -293,40 +293,40 @@ export default {
   components: {
     UploadProfile
   },
-  // props: {
-  //   personalData: {
-  //     type: Object
-  //   }
-  // },
+  props: {
+    personalData: {
+      type: Object
+    }
+  },
   data() {
     return {
       tab: 'addressData',
-      personalData: {
-        tth: '',
-        namet: '',
-        snamet: '',
-        nickName: '',
-        sex: '',
-        idstd: '',
-        course: '',
-        class: '',
-        study: '',
-        ten: '',
-        namee: '',
-        snamee: '',
-        idCard: '',
-        stage: '',
-        stmonth: '',
-        nation: '',
-        race: '',
-        religian: '',
-        bday: '',
-        badd: '',
-        bprovince: '',
-        profile: null,
-        saving: false,
-        saved: false
-      },
+      // personalData: {
+      //   tth: '',
+      //   namet: '',
+      //   snamet: '',
+      //   nickName: '',
+      //   sex: '',
+      //   idstd: '',
+      //   course: '',
+      //   class: '',
+      //   study: '',
+      //   ten: '',
+      //   namee: '',
+      //   snamee: '',
+      //   idCard: '',
+      //   stage: '',
+      //   stmonth: '',
+      //   nation: '',
+      //   race: '',
+      //   religian: '',
+      //   bday: '',
+      //   badd: '',
+      //   bprovince: '',
+      //   profile: null,
+      //   saving: false,
+      //   saved: false
+      // },
       itemsTiteThai: ['เด็กชาย', 'เด็กหญิง', 'นาย', 'นางสาว'],
       itemsTiteEng: ['Master', 'Miss', 'Mr'],
       itemsSex: ['ชาย', 'หญิง'],
