@@ -16,7 +16,7 @@
             <v-tab>สิทธิการเบิกค่าเล่าเรียน</v-tab>
             <v-tab>ช้อมูลครอบครัว</v-tab>
 
-            <v-tab-item><Personal /></v-tab-item>
+            <v-tab-item><Personal :personalData="data"/></v-tab-item>
             <v-tab-item><Health /></v-tab-item>
             <v-tab-item><Address /></v-tab-item>
             <v-tab-item><Withdraw /></v-tab-item>
@@ -43,21 +43,24 @@ export default {
     Personal,
     Withdraw
   },
-  async asyncData() {
-
+  mounted() {
+    this.getStudentById(this.$route.params.id).then(result => (this.data = result))
   },
   data() {
     return {
-      title: `แก้ไข ข้อมูลส่วนตัวนักเรียน`
+      title: `แก้ไข ข้อมูลส่วนตัวนักเรียน`,
+      data: []
     }
   },
   methods: {
-    black() {
+    async getStudentById(studentId) {
+      const response = await this.$store.dispatch('students/getStudentById', studentId)
+      console.log('response', response)
+      return response
+    },
+    back() {
       this.$router.go(-1)
     }
   },
-  mounted() {
-
-  }
 }
 </script>

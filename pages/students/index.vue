@@ -83,7 +83,7 @@ export default {
       this.$router.push({name: 'index'})
     },
     editItem(item) {
-      console.log('item id ', item)
+      // console.log('item id ', item)
       this.$router.push({
         name: 'students-id',
         params: { id: item.objectId }
