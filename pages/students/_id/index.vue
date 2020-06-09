@@ -17,10 +17,10 @@
             <v-tab>ช้อมูลครอบครัว</v-tab>
 
             <v-tab-item><Personal :personalData="data"/></v-tab-item>
-            <v-tab-item><Health /></v-tab-item>
-            <v-tab-item><Address /></v-tab-item>
-            <v-tab-item><Withdraw /></v-tab-item>
-            <v-tab-item><Family /></v-tab-item>
+            <v-tab-item><Health :healthData="data" /></v-tab-item>
+            <v-tab-item><Address :addressData="data"/></v-tab-item>
+            <v-tab-item><Withdraw :withdrawData="data"/></v-tab-item>
+            <v-tab-item><Family :familyData="data"/></v-tab-item>
           </v-tabs>
         </v-card>
       </v-col>

@@ -26,7 +26,7 @@
       </v-col>
       <v-col cols="6">
         <v-row>
-          <v-col class="pt-0 pb-0" cols="2">
+          <v-col class="pt-0 pb-0" cols="3">
             <v-select
               v-model="personalData.tth"
               :items="itemsTiteThai"
@@ -37,7 +37,7 @@
               :rules="[v => !!v || 'เลือกคำนำหน้า']"
             />
           </v-col>
-          <v-col class="pt-0 pb-0" cols="5">
+          <v-col class="pt-0 pb-0" cols="4">
             <v-text-field
               v-model="personalData.namet"
               dense
@@ -62,7 +62,7 @@
 
       <v-col cols="6">
         <v-row>
-          <v-col class="pt-0 pb-0" cols="2">
+          <v-col class="pt-0 pb-0" cols="3">
             <v-select
               v-model="personalData.ten"
               :items="itemsTiteEng"
@@ -73,7 +73,7 @@
               :rules="[v => !!v || 'กรุณาเลือกคำนำหน้า (ภาษาอังกฤษ)']"
             />
           </v-col>
-          <v-col class="pt-0 pb-0" cols="5">
+          <v-col class="pt-0 pb-0" cols="4">
             <v-text-field
               v-model="personalData.namee"
               dense
@@ -293,6 +293,11 @@ export default {
   components: {
     UploadProfile
   },
+  // props: {
+  //   personalData: {
+  //     type: Object
+  //   }
+  // },
   data() {
     return {
       tab: 'addressData',

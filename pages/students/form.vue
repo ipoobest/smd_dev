@@ -3,7 +3,11 @@
     <v-row align="center">
       <v-col cols="12">
         <v-card>
-          <v-card-title>{{ title }}</v-card-title>
+          <v-card-title>
+            <v-btn class="mr-5" color="primary" fab small dark @click="back" >
+              <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>       
+            {{ title }}</v-card-title>
           <v-tabs v-model="tab" fixed-tabs>
             <v-tab href="#personalData">ข้อมูลส่วนตัว</v-tab>
             <v-tab href="#addressData">ที่อยู่อาศัย</v-tab>
@@ -163,11 +167,13 @@ export default {
     handleHealthData(HealthData, tab) {
       this.health = HealthData
       console.log('main handleHealthData ', this.health)
-      // this.changeTab(tab)
       this.saveData()
     },
     changeTab(tab) {
       this.tab = tab
+    },
+    back() {
+      this.$router.go(-1)
     }
   }
 }
