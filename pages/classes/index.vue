@@ -127,9 +127,9 @@
 export default {
   middleware: 'authentication',
   async mounted() {
-    this.classItem = this.$route.query
-    // console.log('route params', this.$route.query)
-    await this.getListClass(this.classItem).then(result => (this.items = result))
+    // this.classItem = this.$route.query
+    console.log('route params', this.$route.query)
+    await this.getListClass(this.$route.query).then(result => (this.items = result))
     await this.getListTeacher().then(result => (this.teachers = result))
     await this.selectItemTeachers()
   },
@@ -151,7 +151,6 @@ export default {
         { text: 'รหัสห้อง', value: 'classRoomId', align:'center'},
         { text: 'ระดับชั้น', value: 'classRoomLevel', align:'center' },
         { text: 'ห้อง', value: 'classRoomName', align:'center' },
-        // { text: 'จำนวนนักเรียน', value: 'teatherId', align:'center' },
         { text: 'Actions', value: 'actions', sortable: false, align:'center'}
       ],
       items: [],
@@ -182,9 +181,8 @@ export default {
   },
   methods: {
     async getListClass(classItem) {
-      console.log('classItem', classItem)
       const response = await this.$store.dispatch(`classes/getClassesByAcademicYears`, classItem)
-      console.log(response.results)
+      console.log('getListClass', response)
       return response.results
     },
     async getListTeacher(){
@@ -192,30 +190,17 @@ export default {
       return response.results
     },
     async createClasses(data) {
-      console.log('create Classes ', data)
-       const response = await this.$store.dispatch(`classes/createClasses`, data)
-      console.log('res create', response)
-    },
-    async updateClasses(data) {
-      // console.log('data update ', data)
-      // console.log('res ', response)
+      const response = await this.$store.dispatch(`classes/createClasses`, data)
+      this.getListClass(this.$route.query).then(result => (this.items = result))
     },
     async deteleClasses(itemId) {
       console.log('delete ', itemId)
       const response = await this.$store.dispatch(`classes/deleteClass`, itemId)
-      // console.log('res ', response)
     },
     async getAcademicYear() {
       const response = await this.$store.dispatch(`academic_year/getAcademicYear`)
-      // console.log('response academicYear', response.results)
       return response.results
     },    
-    async createAcademicYear(object) {
-      const response = await this.$store.dispatch(
-        `academic_year/createAcademicYear`, object)
-      // console.log('create years reuslt', response)
-      this.getListClass(this.classItem).then(result => (this.items = result))
-    },
     selectItemTeachers() {
       console.log('select item teacher', this.teachers)
       for(var index = 0; index < this.teachers.length; index++){
@@ -223,7 +208,6 @@ export default {
         this.teachers[index].firstName + " " + 
         this.teachers[index].lastName)
       }
-      console.log('resss', this.selectItemTeacher)
     },
     editItem(item) {
       // console.log('item id ', item)
@@ -243,9 +227,6 @@ export default {
       this.$router.go(-1)
     },
     close() {
-      console.log('closd')
-      this.$refs.form.reset()
-      console.log('class item after close ', this.classItem)
       if(this.dialogAddClass) {
         this.dialogAddClass = false 
       } else if(this.dialogCreateYear) {
@@ -257,34 +238,13 @@ export default {
       }, 300)
     },
     save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.classItem)
-        const editData = {
-          objectId: this.classItem.objectId,
-          ClassesId: this.classItem.ClassesId,
-          ClassesPosition: this.classItem.ClassesPosition,
-          title: this.classItem.title,
-          firstName: this.classItem.firstName,
-          lastName: this.classItem.lastName
-        }
-        this.updateClasses(editData)
-        this.resetForm()
+      if(this.$refs.form.validate()){
+        console.log('objects', this.classItem)
+        const data = {...this.classItem, ...this.$route.query}
+        console.log('data request', data)
+        this.createClasses(data)
         this.close()
-      } else {
-        if(this.$refs.form.validate()){
-          this.createClasses(this.classItem)
-          this.resetForm()
-          // this.items.push(this.classItem)
-          // this.classItem = {}
-          this.close()
-        }
       }
-    },
-    addYears() {
-      this.createAcademicYear(this.academicYear)
-      // this.selectAcademic.push(`${this.academicYear.schoolYear} เทอม  ${this.academicYear.term}`)
-      this.close()
-
     },
     addStudent(item) {
       console.log('item id ', item.objectId)

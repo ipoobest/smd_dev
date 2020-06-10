@@ -131,6 +131,7 @@ export default {
     async createAcademicYear(data) {
       const response = await this.$store.dispatch(`academic_year/createAcademicYear`, data)
       console.log('res create', response)
+      this.resetForm()
       this.getDataFromApi().then(result => (this.items = result))
     },
     async deteleAcademicYear(itemId) {
@@ -152,7 +153,6 @@ export default {
     },
     addAcademicYear() {
       this.createAcademicYear(this.academicYear)
-      this.resetForm()
       this.close()
 
     },
@@ -163,7 +163,6 @@ export default {
       this.$refs.form.reset()
     },
     close() {
-      this.resetForm()
       setTimeout(() => {
         this.dialogCreateYear = false
       }, 300)

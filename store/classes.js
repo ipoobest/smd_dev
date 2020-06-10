@@ -25,7 +25,6 @@ export const actions = {
     return new Promise(async (resolve, reject) => {
       try {
         const result = this.$axios.$post(`${process.env.parseUrl}/classes/${classes.class}`, object)
-        console.log('student create', result)
         commit('setClass', result)
         resolve(result)
       } catch (error) {
@@ -67,7 +66,6 @@ export const actions = {
       try {
         const where = JSON.stringify(conditions)
         const result = this.$axios.$get(`${process.env.parseUrl}/classes/${classes.class}/?where=${where}`)
-
         commit('setClasses', result)
         resolve(result)
       } catch (error) {

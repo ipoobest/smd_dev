@@ -170,8 +170,8 @@ export default {
     },
     async createSubject(data) {
       const response = await this.$store.dispatch(`subjects/createSubject`, data)
-      // this.getdataFromApi().then(result => (this.items = result))
-      this.items = [...this.items, data]
+      this.getdataFromApi().then(result => (this.items = result))
+      // this.items = [...this.items, data]
     },
     async updateSubject(data) {
       const response = await this.$store.dispatch(`subjects/updateSubject`, data)
@@ -206,11 +206,11 @@ export default {
       this.$router.push({name: 'index'})
     },
     resetForm() {
-      this.$refs.form.reset() 
+      this.$refs.form.reset()
     },
     close() {
       this.dialog = false
-      this.datas = {}
+      this.resetForm()
       setTimeout(() => {
         this.editedIndex = -1
       }, 300)
@@ -220,7 +220,6 @@ export default {
         Object.assign(this.items[this.editedIndex], this.datas)
         console.log('put data user ', this.items)
         // this.items = [...this.datas, data]
-         console.log('this datas', editdatass)
         const editdatas = {
           objectId: this.datas.objectId,
           code: this.datas.code,
@@ -235,7 +234,6 @@ export default {
         if(this.$refs.form.validate()){
           this.createSubject(this.datas)
           // this.items.push(this.datas)
-          this.editdatas = {}
           this.close()
         } 
       }

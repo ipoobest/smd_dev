@@ -28,7 +28,6 @@ export const actions = {
                  `${process.env.parseUrl}/classes/${classes.students}`,
                  object
                );
-               console.log("student create", result);
                commit("setStudent", result);
                resolve(result);
              } catch (error) {
