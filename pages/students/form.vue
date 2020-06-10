@@ -71,7 +71,7 @@ export default {
     async createStudent(data) {
       const response = await this.$store.dispatch(`students/createStudent`, data)
       console.log('response', data)
-      this.createUser(data.idstd, data.idstd, 'student', data.objecId)
+      // this.createUser(data.idstd, data.idstd, 'student', data.objecId)
       this.$router.replace({name: 'students'})
 
     },
@@ -89,7 +89,7 @@ export default {
           ...this.health 
       }
       console.log('data students', this.data)
-      this.createStudent(data)
+      this.createStudent(this.data)
     },
     handlePersonalData(PersonalForm, tab) {
       //todo this kept in store

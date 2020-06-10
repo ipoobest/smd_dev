@@ -6,36 +6,23 @@
       <v-col cols="12">
         <v-row justify="center">
           <v-col class="pt-0 pb-0" cols="2">
-            <!-- <UploadProfile v-model="personalData.profile">
+           <image-input v-model="personalData.avatar">
               <div slot="activator">
-                <v-avatar
-                  v-if="!personalData.profile"
-                  v-ripple
-                  size="150px"
-                  class="grey lighten-3 mb-3"
-                >
-                  <span>คลิกเพื่ออัพโหลดรูปภาพ</span>
-                </v-avatar>
-                <v-avatar v-else v-ripple size="150px" class="mb-3">
-                  <img :src="personalData.profile.imageURL" alt="profile" />
-                </v-avatar>
-              </div>
-            </UploadProfile> -->
-           <image-input v-model="avatar">
-              <div slot="activator">
-                <v-avatar size="150px" v-ripple v-if="!avatar" class="grey lighten-3 mb-3">
-                  <span>Click to add avatar</span>
+                <v-avatar size="150px" v-ripple v-if="!personalData.avatar" class="grey lighten-2 mb-3">
+                  <span>คลิกเพื่อเพิ่มรูปภาพ</span>
                 </v-avatar>
                 <v-avatar size="150px" v-ripple v-else class="mb-3">
-                  <img :src="avatar.imageURL" alt="avatar">
+                  <img :src="personalData.avatar.imageURL" alt="avatar">
                 </v-avatar>
               </div>
             </image-input>
-            <v-slide-x-transition>
-              <div v-if="avatar && saved == false">
-                <v-btn class="primary" @click="uploadImage" :loading="saving">Save Avatar</v-btn>
-              </div>
-            </v-slide-x-transition>         
+            <v-col cols="2">
+              <v-slide-x-transition>
+                <div v-if="personalData.avatar && saved == false">
+                  <v-btn class="success ml-3" @click="uploadImage" :loading="saving">บันทึกรูป</v-btn>
+                </div>
+              </v-slide-x-transition>     
+            </v-col>
           </v-col>
         </v-row>
       </v-col>
@@ -316,7 +303,7 @@ export default {
   data() {
     return {
       tab: 'addressData',
-      avatar: null,
+      // avatar: null,
       saving: false,
       saved: false,
       itemsTiteThai: ['เด็กชาย', 'เด็กหญิง', 'นาย', 'นางสาว'],
@@ -329,7 +316,6 @@ export default {
   computed: {
     fromDateDisp() {
       return this.personalData.bday
-      // format date, apply validations, etc. Example below.
     }
   },
   watch: {
@@ -342,6 +328,7 @@ export default {
   },
   methods: {
     uploadImage() {
+      console.log('image url', this.personalData.avatar.imageURL)
       this.saving = true
       setTimeout(() => this.savedAvatar(), 1000)
     },
@@ -350,13 +337,9 @@ export default {
       this.saved = true
     },
     save() {
-      // if(this.saving == false){
-      //   alert('กรุณาอัพโหลดรูปภาพ')
-      // }else{
-      //   console.log('saving ', this.saving )
-      // }
-      // console.log('title ', this.personalData.birth)
       if(this.$refs.form.validate()){
+        // const data = {...this.personalData, ...this.avatar }
+        // console.log('personal data', data)
         this.$emit('savePersonal', this.personalData, this.tab)
       }
       

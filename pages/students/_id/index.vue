@@ -26,8 +26,8 @@
             <v-tab-item value="personalData"><Personal :personalData="data" @savePersonal="handlePersonalData"/></v-tab-item>
             <v-tab-item value="addressData"><Address :addressData="data" @saveAddress="handleAddressData"/></v-tab-item>
             <v-tab-item value="familyData"><Family :familyData="data" @saveFamily="handleFamilyData"/></v-tab-item>
-            <v-tab-item value="withdrawData"><Health :healthData="data" @saveHealth="handleHealthData"/></v-tab-item>
-            <v-tab-item value="healthData"><Withdraw :withdrawData="data" @saveWithdraw="handleWithdrawData"/></v-tab-item>
+            <v-tab-item value="withdrawData"><Withdraw :withdrawData="data" @saveWithdraw="handleWithdrawData"/></v-tab-item>
+            <v-tab-item value="healthData"><Health :healthData="data" @saveHealth="handleHealthData"/></v-tab-item>
           </v-tabs>
         </v-card>
       </v-col>
@@ -73,6 +73,9 @@ export default {
       console.log('response', response)
       return response
     },
+    async updateStudents(){
+      const response = await this.$store.dispatch('students/updateStudentById', studentId)
+    },
      handlePersonalData(PersonalForm, tab) {
       //todo this kept in store
       this.personal = PersonalForm
@@ -100,16 +103,16 @@ export default {
       this.updateData()
     },
       async updateData() {
-      this.updateData = [
+      this.updateData = {
         ...this.personal, 
         ...this.family, 
         ...this.address, 
         ...this.withdraw, 
         ...this.health 
-      ]
+      }
      
       console.log('data updateData', this.updateData)
-      // this.updateData(this.updateData)
+      this.updateData(this.updateData)
     },
     changeTab(tab) {
       this.tab = tab
