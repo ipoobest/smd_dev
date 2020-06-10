@@ -232,18 +232,13 @@ export default {
       const response = await this.$store.dispatch(`teachers/createTeacher`, data)
       console.log('res create teacher', response)
       this.getDataFromApi().then((result) => (this.items = result))
-      // this.createUser(data)
     },
     async updateTeacher(data) {
-      // console.log('data update ', data)
       const response = await this.$store.dispatch(`teachers/updateTeacher`, data)
-      // console.log('res ', response)
      this.getDataFromApi().then((result) => (this.items = result))
     },
     async deleteTeacher(itemId) {
-      // console.log('delete update ', itemId)
       const response = await this.$store.dispatch(`teachers/deleteTeacher`, itemId)
-      // console.log('res ', response)
     },
     editItem(item) {
       console.log('item id ', item)

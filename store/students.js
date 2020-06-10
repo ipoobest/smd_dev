@@ -85,9 +85,10 @@ export const actions = {
              }
            });
          },
-         async updateStudent({ commit }, { objectId, object }) {
+         async updateStudent({ commit }, object) {
            return new Promise(async (resolve, reject) => {
              try {
+               const objectId = object.objectId;
                const result = this.$axios.$put(
                  `${process.env.parseUrl}/classes/${classes.students}/${objectId}`,
                  object

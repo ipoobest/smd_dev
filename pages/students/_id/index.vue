@@ -73,8 +73,9 @@ export default {
       console.log('response', response)
       return response
     },
-    async updateStudents(){
-      const response = await this.$store.dispatch('students/updateStudentById', studentId)
+    async updateStudents(data){
+      const response = await this.$store.dispatch('students/updateStudent', data)
+      this.$router.push({name: 'students'})
     },
      handlePersonalData(PersonalForm, tab) {
       //todo this kept in store
@@ -108,11 +109,11 @@ export default {
         ...this.family, 
         ...this.address, 
         ...this.withdraw, 
-        ...this.health 
+        ...this.health,
       }
      
       console.log('data updateData', this.updateData)
-      this.updateData(this.updateData)
+      this.updateStudents(this.updateData)
     },
     changeTab(tab) {
       this.tab = tab
