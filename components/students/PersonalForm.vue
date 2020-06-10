@@ -6,7 +6,7 @@
       <v-col cols="12">
         <v-row justify="center">
           <v-col class="pt-0 pb-0" cols="2">
-            <UploadProfile v-model="personalData.profile">
+            <!-- <UploadProfile v-model="personalData.profile">
               <div slot="activator">
                 <v-avatar
                   v-if="!personalData.profile"
@@ -20,7 +20,22 @@
                   <img :src="personalData.profile.imageURL" alt="profile" />
                 </v-avatar>
               </div>
-            </UploadProfile>
+            </UploadProfile> -->
+           <image-input v-model="avatar">
+              <div slot="activator">
+                <v-avatar size="150px" v-ripple v-if="!avatar" class="grey lighten-3 mb-3">
+                  <span>Click to add avatar</span>
+                </v-avatar>
+                <v-avatar size="150px" v-ripple v-else class="mb-3">
+                  <img :src="avatar.imageURL" alt="avatar">
+                </v-avatar>
+              </div>
+            </image-input>
+            <v-slide-x-transition>
+              <div v-if="avatar && saved == false">
+                <v-btn class="primary" @click="uploadImage" :loading="saving">Save Avatar</v-btn>
+              </div>
+            </v-slide-x-transition>         
           </v-col>
         </v-row>
       </v-col>
@@ -287,11 +302,11 @@
 </template>
 
 <script>
-import UploadProfile from './UploadProfile'
+import ImageInput from './ImageInput'
 export default {
   name: 'PersonalFrom',
   components: {
-    UploadProfile
+    ImageInput
   },
   props: {
     personalData: {
@@ -301,32 +316,9 @@ export default {
   data() {
     return {
       tab: 'addressData',
-      // personalData: {
-      //   tth: '',
-      //   namet: '',
-      //   snamet: '',
-      //   nickName: '',
-      //   sex: '',
-      //   idstd: '',
-      //   course: '',
-      //   class: '',
-      //   study: '',
-      //   ten: '',
-      //   namee: '',
-      //   snamee: '',
-      //   idCard: '',
-      //   stage: '',
-      //   stmonth: '',
-      //   nation: '',
-      //   race: '',
-      //   religian: '',
-      //   bday: '',
-      //   badd: '',
-      //   bprovince: '',
-      //   profile: null,
-      //   saving: false,
-      //   saved: false
-      // },
+      avatar: null,
+      saving: false,
+      saved: false,
       itemsTiteThai: ['เด็กชาย', 'เด็กหญิง', 'นาย', 'นางสาว'],
       itemsTiteEng: ['Master', 'Miss', 'Mr'],
       itemsSex: ['ชาย', 'หญิง'],
