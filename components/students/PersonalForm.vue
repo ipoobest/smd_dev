@@ -6,7 +6,7 @@
       <v-col cols="12">
         <v-row justify="center">
           <v-col class="pt-0 pb-0" cols="2">
-           <image-input v-model="personalData.avatar">
+           <image-input  v-model="personalData.avatar">
               <div slot="activator">
                 <v-avatar size="150px" v-ripple v-if="!personalData.avatar" class="grey lighten-2 mb-3">
                   <span>คลิกเพื่อเพิ่มรูปภาพ</span>
@@ -328,7 +328,9 @@ export default {
   },
   methods: {
     uploadImage() {
-      console.log('image url', this.personalData.avatar.imageURL)
+      // console.log('image url', this.personalData.avatar.imageURL)
+      // เอาของจาก emiit ออกมา
+      // เพิ่ม ของที่ได้นัดใส่ this.personalData
       this.saving = true
       setTimeout(() => this.savedAvatar(), 1000)
     },

@@ -31,7 +31,7 @@
       errorDialog: null,
       errorText: '',
       uploadFieldName: 'file',
-      maxSize: 1024
+      maxSize: 5120
     }),
     props: {
     // Use "value" to enable using v-model
@@ -56,9 +56,10 @@
             this.errorText = 'กรุณาเลือกรูปภาพที่มีขนาดน้อยกว่า 5Mb '
           } else {
             // Append file into FormData and turn file into image URL
-            let formData = new FormData()
-            let imageURL = URL.createObjectURL(imageFile)
-            formData.append(fieldName, imageFile)
+            var formData = new FormData()
+            var imageURL = URL.createObjectURL(imageFile)
+            formData.append(imageFile)
+            console.log('formData', formData)
             // Emit the FormData and image URL to the parent component
             this.$emit('input', { formData, imageURL })
           }

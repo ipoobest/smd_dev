@@ -70,7 +70,7 @@ export default {
       console.log('data update async ', data)
       const response = await this.$store.dispatch('students/updateStudent', data )
       console.log(response)
-      // this.$router.push({name: 'students'})
+      this.$router.push({name: 'students'})
     },
      handlePersonalData(PersonalForm, tab) {
       //todo this kept in store
