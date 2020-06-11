@@ -52,7 +52,7 @@ export default {
   },
   mounted() {
     this.getStudentById(this.$route.params.id).then(result => (this.data = result))
-    console.log('data xx', this.data)
+    this.data = { ...this.data}
   },
   data() {
     return {
@@ -64,7 +64,7 @@ export default {
       address: {},
       withdraw: {},
       health: {},
-      updateDate: {}
+      editData: {}
     }
   },
   methods: {
@@ -73,9 +73,11 @@ export default {
       console.log('response', response)
       return response
     },
-    async updateStudents(data){
-      const response = await this.$store.dispatch('students/updateStudent', data)
-      this.$router.push({name: 'students'})
+    async updateStudents(object){
+      console.log('data update async ', object)
+      const response = await this.$store.dispatch('students/updateStudent', { object } )
+      console.log(response)
+      // this.$router.push({name: 'students'})
     },
      handlePersonalData(PersonalForm, tab) {
       //todo this kept in store
@@ -104,7 +106,7 @@ export default {
       this.updateData()
     },
       async updateData() {
-      this.updateData = {
+      this.editData = {
         ...this.personal, 
         ...this.family, 
         ...this.address, 
@@ -112,8 +114,8 @@ export default {
         ...this.health,
       }
      
-      console.log('data updateData', this.updateData)
-      this.updateStudents(this.updateData)
+      console.log('data updateData xxx', this.editData)
+      this.updateStudents(this.editData)
     },
     changeTab(tab) {
       this.tab = tab

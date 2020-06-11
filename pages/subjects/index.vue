@@ -174,7 +174,7 @@ export default {
       // this.items = [...this.items, data]
     },
     async updateSubject(data) {
-      const response = await this.$store.dispatch(`subjects/updateSubject`, data)
+      const response = await this.$store.dispatch(`subjects/updateSubject`, { data })
       // console.log('updateSubject ', response)
       this.getdataFromApi().then(result => (this.items = result))
     },

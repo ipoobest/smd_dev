@@ -53,7 +53,7 @@
     <v-row justify="end">
       <div class="mb-5 mr-7">
         <v-btn color="orange" depressed large @click="back">ย้อนกลับ</v-btn>
-        <v-btn color="success" depressed large @click="save">สร้าง</v-btn>
+        <v-btn color="success" depressed large @click="save">{{ buttonTitle }}</v-btn>
       </div>
     </v-row>
   </v-card-text>
@@ -65,6 +65,11 @@ export default {
   props: {
     healthData: {
       type: Object
+    }
+  },
+  computed: {
+    buttonTitle() {
+      return this.healthData.objectId ? 'อัพเดท' : 'สร้าง'
     }
   },
   data() {
