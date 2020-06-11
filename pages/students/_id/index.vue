@@ -9,12 +9,6 @@
           </v-btn>    
             {{ title }}
           </v-card-title>
-          <!-- <v-tabs fixed-tabs >
-            <v-tab>ข้อมูลส่วนตัว</v-tab>
-            <v-tab>ที่อยู่อาศัย</v-tab>
-            <v-tab>ข้อมูลครอบครัว</v-tab>
-            <v-tab>ข้อมูลสุขภาพ</v-tab>
-            <v-tab>สิทธิการเบิกค่าเล่าเรียน</v-tab> -->
 
           <v-tabs v-model="tab" fixed-tabs>
             <v-tab href="#personalData">ข้อมูลส่วนตัว</v-tab>
@@ -64,7 +58,6 @@ export default {
       address: {},
       withdraw: {},
       health: {},
-      editData: {}
     }
   },
   methods: {
@@ -73,9 +66,9 @@ export default {
       console.log('response', response)
       return response
     },
-    async updateStudents(object){
-      console.log('data update async ', object)
-      const response = await this.$store.dispatch('students/updateStudent', { object } )
+    async updateStudents(data){
+      console.log('data update async ', data)
+      const response = await this.$store.dispatch('students/updateStudent', data )
       console.log(response)
       // this.$router.push({name: 'students'})
     },
@@ -105,17 +98,22 @@ export default {
       console.log('main handleHealthData ', this.health)
       this.updateData()
     },
-      async updateData() {
-      this.editData = {
+    updateData() {
+      const editData = {
         ...this.personal, 
         ...this.family, 
         ...this.address, 
         ...this.withdraw, 
         ...this.health,
       }
-     
-      console.log('data updateData xxx', this.editData)
-      this.updateStudents(this.editData)
+
+    // delete
+     delete editData.data;
+     delete editData.createdAt;
+     delete editData.updatedAt;
+
+      console.log('data updateData xxx', editData)
+      this.updateStudents(editData)
     },
     changeTab(tab) {
       this.tab = tab

@@ -174,14 +174,12 @@ export default {
       // this.items = [...this.items, data]
     },
     async updateSubject(data) {
-      const response = await this.$store.dispatch(`subjects/updateSubject`, { data })
+      const response = await this.$store.dispatch(`subjects/updateSubject`, data )
       // console.log('updateSubject ', response)
       this.getdataFromApi().then(result => (this.items = result))
     },
     async deleteSubject(data) {
-      // console.log('object id', data)
       const response = await this.$store.dispatch(`subjects/deleteSubject`, data)
-      // console.log('deleteSubject ', response)
     },
     addClasses(item){
       this.$router.push({name: 'subjects-id', params: { id: `${item.objectId}`}})
@@ -190,7 +188,6 @@ export default {
       this.getdataFromApi().then(result => (this.items = result))
     },
     editItem(item) {
-      // console.log('item id ', item)
       this.editedIndex = this.items.indexOf(item)
       this.datas = Object.assign({}, item)
       this.dialog = true
