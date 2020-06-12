@@ -1,11 +1,11 @@
 <template>
   <div
     class="base-image-input"
-    :style="{ 'background-image': `url(${imageData})` }"
+    :style="{ 'background-image': `url(${profileImage})` }"
     @click="chooseImage"
   >
     <span
-      v-if="!imageData"
+      v-if="!profileImage"
       class="placeholder"
     >
       Choose an Image
@@ -22,9 +22,9 @@
 
 export default {
    name: 'base-image-input',
+   props: ['profileImage'],
    data () {
     return {
-      imageData: null
     }
   },
   methods: {
@@ -37,10 +37,10 @@ export default {
       if (files && files[0]) {
       const reader = new FileReader
       reader.onload = e => {
-        this.imageData = e.target.result
+        this.profileImage = e.target.result
       }
       reader.readAsDataURL(files[0])
-      this.$emit('input', files[0])
+      this.$emit('input', this.profileImage)
      }
     }
   }

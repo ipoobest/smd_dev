@@ -5,9 +5,21 @@
     <v-row>
       <v-col cols="12">
         <v-row justify="center">
-          <v-col class="pt-0 pb-0" cols="2">
-            <base-image-input v-model="personalData.imageFile"/>
-          </v-col>
+              <v-col v-if="!personalData.profileBase64" class="pt-0 pb-0" cols="12">
+                <v-row justify="center">
+                  <v-col class="pt-0 pb-0" cols="4">
+                    <v-file-input v-model="profile" @change="handleImage" label="รูป" />
+                  </v-col>
+                </v-row>
+              </v-col>
+              <v-col v-if="!!personalData.profileBase64" class="pt-0" cols="4" offset="1">
+               <v-row>
+                  <v-col class="pt-0 pb-0 text-center" cols="6">
+                    <v-img :src="personalData.profileBase64" max-width="200" />
+                    <v-btn color="error" class="mt-5" @click="removeprofile" >ลบรูป</v-btn>
+                  </v-col>
+                </v-row>
+              </v-col>
         </v-row>
       </v-col>
       <v-col cols="6">
@@ -292,7 +304,8 @@ export default {
       itemsTiteEng: ['Master', 'Miss', 'Mr'],
       itemsSex: ['ชาย', 'หญิง'],
       itemsLevel: ['ม.1', 'ม.2','ม.3','ม.4','ม.5','ม.6'],
-      fromDateMenu: false
+      fromDateMenu: false,
+      profile: {},
     }
   },
   computed: {
@@ -300,15 +313,30 @@ export default {
       return this.personalData.bday
     }
   },
-  watch: {
-    avatar: {
-      handler() {
-        this.saved = false
-      },
-      deep: true
-    }
-  },
   methods: {
+    async handleImage(e) {
+        
+      if(!!this.profile && this.profile.type) {
+        const type = this.profile.type.split('/')[0]
+
+        if(type === 'image') {
+          const reader = new FileReader
+          reader.readAsDataURL(this.profile)
+           reader.onload =  () => {
+            console.log('reader', reader.result)
+            this.personalData.profileBase64 =  reader.result
+          }
+          reader.onerror = error => console.log(error)
+        }
+      }
+
+    },
+    async removeprofile() {
+      if(confirm(`ต้องการลบโลโก้`)) {
+        this.personalData.profile = ``
+        this.personalData.profileBase64 = ``
+      }
+    },
     save() {
       if(this.$refs.form.validate()){
         this.$emit('savePersonal', this.personalData, this.tab)
