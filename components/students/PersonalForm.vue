@@ -6,23 +6,7 @@
       <v-col cols="12">
         <v-row justify="center">
           <v-col class="pt-0 pb-0" cols="2">
-           <image-input  v-model="personalData.avatar">
-              <div slot="activator">
-                <v-avatar size="150px" v-ripple v-if="!personalData.avatar" class="grey lighten-2 mb-3">
-                  <span>คลิกเพื่อเพิ่มรูปภาพ</span>
-                </v-avatar>
-                <v-avatar size="150px" v-ripple v-else class="mb-3">
-                  <img :src="personalData.avatar.imageURL" alt="avatar">
-                </v-avatar>
-              </div>
-            </image-input>
-            <v-col cols="2">
-              <v-slide-x-transition>
-                <div v-if="personalData.avatar && saved == false">
-                  <v-btn class="success ml-3" @click="uploadImage" :loading="saving">บันทึกรูป</v-btn>
-                </div>
-              </v-slide-x-transition>     
-            </v-col>
+            <base-image-input v-model="personalData.imageFile"/>
           </v-col>
         </v-row>
       </v-col>
@@ -289,11 +273,12 @@
 </template>
 
 <script>
-import ImageInput from './ImageInput'
+import BaseImageInput from './BaseImageInput'
+
 export default {
   name: 'PersonalFrom',
   components: {
-    ImageInput
+    BaseImageInput
   },
   props: {
     personalData: {
@@ -303,9 +288,6 @@ export default {
   data() {
     return {
       tab: 'addressData',
-      // avatar: null,
-      saving: false,
-      saved: false,
       itemsTiteThai: ['เด็กชาย', 'เด็กหญิง', 'นาย', 'นางสาว'],
       itemsTiteEng: ['Master', 'Miss', 'Mr'],
       itemsSex: ['ชาย', 'หญิง'],
@@ -327,21 +309,8 @@ export default {
     }
   },
   methods: {
-    uploadImage() {
-      // console.log('image url', this.personalData.avatar.imageURL)
-      // เอาของจาก emiit ออกมา
-      // เพิ่ม ของที่ได้นัดใส่ this.personalData
-      this.saving = true
-      setTimeout(() => this.savedAvatar(), 1000)
-    },
-    savedAvatar() {
-      this.saving = false
-      this.saved = true
-    },
     save() {
       if(this.$refs.form.validate()){
-        // const data = {...this.personalData, ...this.avatar }
-        // console.log('personal data', data)
         this.$emit('savePersonal', this.personalData, this.tab)
       }
       
