@@ -17,7 +17,7 @@
             <v-tab href="#withdrawData">สิทธิการเบิกค่าเล่าเรียน</v-tab>
             <v-tab href="#healthData">ข้อมูลสุขภาพ</v-tab>
 
-            <v-tab-item value="personalData"><Personal :personalData="data" @savePersonal="handlePersonalData"/></v-tab-item>
+            <v-tab-item value="personalData"><Personal :personalData="personal" @savePersonal="handlePersonalData"/></v-tab-item>
             <v-tab-item value="addressData"><Address :addressData="data" @saveAddress="handleAddressData"/></v-tab-item>
             <v-tab-item value="familyData"><Family :familyData="data" @saveFamily="handleFamilyData"/></v-tab-item>
             <v-tab-item value="withdrawData"><Withdraw :withdrawData="data" @saveWithdraw="handleWithdrawData"/></v-tab-item>
@@ -44,16 +44,43 @@ export default {
     Personal,
     Withdraw
   },
-  mounted () {
-    this.getStudentById(this.$route.params.id).then(result => (this.data = result))
-    // this.data = { ...this.data}
+  async mounted () {
+    await this.getStudentById(this.$route.params.id).then(result => (this.data = result))
+    await this.mapPersonal()
+    // this.personal = {...this.data}
+    // console.log('personal', this.personal)
   },
   data() {
     return {
       title: `แก้ไข ข้อมูลส่วนตัวนักเรียน`,
       tab: ``,
-      data: {},
-      personal: {},
+      data: {
+        profileBase64: ''
+      },
+      personal: {
+        tth: '',
+        profileBase64: '',
+        namet: '',
+        snamet: '',
+        itemsTiteEng: '',
+        namee: '',
+        snamee: '',
+        nickName: '',
+        sex: '',
+        idstd: '',
+        course: '',
+        class: '',
+        study: '',
+        idCard: '',
+        stage: '',
+        stmonth: '',
+        nation: '',
+        race: '',
+        religian: '',
+        bday: '',
+        badd: '',
+        bprovince: ''
+      },
       family: {},
       address: {},
       withdraw: {},
@@ -114,6 +141,30 @@ export default {
 
       console.log('data updateData xxx', editData)
       this.updateStudents(editData)
+    },
+    mapPersonal() {
+        this.personal.profileBase64 = this.data.profileBase64,
+        this.personal.tth = this.data.tth,
+        this.personal.namet = this.data.namet,
+        this.personal.snamet = this.data.snamet,
+        this.personal.ten = this.data.ten,
+        this.personal.namee = this.data.namee,
+        this.personal.snamee = this.data.snamee,
+        this.personal.nickName = this.data.nickName,
+        this.personal.sex = this.data.sex,
+        this.personal.idstd = this.data.idstd,
+        this.personal.course = this.data.course,
+        this.personal.class = this.data.class,
+        this.personal.study = this.data.study,
+        this.personal.idCard = this.data.idCard,
+        this.personal.stage = this.data.stage,
+        this.personal.stmonth = this.data.stmonth,
+        this.personal.nation = this.data.nation,
+        this.personal.race = this.data.race,
+        this.personal.religian = this.data.religian,
+        this.personal.bday = this.data.bday,
+        this.personal.badd = this.data.badd,
+        this.personal.bprovince = this.data.bprovince
     },
     changeTab(tab) {
       this.tab = tab

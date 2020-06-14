@@ -294,7 +294,7 @@ export default {
     }
   },
   mounted () {
-    // console.log('props', this.personalData)
+    console.log('props', this.personalData)
     // this.profileBase64 = this.personalData.this.profileBase64
   },
   data() {
@@ -331,8 +331,8 @@ export default {
     },
     async removeprofile() {
       if(confirm(`ต้องการลบโลโก้`)) {
-        console.log('personalData', this.profile)
         this.profile = ``
+        console.log('personalData', this.personalData.profileBase64)
         this.personalData.profileBase64 = ``
       }
     },
