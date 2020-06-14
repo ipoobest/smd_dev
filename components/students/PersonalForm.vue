@@ -285,17 +285,17 @@
 </template>
 
 <script>
-import BaseImageInput from './BaseImageInput'
 
 export default {
   name: 'PersonalFrom',
-  components: {
-    BaseImageInput
-  },
   props: {
     personalData: {
       type: Object
     }
+  },
+  mounted () {
+    // console.log('props', this.personalData)
+    // this.profileBase64 = this.personalData.this.profileBase64
   },
   data() {
     return {
@@ -315,14 +315,12 @@ export default {
   },
   methods: {
     async handleImage(e) {
-        
       if(!!this.profile && this.profile.type) {
         const type = this.profile.type.split('/')[0]
-
         if(type === 'image') {
           const reader = new FileReader
           reader.readAsDataURL(this.profile)
-           reader.onload =  () => {
+          reader.onload = () => {
             console.log('reader', reader.result)
             this.personalData.profileBase64 =  reader.result
           }
@@ -333,7 +331,8 @@ export default {
     },
     async removeprofile() {
       if(confirm(`ต้องการลบโลโก้`)) {
-        this.personalData.profile = ``
+        console.log('personalData', this.profile)
+        this.profile = ``
         this.personalData.profileBase64 = ``
       }
     },

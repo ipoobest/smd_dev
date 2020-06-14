@@ -44,9 +44,9 @@ export default {
     Personal,
     Withdraw
   },
-  mounted() {
+  mounted () {
     this.getStudentById(this.$route.params.id).then(result => (this.data = result))
-    this.data = { ...this.data}
+    // this.data = { ...this.data}
   },
   data() {
     return {

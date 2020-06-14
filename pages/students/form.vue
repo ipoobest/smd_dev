@@ -31,7 +31,6 @@
               ><Health :healthData="health" @saveHealth="handleHealthData"
             /></v-tab-item>
           </v-tabs>
-          <!-- <v-btn @click="changeTab('tab-2')">Go to item2</v-btn> -->
         </v-card>
       </v-col>
     </v-row>
@@ -58,7 +57,9 @@ export default {
     return {
       tab: '',
       title: 'ข้อมูลส่วนตัวนักเรียน',
-      personal: {},
+      personal: {
+        profileBase64: ''
+      },
       family: {},
       address: {},
       withdraw: {},
@@ -66,7 +67,9 @@ export default {
       data: {}
     }
   },
-  mounted() {},
+  mounted() {
+    // console.log('testxxxx', this.personalData.profileBase64)
+  },
   methods: {
     async createStudent(data) {
       const response = await this.$store.dispatch(`students/createStudent`, data)
