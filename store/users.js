@@ -39,7 +39,7 @@ export const actions = {
   async getUsers ({ commit }, objectId) {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = this.$axios.$get(`${process.env.parseUrl}/userst/${objectId}`)
+        const result = this.$axios.$get(`${process.env.parseUrl}/users/${objectId}`)
 
         commit('setUsers', result)
         resolve(result)
@@ -54,6 +54,21 @@ export const actions = {
     return new Promise(async (resolve, reject) => {
       try {
         const result = this.$axios.$get(`${process.env.parseUrl}/users`)
+
+        commit('setUser', result)
+        resolve(result)
+      } catch (error) {
+        console.log({ error })
+        commit(`setError`, error)
+        reject(error)
+      }
+    })
+  },
+  async getUserByTeacherId ({ commit }, conditions) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const where = JSON.stringify(conditions)
+        const result = this.$axios.$get(`${process.env.parseUrl}/users?where=${where}`)
 
         commit('setUser', result)
         resolve(result)
@@ -81,7 +96,8 @@ export const actions = {
   async deleteUser ({ commit }, objectId) {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = this.$axios.$put(`${process.env.parseUrl}/users/${objectId}`)
+        // console.log('user delete user', `${process.env.parseUrl}/users/${objectId}`)
+        const result = this.$axios.$delete(`${process.env.parseUrl}/users/${objectId}`)
 
         commit('setUser', null)
         resolve(result)

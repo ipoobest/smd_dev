@@ -217,6 +217,14 @@ export default {
       return response.results
 
     },
+    async getUserByTacherId(teacherId) {
+      const data = {
+          teacherId
+      }
+      const response = await this.$store.dispatch(`users/getUserByTeacherId`, data)
+      console.log('response getUserByTeacher Id', response.results)
+      return response
+    },
     async createUser(data){
       console.log('create user teacher', data.username, data.password)
       const user = {
@@ -225,12 +233,15 @@ export default {
         type: 'teacher',
         teacherId: data.teacherId
       }
-      // const response = await this.$store.dispatch(`users/createUser`, user)
+      const response = await this.$store.dispatch(`users/createUser`, user)
       console.log('create result', response)
     },
     async createTeacher(data) {
+      console.log('data create', data)
       const response = await this.$store.dispatch(`teachers/createTeacher`, data)
-      console.log('res create teacher', response)
+      this.createUser(data)
+      // console.log('res create teacher', response)
+      
       this.getDataFromApi().then((result) => (this.items = result))
     },
     async updateTeacher(data) {
@@ -240,19 +251,26 @@ export default {
     async deleteTeacher(itemId) {
       const response = await this.$store.dispatch(`teachers/deleteTeacher`, itemId)
     },
+    async deleteUser(itemId) {
+      const response = await this.$store.dispatch(`users/deleteUser`, itemId)
+      console.log('create result', response)      
+    },
     editItem(item) {
       console.log('item id ', item)
+      // this.getUserByTacherId(item.teacherId)
       this.editedIndex = this.items.indexOf(item)
       this.editedItem = Object.assign({}, item)
 
       this.dialog = true
     },
-    deleteItem(item) {
-
+    async deleteItem(item) {
     const index = this.items.indexOf(item)
-        //delete user ด้วย
       if (confirm('ยืนยีนการลบข้อมูลครู')) {
-        this.deleteTeacher(item.objectId)
+        const userId = await this.getUserByTacherId(item.teacherId)
+        const objectId =  userId.results[0].objectId
+        console.log('delete userId', userId.results[0].objectId)
+        await this.deleteUser(objectId)
+        await this.deleteTeacher(item.objectId)
         this.items.splice(index, 1)   
       }
     },

@@ -6,6 +6,8 @@ export default function({ $axios, redirect, app, store}) {
     const sessionToken = app.$cookies.get(`X-Parse-Session-Token`)
 
     config.headers.common[`X-Parse-Application-Id`] = process.env.parseAppId
+    config.headers.common[`X-Parse-Master-Key`] = process.env.parseMasterKey
+
 
     if (sessionToken) {
       config.headers.common[`X-Parse-Session-Token`] = sessionToken
