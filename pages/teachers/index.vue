@@ -225,7 +225,7 @@ export default {
         type: 'teacher',
         teacherId: data.teacherId
       }
-      const response = await this.$store.dispatch(`users/createUser`, user)
+      // const response = await this.$store.dispatch(`users/createUser`, user)
       console.log('create result', response)
     },
     async createTeacher(data) {
@@ -256,11 +256,15 @@ export default {
         this.items.splice(index, 1)   
       }
     },
+    resetForm () {
+      this.$refs.form.reset()
+    },
     back() {
       this.$router.push({name: 'index'})
     },
     close() {
       this.dialog = false
+      this.resetForm()
       setTimeout(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
