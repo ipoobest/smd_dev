@@ -5,6 +5,15 @@ module.exports = {
   /*
   ** Headers of the page
   */
+  webpack: (config, { isServer }) => {
+    // Fixes npm packages that depend on `fs` module
+    if (!isServer) {
+      config.node = {
+        fs: 'empty'
+      }
+    }
+    return config
+  },
   head: {
     titleTemplate: '%s - ' + process.env.npm_package_name,
     // title: process.env.npm_package_name || '',
@@ -80,6 +89,7 @@ module.exports = {
   /*
   ** Build configuration
   */
+
   build: {
     /*
     ** You can extend webpack config here

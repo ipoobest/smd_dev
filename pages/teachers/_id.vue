@@ -66,6 +66,10 @@
     },
     subjectList(item) {
       console.log(item)
+      this.$router.push({
+        name: 'teachers-teach-subjects',
+        params: { schoolYear: item.schoolYear, term: item.term, id: this.params}
+      })
     }
   }
 }
