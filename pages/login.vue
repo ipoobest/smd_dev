@@ -66,7 +66,13 @@ export default {
         try {
           const response = await this.$store.dispatch(`auth/login`, { data })
           console.log('login response', response)
-          if(response){
+          // if(response){
+          //   this.$router.replace({name: 'index'})
+          // }
+          if(response.type == "teacher"){
+            console.log('teacher login')
+            this.$router.replace({name: 'teachers-id', params: {id: `${response.objectId}`} })
+          }else {
             this.$router.replace({name: 'index'})
           }
         } catch (error) {
