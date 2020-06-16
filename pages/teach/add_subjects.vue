@@ -1,4 +1,4 @@
-<template>
+al<template>
   <v-layout>
     <v-row align="center">
       <v-col cols="12">
@@ -56,14 +56,16 @@
                           </v-col>
                           <v-col cols="12" sm="6" md="6">
                             <v-select
-                              v-model="input.classTeacher"
+                              v-model="input.teacher"
                               :items="itemTeachers"
+                              item-text="name"
+                              return-object
                               outlined
                               label="ครูผู้สอน"
-                              required
+                              require
                               :rules="[v => !!v || 'กรุณาเลือกครูผู้สอน']"
                             ></v-select>
-                          </v-col>
+                            </v-col>
                           <v-col cols="12" sm="6" md="6">
                             <v-select
                               v-model="input.classRoomLevel"
@@ -154,14 +156,9 @@
           { text: 'รหัส/ชื่อวิขา', value: 'sname', align:'center' },
           { text: 'ระดับชั้น', value: 'classRoomLevel', align:'center'},
           { text: 'ห้องเรียน', value: 'classRoomName', align:'center'},
-          { text: 'ครูผู้สอน', value: 'teacher', align:'center' },
+          { text: 'ครูผู้สอน', value: 'teacher.name', align:'center' },
           { text: 'Actions', value: 'actions', sortable: false, align:'center'}
         ],
-        // headersAddSubjects: [
-        //   { text: 'รหัสวิชา', value: 'codet', align:'center'},
-        //   { text: 'ชื่อวิขา', value: 'sname', align:'center' },
-        //   { text: 'หน่วยกิจ', value: 'credit', align:'center' },
-        // ],
         dialogCreateTeach: false,
         singleSelect: false,
         items: [],
@@ -176,12 +173,12 @@
           classSubject: '',
           classRoomLevel: '',
           classRoomName: '',
-          classTeacher: ''
+          teacher: []
         },
         classSubject: [],
         classRoomLevel: [],
         classRoomName: [],
-        itemTeachers: []        
+        itemTeachers: [],
       }
     },
     methods: {
@@ -191,17 +188,14 @@
           term: this.query.term
         }
         const response = await  this.$store.dispatch(`classes/getClassesByAcademicYears`, conditions)
-        // console.log('classes', response.results)
         return response.results
       },
       async getTeacher() {
         const response = await this.$store.dispatch(`teachers/getTeacher`)
-        // console.log('teacher', response.results)
         return response.results
       },      
       async getSubjects() {
         const response = await this.$store.dispatch(`subjects/getSubjects`)
-        // console.log('response get subject', response.results)
         return response.results
       },
       async getSubjectsFromTeach() {
@@ -210,12 +204,10 @@
           term: this.query.term
         }
         const response = await this.$store.dispatch(`teach/getSubjectsByTerm`,condition)
-        // console.log('response get subject xxx ', response)
         return response.results
       },
       async addSubjectToTeach(data) {
         const response = await this.$store.dispatch(`teach/createTeach`, data)
-        // console.log('response get subject', response)
         await this.getSubjectsFromTeach().then(result => (this.subjectsInTerm = result))
       },
       async addSubject() {
@@ -225,14 +217,10 @@
           sname: this.input.classSubject,   
           classRoomLevel: this.input.classRoomLevel,   
           classRoomName: this.input.classRoomName,   
-          teacher: this.input.classTeacher,
-          // codeSubjectId: '',
-          // teacherId: '',
-          // classId: ''
+          teacher: this.input.teacher
         }
-
+        console.log('teach data', data)
         this.addSubjectToTeach(data)
-        // this.subjectsInTerm.push(data)
         this.resetForm()
         this.close()
       },
@@ -256,9 +244,13 @@
       },
       selectInputTeacher() {
         for (var index = 0; index < this.teachers.length; index++) {
-          this.itemTeachers.push(this.teachers[index].teacherTitle + " " +
-          this.teachers[index].firstName + " " +
-          this.teachers[index].lastName )
+          const teacher = {
+            name: this.teachers[index].teacherTitle + " " +
+                  this.teachers[index].firstName + " " +
+                  this.teachers[index].lastName ,
+            value: this.teachers[index].objectId
+          }
+          this.itemTeachers.push(teacher)
         }
       },      
       addClasses(item) {
