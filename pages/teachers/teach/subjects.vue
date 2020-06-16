@@ -1,11 +1,10 @@
 <template>
   <div>
-    <h3>{{ query }}</h3>
+    <h3>{{ params }}</h3>
   </div>
 </template>
 
 <script>
-import { response } from 'express/lib/express'
   export default {
     mounted () {
       this.params = this.$route.params
