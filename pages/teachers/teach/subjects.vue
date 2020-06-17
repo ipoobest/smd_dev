@@ -21,17 +21,11 @@
     },
     methods: {
       async getTeachByTeacherId (teacherId) {
-        // const teacher = {
-        //   value: 'q5BHP59DvT'
-        // }
-        const data = {
+       const data = {
            'schoolYear': this.$route.params.schoolYear,
            'term': this.$route.params.term,
            'teacher.value': 'q5BHP59DvT'
         }
-        // const data = {
-        //   objectId : "3VKVEjOClE"
-        // }
         const response = await this.$store.dispatch(`teach/getTeachByTeacherId`, data )
         console.log('response', response)
         return response

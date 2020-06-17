@@ -213,7 +213,7 @@ export default {
   methods: {
     async getDataFromApi() {
       const response = await this.$store.dispatch(`teachers/getTeacher`)
-      console.log('teacher response', response)
+      // console.log('teacher response', response)
       return response.results
 
     },
@@ -222,25 +222,28 @@ export default {
           teacherId
       }
       const response = await this.$store.dispatch(`users/getUserByTeacherId`, data)
-      console.log('response getUserByTeacher Id', response.results)
+      // console.log('response getUserByTeacher Id', response.results)
       return response
     },
-    async createUser(data){
-      console.log('create user teacher', data.username, data.password)
+    async createUser(data, objectId){
+      // console.log('create user teacher', data.username, data.password)
       const user = {
         username: data.username,
         password: data.password,
         type: 'teacher',
-        teacherId: data.teacherId
+        teacherId: data.teacherId,
+        teacherObjectId: objectId
       }
+      // console.log('create user teacher', user)
       const response = await this.$store.dispatch(`users/createUser`, user)
-      console.log('create result', response)
+      // console.log('create result', response)
     },
     async createTeacher(data) {
-      console.log('data create', data)
+      // console.log('data create', data)
       const response = await this.$store.dispatch(`teachers/createTeacher`, data)
-      this.createUser(data)
-      // console.log('res create teacher', response)
+      // console.log('create teacher', response)
+      const objectId = response.objectId
+      this.createUser(data, objectId)
       
       this.getDataFromApi().then((result) => (this.items = result))
     },
