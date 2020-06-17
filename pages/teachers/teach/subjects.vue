@@ -6,11 +6,12 @@
 
 <script>
   export default {
+    layout: 'teacher',
     mounted () {
       this.params = this.$route.params
       // conslode.log('route params', this.$route.query)
       console.log(this.$route.params)
-      this.getTeachByTeacher().then(result => (this.items = result))
+      this.getTeachByTeacherId(this.$route.params.id).then(result => (this.items = result))
     },
     data() {
       return {
@@ -19,8 +20,19 @@
       }
     },
     methods: {
-      async getTeachByTeacher (teacherId) {
-        const response = await this.$store.dispatch('teach/getTeachByTeacherId', teacherId)
+      async getTeachByTeacherId (teacherId) {
+        // const teacher = {
+        //   value: 'q5BHP59DvT'
+        // }
+        const data = {
+           'schoolYear': this.$route.params.schoolYear,
+           'term': this.$route.params.term,
+           'teacher.value': 'q5BHP59DvT'
+        }
+        // const data = {
+        //   objectId : "3VKVEjOClE"
+        // }
+        const response = await this.$store.dispatch(`teach/getTeachByTeacherId`, data )
         console.log('response', response)
         return response
       }
