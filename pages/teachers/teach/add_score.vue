@@ -10,7 +10,7 @@
     async mounted () {
       this.data = this.$route.params.data
       await this.getStudentByTeach(this.data).then(result => (this.students = result))
-      // await console.log('classtes', this.students)
+      await console.log('classtes', this.students)
       await this.getStudent(this.students).then(result => (this.items = result))
     },
     data() {
