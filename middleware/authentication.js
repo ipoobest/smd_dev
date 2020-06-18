@@ -13,7 +13,7 @@ export default async function ({ store, redirect }) {
     return redirect('/login')
   } else if (store.state.auth.auth.type == "teacher") {
     console.log('auth ddd', store.state.auth.auth.type)
-    return redirect('/teacher')
+    return redirect(`/teachers/${store.state.auth.auth.objectId}`);
     // const user = await store.$axios.$get(`${process.env.parseUrl}/users/me`)
     // console.log('user/me', user)
   }

@@ -64,7 +64,7 @@ export default {
         {
           icon: `mdi-account`,
           title: `ผู้ใช้งาน`,
-          to: `/users`
+          to: `/#`
         },
         // {
         //   icon: `mdi-format-align-justify`,
@@ -74,7 +74,7 @@ export default {
         {
           icon: `mdi-book-plus`,
           title: `การเรียนการสอน`,
-          to: `/teach`
+          to: `/teachers/${this.$store.state.auth.auth.objectId}`
         },
       ],
       miniVariant: false,

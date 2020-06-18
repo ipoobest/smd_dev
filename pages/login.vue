@@ -71,7 +71,7 @@ export default {
           // }
           if(response.type == "teacher"){
             console.log('teacher login')
-            this.$router.replace({name: 'teachers-id', params: {id: `${response.objectId}`} })
+            this.$router.replace({name: 'teachers-id', params: {id: `${this.$store.state.auth.auth.objectId}`} })
           }else {
             this.$router.replace({name: 'index'})
           }

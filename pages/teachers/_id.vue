@@ -3,7 +3,7 @@
     <v-row align="center">
       <v-col cols="12">
         <v-card>
-          <v-card-title>
+          <v-card-title> 
             {{ title }}
             <v-spacer></v-spacer>
             <v-text-field

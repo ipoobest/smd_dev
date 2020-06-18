@@ -1,4 +1,4 @@
-al<template>
+<template>
   <v-layout>
     <v-row align="center">
       <v-col cols="12">
