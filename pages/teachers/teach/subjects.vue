@@ -87,7 +87,8 @@
         return response.results
       },
       addScore(item) {
-        console.log('add score', item)
+        // console.log('add score', item)
+        this.$router.push({name: 'teachers-teach-add_score', params: {data: item}})
       },
       back() {
         this.$router.go(-1)
