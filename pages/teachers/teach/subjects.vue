@@ -55,14 +55,24 @@
                           </v-col>
                         </v-row>
                         <v-row>
-                            <div v-for="item in part_point" :key="item">
+                            <div v-for="item in part_rating" :key="item.id" >
                               <!-- {{ item.sname }} -->
-                              <v-col cols="12" align-self="center">
+                              <v-col align-self="center">
+                                <v-row>
                                 <v-text-field
-                                  v-model="part_rating[item]"
+                                  class="mr-10"
+                                  v-model="item.name"
+                                  label="หัวข้อ"
+                                  outlined
+                                  type="text"
+                                />
+                                <v-text-field
+                                  v-model="item.rating"
+                                  label="สัดส่วน"
                                   outlined
                                   type="number"
                                 />
+                                </v-row>
                               </v-col>
                             </div>
                           <!-- <div v-for="index in part_point" :key="index">
@@ -163,12 +173,9 @@
         return response
       },
       addPartNumber() {
-        console.log('add part', this.part_num)
-        // this.part_point = new Array(this.part_num)
-        // console.log('part_point', this.part_point)
-        this.part_point = []
+        this.part_rating = []
         for (var index = 0; index < this.part_num; index++) {
-          this.part_point.push(index)
+          this.part_rating.push({ name: '', rating: 0})
         }
         console.log('length', this.part_point)
       },
@@ -182,22 +189,19 @@
         this.$router.push({name: 'teachers-teach-add_score', params: {data: item}})
       },
       save() {
-        var result = this.part_rating.map(Number)
-        var sum = 0
-        for (var index = 0; index < result.length; index++ ) {
-          sum += result[index]
-        }
+        var rating = this.part_rating.map(result => parseInt(result.rating))
+        
+        var sum = rating.reduce((a,b) => a + b)
+        sum != 100 ? alert('กรุณาทำให้ผลรวม') : null
 
-        if ( sum != 100) {
-          alert('กรุณาทำให้ผลรวม = 100')
-        }
         const teach = {
           objectId: this.teach.objectId,
-          rating: result
+          rating: this.part_rating
         }
+        // this.addRatingToTach(teach)
         console.log('item ob', teach)
+        this.close()
 
-        this.addRatingToTach(teach)
       },
       close() {
         this.dialog = false
