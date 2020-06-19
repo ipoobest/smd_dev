@@ -131,7 +131,7 @@
         search: '',
         params: '',
         teacherId: '',
-        teachId: '',
+        teach: '',
         dialogCreateTeach: 'false',
         part_num: '',
         part_point: [],
@@ -157,6 +157,11 @@
         console.log('response', response)
         return response.results
       },
+      async addRatingToTach(teach) {
+        const response = await this.$store.dispatch(`teach/updateTeach`, teach)
+        console.log('response', response)
+        return response
+      },
       addPartNumber() {
         console.log('add part', this.part_num)
         // this.part_point = new Array(this.part_num)
@@ -169,28 +174,30 @@
       },
       addRating(item) {
         this.dialog = true
-        this.teachId = item.objectId
-        console.log('add raing', this.teachId)
+        this.teach = item
+        console.log('add raing', this.teach)
       },
       addScore(item) {
         // console.log('add score', item)
         this.$router.push({name: 'teachers-teach-add_score', params: {data: item}})
       },
       save() {
-        // console.log('data model', this.part_rating)
         var result = this.part_rating.map(Number)
-        // console.log('result', result.length)
         var sum = 0
         for (var index = 0; index < result.length; index++ ) {
           sum += result[index]
-          // console.log('sum xx', result[index])
         }
-        // console.log('sum xxxxx', sum)
+
         if ( sum != 100) {
           alert('กรุณาทำให้ผลรวม = 100')
         }
-        console.log('item ob', this.teacherId, result)
+        const teach = {
+          objectId: this.teach.objectId,
+          rating: result
+        }
+        console.log('item ob', teach)
 
+        this.addRatingToTach(teach)
       },
       close() {
         this.dialog = false

@@ -203,7 +203,7 @@
           schoolYear: this.query.schoolYear,
           term: this.query.term
         }
-        const response = await this.$store.dispatch(`teach/getSubjectsByTerm`,condition)
+        const response = await this.$store.dispatch(`teach/getTeachByTerm`,condition)
         return response.results
       },
       async addSubjectToTeach(data) {

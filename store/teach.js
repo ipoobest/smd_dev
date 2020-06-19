@@ -91,13 +91,13 @@ export const actions = {
   async getSubjectsByClass ({ commit }, classId) {
     return await this.getSubjects({ class: classId })
   },
-  async updateSubject ({ commit }, object) {
+  async updateTeach ({ commit }, object) {
     return new Promise(async (resolve, reject) => {
       console.log('update object', object)
       try {
-        const result = this.$axios.$put(`${process.env.parseUrl}/classes/${classes.subjects}/${object.objectId}`, object)
+        const result = this.$axios.$put(`${process.env.parseUrl}/classes/${classes.teach}/${object.objectId}`, object)
 
-        commit('setSubject', result)
+        commit("setTeach", result);
         resolve(result)
       } catch (error) {
         console.log({ error })
