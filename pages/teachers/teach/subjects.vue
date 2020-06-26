@@ -121,12 +121,15 @@
 <script>
   export default {
     layout: 'teacher',
-    mounted () {
+     async mounted () {
       this.params = this.$route.params
       this.teacherId = this.$store.state.auth.auth.teacherObjectId
       // conslode.log('route params', this.$route.query)
       console.log(this.teacherId)
       this.getTeachByTeacherId(this.teacherId).then(result => (this.items = result))
+      // get rating
+      this.part_rating = this.items.rating
+      console.log('rating', this.items)
     },
     watch: {
       dialog(val) {
@@ -198,8 +201,8 @@
           objectId: this.teach.objectId,
           rating: this.part_rating
         }
-        // this.addRatingToTach(teach)
         console.log('item ob', teach)
+        this.addRatingToTach(teach)
         this.close()
 
       },
