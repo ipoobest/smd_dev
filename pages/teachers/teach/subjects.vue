@@ -189,7 +189,15 @@
       },
       addScore(item) {
         // console.log('add score', item)
-        this.$router.push({name: 'teachers-teach-add_score', params: {data: item}})
+        this.$router.push({
+          name: 'teachers-teach-add_score', 
+          query: { 
+            schoolYear: item.schoolYear, 
+            term: item.term,
+            classRoomLevel: item.classRoomLevel,
+            classRoomName: item.classRoomName
+          }
+        })
       },
       save() {
         var rating = this.part_rating.map(result => parseInt(result.rating))

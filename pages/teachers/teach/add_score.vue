@@ -1,6 +1,19 @@
 <template>
   <div>
-    <h3>add score {{ data }}</h3>
+    <p>
+        {{
+          `schoolYear: ${this.$route.query.schoolYear},
+          term: ${this.$route.query.term},
+          classRoomLevel: ${this.$route.query.classRoomLevel},
+          classRoomName: ${this.$route.query.classRoomName}`
+        }}
+    </p>
+    <p>
+      รายชื่อนักเรียน : 
+      {{
+      students
+      }}
+    </p>
   </div>
 </template>
 
@@ -8,25 +21,28 @@
   export default {
     layout: 'teacher',
     async mounted () {
-      this.data = this.$route.params.data
-      await this.getStudentByTeach(this.data).then(result => (this.students = result))
-      await console.log('classtes', this.students)
+      await this.getStudentByTeach().then(result => (this.students = result))
       await this.getStudent(this.students).then(result => (this.items = result))
     },
     data() {
       return {
+        title: 'เพิ่มคะแนนให้นักเรียน',
+        dialog: false,
+        formTitle: 'tesst',
+        headers: [],
+        search: '',
         data: '',
         items:[],
-        students: []
+        students: [],
       }
     },
     methods: {
       async getStudentByTeach(data) {
         const conditions = {
-          schoolYear: data.schoolYear,
-          term: data.term,
-          classRoomLevel: data.classRoomLevel,
-          classRoomName: data.classRoomName
+          schoolYear: this.$route.query.schoolYear,
+          term: this.$route.query.term,
+          classRoomLevel: this.$route.query.classRoomLevel,
+          classRoomName: this.$route.query.classRoomName
         }
         const response = await this.$store.dispatch('classes/getClassesByAcademicYears', conditions)
         console.log('response students', response.results[0].studentId)
@@ -40,6 +56,19 @@
       }
         const response = await this.$store.dispatch('students/getStudents', query)
         console.log('response student', response.results)
+      },
+      addScore() {
+        console.log('item id ', item)
+        // this.getUserByTacherId(item.teacherId)
+        this.editedIndex = this.items.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+
+        this.dialog = true
+      },
+      save () {},
+      close () {},
+      back () {
+        this.$router.go(-1)
       }
     }
   }
