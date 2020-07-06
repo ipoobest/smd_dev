@@ -69,12 +69,23 @@ export const actions = {
       }
     })
   },
+  async getTeachByid ({commit}, id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = this.$axios.$get(`${process.env.parseUrl}/classes/${classes.teach}/${id}`)
+        commit("setSubjects", result);
+        resolve(result);        
+      } catch (error) {
+        console.log({ error });
+        commit(`setError`, error);
+        reject(error);
+      }
+    })
+  },
   async getTeachByTeacherId ({ commit }, conditions) {
     return new Promise(async (resolve, reject) => {
       try {
-        console.log('xx', conditions)
         const where = JSON.stringify(conditions);
-        console.log("where", where);
         const result = this.$axios.$get(
           `${process.env.parseUrl}/classes/${classes.teach}?where=${where}`
         );

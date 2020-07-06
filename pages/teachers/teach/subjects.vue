@@ -126,10 +126,10 @@
       this.teacherId = this.$store.state.auth.auth.teacherObjectId
       // conslode.log('route params', this.$route.query)
       console.log(this.teacherId)
-      this.getTeachByTeacherId(this.teacherId).then(result => (this.items = result))
+      await this.getTeachByTeacherId(this.teacherId).then(result => (this.items = result))
       // get rating
-      this.part_rating = this.items.rating
-      console.log('rating', this.items)
+      // this.part_rating = this.items.rating
+      // console.log('rating', this.items)
     },
     watch: {
       dialog(val) {
@@ -167,7 +167,7 @@
            'teacher.value': teacherId
         }
         const response = await this.$store.dispatch(`teach/getTeachByTeacherId`, data )
-        console.log('response', response)
+        console.log('response ปปปป', response)
         return response.results
       },
       async addRatingToTach(teach) {
@@ -185,13 +185,18 @@
       addRating(item) {
         this.dialog = true
         this.teach = item
-        console.log('add raing', this.teach)
+        if (item.rating) {
+          this.part_num = item.rating.length
+        }
+        this.part_rating = item.rating
+        console.log('addrateing', item.rating)
       },
       addScore(item) {
         // console.log('add score', item)
         this.$router.push({
           name: 'teachers-teach-add_score', 
           query: { 
+            id: item.objectId,
             schoolYear: item.schoolYear, 
             term: item.term,
             classRoomLevel: item.classRoomLevel,
@@ -216,6 +221,7 @@
       },
       close() {
         this.dialog = false
+        this.part_num = ''
         // this.resetForm()
         setTimeout(() => {
         }, 300)

@@ -76,7 +76,7 @@ export default {
             this.$router.replace({name: 'index'})
           }
         } catch (error) {
-          console.log(error)
+          alert('username หรือ รหัสผ่านผิดกรุณาลองใหม่')
         }
       }
     },
