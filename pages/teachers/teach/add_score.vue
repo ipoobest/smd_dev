@@ -10,24 +10,26 @@
       <v-spacer></v-spacer>
       <v-col md="2">
         <v-text-field
-            label="คุณลักษณะ"
-            outlined
-            type="number"
+          v-model="score_aptitude"
+          label="คุณลักษณะ"
+          outlined
+          type="number"
         ></v-text-field>
       </v-col>
-      <v-col md="1" class="mt-2">
+      <!-- <v-col md="1" class="mt-2">
         <v-btn color="info">ตกลง</v-btn>
-      </v-col>
+      </v-col> -->
       <v-col md="2">
         <v-text-field
-            label="การคิดการอ่าน"
-            outlined
-            type="number"
+          v-model="score_analytical_thinking"
+          label="การคิดการอ่าน"
+          outlined
+          type="number"
         ></v-text-field>
       </v-col>
-      <v-col md="1" class="mt-2">
+      <!-- <v-col md="1" class="mt-2">
         <v-btn color="info">ตกลง</v-btn>
-      </v-col>
+      </v-col> -->
     </v-row>
     <v-simple-table fixed-header  height="500px" v-if="rating" >
     <template v-slot:default>
@@ -38,22 +40,22 @@
           <th class="text-left" v-for="item in rating" :key="item.name">{{item.name}}</th>
           <th class="text-left">คุณลักษณะ</th>
           <th class="text-left">การคิดการอ่าน</th>
-          <!-- <th class="text-left">Calories</th>
-          <th class="text-left">Calories</th> -->
+
         </tr>
       </thead>
       <tbody >
         <tr v-for="student in items" :key="student.name">
           <td > {{ student.namet }} </td>
-          <td v-for="item in rating.length" :key="item.name"><v-text-field  type="text" hide-details="auto" /></td>
-          <td><v-text-field  type="text" hide-details="auto" /></td>
-          <td><v-text-field  type="text" hide-details="auto" /></td>
+          <td v-for="item in rating.length" :key="item.name"><v-text-field v-model="score[item]"  type="text" hide-details="auto" /></td>
+          <td><v-text-field v-model="score_aptitude" type="text" hide-details="auto" /></td>
+          <td><v-text-field v-model="score_analytical_thinking"  type="text" hide-details="auto" /></td>
         </tr>
       </tbody>
     </template>
   </v-simple-table>
   <v-row justify="end">
-    <v-btn color="success">บันทึก</v-btn>
+    <v-btn color="orange" dark class="mr-2">reset form</v-btn>
+    <v-btn color="success" @click="save">บันทึก</v-btn>
   </v-row>
   </v-container>
 </template>
@@ -75,6 +77,9 @@
         ],
         data: '',
         items: '',
+        score: [],
+        score_analytical_thinking: '',
+        score_aptitude: '',
         students: [],
       }
     },
@@ -113,8 +118,11 @@
 
         this.dialog = true
       },
-      save () {},
+      save () {
+        console.log('this.score', this.score)
+      },
       close () {},
+      reset () {},
       back () {
         this.$router.go(-1)
       }

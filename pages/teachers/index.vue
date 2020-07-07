@@ -236,12 +236,12 @@ export default {
       }
       // console.log('create user teacher', user)
       const response = await this.$store.dispatch(`users/createUser`, user)
-      // console.log('create result', response)
+      console.log('create result', response)
     },
     async createTeacher(data) {
       // console.log('data create', data)
       const response = await this.$store.dispatch(`teachers/createTeacher`, data)
-      // console.log('create teacher', response)
+      console.log('create teacher', response)
       const objectId = response.objectId
       this.createUser(data, objectId)
       
@@ -267,15 +267,20 @@ export default {
       this.dialog = true
     },
     async deleteItem(item) {
-    const index = this.items.indexOf(item)
-      if (confirm('ยืนยีนการลบข้อมูลครู')) {
-        const userId = await this.getUserByTacherId(item.teacherId)
-        const objectId =  userId.results[0].objectId
-        console.log('delete userId', userId.results[0].objectId)
-        await this.deleteUser(objectId)
-        await this.deleteTeacher(item.objectId)
-        this.items.splice(index, 1)   
-      }
+      const index = this.items.indexOf(item)
+      console.log('index', index)
+        if (confirm('ยืนยีนการลบข้อมูลครู')) {
+          console.log('iteacherId', item.teacherId)
+          const userId = await this.getUserByTacherId(item.teacherId)
+          const objectId =  userId.results[0].objectId
+
+          console.log('delete teacherId', objectId)
+          // console.log('delete userId',objectId)
+
+          await this.deleteUser(objectId)
+          await this.deleteTeacher(item.objectId)
+          this.items.splice(index, 1)   
+        }
     },
     resetForm () {
       this.$refs.form.reset()
