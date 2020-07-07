@@ -140,7 +140,7 @@
       return {
         dialog: false,
         formTitle: 'เกณฑ์การให้คะแนน',
-        title: '',
+        title: 'เลือกห้องเรียน',
         search: '',
         params: '',
         teacherId: '',

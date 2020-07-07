@@ -1,6 +1,34 @@
 <template>
   <v-container>
-    <h3>ลงคะแนน</h3>
+    <v-row>
+      <v-btn class="mr-5" color="primary" fab small dark @click="back" >
+        <v-icon>mdi-arrow-left</v-icon>
+      </v-btn>    
+      <v-col md="2">
+        <h3>ลงคะแนนนักเรียน</h3>
+      </v-col>
+      <v-spacer></v-spacer>
+      <v-col md="2">
+        <v-text-field
+            label="คุณลักษณะ"
+            outlined
+            type="number"
+        ></v-text-field>
+      </v-col>
+      <v-col md="1" class="mt-2">
+        <v-btn color="info">ตกลง</v-btn>
+      </v-col>
+      <v-col md="2">
+        <v-text-field
+            label="การคิดการอ่าน"
+            outlined
+            type="number"
+        ></v-text-field>
+      </v-col>
+      <v-col md="1" class="mt-2">
+        <v-btn color="info">ตกลง</v-btn>
+      </v-col>
+    </v-row>
     <v-simple-table fixed-header  height="500px" v-if="rating" >
     <template v-slot:default>
       <thead>
@@ -24,6 +52,9 @@
       </tbody>
     </template>
   </v-simple-table>
+  <v-row justify="end">
+    <v-btn color="success">บันทึก</v-btn>
+  </v-row>
   </v-container>
 </template>
 
