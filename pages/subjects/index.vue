@@ -42,7 +42,7 @@
                         <v-row>
                           <v-col cols="12" sm="6" md="6">
                             <v-text-field
-                              v-model="datas.code"
+                              v-model="input.code"
                               outlined
                               label="รหัสวิชา"
                               required
@@ -51,7 +51,7 @@
                           </v-col>
                           <v-col cols="12" sm="6" md="6">
                             <v-text-field
-                              v-model="datas.codet"
+                              v-model="input.codet"
                               outlined
                               label="รหัสวิชาภาษาไทย"
                               required
@@ -60,7 +60,7 @@
                           </v-col>
                           <v-col cols="12" sm="6" md="6">
                             <v-text-field
-                              v-model="datas.sname"
+                              v-model="input.sname"
                               outlined
                               label="ชื่อวิชา"
                               required
@@ -69,7 +69,7 @@
                           </v-col>
                           <v-col cols="12" sm="6" md="4">
                             <v-text-field
-                              v-model="datas.credit"
+                              v-model="input.credit"
                               outlined
                               label="หน่วยกิต"
                               required
@@ -78,7 +78,7 @@
                           </v-col>
                           <v-col cols="12" sm="6" md="4">
                             <v-text-field
-                              v-model="datas.hour"
+                              v-model="input.hour"
                               outlined
                               label="จำนวนชั่วโมงที่สอน"
                               required
@@ -111,7 +111,7 @@
                 ลบ
               </v-btn>
             </template>
-            <template v-slot:no-data>
+            <template v-slot:no-input>
               <v-btn color="primary" @click="initialize">Reset</v-btn>
             </template>
           </v-data-table>
@@ -134,13 +134,13 @@ export default {
         { text: 'รหัสวิชาภาษาไทย', value: 'codet' },
         { text: 'ชื่อวิชา', value: 'sname' },
         { text: 'หน่วยกิต', value: 'credit' },
-        // { text: 'จำนวนชั่วโมงที่สอน', value: 'hour' },
+        { text: 'จำนวนชั่วโมงที่สอน', value: 'hour' },
         { text: 'Actions', value: 'actions', sortable: false }
       ],
       items: [],
       search: ``,
       title: `วิชา`,
-      datas: {
+      input: {
         code: '',
         codet: '',
         sname: '',
@@ -155,7 +155,7 @@ export default {
     }
   },
   mounted(){
-    this.getdataFromApi().then(result => (this.items = result))
+    this.getinputFromApi().then(result => (this.items = result))
   },
   watch: {
     dialog(val) {
@@ -163,33 +163,33 @@ export default {
     }
   },
   methods: {
-    async getdataFromApi() {
+    async getinputFromApi() {
     const response = await this.$store.dispatch(`subjects/getSubjects`)
     // console.log('variable', response)
     return response.results
     },
-    async createSubject(data) {
-      const response = await this.$store.dispatch(`subjects/createSubject`, data)
-      this.getdataFromApi().then(result => (this.items = result))
-      // this.items = [...this.items, data]
+    async createSubject(input) {
+      const response = await this.$store.dispatch(`subjects/createSubject`, input)
+      this.getinputFromApi().then(result => (this.items = result))
+      // this.items = [...this.items, input]
     },
-    async updateSubject(data) {
-      const response = await this.$store.dispatch(`subjects/updateSubject`, data )
+    async updateSubject(input) {
+      const response = await this.$store.dispatch(`subjects/updateSubject`, input )
       // console.log('updateSubject ', response)
-      this.getdataFromApi().then(result => (this.items = result))
+      this.getinputFromApi().then(result => (this.items = result))
     },
-    async deleteSubject(data) {
-      const response = await this.$store.dispatch(`subjects/deleteSubject`, data)
+    async deleteSubject(input) {
+      const response = await this.$store.dispatch(`subjects/deleteSubject`, input)
     },
     addClasses(item){
       this.$router.push({name: 'subjects-id', params: { id: `${item.objectId}`}})
     },
     initialize() {
-      this.getdataFromApi().then(result => (this.items = result))
+      this.getinputFromApi().then(result => (this.items = result))
     },
     editItem(item) {
       this.editedIndex = this.items.indexOf(item)
-      this.datas = Object.assign({}, item)
+      this.input = Object.assign({}, item)
       this.dialog = true
     },
     deleteItem(item) {
@@ -214,23 +214,32 @@ export default {
     },
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.items[this.editedIndex], this.datas)
-        console.log('put data user ', this.items)
-        // this.items = [...this.datas, data]
-        const editdatas = {
-          objectId: this.datas.objectId,
-          code: this.datas.code,
-          codet: this.datas.codet,
-          sname: this.datas.sname,
-          credit: this.datas.credit,
-          hour: this.datas.hour,
+        Object.assign(this.items[this.editedIndex], this.input)
+        console.log('put input user ', this.items)
+        // this.items = [...this.input, input]
+        const editinput = {
+          objectId: this.input.objectId,
+          code: this.input.code,
+          codet: this.input.codet,
+          sname: this.input.sname,
+          credit: this.input.credit,
+          hour: this.input.hour,
         }
-        this.updateSubject(editdatas)
+        this.updateSubject(editinput)
         this.close()
       } else {
         if(this.$refs.form.validate()){
-          this.createSubject(this.datas)
-          // this.items.push(this.datas)
+          const data = {
+            objectId: this.input.objectId,
+            code: this.input.code,
+            codet: this.input.codet,
+            sname: this.input.sname,
+            credit: this.input.credit,
+            hour: this.input.hour,
+          }
+          console.log('input create', data)
+          this.createSubject(data)
+          this.items.push(data)
           this.close()
         } 
       }
