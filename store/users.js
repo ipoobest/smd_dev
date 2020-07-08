@@ -64,10 +64,11 @@ export const actions = {
       }
     })
   },
-  async getUserByTeacherId ({ commit }, conditions) {
+  async getUserByCondtions ({ commit }, conditions) {
     return new Promise(async (resolve, reject) => {
       try {
         const where = JSON.stringify(conditions)
+        console.log('where', where)
         const result = this.$axios.$get(`${process.env.parseUrl}/users?where=${where}`)
 
         commit('setUser', result)
@@ -79,10 +80,12 @@ export const actions = {
       }
     })
   },
-  async updateUser ({ commit }, { objectId, object }) {
+  async updateUser ({ commit }, data) {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = this.$axios.$put(`${process.env.parseUrl}/users/${objectId}`, object)
+        const user = JSON.stringify(data)
+        console.log('user.objectId', data.objectId)
+        const result = this.$axios.$put(`${process.env.parseUrl}/users/${data.objectId}`, data)
 
         commit('setUser', result)
         resolve(result)

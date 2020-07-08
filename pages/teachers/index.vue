@@ -41,7 +41,7 @@
                       <v-form ref="form" validation>
                       <v-container>
                         <v-row>
-                          <v-col cols="12" sm="6" md="6">
+                          <v-col cols="12" sm="4" md="4">
                             <v-text-field
                               v-model="editedItem.username"
                               outlined
@@ -50,7 +50,7 @@
                               :rules="[v => !!v || 'กรุณากรอก username']"
                             ></v-text-field>
                           </v-col>
-                          <v-col cols="12" sm="6" md="6">
+                          <v-col cols="12" sm="4" md="4">
                             <v-text-field
                               v-model="editedItem.password"
                               outlined
@@ -60,6 +60,16 @@
                               :rules="[v => !!v || 'กรุณากรอก password']"
                             ></v-text-field>
                           </v-col>
+                          <v-col cols="12" sm="4" md="4">
+                            <v-text-field
+                              v-model="editedItem.rePassword"
+                              outlined
+                              type="password"
+                              label="re-password"
+                              required
+                              :rules="[v => !!v || 'กรุณากรอก password อีกครั้ง']"
+                            ></v-text-field>
+                          </v-col>                          
                           <v-col cols="12" sm="6" md="4">
                             <v-text-field
                               v-model="editedItem.teacherId"
@@ -158,6 +168,7 @@ export default {
         { text: 'นามสกุล', value: 'lastName' },
         { text: 'Actions', value: 'actions', sortable: false }
       ],
+      user: '',
       items: [],
       search: ``,
       title: `ครู`,
@@ -166,6 +177,7 @@ export default {
       editedItem: {
         username: '',
         password: '',
+        rePassword: '',
         teacherId: '',
         teacherPosition: '',
         teacherTitle: '',
@@ -217,11 +229,11 @@ export default {
       return response.results
 
     },
-    async getUserByTacherId(teacherId) {
-      const data = {
-          teacherId
-      }
-      const response = await this.$store.dispatch(`users/getUserByTeacherId`, data)
+    async getUserByCondtions(data) {
+      // const data = {
+      //     teacherId: object
+      // }
+      const response = await this.$store.dispatch(`users/getUserByCondtions`, data)
       // console.log('response getUserByTeacher Id', response.results)
       return response
     },
@@ -240,16 +252,37 @@ export default {
     },
     async createTeacher(data) {
       // console.log('data create', data)
+      const condition = {
+        username: data.username
+      }
+      const user = await this.$store.dispatch(`users/getUserByCondtions`, condition)
+      if (user.results.length != 0) {
+        alert('username นี้ถูกใช้แล้วกรุณาเปลี่ยน username')
+        return
+      } else {
       const response = await this.$store.dispatch(`teachers/createTeacher`, data)
-      console.log('create teacher', response)
-      const objectId = response.objectId
-      this.createUser(data, objectId)
-      
-      this.getDataFromApi().then((result) => (this.items = result))
+        console.log('create teacher', response)
+        const objectId = response.objectId
+        this.createUser(data, objectId)
+        
+        this.getDataFromApi().then((result) => (this.items = result))
+      }
     },
     async updateTeacher(data) {
       const response = await this.$store.dispatch(`teachers/updateTeacher`, data)
-     this.getDataFromApi().then((result) => (this.items = result))
+      this.getDataFromApi().then((result) => (this.items = result))
+    },
+    async updateUser(data) {
+      const user = {
+        username: data.username,
+        password: data.password,
+        teacherId: data.teacherId,
+        // objectId: data.objectId,
+        objectId: data.userId
+      }
+      console.log('rquest edit user', user)
+      const response = await this.$store.dispatch(`users/updateUser`, user)
+      console.log('response edit user', response)
     },
     async deleteTeacher(itemId) {
       const response = await this.$store.dispatch(`teachers/deleteTeacher`, itemId)
@@ -260,6 +293,7 @@ export default {
     },
     editItem(item) {
       console.log('item id ', item)
+      this.user = item
       // this.getUserByTacherId(item.teacherId)
       this.editedIndex = this.items.indexOf(item)
       this.editedItem = Object.assign({}, item)
@@ -270,16 +304,14 @@ export default {
       const index = this.items.indexOf(item)
       console.log('index', index)
         if (confirm('ยืนยีนการลบข้อมูลครู')) {
-          console.log('iteacherId', item.teacherId)
           const userId = await this.getUserByTacherId(item.teacherId)
-          const objectId =  userId.results[0].objectId
-
-          console.log('delete teacherId', objectId)
-          // console.log('delete userId',objectId)
-
-          await this.deleteUser(objectId)
-          await this.deleteTeacher(item.objectId)
-          this.items.splice(index, 1)   
+          console.log('userid', userId)
+          if (userId.results[0] != null) {
+            const objectId =  userId.results[0].objectId
+            await this.deleteUser(objectId)
+          }
+            await this.deleteTeacher(item.objectId)
+            this.items.splice(index, 1)  
         }
     },
     resetForm () {
@@ -296,18 +328,33 @@ export default {
         this.editedIndex = -1
       }, 300)
     },
-    save() {
+    async save() {
+      if(this.editedItem.password != this.editedItem.rePassword) {
+        alert('password และ re-password ไม่ตรงกัน')
+        return
+      }
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.editedItem)
+        const userId = await this.getUserByTacherId(this.editedItem.teacherId)
+        const objectId =  userId.results[0].objectId
+        console.log('object User Id', objectId)
+
         const editData = {
           objectId: this.editedItem.objectId,
           teacherId: this.editedItem.teacherId,
           teacherPosition: this.editedItem.teacherPosition,
           title: this.editedItem.teacherTitle,
           firstName: this.editedItem.firstName,
-          lastName: this.editedItem.lastName
+          lastName: this.editedItem.lastName,
+          username: this.editedItem.username,
+          password: this.editedItem.password,
+          userId: objectId
         }
+
+        console.log('edit data', editData)
+
         this.updateTeacher(editData)
+        this.updateUser(editData)
         this.close()
       } else {
         if(this.$refs.form.validate()){

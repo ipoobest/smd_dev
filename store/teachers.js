@@ -69,6 +69,7 @@ export const actions = {
   async updateTeacher({ commit },  object ) {
     return new Promise(async (resolve, reject) => {
       const objectId = object.objectId
+      console.log('teacher objecId', objectId)
       try {
         const result = this.$axios.$put(`${process.env.parseUrl}/classes/${classes.teachers}/${objectId}`, object)
 
