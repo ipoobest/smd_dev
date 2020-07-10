@@ -89,10 +89,7 @@ export const actions = {
            return new Promise(async (resolve, reject) => {
              try {
                console.log('data form methods', object)
-               const result = this.$axios.$put(
-                 `${process.env.parseUrl}/classes/${classes.students}/${object.objectId}`,
-                 object
-               );
+               const result = this.$axios.$put(`${process.env.parseUrl}/classes/${classes.students}/${object.objectId}`, object)
 
                commit("setStudent", result);
                resolve(result);

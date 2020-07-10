@@ -17,7 +17,7 @@
             <v-tab href="#withdrawData">สิทธิการเบิกค่าเล่าเรียน</v-tab>
             <v-tab href="#healthData">ข้อมูลสุขภาพ</v-tab>
 
-            <v-tab-item value="personalData"><Personal :personalData="personal" @savePersonal="handlePersonalData"/></v-tab-item>
+            <v-tab-item value="personalData"><Personal :personalData="data" @savePersonal="handlePersonalData"/></v-tab-item>
             <v-tab-item value="addressData"><Address :addressData="data" @saveAddress="handleAddressData"/></v-tab-item>
             <v-tab-item value="familyData"><Family :familyData="data" @saveFamily="handleFamilyData"/></v-tab-item>
             <v-tab-item value="withdrawData"><Withdraw :withdrawData="data" @saveWithdraw="handleWithdrawData"/></v-tab-item>
@@ -54,9 +54,10 @@ export default {
     return {
       title: `แก้ไข ข้อมูลส่วนตัวนักเรียน`,
       tab: ``,
-      data: {
-        profileBase64: ''
-      },
+      // data: {
+      //   profileBase64: ''
+      // },
+      data: '',
       personal: {
         tth: '',
         profileBase64: '',
@@ -90,13 +91,13 @@ export default {
   methods: {
     async getStudentById(studentId) {
       const response = await this.$store.dispatch('students/getStudentById', studentId)
-      console.log('response', response)
+      // console.log('response', response)
       return response
     },
     async updateStudents(data){
       console.log('data update async ', data)
       const response = await this.$store.dispatch('students/updateStudent', data )
-      console.log(response)
+      console.log('response update',response)
       this.$router.push({name: 'students'})
     },
      handlePersonalData(PersonalForm, tab) {

@@ -153,6 +153,9 @@
 <script>
 export default {
   middleware: 'authentication',
+  mounted() {
+    this.getDataFromApi().then((result) => (this.items = result))
+  },
   data() {
     return {
       dialog: false,
@@ -219,21 +222,17 @@ export default {
       val || this.close()
     }
   },
-  mounted() {
-    this.getDataFromApi().then((result) => (this.items = result))
-  },
   methods: {
     async getDataFromApi() {
       const response = await this.$store.dispatch(`teachers/getTeacher`)
       // console.log('teacher response', response)
       return response.results
-
     },
     async getUserByCondtions(data) {
-      // const data = {
-      //     teacherId: object
-      // }
-      const response = await this.$store.dispatch(`users/getUserByCondtions`, data)
+      const condition = {
+          teacherObjectId: data
+      }
+      const response = await this.$store.dispatch(`users/getUserByCondtions`, condition)
       // console.log('response getUserByTeacher Id', response.results)
       return response
     },
@@ -261,7 +260,7 @@ export default {
         return
       } else {
       const response = await this.$store.dispatch(`teachers/createTeacher`, data)
-        console.log('create teacher', response)
+        // console.log('create teacher', response)
         const objectId = response.objectId
         this.createUser(data, objectId)
         
@@ -277,24 +276,19 @@ export default {
         username: data.username,
         password: data.password,
         teacherId: data.teacherId,
-        // objectId: data.objectId,
         objectId: data.userId
       }
-      console.log('rquest edit user', user)
       const response = await this.$store.dispatch(`users/updateUser`, user)
-      console.log('response edit user', response)
     },
     async deleteTeacher(itemId) {
       const response = await this.$store.dispatch(`teachers/deleteTeacher`, itemId)
     },
     async deleteUser(itemId) {
       const response = await this.$store.dispatch(`users/deleteUser`, itemId)
-      console.log('create result', response)      
     },
     editItem(item) {
-      console.log('item id ', item)
       this.user = item
-      // this.getUserByTacherId(item.teacherId)
+      console.log('teacher id' ,this.user)
       this.editedIndex = this.items.indexOf(item)
       this.editedItem = Object.assign({}, item)
 
@@ -304,7 +298,7 @@ export default {
       const index = this.items.indexOf(item)
       console.log('index', index)
         if (confirm('ยืนยีนการลบข้อมูลครู')) {
-          const userId = await this.getUserByTacherId(item.teacherId)
+          const userId = await this.getUserByCondtions(item.teacherId)
           console.log('userid', userId)
           if (userId.results[0] != null) {
             const objectId =  userId.results[0].objectId
@@ -335,7 +329,8 @@ export default {
       }
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.editedItem)
-        const userId = await this.getUserByTacherId(this.editedItem.teacherId)
+        const userId = await this.getUserByCondtions(this.user.objectId)
+        console.log('response user Id', userId)
         const objectId =  userId.results[0].objectId
         console.log('object User Id', objectId)
 
