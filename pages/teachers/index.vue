@@ -206,6 +206,7 @@ export default {
       ],
       selectItemTitle:[
         'ดร.',
+        'อาจารย์',
         'นาย',
         'นาง',
         'นางสาว'

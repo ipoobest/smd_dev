@@ -27,6 +27,11 @@
           type="number"
         ></v-text-field>
       </v-col>
+       <v-col md="2">
+       <v-btn color="info" class="mt-2">
+         เกณฑ์การตัดเกรด
+       </v-btn>
+      </v-col>
       <!-- <v-col md="1" class="mt-2">
         <v-btn color="info">ตกลง</v-btn>
       </v-col> -->
@@ -37,18 +42,19 @@
         <tr>
           <th class="text-left">ชื่อ</th>
           <!--- this header -->
-          <th class="text-left" v-for="item in rating" :key="item.name">{{item.name}}</th>
+          <th class="text-left" v-for="item in rating" :key="item.name">{{item.name}} , {{item.rating}} คะแนน</th>
           <th class="text-left">คุณลักษณะ</th>
           <th class="text-left">การคิดการอ่าน</th>
-
+          <th class="text-left">ดำเนินการ</th>
         </tr>
       </thead>
       <tbody >
         <tr v-for="student in items" :key="student.name">
           <td > {{ student.namet }} </td>
-          <td v-for="item in rating.length" :key="item.name"><v-text-field v-model="score[item]"  type="text" hide-details="auto" /></td>
+          <td v-for="item in rating.length" :key="item.name"><v-text-field v-model="student[item]" type="text" hide-details="auto" @click="logId(student[item])" /></td>
           <td><v-text-field v-model="score_aptitude" type="text" hide-details="auto" /></td>
           <td><v-text-field v-model="score_analytical_thinking"  type="text" hide-details="auto" /></td>
+          <td><v-btn color="success" @click="logId(student[item])">บันทึก</v-btn></td>
         </tr>
       </tbody>
     </template>
@@ -117,6 +123,9 @@
         this.editedItem = Object.assign({}, item)
 
         this.dialog = true
+      },
+      logId(item) {
+        console.log(item)
       },
       save () {
         console.log('this.score', this.score)
