@@ -8,5 +8,6 @@ export default {
   teacherSubjects: `TeacherSubjects`,
   users: `_User`,
   academicYear: `AcademicYear`,
-  teach: `Teach`
+  teach: `Teach`,
+  grade: `Grade`
 }

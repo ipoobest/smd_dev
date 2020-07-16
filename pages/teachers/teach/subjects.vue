@@ -26,7 +26,7 @@
               <v-toolbar flat color="white">
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
-                <v-dialog v-model="dialog" max-width="500px">
+                <v-dialog v-model="dialog" max-width="700px">
                   <v-card>
                     <v-card-title>
                       <span class="headline">{{ formTitle }}</span>
@@ -60,15 +60,22 @@
                               <v-col align-self="center">
                                 <v-row>
                                 <v-text-field
-                                  class="mr-10"
+                                  class="mr-5"
                                   v-model="item.name"
                                   label="หัวข้อ"
                                   outlined
                                   type="text"
                                 />
                                 <v-text-field
+                                  class="mr-5"
+                                  v-model="item.score"
+                                  label="คะแนน"
+                                  outlined
+                                  type="number"
+                                />
+                                <v-text-field
                                   v-model="item.rating"
-                                  label="สัดส่วน"
+                                  label="สัดส่วน %"
                                   outlined
                                   type="number"
                                 />

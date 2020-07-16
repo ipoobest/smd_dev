@@ -32,9 +32,6 @@
          เกณฑ์การตัดเกรด
        </v-btn>
       </v-col>
-      <!-- <v-col md="1" class="mt-2">
-        <v-btn color="info">ตกลง</v-btn>
-      </v-col> -->
     </v-row>
     <v-simple-table fixed-header  height="500px" v-if="rating" >
     <template v-slot:default>
@@ -42,7 +39,7 @@
         <tr>
           <th class="text-left">ชื่อ</th>
           <!--- this header -->
-          <th class="text-left" v-for="item in rating" :key="item.name">{{item.name}} , {{item.rating}} คะแนน</th>
+          <th class="text-left" v-for="item in rating" :key="item.name">{{item.name}} , {{item.score}} คะแนน</th>
           <th class="text-left">คุณลักษณะ</th>
           <th class="text-left">การคิดการอ่าน</th>
           <th class="text-left">ดำเนินการ</th>
@@ -50,11 +47,11 @@
       </thead>
       <tbody >
         <tr v-for="student in items" :key="student.name">
-          <td > {{ student.namet }} </td>
-          <td v-for="item in rating.length" :key="item.name"><v-text-field v-model="student[item]" type="text" hide-details="auto" @click="logId(student[item])" /></td>
+          <td > {{ student }} </td>
+          <td v-for="item in rating.length" :key="item.name"><v-text-field  type="number" hide-details="auto" v-model="form.score_id[item]" @click="logId(form.score_id[item])" /></td>
           <td><v-text-field v-model="score_aptitude" type="text" hide-details="auto" /></td>
           <td><v-text-field v-model="score_analytical_thinking"  type="text" hide-details="auto" /></td>
-          <td><v-btn color="success" @click="logId(student[item])">บันทึก</v-btn></td>
+          <td><v-btn color="success" @click="logId(student)">บันทึก</v-btn></td>
         </tr>
       </tbody>
     </template>
@@ -72,18 +69,22 @@
     async mounted () {
       await this.getStudentByTeach().then(result => (this.students = result))
       await this.getStudent(this.students).then(result => (this.items = result))
-      this.getTechById(this.$route.query.id).then(result => (this.rating = result))
-      console.log('this.data', this.items)
+      await this.getTechById(this.$route.query.id).then(result => (this.rating = result))
+      console.log('this.data', this.rating)
     },
     data() {
       return {
         title: 'เพิ่มคะแนนให้นักเรียน',
         rating: [
-          { name: 'กรุณาเพิ่ทเกณฑ์การให้คะแนน', rating: 0}
+          // { name: 'กรุณาเพิ่ทเกณฑ์การให้คะแนน', rating: 0}
         ],
+        form: {
+          score_id: []
+        },
         data: '',
         items: '',
         score: [],
+        studentName: [],
         score_analytical_thinking: '',
         score_aptitude: '',
         students: [],
@@ -109,12 +110,20 @@
       }
         const response = await this.$store.dispatch('students/getStudents', query)
         console.log('response student test', response.results)
-        return response.results
+        var name = this.getStudentName(response.results)
+        return name
       },
       async getTechById (id) {
         const response = await this.$store.dispatch('teach/getTeachByid', id)
-        console.log('response', response.rating)
+        console.log('response rating', response.rating)
         return response.rating
+      },
+      getStudentName(item) {
+        for(var index = 0; index < item.length; index++) {
+          this.studentName.push(item[index].tth + " " + item[index].namet + " " + item[index].snamet)
+        }
+        console.log('student name', this.studentName)
+        return  this.studentName
       },
       addScore() {
         console.log('item id ', item)
