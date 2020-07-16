@@ -180,12 +180,15 @@
         return response.results
       },
       async getGradeByConditions (item) {
+        console.log('where item',item)
+
         const conditions = {
           'subject': item.sname,
           'schoolYear': item.schoolYear,
           'term': item.term,
           'classRoomLevel': item.classRoomLevel,
           'classRoomName': item.classRoomName,
+          'teacher.id': item.teacher.value
         }
         const response = await this.$store.dispatch(`grade/getGradeByConditions`, conditions )
         console.log('response get grade', response.results)
