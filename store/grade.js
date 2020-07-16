@@ -48,8 +48,8 @@ export const actions = {
     return new Promise(async (resolve, reject) => {
       try {
         const where = JSON.stringify(conditions)
-        const result = await this.$axios.$get(`${process.env.parseUrl}/users?where=${where}`)
-        console.log('grades url', `${process.env.parseUrl}/users?where=${where}`)
+        const result = await this.$axios.$get(`${process.env.parseUrl}/classes/${classes.grade}?where=${where}`)
+        console.log('grades url', `${process.env.parseUrl}/classes/${classes.grade}?where=${where}`)
         commit('setGrade', result)
         resolve(result)
       } catch (error) {

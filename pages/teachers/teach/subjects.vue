@@ -131,7 +131,6 @@
      async mounted () {
       this.params = this.$route.params
       this.teacherId = this.$store.state.auth.auth.teacherObjectId
-      // conslode.log('route params', this.$route.query)
       console.log(this.teacherId)
       await this.getTeachByTeacherId(this.teacherId).then(result => (this.items = result))
       // get rating
@@ -156,6 +155,9 @@
         part_num: '',
         part_point: [],
         part_rating: [],
+        studentsId: [],
+        studentsNamr: [],
+        rating: [],
         headers: [
           { text: 'รหัส/ชื่อวิขา', value: 'sname', align:'center' },
           { text: 'ระดับชั้น', value: 'classRoomLevel', align:'center'},
@@ -174,12 +176,51 @@
            'teacher.value': teacherId
         }
         const response = await this.$store.dispatch(`teach/getTeachByTeacherId`, data )
-        console.log('response ปปปป', response)
+        console.log('response getTeachByTeacherId', response)
         return response.results
+      },
+      async getGradeByConditions (item) {
+        const conditions = {
+          'subject': item.sname,
+          'schoolYear': item.schoolYear,
+          'term': item.term,
+          'classRoomLevel': item.classRoomLevel,
+          'classRoomName': item.classRoomName,
+        }
+        const response = await this.$store.dispatch(`grade/getGradeByConditions`, conditions )
+        console.log('response get grade', response.results)
+        return response.results
+      },
+      async getStudentByTeach(item) {
+        const conditions = {
+          'schoolYear': item.schoolYear,
+          'term': item.term,
+          'classRoomLevel': item.classRoomLevel,
+          'classRoomName': item.classRoomName
+        }
+        const response = await this.$store.dispatch('classes/getClassesByAcademicYears', conditions)
+        console.log('response students', response.results[0].studentId)
+        return response.results[0].studentId
+      },
+      async getStudent(data) {
+        const query = {
+          objectId: {
+            $in: data
+          }
+      }
+        const response = await this.$store.dispatch('students/getStudents', query)
+        console.log('response student test', response.results)
+        var name = this.getStudentName(response.results)
+        return name
+      },
+      async createGrade(object) {
+        const response = await this.$store.dispatch(`grade/createGrade`, object )
+        console.log('response create grade', response)
+        return response
       },
       async addRatingToTach(teach) {
         const response = await this.$store.dispatch(`teach/updateTeach`, teach)
-        console.log('response', response)
+        console.log('response addRatingToTach', response)
         return response
       },
       addPartNumber() {
@@ -198,18 +239,65 @@
         this.part_rating = item.rating
         console.log('addrateing', item.rating)
       },
-      addScore(item) {
-        // console.log('add score', item)
-        this.$router.push({
-          name: 'teachers-teach-add_score', 
-          query: { 
-            id: item.objectId,
-            schoolYear: item.schoolYear, 
-            term: item.term,
-            classRoomLevel: item.classRoomLevel,
-            classRoomName: item.classRoomName
+      getRating(item) {
+        var rating = [];
+        for(var index = 0; index < item.length; index++) {
+          rating.push(item[index].name + " " + item[index].rating + " " + 0)
+        }
+        console.log('student name', rating)
+        return  rating        
+      },
+      getStudentName(item) {
+        var studentName = [];
+        for(var index = 0; index < item.length; index++) {
+          studentName.push(item[index].tth + " " + item[index].namet + " " + item[index].snamet)
+        }
+        console.log('student name', studentName)
+        return  studentName
+      },
+      mapScoreName(name, score) {
+        var student = [];
+        for (var i = 0; i < name.length; i++) {
+          for(var j = 0; j < score.length; j++) {
+            student.push({
+              'name': name[i],
+              'score': score[j]
+            }) 
           }
-        })
+        }
+        console.log('x y', student)
+        return student
+      },
+      async addScore(item) {
+        // เช็คก่อนว่ามมี data ใน gradeรึยัง (1)
+        var grade =  await this.getGradeByConditions(item)
+        console.log('grade objec', grade.length)
+        if (grade.length == 0) {
+           await this.getStudentByTeach(item).then(result => (this.studentsId = result))
+           await this.getStudent(this.studentsId).then(result => (this.studentName = result))
+          var scores = this.mapScoreName(this.studentName, item.rating)
+          // ได้รายชื่อนักเรียนแล้ว -> เอารายชื่อนักเรียนไปรวมกับ rating สร้าง grade object
+          const data = {
+            'subject' : item.sname,
+            'schoolYear': item.schoolYear,
+            'term': item.term,
+            'classRoomLevel': item.classRoomLevel,
+            'classRoomName': item.classRoomName,
+            'teacher': {
+              'id': item.teacher.value,
+              'name': item.teacher.name
+            },
+            'students': scores 
+          }
+          console.log('object grade', data)
+          var response = await this.createGrade(data)
+          // เอารายชื่อนักเรียนไปรวมกับ rating
+          if (response) {
+            this.goToAddScore(item)
+          }
+        } else {
+          this.goToAddScore(item)
+        }
       },
       save() {
         var rating = this.part_rating.map(result => parseInt(result.rating))
@@ -229,13 +317,24 @@
       close() {
         this.dialog = false
         this.part_num = ''
-        // this.resetForm()
         setTimeout(() => {
         }, 300)
       },
       back() {
         this.$router.go(-1)
         console.log('back')
+      },
+      goToAddScore(item){
+        this.$router.push({
+          name: 'teachers-teach-add_score', 
+          query: { 
+            id: item.objectId,
+            schoolYear: item.schoolYear, 
+            term: item.term,
+            classRoomLevel: item.classRoomLevel,
+            classRoomName: item.classRoomName
+          }
+        })
       }
     }
   }
