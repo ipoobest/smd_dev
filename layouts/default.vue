@@ -83,7 +83,7 @@ export default {
         },
         {
           icon: `mdi-account-tie`,
-          title: `ครู`,
+          title: `การจัดการผู้ใช้`,
           to: `/teachers`
         },
         {

@@ -33,7 +33,7 @@
        </v-btn>
       </v-col>
     </v-row>
-    <v-simple-table fixed-header  height="500px" v-if="rating" >
+    <v-simple-table fixed-header  height="450px" v-if="rating" >
     <template v-slot:default>
       <thead>
         <tr>
@@ -48,7 +48,7 @@
       <tbody >
         <tr v-for="student in items" :key="student.name">
           <td > {{ student }} </td>
-          <td v-for="item in rating.length" :key="item.name"><v-text-field  type="number" hide-details="auto" v-model="form.score_id[item]" @click="logId(form.score_id[item])" /></td>
+          <td v-for="item in rating.length" :key="item.name"><v-text-field  type="number" hide-details="auto"  @click="logId(form.score_id[item])" /></td>
           <td><v-text-field v-model="score_aptitude" type="text" hide-details="auto" /></td>
           <td><v-text-field v-model="score_analytical_thinking"  type="text" hide-details="auto" /></td>
           <td><v-btn color="success" @click="logId(student)">บันทึก</v-btn></td>
@@ -57,8 +57,8 @@
     </template>
   </v-simple-table>
   <v-row justify="end">
-    <v-btn color="orange" dark class="mr-2">reset form</v-btn>
-    <v-btn color="success" @click="save">บันทึก</v-btn>
+    <!-- <v-btn color="orange" dark class="mr-2">reset form</v-btn> -->
+    <v-btn color="success" @click="save">บันทึกทั้งหมด</v-btn>
   </v-row>
   </v-container>
 </template>
@@ -70,7 +70,8 @@
       await this.getStudentByTeach().then(result => (this.students = result))
       await this.getStudent(this.students).then(result => (this.items = result))
       await this.getTechById(this.$route.query.id).then(result => (this.rating = result))
-      console.log('this.data', this.rating)
+      // console.log('this.data', this.rating)
+      
     },
     data() {
       return {

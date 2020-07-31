@@ -117,6 +117,16 @@
                               :rules="[v => !!v || 'กรุณากรอกนามสกุล']"
                             ></v-text-field>
                           </v-col>
+                           <v-col cols="12" sm="6" md="6">
+                            <v-select
+                              v-model="editedItem.type"
+                              :items="selectItemUserType"
+                              outlined
+                              label="ประเภทผู้ใช้งาน"
+                              required
+                              :rules="[v => !!v || 'กรุณาเลือกประเภทผู้ใช้งาน']"
+                            ></v-select>
+                          </v-col>
                         </v-row>
                       </v-container>
                       </v-form>
@@ -169,12 +179,13 @@ export default {
         { text: 'คำนำหน้า', value: 'teacherTitle' },
         { text: 'ชื่อ', value: 'firstName' },
         { text: 'นามสกุล', value: 'lastName' },
+        { text: 'ประเภท', value: 'type' },
         { text: 'Actions', value: 'actions', sortable: false }
       ],
       user: '',
       items: [],
       search: ``,
-      title: `ครู`,
+      title: `การจัดการผู้ใช้`,
       desserts: [],
       editedIndex: -1,
       editedItem: {
@@ -186,7 +197,7 @@ export default {
         teacherTitle: '',
         firstName: '',
         lastName: '',
-        type: 'teacher'
+        // type: 'teacher'
       },
       selectItemPosition: [
         'ครูอัตราจ้าง' ,
@@ -210,6 +221,12 @@ export default {
         'นาย',
         'นาง',
         'นางสาว'
+      ],
+      selectItemUserType: [
+        'ครู',
+        'หัวหน้ากลุ่มสาระ',
+        'หัวหน้ากลุ่มประเมิน',
+        'กลุ่มงานทะเบียน'
       ]
     }
   },
