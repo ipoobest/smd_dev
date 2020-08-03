@@ -85,6 +85,16 @@
                               :rules="[v => !!v || 'กรุณากรอกข้อมูล จำนวนชั่วโมงที่สอน']"
                             ></v-text-field>
                           </v-col>
+                          <v-col cols="12" sm="6" md="4">
+                            <v-select
+                              v-model="input.type"
+                              :items="typeSubjects"
+                              outlined
+                              label="ประเภทวิชา"
+                              required
+                              :rules="[v => !!v || 'กรุณาเลือกข้อมูล ประเภทวิชา']"
+                            ></v-select>
+                          </v-col>
                         </v-row>
                       </v-container>
                       </v-form>
@@ -96,7 +106,7 @@
                         >Cancel</v-btn
                       >
                       <v-btn class="success" text @click="save"
-                        >Save</v-btn
+                        >บันทึก</v-btn
                       >
                     </v-card-actions>
                   </v-card>
@@ -145,8 +155,13 @@ export default {
         codet: '',
         sname: '',
         credit: '',
-        hour: ''
-      }
+        hour: '',
+        type: '',
+      },
+      typeSubjects: [
+        'วิชาบังคับ',
+        'วิชาเลือก'
+      ]
     }
   },
   computed: {
@@ -224,6 +239,7 @@ export default {
           sname: this.input.sname,
           credit: this.input.credit,
           hour: this.input.hour,
+          type: this.input.type
         }
         this.updateSubject(editinput)
         this.close()
@@ -236,6 +252,7 @@ export default {
             sname: this.input.sname,
             credit: this.input.credit,
             hour: this.input.hour,
+            type: this.input.type
           }
           console.log('input create', data)
           this.createSubject(data)
