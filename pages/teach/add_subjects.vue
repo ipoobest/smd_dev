@@ -206,17 +206,31 @@
         const response = await this.$store.dispatch(`teach/getSubjectsByTerm`,condition)
         return response.results
       },
+      async getClassesByAcademicYears() {
+        const condition = {
+          schoolYear: this.query.schoolYear,
+          term: this.query.term,
+          classRoomLevel: this.input.classRoomLevel,   
+          classRoomName: this.input.classRoomName,   
+        }
+        const response = await this.$store.dispatch(`classes/getClassesByAcademicYears`, condition)
+        return response.results[0].studentId
+      },
       async addSubjectToTeach(data) {
         const response = await this.$store.dispatch(`teach/createTeach`, data)
         await this.getSubjectsFromTeach().then(result => (this.subjectsInTerm = result))
       },
       async addSubject() {
+        // query studets id เอาแต่ students id
+        const studentId = await this.getClassesByAcademicYears()
+        console.log('response studentId', studentId)
         const data = {
           schoolYear: this.query.schoolYear,
           term: this.query.term,
           sname: this.input.classSubject,   
           classRoomLevel: this.input.classRoomLevel,   
           classRoomName: this.input.classRoomName,   
+          students: studentId,
           teacher: this.input.teacher
         }
         console.log('teach data', data)

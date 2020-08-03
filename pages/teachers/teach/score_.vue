@@ -16,6 +16,9 @@
           type="number"
         ></v-text-field>
       </v-col>
+      <!-- <v-col md="1" class="mt-2">
+        <v-btn color="info">ตกลง</v-btn>
+      </v-col> -->
       <v-col md="2">
         <v-text-field
           v-model="score_analytical_thinking"
@@ -64,10 +67,11 @@
   export default {
     layout: 'teacher',
     async mounted () {
-      await this.getStudentByTeach().then(result => (this.students = result))
-      await this.getStudent(this.students).then(result => (this.items = result))
-      await this.getTechById(this.$route.query.id).then(result => (this.rating = result))
-      console.log('this.data', this.rating)
+      this.getGradeByConditions().then(result => (this.students = result))
+      // await this.getStudentByTeach().then(result => (this.students = result))
+      // await this.getStudent(this.students).then(result => (this.items = result))
+      // await this.getTechById(this.$route.query.id).then(result => (this.rating = result))
+      // console.log('this.data', this.rating)
       
     },
     data() {
