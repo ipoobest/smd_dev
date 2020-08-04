@@ -259,7 +259,7 @@ export default {
       const user = {
         username: data.username,
         password: data.password,
-        type: 'teacher',
+        type: data.type,
         teacherId: data.teacherId,
         teacherObjectId: objectId
       }
@@ -361,6 +361,7 @@ export default {
           lastName: this.editedItem.lastName,
           username: this.editedItem.username,
           password: this.editedItem.password,
+          type: this.editedItem.type,
           userId: objectId
         }
 

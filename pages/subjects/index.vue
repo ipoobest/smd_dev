@@ -145,6 +145,7 @@ export default {
         { text: 'ชื่อวิชา', value: 'sname' },
         { text: 'หน่วยกิต', value: 'credit' },
         { text: 'จำนวนชั่วโมงที่สอน', value: 'hour' },
+        { text: 'ประเภทวิชา', value: 'type' },
         { text: 'Actions', value: 'actions', sortable: false }
       ],
       items: [],
