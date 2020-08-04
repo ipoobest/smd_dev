@@ -84,7 +84,7 @@ export default {
         {
           icon: `mdi-account-tie`,
           title: `การจัดการผู้ใช้`,
-          to: `/teachers`
+          to: `/users`
         },
         {
           icon: `mdi-account-group`,
