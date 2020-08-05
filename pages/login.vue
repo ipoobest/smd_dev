@@ -69,7 +69,7 @@ export default {
           // if(response){
           //   this.$router.replace({name: 'index'})
           // }
-          if(response.type == "teacher"){
+          if(response.type == "ครู"){
             console.log('teacher login')
             this.$router.replace({name: 'teachers-id', params: {id: `${this.$store.state.auth.auth.objectId}`} })
           }else {

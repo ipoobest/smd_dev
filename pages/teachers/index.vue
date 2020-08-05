@@ -246,11 +246,11 @@ export default {
       // console.log('teacher response', response)
       return response.results
     },
-    async getUserByCondtions(data) {
+    async getUserByConditions(data) {
       const condition = {
           teacherObjectId: data
       }
-      const response = await this.$store.dispatch(`users/getUserByCondtions`, condition)
+      const response = await this.$store.dispatch(`users/getUserByConditions`, condition)
       // console.log('response getUserByTeacher Id', response.results)
       return response
     },
@@ -272,7 +272,7 @@ export default {
       const condition = {
         username: data.username
       }
-      const user = await this.$store.dispatch(`users/getUserByCondtions`, condition)
+      const user = await this.$store.dispatch(`users/getUserByConditions`, condition)
       if (user.results.length != 0) {
         alert('username นี้ถูกใช้แล้วกรุณาเปลี่ยน username')
         return
@@ -316,7 +316,7 @@ export default {
       const index = this.items.indexOf(item)
       console.log('index', index)
         if (confirm('ยืนยีนการลบข้อมูลครู')) {
-          const userId = await this.getUserByCondtions(item.teacherId)
+          const userId = await this.getUserByConditions(item.teacherId)
           console.log('userid', userId)
           if (userId.results[0] != null) {
             const objectId =  userId.results[0].objectId
@@ -347,7 +347,7 @@ export default {
       }
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.editedItem)
-        const userId = await this.getUserByCondtions(this.user.objectId)
+        const userId = await this.getUserByConditions(this.user.objectId)
         console.log('response user Id', userId)
         const objectId =  userId.results[0].objectId
         console.log('object User Id', objectId)

@@ -76,6 +76,16 @@ export default {
           title: `การเรียนการสอน`,
           to: `/teachers/${this.$store.state.auth.auth.objectId}`
         },
+        {
+          icon: `mdi-book-plus`,
+          title: `เกณฑ์การให้คะแนน`,
+          to: `/teachers/${this.$store.state.auth.auth.objectId}`
+        },
+        {
+          icon: `mdi-book-plus`,
+          title: `เกณฑ์การตัดเกรด`,
+          to: `/teachers/${this.$store.state.auth.auth.objectId}`
+        },
       ],
       miniVariant: false,
       right: true,

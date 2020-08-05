@@ -25,7 +25,7 @@ export const actions = {
     return new Promise(async (resolve, reject) => {
       try {
         // console.log('parms', { username, password, type, techerId })
-        const result = this.$axios.$post(`${process.env.parseUrl}/users`, object)
+        const result = await this.$axios.$post(`${process.env.parseUrl}/users`, object)
         console.log('create store user ', result)
         commit('setUser', result)
         resolve(result)
@@ -64,7 +64,7 @@ export const actions = {
       }
     })
   },
-  async getUserByCondtions ({ commit }, conditions) {
+  async getUserByConditions ({ commit }, conditions) {
     return new Promise(async (resolve, reject) => {
       try {
         const where = JSON.stringify(conditions)
