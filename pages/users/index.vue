@@ -269,6 +269,11 @@ export default {
       const response = await this.$store.dispatch(`users/getUserByConditions`, conditions)
       return response.results
     },
+    async getUserById(id) {
+      // console.log('user', id)
+      const response = await this.$store.dispatch(`users/getUserById`, id)
+      return response
+    },
     async createUser(data){
       const response = await this.$store.dispatch(`users/createUser`, data)
       this.getDataFromApi().then((result) => (this.items = result))
@@ -291,7 +296,7 @@ export default {
         // id: data.id,
         objectId: data.userId
       }
-      const response = await this.$store.dispatch(`users/updateUser`, user)
+      const response = await this.$store.dispatch(`users/updateUser`, data)
     },
     async deleteUser(itemId) {
       const response = await this.$store.dispatch(`users/deleteUser`, itemId)
@@ -317,9 +322,10 @@ export default {
       }
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.editedItem)
-        const userId = await this.getDataFromApi(this.user.objectId)
+        console.log('user id xx', this.user.objectId)
+        const userId = await this.getUserById(this.user.objectId)
         console.log('response user Id', userId)
-        const objectId =  userId.results[0].objectId
+        const objectId =  userId.objectId
         console.log('object User Id', objectId)
 
         const editData = {
@@ -332,7 +338,8 @@ export default {
           username: this.editedItem.username,
           password: this.editedItem.password,
           type: this.editedItem.type,
-          userId: objectId
+          // userId: objectId
+          objectId: objectId
         }
 
         console.log('edit data', editData)

@@ -64,6 +64,20 @@ export const actions = {
       }
     })
   },
+  async getUserById ({ commit }, id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = this.$axios.$get(`${process.env.parseUrl}/users/${id}`)
+
+        commit('setUser', result)
+        resolve(result)
+      } catch (error) {
+        console.log({ error })
+        commit(`setError`, error)
+        reject(error)
+      }
+    })
+  },  
   async getUserByConditions ({ commit }, conditions) {
     return new Promise(async (resolve, reject) => {
       try {
