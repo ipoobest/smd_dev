@@ -109,13 +109,7 @@
               </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-              <!-- <v-btn color="info" @click="addClasses(item)">
-                แก้ไข
-              </v-btn> -->
-              <!-- <v-icon small class="mr-2" @click="editItem(item)">
-                mdi-pencil
-              </v-icon> -->
-              <v-btn color="info">
+              <v-btn color="info" @click="addStudent(item)">
                 เพิ่มรายชื่อนักเรียน
               </v-btn>
               <v-btn color="error"  @click="deleteItem(item)">
@@ -161,6 +155,7 @@
           { text: 'ครูผู้สอน', value: 'teacher.name', align:'center' },
           { text: 'Actions', value: 'actions', sortable: false, align:'center'}
         ],
+        dialogAddStudents: false,
         dialogCreateTeach: false,
         singleSelect: false,
         items: [],
@@ -212,7 +207,7 @@
           term: this.query.term,
           type: "วิชาเลือกเสรี"
         }
-        const response = await this.$store.dispatch(`teach/getSubjectsByTerm`,condition)
+        const response = await this.$store.dispatch(`teach/getSubjectsByConditions`,condition)
         return response.results
       },
       async getClassesByAcademicYears() {
@@ -230,9 +225,6 @@
         await this.getSubjectsFromTeach().then(result => (this.subjectsInTerm = result))
       },
       async addSubject() {
-        // query studets id เอาแต่ students id
-        // const studentId = await this.getClassesByAcademicYears()
-        // console.log('response studentId', studentId)
         const data = {
           schoolYear: this.query.schoolYear,
           term: this.query.term,
@@ -285,6 +277,13 @@
           term: this.query.term
           }
         })
+      },
+      addStudent(item) {
+      console.log('item id ', item.objectId)
+      this.$router.push({
+        name: 'teach-add_students_to_elective_subject',
+        query: { id: item.objectId }
+      })
       },
       deleteItem(item) {
         const index = this.subjectsInTerm.indexOf(item)

@@ -116,7 +116,7 @@
         return name
       },
       async getTechById (id) {
-        const response = await this.$store.dispatch('teach/getTeachByid', id)
+        const response = await this.$store.dispatch('teach/getTeachById', id)
         console.log('response rating', response.rating)
         return response.rating
       },

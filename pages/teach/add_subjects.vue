@@ -210,7 +210,7 @@
           term: this.query.term,
            type: "วิชาบังคับ"
         }
-        const response = await this.$store.dispatch(`teach/getSubjectsByTerm`,condition)
+        const response = await this.$store.dispatch(`teach/getSubjectsByConditions`,condition)
         return response.results
       },
       async getClassesByAcademicYears() {

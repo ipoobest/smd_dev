@@ -317,7 +317,7 @@ export default {
       }
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.editedItem)
-        const userId = await this.getUserByConditions(this.user.objectId)
+        const userId = await this.getDataFromApi(this.user.objectId)
         console.log('response user Id', userId)
         const objectId =  userId.results[0].objectId
         console.log('object User Id', objectId)

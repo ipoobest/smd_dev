@@ -70,6 +70,22 @@ export const actions = {
              }
            });
          },
+         async getStudentByConditions ({ commit }, conditions){
+           return new Promise(async (resolve, reject) => {
+             try {
+               const where = JSON.stringify(conditions)
+               console.log('where', where)
+               const result = this.$axios.$get(`${process.env.parseUrl}/classes/${classes.students}?where=${where}`)
+
+               commit('setStudents', result)
+               resolve(result)
+             } catch (error) {
+               console.log({ error })
+               commit(`setError`, error)
+               reject(error)
+             }
+           })
+         },
          async getStudentById({ commit }, studentId) {
            return new Promise(async (resolve, reject) => {
              try {

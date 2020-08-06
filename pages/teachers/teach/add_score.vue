@@ -96,9 +96,9 @@
           classRoomLevel: this.$route.query.classRoomLevel,
           classRoomName: this.$route.query.classRoomName
         }
-        const response = await this.$store.dispatch('classes/getClassesByAcademicYears', conditions)
-        console.log('response students', response.results[0].studentId)
-        return response.results[0].studentId
+        const response = await this.$store.dispatch('teach/getSubjectsByConditions', conditions)
+        console.log('response students', response.results[0].students)
+        return response.results[0].students
       },
       async getStudent(data) {
         const query = {
@@ -112,7 +112,7 @@
         return name
       },
       async getTechById (id) {
-        const response = await this.$store.dispatch('teach/getTeachByid', id)
+        const response = await this.$store.dispatch('teach/getTeachById', id)
         console.log('response rating', response.rating)
         return response.rating
       },
