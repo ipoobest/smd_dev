@@ -76,7 +76,7 @@
                               :rules="[v => !!v || 'กรุณาเลือกระดับชั้น']"
                             ></v-select>
                           </v-col>
-                          <v-col cols="12" sm="6" md="6">
+                          <!-- <v-col cols="12" sm="6" md="6">
                             <v-select
                               v-model="input.classRoomName"
                               :items="classRoomName"
@@ -85,7 +85,7 @@
                               required
                               :rules="[v => !!v || 'กรุณาเลือกระดับชั้น']" 
                             ></v-select>
-                          </v-col>
+                          </v-col> -->
                         </v-row>
                       </v-container>
                       </v-form>                      
@@ -115,8 +115,11 @@
               <!-- <v-icon small class="mr-2" @click="editItem(item)">
                 mdi-pencil
               </v-icon> -->
+              <v-btn color="info">
+                เพิ่มรายชื่อนักเรียน
+              </v-btn>
               <v-btn color="error"  @click="deleteItem(item)">
-                ลบ
+                ลบวิชา
               </v-btn>
             </template>
           </v-data-table>
@@ -155,7 +158,6 @@
         headers:  [
           { text: 'รหัส/ชื่อวิขา', value: 'sname', align:'center' },
           { text: 'ระดับชั้น', value: 'classRoomLevel', align:'center'},
-          { text: 'ห้องเรียน', value: 'classRoomName', align:'center'},
           { text: 'ครูผู้สอน', value: 'teacher.name', align:'center' },
           { text: 'Actions', value: 'actions', sortable: false, align:'center'}
         ],
@@ -198,8 +200,8 @@
         return response.results
       },      
       async getSubjects() {
-        var conditions = {
-          type: "วิชาบังคับ"
+         var conditions = {
+          type: "วิชาเลือก"
         }
         const response = await this.$store.dispatch(`subjects/getSubjectsByConditions`, conditions)
         return response.results
@@ -208,7 +210,7 @@
         const condition = {
           schoolYear: this.query.schoolYear,
           term: this.query.term,
-           type: "วิชาบังคับ"
+          type: "วิชาเลือกเสรี"
         }
         const response = await this.$store.dispatch(`teach/getSubjectsByTerm`,condition)
         return response.results
@@ -229,17 +231,17 @@
       },
       async addSubject() {
         // query studets id เอาแต่ students id
-        const studentId = await this.getClassesByAcademicYears()
-        console.log('response studentId', studentId)
+        // const studentId = await this.getClassesByAcademicYears()
+        // console.log('response studentId', studentId)
         const data = {
           schoolYear: this.query.schoolYear,
           term: this.query.term,
           sname: this.input.classSubject,   
           classRoomLevel: this.input.classRoomLevel,   
           classRoomName: this.input.classRoomName,   
-          students: studentId,
+          students: [],
           teacher: this.input.teacher,
-          type: "วิชาบังคับ"
+          type: "วิชาเลือกเสรี"
         }
         console.log('teach data', data)
         this.addSubjectToTeach(data)
@@ -274,7 +276,7 @@
           }
           this.itemTeachers.push(teacher)
         }
-      },      
+      },    
       addClasses(item) {
         this.$router.push({name:'teach-add_classes', 
         query:{ 

@@ -63,6 +63,22 @@ export const actions = {
       }
     })
   },
+  async getSubjectsByConditions ({ commit }, conditions){
+    return new Promise(async (resolve, reject) => {
+      try {
+        const where = JSON.stringify(conditions)
+        console.log('where', where)
+        const result = this.$axios.$get(`${process.env.parseUrl}/classes/${classes.subjects}?where=${where}`)
+
+        commit('setUser', result)
+        resolve(result)
+      } catch (error) {
+        console.log({ error })
+        commit(`setError`, error)
+        reject(error)
+      }
+    })
+  },
   async getSubjectsByClass({ commit }, classId) {
     return await this.getSubjects({ class: classId })
   },

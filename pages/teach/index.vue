@@ -27,8 +27,12 @@
               </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }" >
-              <v-btn  color="info" dark class="mr-2" @click="addSubject(item)">
-                จัดการ</v-btn>
+              <v-btn  color="success" dark class="mr-2" @click="addSubject(item)">
+                จัดการวิชาบังคับ
+              </v-btn>
+              <v-btn  color="info" dark class="mr-2" @click="addElevtiveSubject(item)">
+                จัดการวิชาเลือกเสรี
+              </v-btn>
             </template>
           </v-data-table>
         </v-card>
@@ -80,6 +84,10 @@ export default {
       // this.$store.commit('academic_year/setTerm', item.term)
       // console.log('item after commit', this.$store.state.academic_year.schoolYear)
       this.$router.push({ name: 'teach-add_subjects', query: { schoolYear: item.schoolYear, term: item.term} })
+    },
+    async addElevtiveSubject(item) {
+      this.$router.push({ name: 'teach-add_elective_subjects', query: { schoolYear: item.schoolYear, term: item.term} })
+
     }
   }
 }
