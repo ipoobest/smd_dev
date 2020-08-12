@@ -293,10 +293,10 @@ export default {
       const user = {
         username: data.username,
         password: data.password,
-        // id: data.id,
         objectId: data.userId
       }
       const response = await this.$store.dispatch(`users/updateUser`, data)
+      this.getDataFromApi().then((result) => (this.items = result))
     },
     async deleteUser(itemId) {
       const response = await this.$store.dispatch(`users/deleteUser`, itemId)
@@ -328,6 +328,12 @@ export default {
         const objectId =  userId.objectId
         console.log('object User Id', objectId)
 
+        var userType;
+          if (this.editedItem.staffType) {
+            userType = this.editedItem.type + this.editedItem.staffType
+          } else {
+            userType = this.editedItem.type 
+          }
         const editData = {
           objectId: this.editedItem.objectId,
           id: this.editedItem.id,
@@ -337,8 +343,7 @@ export default {
           lastName: this.editedItem.lastName,
           username: this.editedItem.username,
           password: this.editedItem.password,
-          type: this.editedItem.type,
-          // userId: objectId
+          type: userType,
           objectId: objectId
         }
 
