@@ -111,9 +111,9 @@
               </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-              <v-btn  class="info" @click="addRating(item)">
+              <!-- <v-btn  class="info" @click="addRating(item)">
                 เกณฑ์การให้คะแนน
-              </v-btn>
+              </v-btn> -->
               <v-btn class="success" @click="addScore(item)" >
                 ให้คะแนน
               </v-btn>

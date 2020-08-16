@@ -230,7 +230,7 @@
           term: this.query.term,
           sname: this.input.classSubject,   
           classRoomLevel: this.input.classRoomLevel,   
-          classRoomName: this.input.classRoomName,   
+          classRoomName: "รวม",   
           students: [],
           teacher: this.input.teacher,
           type: "วิชาเลือกเสรี"
