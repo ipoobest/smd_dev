@@ -129,10 +129,10 @@
   export default {
     layout: 'teacher',
      async mounted () {
-      this.params = this.$route.params
-      this.teacherId = this.$store.state.auth.auth.teacherObjectId
-      console.log(this.teacherId)
-      await this.getTeachByTeacherId(this.teacherId).then(result => (this.items = result))
+      this.query = this.$route.query
+      // this.teacherId = this.$store.state.auth.auth.teacherObjectId
+      console.log('params',this.query.id)
+      await this.getTeachByTeacherId(this.query.id).then(result => (this.items = result))
       // get rating
       // this.part_rating = this.items.rating
       // console.log('rating', this.items)
@@ -148,7 +148,7 @@
         formTitle: 'เกณฑ์การให้คะแนน',
         title: 'เลือกห้องเรียน',
         search: '',
-        params: '',
+        query: '',
         teacherId: '',
         teach: '',
         dialogCreateTeach: 'false',
@@ -171,8 +171,8 @@
     methods: {
       async getTeachByTeacherId (teacherId) {
        const data = {
-           'schoolYear': this.$route.params.schoolYear,
-           'term': this.$route.params.term,
+           'schoolYear': this.$route.query.schoolYear,
+           'term': this.$route.query.term,
            'teacher.value': teacherId
         }
         const response = await this.$store.dispatch(`teach/getTeachByTeacherId`, data )

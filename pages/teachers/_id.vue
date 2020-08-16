@@ -39,6 +39,7 @@
     mounted () {
       this.params = this.$route.params.id
       this.getDataFromApi().then(result => (this.items = result))
+      console.log('this.params', this.params)
     },
     data() {
       return {
@@ -68,7 +69,7 @@
       console.log(item)
       this.$router.push({
         name: 'teachers-teach-subjects',
-        params: { schoolYear: item.schoolYear, term: item.term, id: this.params}
+        query: { schoolYear: item.schoolYear, term: item.term, id: this.params}
       })
     }
   }
