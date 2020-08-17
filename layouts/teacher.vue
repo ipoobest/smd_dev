@@ -73,13 +73,13 @@ export default {
         // },
         {
           icon: `mdi-book-plus`,
-          title: `การเรียนการสอน`,
+          title: `ให้คะแนน`,
           to: `/teachers/${this.$store.state.auth.auth.objectId}`
         },
         {
           icon: `mdi-poll`,
           title: `เกณฑ์การให้คะแนน`,
-          to: `/teachers/${this.$store.state.auth.auth.objectId}`
+          to: `/teachers/teach/`
         },
         // {
         //   icon: `mdi-book-plus`,

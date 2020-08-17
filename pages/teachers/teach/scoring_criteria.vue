@@ -111,12 +111,9 @@
               </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-              <!-- <v-btn  class="info" @click="addRating(item)">
-                เกณฑ์การให้คะแนน
-              </v-btn> -->
-              <v-btn class="success" @click="addScore(item)" >
-                ให้คะแนน
-              </v-btn>
+              <v-btn  class="info" @click="goToAddScore(item)">
+               จัดการ
+              </v-btn>              
             </template>
           </v-data-table>
         </v-card>
@@ -202,7 +199,6 @@
           'classRoomName': item.classRoomName
         }
         const response = await this.$store.dispatch('classes/getClassesByAcademicYears', conditions)
-        console.log('response students', response.results)
         console.log('response students', response.results[0].studentId)
         return response.results[0].studentId
       },
@@ -222,11 +218,11 @@
         console.log('response create grade', response)
         return response
       },
-      // async addRatingToTach(teach) {
-      //   const response = await this.$store.dispatch(`teach/updateTeach`, teach)
-      //   console.log('response addRatingToTach', response)
-      //   return response
-      // },
+      async addRatingToTach(teach) {
+        const response = await this.$store.dispatch(`teach/updateTeach`, teach)
+        console.log('response addRatingToTach', response)
+        return response
+      },
       addPartNumber() {
         this.part_rating = []
         for (var index = 0; index < this.part_num; index++) {
@@ -279,11 +275,7 @@
         if (grade.length == 0) {
            await this.getStudentByTeach(item).then(result => (this.studentsId = result))
            await this.getStudent(this.studentsId).then(result => (this.studentName = result))
-           if(item.rating == null) {
-             item.rating = []
-           } else{
-              var scores = this.mapScoreName(this.studentName, item.rating)
-           }
+          var scores = this.mapScoreName(this.studentName, item.rating)
           // ได้รายชื่อนักเรียนแล้ว -> เอารายชื่อนักเรียนไปรวมกับ rating สร้าง grade object
           const data = {
             'subject' : item.sname,
@@ -334,13 +326,13 @@
       },
       goToAddScore(item){
         this.$router.push({
-          name: 'teachers-teach-add_score', 
+          name: 'teachers-teach-add_scoring_criteria', 
           query: { 
             id: item.objectId,
-            schoolYear: item.schoolYear, 
-            term: item.term,
-            classRoomLevel: item.classRoomLevel,
-            classRoomName: item.classRoomName
+            // schoolYear: item.schoolYear, 
+            // term: item.term,
+            // classRoomLevel: item.classRoomLevel,
+            // classRoomName: item.classRoomName
           }
         })
       }
