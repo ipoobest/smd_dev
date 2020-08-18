@@ -111,9 +111,9 @@
               </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-              <!-- <v-btn  class="info" @click="addRating(item)">
+              <v-btn  class="info" @click="addRating(item)">
                 เกณฑ์การให้คะแนน
-              </v-btn> -->
+              </v-btn>
               <v-btn class="success" @click="addScore(item)" >
                 ให้คะแนน
               </v-btn>
@@ -222,11 +222,11 @@
         console.log('response create grade', response)
         return response
       },
-      // async addRatingToTach(teach) {
-      //   const response = await this.$store.dispatch(`teach/updateTeach`, teach)
-      //   console.log('response addRatingToTach', response)
-      //   return response
-      // },
+      async addRatingToTach(teach) {
+        const response = await this.$store.dispatch(`teach/updateTeach`, teach)
+        console.log('response addRatingToTach', response)
+        return response
+      },
       addPartNumber() {
         this.part_rating = []
         for (var index = 0; index < this.part_num; index++) {

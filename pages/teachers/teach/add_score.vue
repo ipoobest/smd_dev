@@ -24,11 +24,6 @@
           type="number"
         ></v-text-field>
       </v-col>
-       <v-col md="2">
-       <v-btn color="info" class="mt-2">
-         เกณฑ์การตัดเกรด
-       </v-btn>
-      </v-col>
     </v-row>
     <v-simple-table fixed-header  height="450px" v-if="rating" >
       <template v-slot:default>
@@ -39,16 +34,18 @@
             <th class="text-left" v-for="item in rating" :key="item.name">{{item.name}} , {{item.score}} คะแนน</th>
             <th class="text-left">คุณลักษณะ</th>
             <th class="text-left">การคิดการอ่าน</th>
-            <th class="text-left">ดำเนินการ</th>
+            <th class="text-left">คะแนนรวม</th>
+            <th class="text-left">เกรด</th>
           </tr>
         </thead>
         <tbody >
           <tr v-for="student in items" :key="student.name">
             <td > {{ student }} </td>
             <td v-for="item in rating.length" :key="item.name"><v-text-field  type="number" hide-details="auto"  @click="logId(form.score_id[item])" /></td>
-            <td><v-text-field v-model="score_aptitude" type="text" hide-details="auto" /></td>
-            <td><v-text-field v-model="score_analytical_thinking"  type="text" hide-details="auto" /></td>
-            <td><v-btn color="success" @click="logId(student)">บันทึก</v-btn></td>
+            <td><v-text-field  type="text" hide-details="auto" /></td>
+            <td><v-text-field  type="text" hide-details="auto" /></td>
+            <td><p  type="text" hide-details="auto" /></td>
+            <td><p  type="text" hide-details="auto" /></td>
           </tr>
         </tbody>
       </template>
