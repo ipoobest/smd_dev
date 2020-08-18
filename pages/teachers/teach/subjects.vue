@@ -26,94 +26,10 @@
               <v-toolbar flat color="white">
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
-                <v-dialog v-model="dialog" max-width="700px">
-                  <v-card>
-                    <v-card-title>
-                      <span class="headline">{{ formTitle }}</span>
-                    </v-card-title>
-
-                    <v-card-text>
-                      <v-form ref="form" validation>
-                      <v-container>
-                        <v-row>
-                          <v-col cols="12" sm="6" md="4" align-self="center">
-                            <h3>การเก็บคะแนน</h3>
-                          </v-col>
-                          <v-col cols="12" sm="6" md="3" align-self="center">
-                            <v-text-field
-                              v-model="part_num"
-                              type="number"
-                              required
-                              :rules="[v => !!v || 'กรุณากรอก จำนวนการเก็บคะแนน']"
-                            />
-                          </v-col>
-                          <v-col cols="12" sm="6" md="2" align-self="center">
-                            <h3>ส่วน</h3>
-                          </v-col>
-                          <v-col cols="12" sm="6" md="2" align-self="center">
-                            <v-btn class="info" @click="addPartNumber">ตกลง</v-btn>
-                          </v-col>
-                        </v-row>
-                        <v-row>
-                            <div v-for="item in part_rating" :key="item.id" >
-                              <!-- {{ item.sname }} -->
-                              <v-col align-self="center">
-                                <v-row>
-                                <v-text-field
-                                  class="mr-5"
-                                  v-model="item.name"
-                                  label="หัวข้อ"
-                                  outlined
-                                  type="text"
-                                />
-                                <v-text-field
-                                  class="mr-5"
-                                  v-model="item.score"
-                                  label="คะแนน"
-                                  outlined
-                                  type="number"
-                                />
-                                <v-text-field
-                                  v-model="item.rating"
-                                  label="สัดส่วน %"
-                                  outlined
-                                  type="number"
-                                />
-                                </v-row>
-                              </v-col>
-                            </div>
-                          <!-- <div v-for="index in part_point" :key="index">
-                            <v-col cols="12" sm="6" md="4" >
-                              <v-text-field
-                                outlined
-                                v-model="part_point[index]"
-                                required
-                                label="%"
-                              />
-                            </v-col>
-                          </div> -->
-                        </v-row>
-                      </v-container>
-                      </v-form>
-                    </v-card-text>
-
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="blue darken-1" text @click="close"
-                        >ยกเลิก</v-btn
-                      >
-                      <v-btn class="success" text @click="save"
-                        >บันทึก</v-btn
-                      >
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
+            
               </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
-              <v-btn  class="info" @click="addRating(item)">
-                เกณฑ์การให้คะแนน
-              </v-btn>
               <v-btn class="success" @click="addScore(item)" >
                 ให้คะแนน
               </v-btn>

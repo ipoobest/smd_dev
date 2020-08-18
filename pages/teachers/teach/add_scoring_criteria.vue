@@ -198,7 +198,9 @@ export default {
     async addRatingToTach(teach) {
       const response = await this.$store.dispatch(`teach/updateTeach`, teach);
       console.log('response addRatingToTach', response);
-      return response;
+      if(response){
+        alert('บันทึกสำเร็จ')
+      }
     },
     async getRating(item) {
       console.log('criteria', this.grade);
@@ -240,7 +242,7 @@ export default {
       sum != 100 ? alert('กรุณาทำให้ผลรวมเป็น 100') : null;
 
       const teach = {
-        objectId: this.teach.objectId,
+        objectId: this.$route.query.id,
         rating: this.part_rating
       };
       console.log('item ob', teach);
@@ -255,18 +257,6 @@ export default {
       this.$router.go(-1);
       console.log('back');
     },
-    goToAddScore(item) {
-      this.$router.push({
-        name: 'teachers-teach-add_scoring_criteria',
-        query: {
-          id: item.objectId,
-          schoolYear: item.schoolYear,
-          term: item.term,
-          classRoomLevel: item.classRoomLevel,
-          classRoomName: item.classRoomName
-        }
-      });
-    }
   }
 };
 </script>
