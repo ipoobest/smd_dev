@@ -173,13 +173,13 @@ export default {
       part_rating: [],
       part_num: '',
       grade: {
-        g4: '',
-        g3_5: '',
-        g3: '',
-        g2_5: '',
-        g2: '',
-        g1_5: '',
-        g1: ''
+        g4: 0,
+        g3_5: 0,
+        g3: 0,
+        g2_5: 0,
+        g2: 0,
+        g1_5: 0,
+        g1: 0
       }
     };
   },
@@ -210,7 +210,6 @@ export default {
         this.part_num = item[0].rating.length;
         this.part_rating = item[0].rating;
       } 
-      console.log('addrateing', item.rating);
     },
     addPartNumber() {
       this.part_rating = [];
@@ -223,7 +222,7 @@ export default {
       const data = {
         objectId: this.$route.query.id,
         criteria: {
-          g4: this.grade.g1,
+          g4: this.grade.g4,
           g3_5: this.grade.g3_5,
           g3: this.grade.g3,
           g2_5: this.grade.g2_5,

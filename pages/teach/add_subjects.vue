@@ -239,6 +239,7 @@
           classRoomName: this.input.classRoomName,   
           students: studentId,
           teacher: this.input.teacher,
+          rating: [],
           type: "วิชาบังคับ"
         }
         console.log('teach data', data)

@@ -50,7 +50,7 @@ export const actions = {
         const where = JSON.stringify(conditions)
         const result = await this.$axios.$get(`${process.env.parseUrl}/classes/${classes.grade}?where=${where}`)
         console.log('grades url', `${process.env.parseUrl}/classes/${classes.grade}?where=${where}`)
-        commit('setGrade', result)
+        // commit('setGrade', result)
         resolve(result)
       } catch (error) {
         console.log({ error })

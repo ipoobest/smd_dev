@@ -24,6 +24,9 @@
           type="number"
         ></v-text-field>
       </v-col>
+      <v-col md="2">
+         <v-btn @click="addScoreX">เพิ่ม</v-btn>
+      </v-col>
     </v-row>
     <v-simple-table fixed-header  height="450px" v-if="rating" >
       <template v-slot:default>
@@ -31,7 +34,7 @@
           <tr>
             <th class="text-left">ชื่อ</th>
             <!--- this header -->
-            <th class="text-left" v-for="item in rating" :key="item.name">{{item.name}} , {{item.score}} คะแนน</th>
+            <th class="text-left" v-for="item in rating" :key="item.name"> {{item.name}} , {{item.score}} คะแนน</th>
             <th class="text-left">คุณลักษณะ</th>
             <th class="text-left">การคิดการอ่าน</th>
             <th class="text-left">คะแนนรวม</th>
@@ -39,21 +42,23 @@
           </tr>
         </thead>
         <tbody >
-          <tr v-for="student in items" :key="student.name">
-            <td > {{ student }} </td>
-            <td v-for="item in rating.length" :key="item.name"><v-text-field  type="number" hide-details="auto"  @click="logId(form.score_id[item])" /></td>
-            <td><v-text-field  type="text" hide-details="auto" /></td>
-            <td><v-text-field  type="text" hide-details="auto" /></td>
-            <td><p  type="text" hide-details="auto" /></td>
-            <td><p  type="text" hide-details="auto" /></td>
+          <tr v-for="item_score in score" :key="item_score.studentName">
+            <td > {{ item_score.studentName }} </td>
+              <td v-for="(item_in, index) in  item_score.score" :key="index">
+                <v-text-field  v-model="item_score.score[index].score" :value="item_in" type="number" hide-details="auto" /> 
+              </td>
+            <td><v-text-field v-model=" item_score.aptitude"  type="number" hide-details="auto" /></td>
+            <td><v-text-field v-model=" item_score.analytical_thinking" type="number" hide-details="auto" /></td>
+            <td><v-text-field  type="number" style="text-align:justify" hide-details="auto" /></td>
+            <td><p type="text" hide-details="auto" /></td>
           </tr>
         </tbody>
       </template>
     </v-simple-table>
-      <h3 v-else>กรุณาเพิ่ทเกณฑ์การให้คะแนน</h3>
+      <h3 v-else>กรุณาเพิ่มเกณฑ์การให้คะแนน</h3>
   <v-row justify="end">
     <!-- <v-btn color="orange" dark class="mr-2">reset form</v-btn> -->
-    <v-btn color="success" @click="save">บันทึกทั้งหมด</v-btn>
+    <v-btn color="success" @click="updateGrade">บันทึกทั้งหมด</v-btn>
   </v-row>
   </v-container>
 </template>
@@ -62,17 +67,14 @@
   export default {
     layout: 'teacher',
     async mounted () {
-      await this.getStudentByTeach().then(result => (this.students = result))
-      await this.getStudent(this.students).then(result => (this.items = result))
-      await this.getTechById(this.$route.query.id).then(result => (this.rating = result))
-      console.log('this.data', this.rating)
+      await this.getGradeByConditions().then(result => (this.grade = result))
+      console.log('getGrade', this.grade)
       
     },
     data() {
       return {
         title: 'เพิ่มคะแนนให้นักเรียน',
         rating: [
-          // { name: 'กรุณาเพิ่ทเกณฑ์การให้คะแนน', rating: 0}
         ],
         form: {
           score_id: []
@@ -84,9 +86,29 @@
         score_analytical_thinking: '',
         score_aptitude: '',
         students: [],
+        grade: '',
       }
     },
     methods: {
+      async getGradeByConditions() {
+        const conditions = {
+          schoolYear: this.$route.query.schoolYear,
+          term: this.$route.query.term,
+          classRoomLevel: this.$route.query.classRoomLevel,
+          classRoomName: this.$route.query.classRoomName
+        }
+        const response = await this.$store.dispatch('grade/getGradeByConditions', conditions)
+        console.log('response grade', response.results.length)
+        if(response.results.length == 0) {
+          this.createGrade()
+        } else {
+          console.log('this responbse', response.results)
+          await this.getTechById(this.$route.query.id)
+          this.score =  response.results.slice()
+          console.log('this score', this.score)
+          return response.results
+        }
+      },
       async getStudentByTeach(data) {
         const conditions = {
           schoolYear: this.$route.query.schoolYear,
@@ -111,8 +133,61 @@
       },
       async getTechById (id) {
         const response = await this.$store.dispatch('teach/getTeachById', id)
-        console.log('response rating', response.rating)
-        return response.rating
+        console.log('this.item', response)
+        this.rating = response.rating
+        return response
+      },
+      async createGrade () {
+        // console.log('create grade')
+        await this.getTechById(this.$route.query.id).then(result => (this.items = result))
+        await this.getStudent(this.items.students).then(result => (this.students = result))
+        // console.log('testtt' , this.students)
+
+        var initScore = []
+        for(var index = 0; index < this.rating.length; index ++){
+          const data = {
+            name:  this.rating[index].name,
+            score: 0
+          }
+          initScore.push(data)
+        }
+        console.log('init sxoew', initScore)
+        for(var index = 0; index < this.rating.length; index ++) {
+          const data = {
+            subject: this.items.sname,
+            schoolYear: this.items.schoolYear,
+            term: this.items.term,
+            classRoomLevel: this.items.classRoomLevel,
+            classRoomName: this.items.classRoomName,
+            studentName: this.students[index],
+            score: initScore,
+            grade: '',
+            aptitude: '',
+            analytical_thinking: ''
+          }
+          console.log('date create', data)
+          const response = await this.$store.dispatch(`grade/createGrade`, data);
+          console.log("response create grade", response);
+        }
+        this.getGradeByConditions().then(result => (this.grade = result))
+      },
+      updateValue(value) {
+        console.log('e',value)
+        this.$store.commit('grade/setScore', value)
+      },
+      async updateGrade () {
+        this.score.forEach(item => {
+          // var objId = item.objectId
+          var data = {
+            objectId: item.objectId,
+            score: item.score,
+            aptitude: item.aptitude,
+            analytical_thinking: item.analytical_thinking,
+          }
+          console.log('score', data)
+          const response = this.$store.dispatch(`grade/updateGrade`, data);
+          console.log('response')
+        })
       },
       getStudentName(item) {
         for(var index = 0; index < item.length; index++) {
@@ -128,6 +203,12 @@
         this.editedItem = Object.assign({}, item)
 
         this.dialog = true
+      },
+      addScoreX() {
+       this.score.forEach(item => {
+          item.aptitude = this.score_aptitude
+          item.analytical_thinking = this.score_analytical_thinking
+        })
       },
       logId(item) {
         console.log(item)
