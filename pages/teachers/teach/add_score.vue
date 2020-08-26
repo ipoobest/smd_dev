@@ -26,10 +26,9 @@
       </v-col>
       <v-col md="2">
          <v-btn @click="addScoreX">เพิ่ม</v-btn>
-         <v-btn class="success mt-5"> refresh </v-btn>
       </v-col>
     </v-row>
-    <v-simple-table fixed-header  height="450px" v-if="rating" >
+    <v-simple-table fixed-header v-if="rating" >
       <template v-slot:default>
         <thead>
           <tr>
@@ -42,19 +41,17 @@
             <th class="text-left">เกรด</th>
           </tr>
         </thead>
-        <tbody >
-          <tr v-for="item_score in score" :key="item_score.studentName">
-          <!-- <tr v-for="(grade, index) in grade_array"> -->
-
+        <tbody>
+          <tr v-for="item_score in score" :key="item_score.studentName" >
             <td > {{ item_score.studentName }} </td>
               <td v-for="(item_in, index) in  item_score.score" :key="index">
                 <v-text-field  v-model="item_score.score[index]" :value="item_in" type="number" hide-details="auto" /> 
               </td>
-            <td><v-text-field v-model=" item_score.aptitude"  type="number" hide-details="auto" /></td>
-            <td><v-text-field v-model=" item_score.analytical_thinking" type="number" hide-details="auto" /></td>
-            <td><v-text-field  type="number" style="text-align:justify" hide-details="auto" /></td>
-            <!-- <td>{{calcScore(grade.score)}}</td> -->
-            <td><p type="text" hide-details="auto" /></td>
+            <td><v-text-field v-model="item_score.aptitude"  type="number" hide-details="auto" /></td>
+            <td><v-text-field v-model="item_score.analytical_thinking" type="number" hide-details="auto" /></td>
+            <!-- <td><v-text-field  type="number" style="text-align:justify" hide-details="auto" /></td> -->
+            <td>{{calcScore(item_score.score)}}</td>
+            <td ><p type="text" hide-details="auto" /></td>
           </tr>
         </tbody>
       </template>
@@ -62,7 +59,7 @@
       <h3 v-else>กรุณาเพิ่มเกณฑ์การให้คะแนน</h3>
   <v-row justify="end">
     <!-- <v-btn color="orange" dark class="mr-2">reset form</v-btn> -->
-    <v-btn color="success" @click="updateGrade">บันทึกทั้งหมด</v-btn>
+    <v-btn class="success mt-5 mr-5" @click="updateGrade">บันทึก</v-btn>
   </v-row>
   </v-container>
 </template>
@@ -71,8 +68,9 @@
   export default {
     layout: 'teacher',
     async mounted () {
-      await this.getGradeByConditions().then(result => (this.grade_list = result))
-      console.log('getGrade', this.grade_list)
+      await this.getTechById(this.$route.query.id).then(result => (this.items = result))
+      await this.getGradeByConditions(this.items).then(result => (this.grade_list = result))
+      // console.log('getGrade', this.grade_list)
       
     },
     data() {
@@ -93,23 +91,21 @@
         grade_array: [],
         students: [],
         grade: '',
+        ratio_array: []
       }
     },
     methods: {
-      async getGradeByConditions() {
+      async getGradeByConditions(item) {
+        console.log('teachId xxxx', item.objectId)
         const conditions = {
-          schoolYear: this.$route.query.schoolYear,
-          term: this.$route.query.term,
-          classRoomLevel: this.$route.query.classRoomLevel,
-          classRoomName: this.$route.query.classRoomName
+          teachId: item.objectId
         }
         const response = await this.$store.dispatch('grade/getGradeByConditions', conditions)
-        console.log('response grade', response.results.length)
+        console.log('response grade xxx', response)
         if(response.results.length == 0) {
           this.createGrade()
         } else {
           console.log('this responbse', response.results)
-          await this.getTechById(this.$route.query.id)
           this.score =  response.results.slice()
           console.log('this score', this.score)
           return response.results
@@ -141,10 +137,10 @@
         const response = await this.$store.dispatch('teach/getTeachById', id)
         console.log('this.item', response)
         this.rating = response.rating
+        this.mapRating(this.rating)
         return response
       },
       async createGrade () {
-        await this.getTechById(this.$route.query.id).then(result => (this.items = result))
         await this.getStudent(this.items.students).then(result => (this.students = result))
 
         var initScore =  new Array(this.rating.length)
@@ -169,7 +165,7 @@
           const response = await this.$store.dispatch(`grade/createGrade`, data);
           // console.log("response create grade", response);
         }
-        this.getGradeByConditions().then(result => (this.grade = result))
+        this.getGradeByConditions(this.items).then(result => (this.grade = result))
       },
       async updateGrade () {
         this.score.forEach(item => {
@@ -192,6 +188,12 @@
         console.log('student name', this.studentName)
         return  this.studentName
       },
+      mapRating(rating) {
+        rating.forEach(item => {
+          this.ratio_array.push(item.rating)
+        })
+        console.log('this.ratio_array',this.ratio_array)
+      },
       addScore() {
         console.log('item id ', item)
         // this.getUserByTacherId(item.teacherId)
@@ -203,7 +205,7 @@
       calcScore(score_array) {
         var calc_score = []
         score_array.forEach((score,index) => {
-          var result = score * ratio_array[index] / 100
+          var result = score * this.ratio_array[index] / 100
           calc_score.push(result)
         })
         var sum_score = calc_score.reduce((a,b) => a+b)
