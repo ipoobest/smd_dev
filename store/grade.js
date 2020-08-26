@@ -64,7 +64,7 @@ export const actions = {
       const objectId = object.objectId
       console.log('grades objecId', objectId)
       try {
-        const result = this.$axios.$put(`${process.env.parseUrl}/classes/${classes.grade}/${objectId}`, object)
+        const result = await this.$axios.$put(`${process.env.parseUrl}/classes/${classes.grade}/${objectId}`, object)
 
         commit('setGrade', result)
         resolve(result)

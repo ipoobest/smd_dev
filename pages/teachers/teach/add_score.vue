@@ -26,6 +26,7 @@
       </v-col>
       <v-col md="2">
          <v-btn @click="addScoreX">เพิ่ม</v-btn>
+         <v-btn class="success mt-5"> refresh </v-btn>
       </v-col>
     </v-row>
     <v-simple-table fixed-header  height="450px" v-if="rating" >
@@ -43,13 +44,16 @@
         </thead>
         <tbody >
           <tr v-for="item_score in score" :key="item_score.studentName">
+          <!-- <tr v-for="(grade, index) in grade_array"> -->
+
             <td > {{ item_score.studentName }} </td>
               <td v-for="(item_in, index) in  item_score.score" :key="index">
-                <v-text-field  v-model="item_score.score[index].score" :value="item_in" type="number" hide-details="auto" /> 
+                <v-text-field  v-model="item_score.score[index]" :value="item_in" type="number" hide-details="auto" /> 
               </td>
             <td><v-text-field v-model=" item_score.aptitude"  type="number" hide-details="auto" /></td>
             <td><v-text-field v-model=" item_score.analytical_thinking" type="number" hide-details="auto" /></td>
             <td><v-text-field  type="number" style="text-align:justify" hide-details="auto" /></td>
+            <!-- <td>{{calcScore(grade.score)}}</td> -->
             <td><p type="text" hide-details="auto" /></td>
           </tr>
         </tbody>
@@ -67,8 +71,8 @@
   export default {
     layout: 'teacher',
     async mounted () {
-      await this.getGradeByConditions().then(result => (this.grade = result))
-      console.log('getGrade', this.grade)
+      await this.getGradeByConditions().then(result => (this.grade_list = result))
+      console.log('getGrade', this.grade_list)
       
     },
     data() {
@@ -85,6 +89,8 @@
         studentName: [],
         score_analytical_thinking: '',
         score_aptitude: '',
+        grade_list: [],
+        grade_array: [],
         students: [],
         grade: '',
       }
@@ -138,22 +144,16 @@
         return response
       },
       async createGrade () {
-        // console.log('create grade')
         await this.getTechById(this.$route.query.id).then(result => (this.items = result))
         await this.getStudent(this.items.students).then(result => (this.students = result))
-        // console.log('testtt' , this.students)
 
-        var initScore = []
-        for(var index = 0; index < this.rating.length; index ++){
-          const data = {
-            name:  this.rating[index].name,
-            score: 0
-          }
-          initScore.push(data)
-        }
+        var initScore =  new Array(this.rating.length)
+        initScore.fill(0)
+       
         console.log('init sxoew', initScore)
         for(var index = 0; index < this.rating.length; index ++) {
           const data = {
+            teachId: this.items.objectId,
             subject: this.items.sname,
             schoolYear: this.items.schoolYear,
             term: this.items.term,
@@ -165,15 +165,11 @@
             aptitude: '',
             analytical_thinking: ''
           }
-          console.log('date create', data)
+          // console.log('date create', data)
           const response = await this.$store.dispatch(`grade/createGrade`, data);
-          console.log("response create grade", response);
+          // console.log("response create grade", response);
         }
         this.getGradeByConditions().then(result => (this.grade = result))
-      },
-      updateValue(value) {
-        console.log('e',value)
-        this.$store.commit('grade/setScore', value)
       },
       async updateGrade () {
         this.score.forEach(item => {
@@ -203,6 +199,15 @@
         this.editedItem = Object.assign({}, item)
 
         this.dialog = true
+      },
+      calcScore(score_array) {
+        var calc_score = []
+        score_array.forEach((score,index) => {
+          var result = score * ratio_array[index] / 100
+          calc_score.push(result)
+        })
+        var sum_score = calc_score.reduce((a,b) => a+b)
+        return sum_score
       },
       addScoreX() {
        this.score.forEach(item => {

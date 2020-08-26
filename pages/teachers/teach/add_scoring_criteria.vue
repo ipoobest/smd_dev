@@ -99,8 +99,17 @@
                 <h3>การเก็บคะแนน</h3>
               </v-col>
             </v-row>
-            <v-row justify="center" align-content="center">
+            <v-row>
               <v-col cols="12">
+                <v-row justify="end">
+                  <v-btn class="info mr-5" @click="editMode">แก้ไข</v-btn>
+                  <v-btn
+                    v-if="edit_mode == false"
+                    class="success mr-5"
+                    @click="editMode"
+                    >บันทึก</v-btn
+                  >
+                </v-row>
                 <v-simple-table>
                   <template v-slot:default>
                     <thead>
@@ -147,20 +156,19 @@
                           </v-row>
                         </td>
                         <td>
-                          <v-icon
-                            color="green"
-                            class="mr-2"
-                            @click="addRatingTest"
+                          <v-icon color="green" class="mr-2" @click="addRating"
                             >mdi-note-plus-outline</v-icon
                           >
                         </td>
                       </tr>
-                      <tr v-for="item in part_rating" :key="item.index">
+                      <!-- <tr v-for="item in part_rating" :key="item.index"> -->
+                      <tr v-for="(rating, index) in part_rating" :key=index>
                         <td>
                           <v-row align="center" justify="center">
                             <v-col cols="8" class="mt-5">
                               <v-text-field
-                                v-model="item.name"
+                                :disabled="edit_mode"
+                                v-model="rating.name"
                                 solo
                               ></v-text-field>
                             </v-col>
@@ -170,7 +178,8 @@
                           <v-row align="center" justify="center">
                             <v-col cols="8" class="mt-5">
                               <v-text-field
-                                v-model="item.score"
+                                :disabled="edit_mode"
+                                v-model="rating.score"
                                 solo
                               ></v-text-field>
                             </v-col>
@@ -180,19 +189,19 @@
                           <v-row align="center" justify="center">
                             <v-col cols="8" class="mt-5">
                               <v-text-field
-                                v-model="item.rating"
+                                :disabled="edit_mode"
+                                v-model="rating.rating"
                                 solo
                               ></v-text-field>
                             </v-col>
                           </v-row>
                         </td>
                         <td>
-                          <v-icon small class="mr-2">mdi-pencil</v-icon>
                           <v-icon
                             small
                             color="red"
                             class="mr-2"
-                            @click="deleteRateingTest"
+                            @click="deleteRating(index)"
                             >mdi-delete</v-icon
                           >
                         </td>
@@ -216,6 +225,7 @@ export default {
     //get teach by subjects
     await this.getTeachByTeacherId().then(result => (this.items = result));
     await this.getRating(this.items);
+    await this.getGradeList().then(result => (this.grade_list = result));
   },
   data() {
     return {
@@ -224,8 +234,9 @@ export default {
       score_criteria: { name: "", score: "", rating: "" },
       items: "",
       part_rating: [],
-      part_rating: [],
       part_num: "",
+      edit_mode: true,
+      grade_list: [],
       grade: {
         g4: 0,
         g3_5: 0,
@@ -249,6 +260,17 @@ export default {
       console.log("response getTeachByTeacherId", response.results);
       return response.results;
     },
+    async getGradeList() {
+      const conditions = {
+        teachId: this.items[0].objectId
+      };
+      const response = await this.$store.dispatch(
+        `grade/getGradeByConditions`,
+        conditions
+      );
+      console.log("getGradeList", response);
+      return response.results;
+    },
     async addRatingToTach(teach) {
       const response = await this.$store.dispatch(`teach/updateTeach`, teach);
       console.log("response addRatingToTach", response);
@@ -264,6 +286,15 @@ export default {
         this.part_num = item[0].rating.length;
         this.part_rating = item[0].rating;
       }
+    },
+    async updateGrade(objectId, score_array) {
+      const data = {
+        objectId: objectId,
+        score:  score_array
+      }
+      console.log("score", data);
+      const response = await this.$store.dispatch(`grade/updateGrade`, data);
+      console.log("response");
     },
     saveScoringCriteria() {
       const data = {
@@ -281,6 +312,13 @@ export default {
       console.log("คะแนน", data);
       this.addRatingToTach(data);
     },
+    editMode() {
+      if (this.edit_mode) {
+        this.edit_mode = false;
+      } else {
+        this.edit_mode = true;
+      }
+    },
     close() {
       this.dialog = false;
       this.part_num = "";
@@ -290,29 +328,43 @@ export default {
       this.$router.go(-1);
       console.log("back");
     },
-    deleteRateingTest(item) {
-      const index = this.part_rating.indexOf(item);
+    deleteRating(index) {
+      // const index = this.part_rating.indexOf(item);
       if (confirm("ยืนยีนการลบข้อมูล")) {
-      const teach = {
-        objectId: this.$route.query.id,
-        rating: this.part_rating
-      };
-      this.addRatingToTach(teach);
-      this.part_rating.splice(index, 1);
+        this.part_rating.splice(index, 1);
+        const teach = {
+          objectId: this.$route.query.id,
+          rating: this.part_rating
+        };
+        this.addRatingToTach(teach);
+        this.grade_list.forEach(grade => {
+          var grade_id = grade.objectId;
+          // console.log('update grade.score', grade.score)
+          // update score ตารางเกรด
+          this.updateGrade(grade.objectId, grade.score)
+          grade.score.splice(index, 1);
+      });
       }
     },
-    addRatingTest() {
+    // this.part_rating.splice(index, 1);
+
+    addRating() {
       this.part_rating.push({
         name: this.score_criteria.name,
         score: this.score_criteria.score,
         rating: this.score_criteria.rating
       });
       console.log("add rating", this.part_rating);
-       const teach = {
+      const teach = {
         objectId: this.$route.query.id,
         rating: this.part_rating
       };
       this.addRatingToTach(teach);
+      this.grade_list.forEach(grade => {
+        var grade_id = grade.objectId;
+        grade.score.push(0);
+        this.updateGrade(grade.objectId, grade.score)
+      });
     }
   }
 };
