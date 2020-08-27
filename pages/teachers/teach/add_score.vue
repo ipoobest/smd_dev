@@ -34,7 +34,7 @@
           <tr>
             <th class="text-left">ชื่อ</th>
             <!--- this header -->
-            <th class="text-left" v-for="item in rating" :key="item.name"> {{item.name}} , {{item.score}} คะแนน</th>
+            <th class="text-left" v-for="item in rating" :key="item.name">{{item.score}} คะแนน, {{item.rating}} % </th>
             <th class="text-left">คุณลักษณะ</th>
             <th class="text-left">การคิดการอ่าน</th>
             <th class="text-left">คะแนนรวม</th>
@@ -91,7 +91,8 @@
         grade_array: [],
         students: [],
         grade: '',
-        ratio_array: []
+        ratio_array: [],
+        score_array: []
       }
     },
     methods: {
@@ -191,6 +192,7 @@
       mapRating(rating) {
         rating.forEach(item => {
           this.ratio_array.push(item.rating)
+          this.score_array.push(item.score)
         })
         console.log('this.ratio_array',this.ratio_array)
       },
@@ -205,11 +207,13 @@
       calcScore(score_array) {
         var calc_score = []
         score_array.forEach((score,index) => {
-          var result = score * this.ratio_array[index] / 100
+          var result = score * this.score_array / this.ratio_array[index] / 100
+          var result = ((( score / this.score_array[index] ) * 100) / 100 ) *  this.ratio_array[index]
+          // ((( คะแนนที่ได้ / คะแนนเต็ม ) x 100) / 100 ) x ร้อยละ
           calc_score.push(result)
         })
         var sum_score = calc_score.reduce((a,b) => a+b)
-        return sum_score
+        return sum_score.toFixed(2) 
       },
       addScoreX() {
        this.score.forEach(item => {

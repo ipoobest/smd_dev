@@ -282,9 +282,11 @@ export default {
       console.log("criteria", this.grade);
       console.log("this rating", item[0].rating);
       if (item[0].rating) {
-        this.grade = item[0].criteria;
         this.part_num = item[0].rating.length;
         this.part_rating = item[0].rating;
+      } 
+      if (item[0].criteria) {
+        this.grade = item[0].criteria;
       }
     },
     async updateGrade(objectId, score_array) {
