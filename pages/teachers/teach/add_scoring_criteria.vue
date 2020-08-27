@@ -162,7 +162,7 @@
                         </td>
                       </tr>
                       <!-- <tr v-for="item in part_rating" :key="item.index"> -->
-                      <tr v-for="(rating, index) in part_rating" :key=index>
+                      <tr v-for="(rating, index) in part_rating" :key="index">
                         <td>
                           <v-row align="center" justify="center">
                             <v-col cols="8" class="mt-5">
@@ -284,7 +284,7 @@ export default {
       if (item[0].rating) {
         this.part_num = item[0].rating.length;
         this.part_rating = item[0].rating;
-      } 
+      }
       if (item[0].criteria) {
         this.grade = item[0].criteria;
       }
@@ -292,8 +292,8 @@ export default {
     async updateGrade(objectId, score_array) {
       const data = {
         objectId: objectId,
-        score:  score_array
-      }
+        score: score_array
+      };
       console.log("score", data);
       const response = await this.$store.dispatch(`grade/updateGrade`, data);
       console.log("response");
@@ -343,30 +343,42 @@ export default {
           var grade_id = grade.objectId;
           // console.log('update grade.score', grade.score)
           // update score ตารางเกรด
-          this.updateGrade(grade.objectId, grade.score)
+          this.updateGrade(grade.objectId, grade.score);
           grade.score.splice(index, 1);
-      });
+        });
       }
     },
     // this.part_rating.splice(index, 1);
 
     addRating() {
+      var sum = 0;
+      var sum_array = [];
       this.part_rating.push({
         name: this.score_criteria.name,
         score: this.score_criteria.score,
         rating: this.score_criteria.rating
       });
-      console.log("add rating", this.part_rating);
-      const teach = {
-        objectId: this.$route.query.id,
-        rating: this.part_rating
-      };
-      this.addRatingToTach(teach);
-      this.grade_list.forEach(grade => {
-        var grade_id = grade.objectId;
-        grade.score.push(0);
-        this.updateGrade(grade.objectId, grade.score)
+      this.part_rating.forEach(item => {
+        sum_array.push(parseInt(item.rating));
       });
+      sum = sum_array.reduce((a, b) => a + b);
+      console.log("add rating", sum);
+      if (sum != 100) {
+        alert('กรุณาทำสัดส่วนให้เท่ากับ 100')
+        this.part_rating.splice(-1,1);
+        return
+      } else {
+        const teach = {
+          objectId: this.$route.query.id,
+          rating: this.part_rating
+        };
+        this.addRatingToTach(teach);
+        this.grade_list.forEach(grade => {
+          var grade_id = grade.objectId;
+          grade.score.push(0);
+          this.updateGrade(grade.objectId, grade.score);
+        });
+      }
     }
   }
 };
