@@ -50,7 +50,8 @@
             <td><v-text-field v-model="item_score.aptitude"  type="number" hide-details="auto" /></td>
             <td><v-text-field v-model="item_score.analytical_thinking" type="number" hide-details="auto" /></td>
             <!-- <td><v-text-field  type="number" style="text-align:justify" hide-details="auto" /></td> -->
-            <td>{{calcScore(item_score.score)}}</td>
+            <!-- <td>{{calcScore(item_score.score)}}</td> -->
+            <td>{{item_score.score}}</td>
             <td ><p type="text" hide-details="auto" /></td>
           </tr>
         </tbody>
@@ -108,6 +109,7 @@
         } else {
           console.log('this responbse', response.results)
           this.score =  response.results.slice()
+          this.mapScore(response.results)
           console.log('this score', this.score)
           return response.results
         }
@@ -195,6 +197,12 @@
           this.score_array.push(item.score)
         })
         console.log('this.ratio_array',this.ratio_array)
+      },
+      mapScore(score) {
+        this.score = score
+        this.score.forEach(item => {
+          item.score_totle = calcScore(item.score)
+        })
       },
       addScore() {
         console.log('item id ', item)

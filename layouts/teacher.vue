@@ -74,7 +74,7 @@ export default {
         {
           icon: `mdi-book-plus`,
           title: `ให้คะแนน`,
-          to: `/teachers/${this.$store.state.auth.auth.objectId}`
+          to: `/teachers/add_score/${this.$store.state.auth.auth.objectId}`
         },
         {
           icon: `mdi-poll`,

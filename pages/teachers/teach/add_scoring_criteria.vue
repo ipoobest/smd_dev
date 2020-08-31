@@ -102,13 +102,14 @@
             <v-row>
               <v-col cols="12">
                 <v-row justify="end">
-                  <v-btn class="info mr-5" @click="editMode">แก้ไข</v-btn>
-                  <v-btn
+                  <v-btn class="success mr-5" @click="saveRating">บันทึก</v-btn>
+                  <v-btn class="info mr-5" v-if="edit_mode" @click="editMode">แก้ไข</v-btn>
+                  <!-- <v-btn
                     v-if="edit_mode == false"
                     class="success mr-5"
                     @click="editMode"
                     >บันทึก</v-btn
-                  >
+                  > -->
                 </v-row>
                 <v-simple-table>
                   <template v-slot:default>
@@ -274,9 +275,9 @@ export default {
     async addRatingToTach(teach) {
       const response = await this.$store.dispatch(`teach/updateTeach`, teach);
       console.log("response addRatingToTach", response);
-      // if (response) {
-      //   alert("บันทึกสำเร็จ");
-      // }
+      if (response) {
+        alert("บันทึกสำเร็จ");
+      }
     },
     async getRating(item) {
       console.log("criteria", this.grade);
@@ -358,6 +359,44 @@ export default {
         score: this.score_criteria.score,
         rating: this.score_criteria.rating
       });
+      // const teach = {
+      //   objectId: this.$route.query.id,
+      //   rating: this.part_rating
+      // };
+      //   this.addRatingToTach(teach);
+      //   this.grade_list.forEach(grade => {
+      //     var grade_id = grade.objectId;
+      //     grade.score.push(0);
+      //     this.updateGrade(grade.objectId, grade.score);
+      //   });
+
+      // this.part_rating.forEach(item => {
+      //   sum_array.push(parseInt(item.rating));
+      // });
+      // sum = sum_array.reduce((a, b) => a + b);
+      // console.log("add rating", sum);
+      // if (sum != 100) {
+      //   alert('กรุณาทำสัดส่วนให้เท่ากับ 100')
+      //   this.part_rating.splice(-1,1);
+      //   return
+      // } else {
+      //   const teach = {
+      //     objectId: this.$route.query.id,
+      //     rating: this.part_rating
+      //   };
+      //   this.addRatingToTach(teach);
+      //   this.grade_list.forEach(grade => {
+      //     var grade_id = grade.objectId;
+      //     grade.score.push(0);
+      //     this.updateGrade(grade.objectId, grade.score);
+      //   });
+      // }
+    },
+
+    saveRating() {
+      this.editMode()
+      var sum = 0;
+      var sum_array = [];
       this.part_rating.forEach(item => {
         sum_array.push(parseInt(item.rating));
       });
@@ -378,7 +417,7 @@ export default {
           grade.score.push(0);
           this.updateGrade(grade.objectId, grade.score);
         });
-      }
+      }      
     }
   }
 };
