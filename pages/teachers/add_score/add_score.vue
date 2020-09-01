@@ -41,10 +41,11 @@
             <th class="text-left">การคิดการอ่าน</th>
             <th class="text-left">คะแนนรวม</th>
             <th class="text-left">เกรด</th>
+            <th class="text-left">จัดการ</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item_score in score" :key="item_score.studentName">
+          <tr v-for="(item_score, score_index) in score" :key="item_score.studentName">
             <td>{{ item_score.studentName }}</td>
             <td v-for="(item_in, index) in item_score.score" :key="index">
               <v-text-field
@@ -70,7 +71,15 @@
               />
             </td>
             <td>{{ calcScore(item_score.score) }}</td>
-            <td>{{ calcGrade(calcScore(item_score.score)) }}</td>
+            <td><v-text-field v-model="score.grade"
+             :disabled="edit_mode[score_index]"
+              hide-details="auto"
+             ></v-text-field></td>
+
+            <td>
+              <v-btn v-if="edit_mode[score_index]" class="info mt-5 mr-3"  @click="editMode(score_index)">แก้ไข</v-btn>
+              <v-btn v-else class="success mt-5 mr-3" @click="fixedGrade(score_index)">บันทึก</v-btn>
+            </td>
           </tr>
         </tbody>
       </template>
@@ -78,7 +87,7 @@
     <h3 v-else>กรุณาเพิ่มเกณฑ์การให้คะแนน</h3>
     <v-row justify="end">
       <!-- <v-btn color="orange" dark class="mr-2">reset form</v-btn> -->
-      <v-btn class="success mt-5 mr-5" @click="updateGrade">บันทึก</v-btn>
+      <v-btn class="success mt-5 mr-12" @click="updateGrade">บันทึก</v-btn>
     </v-row>
   </v-container>
 </template>
@@ -95,6 +104,7 @@ export default {
   data() {
     return {
       title: 'เพิ่มคะแนนให้นักเรียน',
+      edit_mode: [],
       rating: [
       ],
       form: {
@@ -128,7 +138,9 @@ export default {
       } else {
         console.log('this responbse', response.results)
         this.score =  response.results.slice()
-        console.log('this score', this.score)
+        this.edit_mode = new Array(this.score.length)
+        this.edit_mode.fill(true)
+        console.log('this score grade', this.score)
         return response.results
       }
     },
@@ -195,6 +207,7 @@ export default {
           score: item.score,
           aptitude: item.aptitude,
           analytical_thinking: item.analytical_thinking,
+          grade: this.score.grade.toString()
         }
         console.log('score', data)
         const response = this.$store.dispatch(`grade/updateGrade`, data);
@@ -218,17 +231,13 @@ export default {
     calcScore(score_array) {
       var calc_score = []
       score_array.forEach((score,index) => {
-        var result = score * this.score_array / this.ratio_array[index] / 100
         var result = ((( score / this.score_array[index] ) * 100) / 100 ) *  this.ratio_array[index]
         // ((( คะแนนที่ได้ / คะแนนเต็ม ) x 100) / 100 ) x ร้อยละ
         calc_score.push(result)
       })
       var sum_score = calc_score.reduce((a,b) => a+b)
-
-      // if(score_item) {
-      //   score_item.total_score = sum_score.toFixed(2)
-      // }
-      console.log('this.score', this.score)
+      this.score.grade = this.calcGrade(sum_score.toFixed(2))
+      console.log('this.score xx', this.score.grade)
       return sum_score.toFixed(2)
     },
     calcGrade(score) {
@@ -249,6 +258,18 @@ export default {
       } else {
        return 0
       }
+    },
+    fixedGrade(index) {
+      this.$set(this.edit_mode, index, ! this.edit_mode[index])
+    },
+    editMode(index) {
+      console.log('index', index)
+      this.$set(this.edit_mode, index, ! this.edit_mode[index])
+      // if (this.edit_mode) {
+      //   this.edit_mode = false;
+      // } else {
+      //   this.edit_mode = true;
+      // }
     },
     addScoreX() {
      this.score.forEach(item => {
