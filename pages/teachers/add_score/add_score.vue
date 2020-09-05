@@ -45,6 +45,11 @@
           </tr>
         </thead>
         <tbody>
+          <v-col v-if="rating.length == 0" justify="center">
+            <v-row>
+              <h2>กรุณาเพิ่มเกณฑ์การให้คะแนน</h2>
+            </v-row>
+          </v-col>
           <tr
             v-for="(item_score, score_index) in score"
             :key="item_score.studentName"
@@ -57,12 +62,17 @@
                 min="0"
                 type="number"
                 hide-details="auto"
+                :disabled="items.send_score"
               />
             </td>
             <td>
               <v-text-field
                 v-model="item_score.aptitude"
                 type="number"
+                :max="3"
+                :min="0"
+                :rules="[v => v >= 0  || 'กรุณากรอกคะแนนให้มากกว่า 0' , v => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3']" 
+                :disabled="items.send_score"
                 hide-details="auto"
               />
             </td>
@@ -70,15 +80,14 @@
               <v-text-field
                 v-model="item_score.analytical_thinking"
                 type="number"
+                :max="3"
+                :min="0"
+                :rules="[v => v >= 0  || 'กรุณากรอกคะแนนให้มากกว่า 0' , v => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3']"      
+                :disabled="items.send_score"
                 hide-details="auto"
               />
             </td>
             <td>{{ calcScore(item_score.score, score_index) }}</td>
-            <!-- <td><v-text-field v-model="score[score_index].grade"
-             :disabled="edit_mode[score_index]"
-              hide-details="auto"
-             ></v-text-field></td> -->
-            <!-- <td>{{ item_score.grade }}</td> -->
 
             <td v-if="edit_mode[score_index]">
               <template v-if="item_score.grade_option">{{
@@ -87,11 +96,10 @@
               <template v-else>{{ item_score.grade }}</template>
             </td>
             <td v-else>
-              <v-select v-model="item_score.grade_option"
-                        :items="item_grade_option">
-                <!-- <option value="">{{ item_score.grade }}</option> -->
-                <!-- <option v-for="(item_grade, grade_index) in item_grade_option" :key="grade_index" :value="item_grade"></option> -->
-              </v-select>
+              <v-select
+                v-model="item_score.grade_option"
+                :items="item_grade_option"
+              />
             </td>
 
             <td>
@@ -113,9 +121,15 @@
       </template>
     </v-simple-table>
     <h3 v-else>กรุณาเพิ่มเกณฑ์การให้คะแนน</h3>
-    <v-row justify="end">
+    <v-row justify="center">
       <!-- <v-btn color="orange" dark class="mr-2">reset form</v-btn> -->
-      <v-btn class="success mt-5 mr-12" @click="updateGrade">บันทึก</v-btn>
+      <v-btn
+        class="success mt-5 mr-5"
+        v-if="!items.send_score"
+        @click="updateGrade"
+        >ส่งคะแนน</v-btn
+      >
+      <v-btn class="orange mt-5 mr-5" dark v-else>กรุณารอการตรวจสอบ</v-btn>
     </v-row>
   </v-container>
 </template>
@@ -130,7 +144,6 @@ export default {
     await this.getGradeByConditions(this.items).then(
       result => (this.grade_list = result)
     );
-    // console.log('getGrade', this.grade_list)
   },
   data() {
     return {
@@ -153,15 +166,20 @@ export default {
       ratio_array: [],
       score_array: [],
       total_score: "",
-      item_grade_option: ["","ร", "มส"]
+      item_grade_option: [
+        { text: "0-4", value: null },
+        { text: "ร", value: "ร" },
+        { text: "มส", value: "มส" }
+      ]
     };
   },
   methods: {
     async getGradeByConditions(item) {
-      console.log("teachId xxxx", item.objectId);
+      // console.log("teachId xxxx", item.objectId);
       const conditions = {
         teachId: item.objectId
       };
+      console.log("condition", conditions);
       const response = await this.$store.dispatch(
         "grade/getGradeByConditions",
         conditions
@@ -170,11 +188,11 @@ export default {
       if (response.results.length == 0) {
         this.createGrade();
       } else {
-        console.log("this responbse", response.results);
+        // console.log("this responbse", response.results);
         this.score = response.results.slice();
         this.edit_mode = new Array(this.score.length);
         this.edit_mode.fill(true);
-        console.log("this score grade", this.score);
+        // console.log("this score grade", this.score);
         return response.results;
       }
     },
@@ -193,6 +211,7 @@ export default {
       return response.results[0].students;
     },
     async getStudent(data) {
+      console.log("data student", data);
       const query = {
         objectId: {
           $in: data
@@ -202,7 +221,7 @@ export default {
         "students/getStudents",
         query
       );
-      console.log("response student test", response.results);
+      // console.log("response student test", response.results);
       var name = this.getStudentName(response.results);
       return name;
     },
@@ -217,11 +236,14 @@ export default {
       await this.getStudent(this.items.students).then(
         result => (this.students = result)
       );
-
+      console.log("this.students", this.students);
       var initScore = new Array(this.rating.length);
       initScore.fill(0);
-
-      console.log("init sxoew", initScore);
+      console.log("init score", initScore);
+      if (initScore.length == 0) {
+        // console.log('this.intiScore = 0', initScore.length)
+        return;
+      }
       for (var index = 0; index < this.rating.length; index++) {
         const data = {
           teachId: this.items.objectId,
@@ -236,30 +258,43 @@ export default {
           aptitude: "",
           analytical_thinking: ""
         };
-        // console.log('date create', data)
+        console.log("date create", data);
         const response = await this.$store.dispatch(`grade/createGrade`, data);
-        // console.log("response create grade", response);
+        console.log("response create grade", response);
       }
       this.getGradeByConditions(this.items).then(
         result => (this.grade = result)
       );
     },
+    async updateTech(data) {
+      const response = this.$store.dispatch(`teach/updateTeach`, data);
+      console.log("update Teach", data);
+    },
     async updateGrade() {
-      this.score.forEach(item => {
-        var data = {
-          objectId: item.objectId,
-          score: item.score,
-          aptitude: item.aptitude,
-          analytical_thinking: item.analytical_thinking,
-          grade: item.grade.toString(),
-          total_score: item.sum_score
+      if (confirm("ยืนยันการส่งคะแนน")) {
+        this.score.forEach(item => {
+          var data = {
+            objectId: item.objectId,
+            score: item.score,
+            aptitude: item.aptitude,
+            analytical_thinking: item.analytical_thinking,
+            grade: item.grade.toString(),
+            total_score: item.sum_score
+          };
+          // console.log("score", data);
+          const response = this.$store.dispatch(`grade/updateGrade`, data);
+        });
+        var sentScore = {
+          objectId: this.items.objectId,
+          send_score: true
         };
-        console.log("score", data);
-        const response = this.$store.dispatch(`grade/updateGrade`, data);
-        console.log("response");
-      });
+        console.log("sentScoreStaus", sentScore);
+        this.items.send_score = true
+        this.updateTech(sentScore);
+      }
     },
     getStudentName(item) {
+      this.studentName = [];
       for (var index = 0; index < item.length; index++) {
         this.studentName.push(
           item[index].tth + " " + item[index].namet + " " + item[index].snamet
@@ -273,11 +308,11 @@ export default {
         this.ratio_array.push(item.rating);
         this.score_array.push(item.score);
       });
-      console.log("this.ratio_array", this.ratio_array);
+      // console.log("this.ratio_array", this.ratio_array);
     },
     calcScore(score_array, index) {
       var calc_score = [];
-      console.log("calcScore index", index);
+      // console.log("calcScore index", index);
       score_array.forEach((score, index) => {
         var result =
           (((score / this.score_array[index]) * 100) / 100) *
@@ -288,23 +323,24 @@ export default {
       var sum_score = calc_score.reduce((a, b) => a + b);
       this.score[index].sum_score = sum_score.toFixed(2);
       this.score[index].grade = this.calcGrade(sum_score.toFixed(2));
-      console.log("this.score xx", this.score);
+      // console.log("this.score xx", this.score);
       return sum_score.toFixed(2);
     },
     calcGrade(score) {
-      if (score >= 80) {
+      // console.log('เกณการให้คะแนน', this.items.criteria)
+      if (score >= this.items.criteria.g4) {
         return 4;
-      } else if (score >= 75) {
+      } else if (score >= this.items.criteria.g3_5) {
         return 3.5;
-      } else if (score >= 70) {
+      } else if (score >= this.items.criteria.g3) {
         return 3;
-      } else if (score >= 65) {
+      } else if (score >= this.items.criteria.g2_5) {
         return 2.5;
-      } else if (score >= 60) {
+      } else if (score >= this.items.criteria.g2) {
         return 2;
-      } else if (score >= 55) {
+      } else if (score >= this.items.criteria.g1_5) {
         return 1.5;
-      } else if (score >= 50) {
+      } else if (score >= this.items.criteria.g1) {
         return 1;
       } else {
         return 0;
@@ -315,15 +351,16 @@ export default {
       const data = {
         objectId: item.objectId,
         grade: item.grade.toString(),
-        grade_option: item.grade_option
+        grade_option: item.grade_option,
+        score: item.score
       };
-      console.log("update row", data);
+      // console.log("update row", data);
 
       this.$set(this.edit_mode, index, !this.edit_mode[index]);
       const response = this.$store.dispatch(`grade/updateGrade`, data);
     },
     editMode(index) {
-      console.log("index", index);
+      // console.log("index", index);
       this.$set(this.edit_mode, index, !this.edit_mode[index]);
     },
     addScoreX() {

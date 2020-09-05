@@ -96,27 +96,27 @@ export default {
           title: `วิชา`,
           to: `/subjects`
         },
-        // {
-        //   icon: `mdi-file-import`,
-        //   title: `Import`,
-        //   childs: [
-        //     {
-        //       icon: `mdi-account-arrow-right`,
-        //       title: `อาจารย์`,
-        //       to: `/imports/teachers`
-        //     },
-        //     {
-        //       icon: `mdi-account-arrow-right-outline`,
-        //       title: `นักเรียน`,
-        //       to: `/imports/students`
-        //     },
-        //     {
-        //       icon: `mdi-application-import`,
-        //       title: `วิชาเรียน`,
-        //       to: `/imports/subjects`
-        //     },
-        //   ]
-        // }
+        {
+          icon: `mdi-file-import`,
+          title: `Import`,
+          childs: [
+            // {
+            //   icon: `mdi-account-arrow-right`,
+            //   title: `อาจารย์`,
+            //   to: `/imports/teachers`
+            // },
+            {
+              icon: `mdi-account-arrow-right-outline`,
+              title: `นักเรียน`,
+              to: `/imports/students`
+            },
+            // {
+            //   icon: `mdi-application-import`,
+            //   title: `วิชาเรียน`,
+            //   to: `/imports/subjects`
+            // },
+          ]
+        }
       ],
       miniVariant: false,
       right: true,
