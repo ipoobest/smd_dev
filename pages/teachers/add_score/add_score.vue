@@ -67,6 +67,10 @@
               <v-text-field
                 v-model="item_score.score[index]"
                 :value="item_in"
+                :max="rating[index].score"
+                :rules="[
+                  v => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
+                  v => v <= rating[index].score || `กรุณากรอกคะแนนให้น้อยกว่า ${rating[index].score}`]"
                 min="0"
                 type="number"
                 hide-details="auto"
@@ -147,12 +151,10 @@
       <v-btn
         class="orange mt-5 mr-5"
         dark
-        @click="updateGrade"
         >Preview</v-btn
       >
       <v-btn
         class="success mt-5 mr-5"
-        @click="updateGrade"
         >บันทึก</v-btn
       >
     </v-row>
