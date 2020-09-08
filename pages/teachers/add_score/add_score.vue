@@ -11,6 +11,10 @@
       <v-col md="2">
         <v-text-field
           v-model="score_aptitude"
+          :rules="[
+            v => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
+            v => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3'
+          ]"
           label="คุณลักษณะ"
           outlined
           type="number"
@@ -19,6 +23,10 @@
       <v-col md="2">
         <v-text-field
           v-model="score_analytical_thinking"
+          :rules="[
+            v => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
+            v => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3'
+          ]"
           label="การคิดการอ่าน"
           outlined
           type="number"
@@ -71,7 +79,10 @@
                 type="number"
                 :max="3"
                 :min="0"
-                :rules="[v => v >= 0  || 'กรุณากรอกคะแนนให้มากกว่า 0' , v => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3']" 
+                :rules="[
+                  v => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
+                  v => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3'
+                ]"
                 :disabled="items.send_score"
                 hide-details="auto"
               />
@@ -82,7 +93,10 @@
                 type="number"
                 :max="3"
                 :min="0"
-                :rules="[v => v >= 0  || 'กรุณากรอกคะแนนให้มากกว่า 0' , v => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3']"      
+                :rules="[
+                  v => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
+                  v => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3'
+                ]"
                 :disabled="items.send_score"
                 hide-details="auto"
               />
@@ -124,12 +138,23 @@
     <v-row justify="center">
       <!-- <v-btn color="orange" dark class="mr-2">reset form</v-btn> -->
       <v-btn
-        class="success mt-5 mr-5"
+        class="info mt-5 mr-5"
         v-if="!items.send_score"
         @click="updateGrade"
         >ส่งคะแนน</v-btn
       >
       <v-btn class="orange mt-5 mr-5" dark v-else>กรุณารอการตรวจสอบ</v-btn>
+      <v-btn
+        class="orange mt-5 mr-5"
+        dark
+        @click="updateGrade"
+        >Preview</v-btn
+      >
+      <v-btn
+        class="success mt-5 mr-5"
+        @click="updateGrade"
+        >บันทึก</v-btn
+      >
     </v-row>
   </v-container>
 </template>
@@ -144,6 +169,8 @@ export default {
     await this.getGradeByConditions(this.items).then(
       result => (this.grade_list = result)
     );
+    await this.getCriteria().then(result => (this.criteria = result))
+
   },
   data() {
     return {
@@ -161,8 +188,7 @@ export default {
       score_aptitude: "",
       grade_list: [],
       grade_array: [],
-      students: [],
-      grade: "",
+      criteria: [],
       ratio_array: [],
       score_array: [],
       total_score: "",
@@ -232,6 +258,12 @@ export default {
       this.mapRating(this.rating);
       return response;
     },
+    async getCriteria() {
+      // grade
+      const response = await this.$store.dispatch(`criteria/getCriteria`);
+      console.log("response", response.results[0]);
+      return response.results[0].criteria;
+    },
     async createGrade() {
       await this.getStudent(this.items.students).then(
         result => (this.students = result)
@@ -289,7 +321,7 @@ export default {
           send_score: true
         };
         console.log("sentScoreStaus", sentScore);
-        this.items.send_score = true
+        this.items.send_score = true;
         this.updateTech(sentScore);
       }
     },
@@ -328,19 +360,19 @@ export default {
     },
     calcGrade(score) {
       // console.log('เกณการให้คะแนน', this.items.criteria)
-      if (score >= this.items.criteria.g4) {
+      if (score >= this.criteria.g4) {
         return 4;
-      } else if (score >= this.items.criteria.g3_5) {
+      } else if (score >= this.criteria.g3_5) {
         return 3.5;
-      } else if (score >= this.items.criteria.g3) {
+      } else if (score >= this.criteria.g3) {
         return 3;
-      } else if (score >= this.items.criteria.g2_5) {
+      } else if (score >= this.criteria.g2_5) {
         return 2.5;
-      } else if (score >= this.items.criteria.g2) {
+      } else if (score >= this.criteria.g2) {
         return 2;
-      } else if (score >= this.items.criteria.g1_5) {
+      } else if (score >= this.criteria.g1_5) {
         return 1.5;
-      } else if (score >= this.items.criteria.g1) {
+      } else if (score >= this.criteria.g1) {
         return 1;
       } else {
         return 0;
@@ -364,6 +396,16 @@ export default {
       this.$set(this.edit_mode, index, !this.edit_mode[index]);
     },
     addScoreX() {
+      console.log("xxxx", this.score_aptitude);
+      if (
+        this.score_aptitude < 0 ||
+        this.score_aptitude > 3 ||
+        this.score_analytical_thinking < 0 ||
+        this.score_analytical_thinking > 3
+      ) {
+        alert("กรุณากรอกข้อมูลให้ถูกต้อง");
+        return;
+      }
       this.score.forEach(item => {
         item.aptitude = this.score_aptitude;
         item.analytical_thinking = this.score_analytical_thinking;
