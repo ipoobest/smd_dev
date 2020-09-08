@@ -16,7 +16,8 @@
     "express": "^4.16.4",
     "nuxt": "^2.0.0",
     "vuelidate": "^0.7.5",
-    "vuex-persist": "^2.2.0"
+    "vuex-persist": "^2.2.0",
+    "xlsx": "^0.16.6"
   },
   "devDependencies": {
     "@nuxtjs/dotenv": "^1.4.1",
