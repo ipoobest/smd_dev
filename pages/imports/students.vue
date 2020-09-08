@@ -217,7 +217,7 @@ export default {
             this.createStudent(data)
             // console.log('user', data)
         })
-        // alert('import สำเร็จ')
+        alert('import สำเร็จ')
         // console.log('output',this.dataArr)
         // this.dataArr = []
       }
