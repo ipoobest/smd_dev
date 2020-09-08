@@ -28,7 +28,7 @@
                       color="error"
                       type="button"
                       @click="handleRemoveItem(item, key)"
-                      >X</v-btn
+                      >ลบ</v-btn
                     >
                   </td>
                 </tr>
@@ -57,7 +57,7 @@
               <!-- Import button -->
             </v-col>
             <v-col align="end" class="mr-3">
-              <v-btn color="info">import</v-btn>
+              <v-btn color="info" v-if="dataArr.length != 0" @click="uploadData">upload</v-btn>
             </v-col>
           </v-row>
         </v-card>
@@ -79,6 +79,10 @@ export default {
     };
   },
   methods: {
+    async createStudent(object) {
+       const response = await this.$store.dispatch(`users/createUser`, object)
+       console.log('create' , response)
+    },
     getHeader(sheet) {
       const XLSX = xlsx;
       const headers = [];
@@ -125,15 +129,15 @@ export default {
           const workbook = XLSX.read(data, {
             type: "binary"
           });
-          const wsname = workbook.SheetNames[0]; // Take the first sheet，wb.SheetNames[0] :Take the name of the first sheet in the sheets
-          const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]); // Generate JSON table content，wb.Sheets[Sheet名]    Get the data of the first sheet
-          const excellist = []; // Clear received data
+          const wsname = workbook.SheetNames[0]; 
+          const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]); 
+          const excellist = [];
           // Edit data
           for (var i = 0; i < ws.length; i++) {
             excellist.push(ws[i]);
           }
           this.dataArr = excellist;
-          console.log("Read results", excellist); // At this point, you get an array containing objects that need to be processed
+          console.log("Read results", excellist); 
         } catch (e) {
           return alert("Read failure!");
         }
@@ -142,22 +146,80 @@ export default {
       var input = document.getElementById("upload");
       input.value = "";
     },
-    handleImport() {
-      const reader = new FileReader();
-
-      reader.readAsText(this.csv);
-      reader.onload = e => {
-        const data = e.target.result;
-        const reuslt = Papa.parse(data, { header: true });
-
-        this.items = result.data;
-      };
-
-      reader.onerror = () => console.log(`Unable to read file.`);
-    },
     handleRemoveItem(item, key) {
       if (confirm(`ต้องการลบ ${item.tth} ${item.namet} ${item.snamet}`)) {
         this.dataArr.splice(key, 1);
+      }
+    },
+    uploadData() {
+      if (confirm(`ยืนยันการ upload`)) {
+
+      // // var output = this.dataArr.map( data => ({student_id:data.id }))
+      // var output = this.dataArr.pop();
+       this.dataArr.forEach(data => {
+            data.stu_id = data.idstd
+            data.class =  data.class.toString()
+            data.study = data.study.toString()
+            // data.grade = data.grade.toString()
+            data.idcard = data.idcard.toString()
+            data.stage = data.stage.toString()
+            data.stmonth = data.stmonth.toString()
+            data.bday = data.bday.toString()
+            data.blood = data.blood.toString()
+            data.disease = data.disease.toString()
+            data.treatment = data.treatment.toString()
+            data.healthpb = data.healthpb.toString()
+            // data.residential = data.residential.toString()
+            data.domicile = data.domicile.toString()
+            data.addres = data.addres.toString()
+            data.dorm = data.dorm.toString()
+            data.sttell = data.sttell.toString()
+            data.sibling = data.sibling.toString()
+            data.sibling1 = data.sibling1.toString()
+            data.sibling2 = data.sibling2.toString()
+            data.sibling3 = data.sibling3.toString()
+            data.sbclass1 = data.sbclass1.toString()
+            data.sbclass2 = data.sbclass2.toString()
+            data.sbclass3 = data.sbclass3.toString()
+            data.ctell = data.ctell.toString()
+            data.fage = data.fage.toString()
+            data.fwork = data.fwork.toString()
+            data.fcareer = data.fcareer.toString()
+            data.fpost = data.fpost.toString()
+            data.fbelong = data.fbelong.toString()
+            data.fatwork = data.fatwork.toString()
+            data.ftell = data.ftell.toString()
+            data.fphone = data.fphone.toString()
+            data.fsalary = data.fsalary.toString()
+            data.mage = data.mage.toString()
+            data.mwork = data.mwork.toString()
+            data.mcareer = data.mcareer.toString()
+            data.mpost = data.mpost.toString()
+            data.mbelong = data.mbelong.toString()
+            data.mtell = data.mtell.toString()
+            data.mphone = data.mphone.toString()
+            data.msalary = data.msalary.toString()
+            data.parent = data.parent.toString()
+            data.prelated = data.prelated.toString()
+            data.pwork = data.pwork.toString()
+            data.patwork = data.patwork.toString()
+            data.ptell = data.ptell.toString()
+            data.personality = data.personality.toString()
+            data.bctell = data.bctell.toString()
+            data.userreg = data.userreg.toString()
+            data.contact = data.contact.toString()
+            data.date = data.date.toString()
+            data.idstd = data.idstd.toString()
+            data.username = data.idstd.toString()
+            data.password = data.idcard
+            data.type = "นักเรียน"
+            delete data.id
+            this.createStudent(data)
+            // console.log('user', data)
+        })
+        // alert('import สำเร็จ')
+        // console.log('output',this.dataArr)
+        // this.dataArr = []
       }
     }
   }
