@@ -9,5 +9,6 @@ export default {
   users: `_User`,
   academicYear: `AcademicYear`,
   teach: `Teach`,
-  grade: `Grade`
+  grade: `Grade`,
+  criteria: `Criteria`
 }

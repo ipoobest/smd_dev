@@ -97,6 +97,11 @@ export default {
           to: `/subjects`
         },
         {
+          icon: `mdi-book-open-page-variant`,
+          title: `เกณฑ์การให้คะแนน`,
+          to: `/criteria`
+        },
+        {
           icon: `mdi-file-import`,
           title: `Import`,
           childs: [
