@@ -11,87 +11,6 @@
             <!-- วิชา {{items[0].sname}}  ปีการศึกษา {{items[0].schoolYear}}  เทอม {{items[0].term}} -->
             <v-spacer></v-spacer>
           </v-card-title>
-          <v-row justify="center">
-            <h3>เกณฑ์ตัดเกรด</h3>
-          </v-row>
-          <v-form ref="form" validation>
-            <v-container fill-height fluid>
-              <v-row align="center" justify="center">
-                <v-col cols="1" class="text-center">เกรด 4</v-col>
-                <v-col cols="2">
-                  <v-text-field
-                    v-model="grade.g4"
-                    label="คะแนน"
-                    outlined
-                    type="number"
-                  />
-                </v-col>
-                <v-col cols="1" class="text-center">เกรด 3.5</v-col>
-                <v-col cols="2">
-                  <v-text-field
-                    v-model="grade.g3_5"
-                    label="คะแนน"
-                    outlined
-                    type="number"
-                  />
-                </v-col>
-                <v-col cols="1" class="text-center">เกรด 3</v-col>
-                <v-col cols="2">
-                  <v-text-field
-                    v-model="grade.g3"
-                    label="คะแนน"
-                    outlined
-                    type="number"
-                  />
-                </v-col>
-              </v-row>
-              <v-row align="center" justify="center">
-                <v-col cols="1" class="text-center">เกรด 2.5</v-col>
-                <v-col cols="2">
-                  <v-text-field
-                    v-model="grade.g2_5"
-                    label="คะแนน"
-                    outlined
-                    type="number"
-                  />
-                </v-col>
-                <v-col cols="1" class="text-center">เกรด 2</v-col>
-                <v-col cols="2">
-                  <v-text-field
-                    v-model="grade.g2"
-                    label="คะแนน"
-                    outlined
-                    type="number"
-                  />
-                </v-col>
-                <v-col cols="1" class="text-center">เกรด 1.5</v-col>
-                <v-col cols="2">
-                  <v-text-field
-                    v-model="grade.g1_5"
-                    label="คะแนน"
-                    outlined
-                    type="number"
-                  />
-                </v-col>
-              </v-row>
-              <v-row align="center" justify="center">
-                <v-col cols="1" class="text-center">เกรด 1</v-col>
-                <v-col cols="2">
-                  <v-text-field
-                    v-model="grade.g1"
-                    label="คะแนน"
-                    outlined
-                    type="number"
-                  />
-                </v-col>
-                <v-col cols="6">
-                  <v-btn class="success mb-5" @click="saveScoringCriteria()"
-                    >บันทึก</v-btn
-                  >
-                </v-col>
-              </v-row>
-            </v-container>
-          </v-form>
           <v-divider></v-divider>
           <v-container fill-height fluid>
             <v-row align="center" justify="center">
@@ -104,12 +23,6 @@
                 <v-row justify="end">
                   <v-btn class="success mr-5" @click="saveRating">บันทึก</v-btn>
                   <v-btn class="info mr-5" v-if="edit_mode" @click="editMode">แก้ไข</v-btn>
-                  <!-- <v-btn
-                    v-if="edit_mode == false"
-                    class="success mr-5"
-                    @click="editMode"
-                    >บันทึก</v-btn
-                  > -->
                 </v-row>
                 <v-simple-table>
                   <template v-slot:default>
@@ -227,6 +140,7 @@ export default {
     await this.getTeachByTeacherId().then(result => (this.items = result));
     await this.getRating(this.items);
     await this.getGradeList().then(result => (this.grade_list = result));
+    await this.getCriteria().then(result => (this.grade = result))
   },
   data() {
     return {
@@ -272,6 +186,12 @@ export default {
       console.log("getGradeList", response);
       return response.results;
     },
+    async getCriteria() {
+      // grade
+      const response = await this.$store.dispatch(`criteria/getCriteria`);
+      console.log("response", response.results[0]);
+      return response.results[0].criteria;
+    },
     async addRatingToTach(teach) {
       const response = await this.$store.dispatch(`teach/updateTeach`, teach);
       console.log("response addRatingToTach", response);
@@ -286,9 +206,9 @@ export default {
         this.part_num = item[0].rating.length;
         this.part_rating = item[0].rating;
       }
-      if (item[0].criteria) {
-        this.grade = item[0].criteria;
-      }
+      // if (item[0].criteria) {
+      //   this.grade = item[0].criteria;
+      // }
     },
     async updateGrade(objectId, score_array) {
       const data = {
