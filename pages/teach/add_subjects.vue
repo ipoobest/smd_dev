@@ -188,6 +188,7 @@
           term: this.query.term
         }
         const response = await  this.$store.dispatch(`classes/getClassesByAcademicYears`, conditions)
+        console.log('class', response)
         return response.results
       },
       async getTeacher() {
@@ -221,7 +222,8 @@
           classRoomName: this.input.classRoomName,   
         }
         const response = await this.$store.dispatch(`classes/getClassesByAcademicYears`, condition)
-        return response.results[0].studentId
+        console.log('getClassss ', response.results[0].objectId)
+        return response.results[0].objectId
       },
       async addSubjectToTeach(data) {
         const response = await this.$store.dispatch(`teach/createTeach`, data)
@@ -229,16 +231,17 @@
       },
       async addSubject() {
         // query studets id เอาแต่ students id
-        const studentId = await this.getClassesByAcademicYears()
-        console.log('response studentId', studentId)
+        const objectId = await this.getClassesByAcademicYears()
+        // console.log('response studentId', studentId)
         const data = {
           schoolYear: this.query.schoolYear,
           term: this.query.term,
           sname: this.input.classSubject,   
           classRoomLevel: this.input.classRoomLevel,   
           classRoomName: this.input.classRoomName,   
-          students: studentId,
+          classId: objectId,
           teacher: this.input.teacher,
+          send_score: false,
           rating: [],
           type: "วิชาบังคับ"
         }

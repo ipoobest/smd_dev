@@ -60,7 +60,7 @@
           </v-col>
           <tr
             v-for="(item_score, score_index) in score"
-            :key="item_score.studentName"
+            :key="item_score.studentObjectId"
           >
             <td>{{ item_score.studentName }}</td>
             <td v-for="(item_in, index) in item_score.score" :key="index">
@@ -181,11 +181,17 @@ export default {
       studentName: [],
       score_analytical_thinking: "",
       score_aptitude: "",
+      grade: [],
+      grade_arr: [],
       grade_list: [],
       grade_array: [],
       criteria: [],
       ratio_array: [],
       score_array: [],
+      studentsId: [],
+      students: [],
+      stu_grade_arr: [],
+      stu_classes_arr: [],
       total_score: "",
       item_grade_option: [
         { text: "0-4", value: null },
@@ -195,26 +201,54 @@ export default {
     };
   },
   methods: {
+    // async getGradeByConditions(item) {
+    //   const conditions = {
+    //     teachId: item.objectId
+    //   };
+    //   console.log("condition", conditions);
+    //   const response = await this.$store.dispatch(
+    //     "grade/getGradeByConditions",
+    //     conditions
+    //   );
+    //   console.log("response grade xxx", response);
+    //   if (response.results.length == 0) {
+    //     this.createGrade();
+    //   } else {
+    //     // console.log("this responbse", response.results);
+    //     this.score = response.results.slice();
+    //     this.edit_mode = new Array(this.score.length);
+    //     this.edit_mode.fill(true);
+    //     // console.log("this score grade", this.score);
+    //     return response.results;
+    //   }
+    // },
     async getGradeByConditions(item) {
-      // console.log("teachId xxxx", item.objectId);
       const conditions = {
         teachId: item.objectId
       };
-      console.log("condition", conditions);
-      const response = await this.$store.dispatch(
-        "grade/getGradeByConditions",
-        conditions
-      );
-      console.log("response grade xxx", response);
-      if (response.results.length == 0) {
-        this.createGrade();
+      // 1 get stu array grade
+      const response_grade = await this.$store.dispatch("grade/getGradeByConditions",conditions)
+      console.log('response xxzzzx', response_grade.results)
+      this.score = response_grade.results
+      this.grade_arr = response_grade.results
+      this.stu_grade_arr = await this.grade_arr.map(a => a.studentObjectId)
+      console.log('response this.stu_grade_arr', this.stu_grade_arr)
+
+      // 2 get stu array class
+      const response_classes = await this.$store.dispatch(`classes/getClass`, this.items.classId)
+      this.stu_classes_arr = response_classes.studentId
+      console.log('stu_classes_arr', this.stu_classes_arr)
+
+      // 3 check diff
+      var difference = this.stu_classes_arr.filter(x => !this.stu_grade_arr.includes(x))
+      console.log('diff', difference)
+
+      // 4 createGrade by diff
+      if(difference.length != 0) {
+         this.createGrade(difference)
       } else {
-        // console.log("this responbse", response.results);
-        this.score = response.results.slice();
-        this.edit_mode = new Array(this.score.length);
-        this.edit_mode.fill(true);
-        // console.log("this score grade", this.score);
-        return response.results;
+        console.log('xxxxxwwww', response_grade.results)
+        return response_grade.results
       }
     },
     async getStudentByTeach(data) {
@@ -246,6 +280,11 @@ export default {
       var name = this.getStudentName(response.results);
       return name;
     },
+    async getStudentByClassId(classId) {
+      const response = await this.$store.dispatch(`classes/getClass`, classId)
+      console.log('response xxxx', response.studentId)
+      return response.studentId
+    },
     async getTechById(id) {
       const response = await this.$store.dispatch("teach/getTeachById", id);
       console.log("this.item", response);
@@ -259,16 +298,19 @@ export default {
       console.log("response", response.results[0]);
       return response.results[0].criteria;
     },
-    async createGrade() {
-      await this.getStudent(this.items.students).then(
-        result => (this.students = result)
-      );
+    async createGrade(students) {
+      //getStudentByClassId
+      // console.log('classId', this.items.classId)
+      // await this.getStudentByClassId(this.items.classId).then(
+      //   result => (this.studentsId = result)
+      // );
+      await this.getStudent(students).then(result => (this.students = result))
+
       console.log("this.students", this.students);
       var initScore = new Array(this.rating.length);
       initScore.fill(0);
       console.log("init score", initScore);
       if (initScore.length == 0) {
-        // console.log('this.intiScore = 0', initScore.length)
         return;
       }
       for (var index = 0; index < this.students.length; index++) {
@@ -280,7 +322,9 @@ export default {
           classRoomLevel: this.items.classRoomLevel,
           classRoomName: this.items.classRoomName,
           studentName: this.students[index],
+          studentObjectId: students[index],
           score: initScore,
+          grade_option: null,
           grade: "",
           aptitude: "",
           analytical_thinking: ""
@@ -290,7 +334,7 @@ export default {
         console.log("response create grade", response);
       }
       this.getGradeByConditions(this.items).then(
-        result => (this.grade = result)
+        result => (this.grade  = result)
       );
     },
     async updateTech(data) {
