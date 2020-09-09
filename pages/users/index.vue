@@ -263,7 +263,7 @@ export default {
     async getDataFromApi() {
       const conditions = {
         type: {
-          $ne: "students"
+          $ne: "นักเรียน"
         }
       }
       const response = await this.$store.dispatch(`users/getUserByConditions`, conditions)

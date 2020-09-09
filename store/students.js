@@ -41,7 +41,7 @@ export const actions = {
     return new Promise(async (resolve, reject) => {
       try {
         const result = this.$axios.$get(
-          `${process.env.parseUrl}/classes/${classes.students}`
+          `${process.env.parseUrl}/classes/${classes.students}?limit=500`
         );
 
         commit("setStudent", result);

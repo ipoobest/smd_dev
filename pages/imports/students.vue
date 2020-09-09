@@ -79,8 +79,21 @@ export default {
     };
   },
   methods: {
+    async createUser(username, password, type) {
+      const data = {
+        username,
+        password,
+        type
+      }
+      const response = await this.$store.dispatch(`users/createUser`, data)
+      //  const response = await this.$store.dispatch(`students/createStudent`, object)
+
+       console.log('create' , response)
+    },
     async createStudent(object) {
-       const response = await this.$store.dispatch(`users/createUser`, object)
+      // const response = await this.$store.dispatch(`users/createUser`, object)
+       const response = await this.$store.dispatch(`students/createStudent`, object)
+
        console.log('create' , response)
     },
     getHeader(sheet) {
@@ -215,9 +228,12 @@ export default {
             data.type = "นักเรียน"
             delete data.id
             this.createStudent(data)
+
+            this.createUser( data.username, data.password, data.type)
+
             // console.log('user', data)
         })
-        alert('import สำเร็จ')
+        // alert('import สำเร็จ')
         // console.log('output',this.dataArr)
         // this.dataArr = []
       }
