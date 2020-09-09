@@ -186,7 +186,10 @@ export default {
       return response.results
     },
     async getListTeacher(){
-      const response = await this.$store.dispatch(`teachers/getTeacher`)
+      var conditions = {
+        type: 'ครู'
+      }
+      const response = await this.$store.dispatch(`users/getUserByConditions`, conditions)
       return response.results
     },
     async createClasses(data) {
@@ -204,7 +207,7 @@ export default {
     selectItemTeachers() {
       console.log('select item teacher', this.teachers)
       for(var index = 0; index < this.teachers.length; index++){
-        this.selectItemTeacher.push(this.teachers[index].teacherTitle + " " + 
+        this.selectItemTeacher.push(this.teachers[index].title + " " + 
         this.teachers[index].firstName + " " + 
         this.teachers[index].lastName)
       }

@@ -68,10 +68,11 @@
                 v-model="item_score.score[index]"
                 :value="item_in"
                 :max="rating[index].score"
+                :min="0"
                 :rules="[
                   v => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
-                  v => v <= rating[index].score || `กรุณากรอกคะแนนให้น้อยกว่า ${rating[index].score}`]"
-                min="0"
+                  v => v <= parseInt(rating[index].score) || `กรุณากรอกคะแนนให้น้อยกว่า ${rating[index].score}`
+                ]"
                 type="number"
                 hide-details="auto"
                 :disabled="items.send_score"
@@ -141,22 +142,15 @@
     <h3 v-else>กรุณาเพิ่มเกณฑ์การให้คะแนน</h3>
     <v-row justify="center">
       <!-- <v-btn color="orange" dark class="mr-2">reset form</v-btn> -->
-      <v-btn
-        class="info mt-5 mr-5"
-        v-if="!items.send_score"
-        @click="updateGrade"
-        >ส่งคะแนน</v-btn
-      >
-      <v-btn class="orange mt-5 mr-5" dark v-else>กรุณารอการตรวจสอบ</v-btn>
-      <v-btn
-        class="orange mt-5 mr-5"
-        dark
-        >Preview</v-btn
-      >
+      <v-btn class="info mt-5 mr-5" @click="sendGrade">ส่งคะแนน</v-btn>
+      <v-btn class="success mt-5 mr-5" dark>Preview</v-btn>
       <v-btn
         class="success mt-5 mr-5"
+        v-if="!items.send_score"
+        @click="updateGrade"
         >บันทึก</v-btn
       >
+      <v-btn class="orange mt-5 mr-5" @click="editAllGrade" dark v-else>แก้ไข</v-btn>
     </v-row>
   </v-container>
 </template>
@@ -171,8 +165,7 @@ export default {
     await this.getGradeByConditions(this.items).then(
       result => (this.grade_list = result)
     );
-    await this.getCriteria().then(result => (this.criteria = result))
-
+    await this.getCriteria().then(result => (this.criteria = result));
   },
   data() {
     return {
@@ -278,7 +271,7 @@ export default {
         // console.log('this.intiScore = 0', initScore.length)
         return;
       }
-      for (var index = 0; index < this.rating.length; index++) {
+      for (var index = 0; index < this.students.length; index++) {
         const data = {
           teachId: this.items.objectId,
           subject: this.items.sname,
@@ -304,8 +297,19 @@ export default {
       const response = this.$store.dispatch(`teach/updateTeach`, data);
       console.log("update Teach", data);
     },
+    async sendGrade () {
+      if (confirm("ยืนยันการส่ง")) {
+        this.score.forEach(item => {
+          var data = {
+            objectId: item.objectId,
+            status: 'รอการตรวจสอบ'
+          }
+          const response = this.$store.dispatch(`grade/updateGrade`, data);
+        })
+      }
+    },
     async updateGrade() {
-      if (confirm("ยืนยันการส่งคะแนน")) {
+      if (confirm("ยืนยันการบันทึก")) {
         this.score.forEach(item => {
           var data = {
             objectId: item.objectId,
@@ -313,7 +317,8 @@ export default {
             aptitude: item.aptitude,
             analytical_thinking: item.analytical_thinking,
             grade: item.grade.toString(),
-            total_score: item.sum_score
+            total_score: item.sum_score,
+            status: 'บันทึก'
           };
           // console.log("score", data);
           const response = this.$store.dispatch(`grade/updateGrade`, data);
@@ -396,6 +401,9 @@ export default {
     editMode(index) {
       // console.log("index", index);
       this.$set(this.edit_mode, index, !this.edit_mode[index]);
+    },
+    editAllGrade(){
+      this.items.send_score = false
     },
     addScoreX() {
       console.log("xxxx", this.score_aptitude);

@@ -98,7 +98,7 @@ export default {
         },
         {
           icon: `mdi-book-open-page-variant`,
-          title: `เกณฑ์การให้คะแนน`,
+          title: `เกณฑ์การตัดเกรด`,
           to: `/criteria`
         },
         {

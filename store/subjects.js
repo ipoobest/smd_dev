@@ -24,7 +24,7 @@ export const actions = {
   async createSubject({ commit }, object) {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = this.$axios.$post(`${process.env.parseUrl}/classes/${classes.subjects}limit=200`, object)
+        const result = this.$axios.$post(`${process.env.parseUrl}/classes/${classes.subjects}`, object)
 
         commit('setSubject', result)
         resolve(result)
