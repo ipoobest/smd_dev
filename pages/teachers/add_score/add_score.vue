@@ -230,6 +230,8 @@ export default {
       const response_grade = await this.$store.dispatch("grade/getGradeByConditions",conditions)
       console.log('response xxzzzx', response_grade.results)
       this.score = response_grade.results
+      this.edit_mode = new Array(this.score.length);
+      this.edit_mode.fill(true);
       this.grade_arr = response_grade.results
       this.stu_grade_arr = await this.grade_arr.map(a => a.studentObjectId)
       console.log('response this.stu_grade_arr', this.stu_grade_arr)
