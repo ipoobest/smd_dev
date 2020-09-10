@@ -71,7 +71,9 @@
                 :min="0"
                 :rules="[
                   v => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
-                  v => v <= parseInt(rating[index].score) || `กรุณากรอกคะแนนให้น้อยกว่า ${rating[index].score}`
+                  v =>
+                    v <= parseInt(rating[index].score) ||
+                    `กรุณากรอกคะแนนให้น้อยกว่า ${rating[index].score}`
                 ]"
                 type="number"
                 hide-details="auto"
@@ -139,18 +141,22 @@
         </tbody>
       </template>
     </v-simple-table>
+
     <h3 v-else>กรุณาเพิ่มเกณฑ์การให้คะแนน</h3>
+
     <v-row justify="center">
       <!-- <v-btn color="orange" dark class="mr-2">reset form</v-btn> -->
       <v-btn class="info mt-5 mr-5" @click="sendGrade">ส่งคะแนน</v-btn>
-      <v-btn class="success mt-5 mr-5" dark>Preview</v-btn>
+      <v-btn class="success mt-5 mr-5" @click="previewGrade" dark>Preview</v-btn>
       <v-btn
         class="success mt-5 mr-5"
         v-if="!items.send_score"
         @click="updateGrade"
         >บันทึก</v-btn
       >
-      <v-btn class="orange mt-5 mr-5" @click="editAllGrade" dark v-else>แก้ไข</v-btn>
+      <v-btn class="orange mt-5 mr-5" @click="editAllGrade" dark v-else
+        >แก้ไข</v-btn
+      >
     </v-row>
   </v-container>
 </template>
@@ -179,6 +185,7 @@ export default {
       items: "",
       score: [],
       studentName: [],
+      studentId: [],
       score_analytical_thinking: "",
       score_aptitude: "",
       grade: [],
@@ -201,56 +208,43 @@ export default {
     };
   },
   methods: {
-    // async getGradeByConditions(item) {
-    //   const conditions = {
-    //     teachId: item.objectId
-    //   };
-    //   console.log("condition", conditions);
-    //   const response = await this.$store.dispatch(
-    //     "grade/getGradeByConditions",
-    //     conditions
-    //   );
-    //   console.log("response grade xxx", response);
-    //   if (response.results.length == 0) {
-    //     this.createGrade();
-    //   } else {
-    //     // console.log("this responbse", response.results);
-    //     this.score = response.results.slice();
-    //     this.edit_mode = new Array(this.score.length);
-    //     this.edit_mode.fill(true);
-    //     // console.log("this score grade", this.score);
-    //     return response.results;
-    //   }
-    // },
     async getGradeByConditions(item) {
       const conditions = {
         teachId: item.objectId
       };
       // 1 get stu array grade
-      const response_grade = await this.$store.dispatch("grade/getGradeByConditions",conditions)
-      console.log('response xxzzzx', response_grade.results)
-      this.score = response_grade.results
+      const response_grade = await this.$store.dispatch(
+        "grade/getGradeByConditions",
+        conditions
+      );
+      // console.log('response xxzzzx', response_grade.results)
+      this.score = response_grade.results;
       this.edit_mode = new Array(this.score.length);
       this.edit_mode.fill(true);
-      this.grade_arr = response_grade.results
-      this.stu_grade_arr = await this.grade_arr.map(a => a.studentObjectId)
-      console.log('response this.stu_grade_arr', this.stu_grade_arr)
+      this.grade_arr = response_grade.results;
+      this.stu_grade_arr = await this.grade_arr.map(a => a.studentObjectId);
+      // console.log('response this.stu_grade_arr', this.stu_grade_arr)
 
       // 2 get stu array class
-      const response_classes = await this.$store.dispatch(`classes/getClass`, this.items.classId)
-      this.stu_classes_arr = response_classes.studentId
-      console.log('stu_classes_arr', this.stu_classes_arr)
+      const response_classes = await this.$store.dispatch(
+        `classes/getClass`,
+        this.items.classId
+      );
+      this.stu_classes_arr = response_classes.studentId;
+      // console.log('stu_classes_arr', this.stu_classes_arr)
 
       // 3 check diff
-      var difference = this.stu_classes_arr.filter(x => !this.stu_grade_arr.includes(x))
-      console.log('diff', difference)
+      var difference = this.stu_classes_arr.filter(
+        x => !this.stu_grade_arr.includes(x)
+      );
+      // console.log('diff', difference)
 
       // 4 createGrade by diff
-      if(difference.length != 0) {
-         this.createGrade(difference)
+      if (difference.length != 0) {
+        this.createGrade(difference);
       } else {
-        console.log('xxxxxwwww', response_grade.results)
-        return response_grade.results
+        // console.log('xxxxxwwww', response_grade.results)
+        return response_grade.results;
       }
     },
     async getStudentByTeach(data) {
@@ -278,14 +272,18 @@ export default {
         "students/getStudents",
         query
       );
-      // console.log("response student test", response.results);
-      var name = this.getStudentName(response.results);
-      return name;
+      console.log("response student test", response.results);
+      var values = this.getStudentName(response.results);
+      var studentName = values[0]
+      var studentId = values[1]
+      console.log('studentName', studentName)
+      console.log('studentId xxx', studentId)
+      return [studentName, studentId];
     },
     async getStudentByClassId(classId) {
-      const response = await this.$store.dispatch(`classes/getClass`, classId)
-      console.log('response xxxx', response.studentId)
-      return response.studentId
+      const response = await this.$store.dispatch(`classes/getClass`, classId);
+      console.log("response xxxx", response.studentId);
+      return response.studentId;
     },
     async getTechById(id) {
       const response = await this.$store.dispatch("teach/getTeachById", id);
@@ -301,29 +299,25 @@ export default {
       return response.results[0].criteria;
     },
     async createGrade(students) {
-      //getStudentByClassId
-      // console.log('classId', this.items.classId)
-      // await this.getStudentByClassId(this.items.classId).then(
-      //   result => (this.studentsId = result)
-      // );
-      await this.getStudent(students).then(result => (this.students = result))
-
-      console.log("this.students", this.students);
+      var studentName = values[0]
+      var studentId = values[1]
+      // console.log("this.students", studentName);
       var initScore = new Array(this.rating.length);
       initScore.fill(0);
-      console.log("init score", initScore);
+      // console.log("init score", initScore);
       if (initScore.length == 0) {
         return;
       }
-      for (var index = 0; index < this.students.length; index++) {
+      for (var index = 0; index < studentName.length; index++) {
         const data = {
           teachId: this.items.objectId,
+          studentId: studentId[index],
           subject: this.items.sname,
           schoolYear: this.items.schoolYear,
           term: this.items.term,
           classRoomLevel: this.items.classRoomLevel,
           classRoomName: this.items.classRoomName,
-          studentName: this.students[index],
+          studentName: studentName[index],
           studentObjectId: students[index],
           score: initScore,
           grade_option: null,
@@ -331,27 +325,27 @@ export default {
           aptitude: "",
           analytical_thinking: ""
         };
-        console.log("date create", data);
+        // console.log("date create", data);
         const response = await this.$store.dispatch(`grade/createGrade`, data);
-        console.log("response create grade", response);
+        // console.log("response create grade", response);
       }
       this.getGradeByConditions(this.items).then(
-        result => (this.grade  = result)
+        result => (this.grade = result)
       );
     },
     async updateTech(data) {
       const response = this.$store.dispatch(`teach/updateTeach`, data);
       console.log("update Teach", data);
     },
-    async sendGrade () {
+    async sendGrade() {
       if (confirm("ยืนยันการส่ง")) {
         this.score.forEach(item => {
           var data = {
             objectId: item.objectId,
-            status: 'รอการตรวจสอบ'
-          }
+            status: "รอการตรวจสอบ"
+          };
           const response = this.$store.dispatch(`grade/updateGrade`, data);
-        })
+        });
       }
     },
     async updateGrade() {
@@ -364,7 +358,7 @@ export default {
             analytical_thinking: item.analytical_thinking,
             grade: item.grade.toString(),
             total_score: item.sum_score,
-            status: 'บันทึก'
+            status: "บันทึก"
           };
           // console.log("score", data);
           const response = this.$store.dispatch(`grade/updateGrade`, data);
@@ -380,13 +374,17 @@ export default {
     },
     getStudentName(item) {
       this.studentName = [];
+      this.studentId = []
       for (var index = 0; index < item.length; index++) {
         this.studentName.push(
           item[index].tth + " " + item[index].namet + " " + item[index].snamet
         );
+        this.studentId.push(
+          item[index].idstd
+        )
       }
-      console.log("student name", this.studentName);
-      return this.studentName;
+      // console.log("student name", this.studentId);
+      return [this.studentName, this.studentId];
     },
     mapRating(rating) {
       rating.forEach(item => {
@@ -404,6 +402,7 @@ export default {
           this.ratio_array[index];
         // ((( คะแนนที่ได้ / คะแนนเต็ม ) x 100) / 100 ) x ร้อยละ
         calc_score.push(result);
+        // console.log('คะแนนที่ผ่านการคำนวน', calc_score)
       });
       var sum_score = calc_score.reduce((a, b) => a + b);
       this.score[index].sum_score = sum_score.toFixed(2);
@@ -448,8 +447,8 @@ export default {
       // console.log("index", index);
       this.$set(this.edit_mode, index, !this.edit_mode[index]);
     },
-    editAllGrade(){
-      this.items.send_score = false
+    editAllGrade() {
+      this.items.send_score = false;
     },
     addScoreX() {
       console.log("xxxx", this.score_aptitude);
@@ -477,6 +476,11 @@ export default {
     reset() {},
     back() {
       this.$router.go(-1);
+    },
+    previewGrade() {
+      console.log('preview grade')
+      this.$router.push({name: 'preview-grade', query: {id: this.$route.query.id}})
+      // this.$router.push({name: 'subjects-id', params: { id: `${item.objectId}`}})
     }
   }
 };

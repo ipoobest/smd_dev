@@ -1,76 +1,70 @@
 const colors = require('vuetify/es5/util/colors').default
 
 module.exports = {
-  mode: 'spa',
+  mode: "spa",
   /*
-  ** Headers of the page
-  */
+   ** Headers of the page
+   */
   webpack: (config, { isServer }) => {
     // Fixes npm packages that depend on `fs` module
     if (!isServer) {
       config.node = {
-        fs: 'empty'
-      }
+        fs: "empty"
+      };
     }
-    return config
+    return config;
   },
   head: {
-    titleTemplate: '%s - ' + process.env.npm_package_name,
+    titleTemplate: "%s - " + process.env.npm_package_name,
     // title: process.env.npm_package_name || '',
-    title: 'ระบบตัดเกรด smd',
+    title: "ระบบตัดเกรด smd",
     meta: [
-      { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { charset: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" }
       // { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
-      
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
-    ]
+    link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
   },
   /*
-  ** Customize the progress-bar color
-  */
-  loading: { color: '#fff' },
+   ** Customize the progress-bar color
+   */
+  loading: { color: "#fff" },
   /*
-  ** Global CSS
-  */
-  css: [
-  ],
+   ** Global CSS
+   */
+  css: [],
   /*
-  ** Plugins to load before mounting the App
-  */
+   ** Plugins to load before mounting the App
+   */
   plugins: [
-    '~/plugins/axios', { src: '~/plugins/vuex-persist', ssr: false }
+    "~/plugins/axios",
+    { src: "~/plugins/vuex-persist", ssr: false },
+    { src: "@/plugins/vue-html2pdf", mode: "client" }
   ],
   /*
-  ** Nuxt.js dev-modules
-  */
-  buildModules: [
-    '@nuxtjs/vuetify',
-    '@nuxtjs/dotenv'
-  ],
+   ** Nuxt.js dev-modules
+   */
+  buildModules: ["@nuxtjs/vuetify", "@nuxtjs/dotenv"],
   /*
-  ** Nuxt.js modules
-  */
+   ** Nuxt.js modules
+   */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
-    '@nuxtjs/axios',
-    '@nuxtjs/dotenv',
-    'cookie-universal-nuxt'
+    "@nuxtjs/axios",
+    "@nuxtjs/dotenv",
+    "cookie-universal-nuxt"
   ],
   /*
-  ** Axios module configuration
-  ** See https://axios.nuxtjs.org/options
-  */
-  axios: {
-  },
+   ** Axios module configuration
+   ** See https://axios.nuxtjs.org/options
+   */
+  axios: {},
   /*
-  ** vuetify module configuration
-  ** https://github.com/nuxt-community/vuetify-module
-  */
+   ** vuetify module configuration
+   ** https://github.com/nuxt-community/vuetify-module
+   */
   vuetify: {
-    customVariables: ['~/assets/variables.scss'],
+    customVariables: ["~/assets/variables.scss"],
     theme: {
       dark: false,
       themes: {
@@ -87,19 +81,18 @@ module.exports = {
     }
   },
   /*
-  ** Build configuration
-  */
+   ** Build configuration
+   */
 
   build: {
     /*
-    ** You can extend webpack config here
-    */
-    extend (config, ctx) {
-    }
+     ** You can extend webpack config here
+     */
+    extend(config, ctx) {}
   },
   env: {
     parseUrl: `https://api-smd.kaensom.com/parse`,
     parseAppId: `37151b935e618517d2467aaa4e10f8ed`,
     parseMasterKey: `905de41c9fb82aa9f8a964d8781b935c`
   }
-}
+};
