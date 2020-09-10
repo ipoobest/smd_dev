@@ -10,7 +10,7 @@
     </v-row>
     <v-row justify="center">
       <v-col cols="3" align="start">
-        วันที่ {{Date( year, month, day )}}
+        วันที่ 
       </v-col>
       <v-col cols="6" align="center">
         วิชา  {{teach.sname}}
