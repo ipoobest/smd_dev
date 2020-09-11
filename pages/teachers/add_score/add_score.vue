@@ -299,9 +299,12 @@ export default {
       return response.results[0].criteria;
     },
     async createGrade(students) {
-      var values = this.getStudent(students)
+      var values = await this.getStudent(students)
       var studentName = values[0]
       var studentId = values[1]
+
+      // console.log('student id', values)
+      
       // console.log("this.students", studentName);
       var initScore = new Array(this.rating.length);
       initScore.fill(0);
@@ -309,6 +312,7 @@ export default {
       if (initScore.length == 0) {
         return;
       }
+      // console.log('this. student xxx', studentName.length)
       for (var index = 0; index < studentName.length; index++) {
         const data = {
           teachId: this.items.objectId,
@@ -326,8 +330,8 @@ export default {
           aptitude: "",
           analytical_thinking: ""
         };
-        console.log("date create", data);
-        // const response = await this.$store.dispatch(`grade/createGrade`, data);
+        // console.log("date create", data);
+        const response = await this.$store.dispatch(`grade/createGrade`, data);
         // console.log("response create grade", response);
       }
       this.getGradeByConditions(this.items).then(
