@@ -137,6 +137,16 @@
                               :rules="[v => !!v || 'กรุณาเลือกประเภทหัวหน้ากลุ่มสาระวิชา']"
                             ></v-select>
                           </v-col>
+                           <v-col v-if="editedItem.type == `หัวหน้ากลุ่มสาระ`" cols="12" sm="6" md="6">
+                            <v-select
+                              v-model="editedItem.classes"
+                              :items="selectItemClasses"
+                              outlined
+                              label="ระดับชั้น"
+                              required
+                              :rules="[v => !!v || 'กรุณาเลือกระดับชั้น']"
+                            ></v-select>
+                          </v-col>
                         </v-row>
                       </v-container>
                       </v-form>
@@ -190,7 +200,7 @@ export default {
         { text: 'คำนำหน้า', value: 'title' },
         { text: 'ชื่อ', value: 'firstName' },
         { text: 'นามสกุล', value: 'lastName' },
-        { text: 'ประเภท', value: 'type' },
+        { text: 'ประเภท', value: 'type'},
         { text: 'Actions', value: 'actions', sortable: false }
       ],
       user: '',
@@ -246,6 +256,10 @@ export default {
         'ภาษาอังกฤษ',
         'คณิตศาสตร์',
         'สังคม'
+      ],
+      selectItemClasses: [
+        'ม.ต้น',
+        'ม.ปลาย'
       ]
     }
   },
@@ -328,12 +342,12 @@ export default {
         const objectId =  userId.objectId
         console.log('object User Id', objectId)
 
-        var userType;
-          if (this.editedItem.staffType) {
-            userType = this.editedItem.type + this.editedItem.staffType
-          } else {
-            userType = this.editedItem.type 
-          }
+        // var userType;
+        //   if (this.editedItem.staffType) {
+        //     userType = this.editedItem.type + this.editedItem.staffType
+        //   } else {
+        //     userType = this.editedItem.type 
+        //   }
         const editData = {
           objectId: this.editedItem.objectId,
           id: this.editedItem.id,
@@ -343,7 +357,9 @@ export default {
           lastName: this.editedItem.lastName,
           username: this.editedItem.username,
           password: this.editedItem.password,
-          type: userType,
+          type: this.editedItem.type ,
+          staffType: this.editedItem.staffType,
+          classes: this.editedItem.classes,
           objectId: objectId
         }
 
@@ -357,12 +373,12 @@ export default {
           const user = await this.checkUser(this.editedItem.username)
           console.log('resonse call this', user)
           if(user) {
-            var userType;
-            if (this.editedItem.staffType) {
-              userType = this.editedItem.type + this.editedItem.staffType
-            } else {
-              userType = this.editedItem.type 
-            }
+            // var userType;
+            // if (this.editedItem.staffType) {
+            //   userType = this.editedItem.type + this.editedItem.staffType
+            // } else {
+            //   userType = this.editedItem.type 
+            // }
             const user = {
               userId: this.editedItem.id,
               position: this.editedItem.position,
@@ -371,11 +387,13 @@ export default {
               lastName: this.editedItem.lastName,
               username: this.editedItem.username,
               password: this.editedItem.password,
-              type: userType
+              type: this.editedItem.type ,
+              staffType: this.editedItem.staffType,
+              classes: this.editedItem.classes,
               // userId: objectId
             }
-            // console.log('user info', user)
-            this.createUser(user)
+            console.log('user info', user)
+            // this.createUser(user)
             this.editedItem = {}
             this.close()
           } else {

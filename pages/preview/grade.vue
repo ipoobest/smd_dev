@@ -111,8 +111,8 @@ export default {
           (((score / this.score_array[index]) * 100) / 100) *
           this.ratio_array[index];
         // ((( คะแนนที่ได้ / คะแนนเต็ม ) x 100) / 100 ) x ร้อยละ
-        calc_score.push(result);
-        console.log('คะแนนที่ผ่านการคำนวน', calc_score[index])
+        calc_score.push(result.toFixed(2));
+        // console.log('คะแนนที่ผ่านการคำนวน', calc_score[index])
       });
       return calc_score
     },

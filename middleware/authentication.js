@@ -16,6 +16,8 @@ export default async function ({ store, redirect }) {
     return redirect(`/teachers/${store.state.auth.auth.objectId}`);
     // const user = await store.$axios.$get(`${process.env.parseUrl}/users/me`)
     // console.log('user/me', user)
+  } else if(store.state.auth.auth.type == "หัวหน้ากลุ่มสาระ") {
+    return redirect(`/staff/${store.state.auth.auth.objectId}`);
   }
 }
 
