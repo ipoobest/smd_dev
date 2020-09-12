@@ -70,7 +70,7 @@ export const actions = {
         console.log('where', where)
         const result = this.$axios.$get(`${process.env.parseUrl}/classes/${classes.subjects}?where=${where}`)
 
-        commit('setUser', result)
+        commit("setSubjects", result);
         resolve(result)
       } catch (error) {
         console.log({ error })

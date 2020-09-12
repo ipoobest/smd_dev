@@ -21,11 +21,6 @@
             <template v-slot:default>
               <thead>
                 <tr>
-                     <!-- { text: "รหัส/ชื่อวิขา", value: "sname", align: "center" },
-        { text: "ระดับชั้น", value: "classRoomLevel", align: "center" },
-        { text: "ห้องเรียน", value: "classRoomName", align: "center" },
-        { text: "ครูผู้สอน", value: "teacher.name", align: "center" },
-        { text: "Actions", value: "actions", sortable: false, align: "center" } -->
                   <th>รหัส/ชื่อวิขา</th>
                   <th>ระดับชั้น</th>
                   <th>ห้องเรียน</th>
@@ -35,7 +30,7 @@
               </thead>
               <tbody>
                 <tr v-for="item in items" :key="item.index">
-                  <td>{{item.sname}}</td>
+                  <td>{{item.subject_info.codet}} {{item.subject_info.sname}}</td>
                   <td>{{item.classRoomLevel}}</td>
                   <td>{{item.classRoomName}}</td>
                   <td>{{item.teacher.name}}</td>
@@ -57,11 +52,6 @@ export default {
     this.staff = this.$store.state.auth.auth;
     console.log("staff", this.staff);
     this.getSubjectsByConditions().then(result => (this.items = result))
-    // this.teacherId = this.$store.state.auth.auth.teacherObjectId
-    // console.log("params", this.query.id);
-    // await this.getTeachByTeacherId(this.query.id).then(
-    //   result => (this.items = result)
-    // );
   },
   watch: {
     dialog(val) {
@@ -92,7 +82,10 @@ export default {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
         send_score: true,
-        sname: ""
+        "subject_info.sname": {
+          $regex: `^${this.staff.staffType}`
+        },
+
         // "teacher.value": this.staff.objectId
       };
       console.log('data conditions', conditions)
