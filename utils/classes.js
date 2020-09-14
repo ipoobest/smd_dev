@@ -10,5 +10,6 @@ export default {
   academicYear: `AcademicYear`,
   teach: `Teach`,
   grade: `Grade`,
-  criteria: `Criteria`
-}
+  criteria: `Criteria`,
+  department: `Department`
+};

@@ -330,7 +330,7 @@ export default {
           aptitude: "",
           analytical_thinking: ""
         };
-        // console.log("date create", data);
+        console.log("date create", data);
         const response = await this.$store.dispatch(`grade/createGrade`, data);
         // console.log("response create grade", response);
       }
@@ -484,7 +484,7 @@ export default {
     },
     previewGrade() {
       console.log('preview grade')
-      this.$router.push({name: 'preview-grade', query: {id: this.$route.query.id}})
+      this.$router.push({name: 'teachers-preview-grade', query: {id: this.$route.query.id}})
       // this.$router.push({name: 'subjects-id', params: { id: `${item.objectId}`}})
     }
   }

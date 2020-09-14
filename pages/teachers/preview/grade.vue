@@ -1,5 +1,8 @@
 <template>
   <v-container>
+      <v-btn class="mr-5" color="primary" fab small dark @click="back">
+        <v-icon>mdi-arrow-left</v-icon> 
+      </v-btn>
     <v-row justify="center">
       <h3>
         รายชื่อนักเรียนโรงเรียนสาธิตมหาวิทยาลัยขอนแก่น (มอดินแดง) จังหวัดขอนแก่น
@@ -63,11 +66,11 @@
 <script>
 export default {
   // middleware: 'authentication',
+  layout: 'teacher',
   async mounted() {
     // check user type and user layout
    await this.getTeach(this.$route.query.id).then(result => (this.teach = result))
    this.getGrade(this.teach).then(result => (this.score = result))
-   this.layout = await this.checkLayout(this.$store.state.auth.auth.type);
   },
   data() {
     return {
@@ -125,13 +128,9 @@ export default {
       });
       // console.log("this.ratio_array", this.ratio_array);
     },
-    // checkLayout(data) {
-    //   if(data){
-    //     return 'teacher'
-    //   }else{
-    //     return 'staff'
-    //   }
-    // }
+    back(){
+      this.$router.go(-1);
+    }
   }
 };
 </script>

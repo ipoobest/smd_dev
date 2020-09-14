@@ -17,13 +17,13 @@
               hide-details
             ></v-text-field>
           </v-card-title>
-          <v-data-table
+          <v-simple-table
             :headers="headers"
-            :items="items"
             :search="search"
           >
             <template v-slot:top>
               <v-toolbar flat color="white">
+                <h4>รายชื่อชั้นเรียน</h4>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="700px">
@@ -56,7 +56,6 @@
                         </v-row>
                         <v-row>
                             <div v-for="item in part_rating" :key="item.id" >
-                              <!-- {{ item.sname }} -->
                               <v-col align-self="center">
                                 <v-row>
                                 <v-text-field
@@ -82,16 +81,6 @@
                                 </v-row>
                               </v-col>
                             </div>
-                          <!-- <div v-for="index in part_point" :key="index">
-                            <v-col cols="12" sm="6" md="4" >
-                              <v-text-field
-                                outlined
-                                v-model="part_point[index]"
-                                required
-                                label="%"
-                              />
-                            </v-col>
-                          </div> -->
                         </v-row>
                       </v-container>
                       </v-form>
@@ -110,12 +99,43 @@
                 </v-dialog>
               </v-toolbar>
             </template>
-            <template v-slot:item.actions="{ item }">
+            <!-- <template v-slot:item.actions="{ item }">
               <v-btn  class="info" @click="goToAddScore(item)">
                จัดการ
               </v-btn>              
-            </template>
-          </v-data-table>
+            </template> -->
+            <thead>
+                        <!-- { text: 'รหัส/ชื่อวิขา', value: 'sname', align:'center' },
+          { text: 'ระดับชั้น', value: 'classRoomLevel', align:'center'},
+          { text: 'ห้องเรียน', value: 'classRoomName', align:'center'},
+          { text: 'ครูผู้สอน', value: 'teacher.name', align:'center' },
+          { text: 'Actions', value: 'actions', sortable: false, align:'center'} -->
+              <tr>
+                <th>รหัส/ชื่อวิขา</th>
+                <th>ระดับชั้น</th>
+                <th>ห้องเรียน</th>
+                <th>ครูผู้สอน</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in items" :key="index">
+                <th >{{item.subject_info.codet}} {{item.subject_info.sname}}</th>
+                <!-- <th >{{item.subject_info}}</th> -->
+                <th >{{item.classRoomLevel}}</th>
+                <th >{{item.classRoomName}}</th>
+                <th >{{item.teacher.name}}</th>
+                <th >   
+                  <v-btn color="info" @click="goToAddScore(item)">
+                     จัดการ
+                  </v-btn>
+                  <!-- <v-btn color="error" @click="deleteItem(item)">
+                     ลบ
+                   </v-btn> -->
+                   </th>
+              </tr>
+            </tbody>
+          </v-simple-table>
         </v-card>
       </v-col>
     </v-row>

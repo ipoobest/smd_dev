@@ -17,13 +17,37 @@
               hide-details
             ></v-text-field>
           </v-card-title>
-          <v-data-table :headers="headers" :items="items" :search="search">
+          <!-- <v-data-table :headers="headers" :items="items" :search="search">
             <template v-slot:item.actions="{ item }">
               <v-btn class="success" @click="addScore(item)">
                 ให้คะแนน
               </v-btn>
             </template>
-          </v-data-table>
+          </v-data-table> -->
+          <v-simple-table width="100%">
+            <template v-slot:default>
+              <thead>
+                <tr>
+                  <th>รหัส/ชื่อวิขา</th>
+                  <th>ระดับชั้น</th>
+                  <th>ห้องเรียน</th>
+                  <th>ครูผู้สอน</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody >
+                <tr v-for="item in items" :key="item.index">
+                  <td>
+                    {{ item.subject_info.codet }} {{ item.subject_info.sname }}
+                  </td>
+                  <td>{{ item.classRoomLevel }}</td>
+                  <td>{{ item.classRoomName }}</td>
+                  <td>{{ item.teacher.name }}</td>
+                  <td><v-btn @click="addScore(item)">จัดการ</v-btn></td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
         </v-card>
       </v-col>
     </v-row>
@@ -40,9 +64,6 @@ export default {
     await this.getTeachByTeacherId(this.query.id).then(
       result => (this.items = result)
     );
-    // get rating
-    // this.part_rating = this.items.rating
-    // console.log('rating', this.items)
   },
   watch: {
     dialog(val) {

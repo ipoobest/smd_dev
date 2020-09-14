@@ -114,9 +114,8 @@
             </thead>
             <tbody>
               <tr v-for="(item, index) in subjectsInTerm" :key="index">
-                <th v-if="item.subject_info">{{item.subject_info.codet}} {{item.subject_info.sname}}</th>
-                <th v-else >{{item.sname}}</th>
-                <!-- <th>{{item.subject_info.codet}} {{item.subject_info.sname}}</th> -->
+                <th >{{item.subject_info.codet}} {{item.subject_info.sname}}</th>
+                <!-- <th >{{item.subject_info}}</th> -->
                 <th >{{item.classRoomLevel}}</th>
                 <th >{{item.classRoomName}}</th>
                 <th >{{item.teacher.name}}</th>
@@ -130,14 +129,7 @@
                    </th>
               </tr>
             </tbody>
-            <!-- <template v-slot:item.actions="{ item }">
-              <v-btn color="info" @click="editItem(item)">
-                แก้ไข
-              </v-btn>
-              <v-btn color="error" @click="deleteItem(item)">
-                ลบ
-              </v-btn>
-            </template> -->
+           
           </v-simple-table>
         </v-card>
       </v-col>
@@ -275,7 +267,6 @@ export default {
       const data = {
         schoolYear: this.query.schoolYear,
         term: this.query.term,
-        // sname: this.input.subject_data.codet + " " + this.input.subject_data.sname,
         classRoomLevel: this.input.classRoomLevel,
         classRoomName: this.input.classRoomName,
         classId: objectId,
@@ -284,6 +275,7 @@ export default {
         rating: [],
         subject_id: this.input.subject_id,
         subject_info: this.input.subject_data,
+        dapartment: '',
         type: "วิชาบังคับ"
       };
       console.log("teach data", data);

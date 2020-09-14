@@ -29,12 +29,21 @@
                 </tr>
               </thead>
               <tbody>
+                <tr>
+                  <td>{{staff.staffType}}</td>
+                  <td>{{staff.classes}}</td>
+                  <td>รวม</td>
+                  <td>รวม</td>
+                  <td><v-btn color="success">สรุป</v-btn></td>
+                </tr>
                 <tr v-for="item in items" :key="item.index">
-                  <td>{{item.subject_info.codet}} {{item.subject_info.sname}}</td>
-                  <td>{{item.classRoomLevel}}</td>
-                  <td>{{item.classRoomName}}</td>
-                  <td>{{item.teacher.name}}</td>
-                  <td><v-btn>จัดการ</v-btn></td>
+                  <td>
+                    {{ item.subject_info.codet }} {{ item.subject_info.sname }}
+                  </td>
+                  <td>{{ item.classRoomLevel }}</td>
+                  <td>{{ item.classRoomName }}</td>
+                  <td>{{ item.teacher.name }}</td>
+                  <td><v-btn @click="goToPreviewGrade(item)">จัดการ</v-btn></td>
                 </tr>
               </tbody>
             </template>
@@ -47,11 +56,11 @@
 
 <script>
 export default {
-  layout: "teacher",
+  layout: "staff",
   async mounted() {
     this.staff = this.$store.state.auth.auth;
     console.log("staff", this.staff);
-    this.getSubjectsByConditions().then(result => (this.items = result))
+    this.getSubjectsByConditions().then(result => (this.items = result));
   },
   watch: {
     dialog(val) {
@@ -66,14 +75,6 @@ export default {
       search: "",
       items: [],
       staff: {}
-      // headers: [
-      //   { text: "รหัส/ชื่อวิขา", value: "sname", align: "center" },
-      //   { text: "ระดับชั้น", value: "classRoomLevel", align: "center" },
-      //   { text: "ห้องเรียน", value: "classRoomName", align: "center" },
-      //   { text: "ครูผู้สอน", value: "teacher.name", align: "center" },
-      //   { text: "Actions", value: "actions", sortable: false, align: "center" }
-      // ],
-      
     };
   },
   methods: {
@@ -85,10 +86,11 @@ export default {
         "subject_info.sname": {
           $regex: `^${this.staff.staffType}`
         },
-
-        // "teacher.value": this.staff.objectId
+        classRoomLevel: {
+          $in: this.staff.classes
+        }
       };
-      console.log('data conditions', conditions)
+      console.log("data conditions", conditions);
       const response = await this.$store.dispatch(
         `teach/getSubjectsByConditions`,
         conditions
@@ -227,6 +229,12 @@ export default {
     back() {
       this.$router.go(-1);
       console.log("back");
+    },
+    goToPreviewGrade(item) {
+      console.log('preview grade', item)
+      this.$router.push({name: 'preview-grade', query: {id: item.objectId}})
+      // this.$router.push({name: 'preview-grade', query: {id: '7NPLER6jFE'}})
+      
     },
     goToAddScore(item) {
       this.$router.push({
