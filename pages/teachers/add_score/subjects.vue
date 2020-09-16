@@ -37,9 +37,10 @@
               </thead>
               <tbody >
                 <tr v-for="item in items" :key="item.index">
-                  <td>
+                  <td v-if="item.subject_info">
                     {{ item.subject_info.codet }} {{ item.subject_info.sname }}
                   </td>
+                  <td v-else>{{ item.sname }}</td>
                   <td>{{ item.classRoomLevel }}</td>
                   <td>{{ item.classRoomName }}</td>
                   <td>{{ item.teacher.name }}</td>
@@ -86,13 +87,13 @@ export default {
       studentsId: [],
       studentsNamr: [],
       rating: [],
-      headers: [
-        { text: "รหัส/ชื่อวิขา", value: "sname", align: "center" },
-        { text: "ระดับชั้น", value: "classRoomLevel", align: "center" },
-        { text: "ห้องเรียน", value: "classRoomName", align: "center" },
-        { text: "ครูผู้สอน", value: "teacher.name", align: "center" },
-        { text: "Actions", value: "actions", sortable: false, align: "center" }
-      ],
+      // headers: [
+      //   { text: "รหัส/ชื่อวิขา", value: "sname", align: "center" },
+      //   { text: "ระดับชั้น", value: "classRoomLevel", align: "center" },
+      //   { text: "ห้องเรียน", value: "classRoomName", align: "center" },
+      //   { text: "ครูผู้สอน", value: "teacher.name", align: "center" },
+      //   { text: "Actions", value: "actions", sortable: false, align: "center" }
+      // ],
       items: []
     };
   },

@@ -17,7 +17,7 @@
               hide-details
             ></v-text-field>
           </v-card-title>
-          <v-data-table :headers="headers" :items="items" :search="search">
+          <v-simple-table :search="search">
             <template v-slot:top>
               <v-toolbar flat color="white">
                 <v-divider class="mx-4" inset vertical></v-divider>
@@ -48,9 +48,6 @@
 
                     <v-card-actions>
                       <v-spacer></v-spacer>
-                      <!-- <v-btn color="blue darken-1" text @click="close"
-                        >Cancel</v-btn
-                      > -->
                       <v-btn color="error" @click="close">ยกเลิก</v-btn>
                       <v-btn color="info" @click="save">เพิ่ม</v-btn>
                     </v-card-actions>
@@ -58,12 +55,25 @@
                 </v-dialog>
               </v-toolbar>
             </template>
-            <template v-slot:item.actions="{ item }">
-              <v-btn class="error" small @click="deleteItem(item)">
+            <thead>
+              <tr>
+                <th>รหัสประจำตัว</th>
+                <th>ชื่อ</th>
+                <th>นามสกุล</th>
+                <th>actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, items) in items" :key="items">
+                <th>{{item.idstd}}</th>
+                <th>{{item.namet}}</th>
+                <th>{{item.snamet}}</th>
+                <th> <v-btn class="error" small @click="deleteItem(item)">
                 ลบ
-              </v-btn>
-            </template>
-          </v-data-table>
+              </v-btn></th>
+              </tr>
+            </tbody>
+          </v-simple-table>
         </v-card>
       </v-col>
     </v-row>
@@ -87,12 +97,7 @@ export default {
       search: '',
       dialog: false,
       classes: '',
-      headers: [
-        { text: 'รหัสประจำตัว', value: 'idstd' },
-        { text: 'ชื่อ', value: 'namet' },
-        { text: 'นามสกุล', value: 'snamet' },
-        { text: 'actions', value: 'actions', sortable: false }
-      ],
+     
       headerStudents: [
         { text: 'รหัสประจำตัว', value: 'idstd' },
         { text: 'ชื่อ', value: 'namet' },
@@ -117,7 +122,7 @@ export default {
   methods: {
     async getTeachById(classId) {
       const response = await this.$store.dispatch(`teach/getTeachById`, classId)
-      console.log('response xxxid', response)
+      // console.log('response xxxid', response)
       return response
     },
     async getStudent() {
@@ -125,7 +130,7 @@ export default {
         class : this.classInfo.classRoomLevel
       }
       const response = await this.$store.dispatch(`students/getStudentByConditions`, conditions)
-      console.log('response', response)
+      // console.log('response yyyy', response)
       return response.results
     },
     async getStudents(items) {
@@ -136,11 +141,11 @@ export default {
       const response = await this.$store.dispatch(`students/getStudents`, {
         objectId
       })
-      console.log('response student', response)
+      // console.log('response student xxx', response)
       return response.results
     },
     async getStudentsNotIn(items) {
-      console.log('items not in', items)
+      // console.log('items not in', items)
       // const objectId = {
       //   $nin: items
       // }

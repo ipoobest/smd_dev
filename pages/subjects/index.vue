@@ -23,7 +23,7 @@
                 <h4>รายชื่อวิชา</h4>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
-                <v-dialog v-model="dialog_department" max-width="700px">
+                <v-dialog v-model="dialog" max-width="700px">
                   <template v-slot:activator="{ on }">
                     <v-btn
                       color="success"
@@ -110,6 +110,18 @@
                                 ]"
                               ></v-select>
                             </v-col>
+                            <v-col cols="12" sm="6" md="4">
+                              <v-select
+                                v-model="input.department"
+                                :items="department"
+                                outlined
+                                label="กลุ่มสาระวิชา"
+                                required
+                                :rules="[
+                                  v => !!v || 'กรุณาเลือกข้อมูล กลุ่มสาระวิชา'
+                                ]"
+                              ></v-select>
+                            </v-col>
                           </v-row>
                         </v-container>
                       </v-form>
@@ -172,7 +184,7 @@
                 <h4>กลุ่มสาระการเรียนรู้</h4>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
-                <v-dialog v-model="dialog" max-width="350px">
+                <v-dialog v-model="dialog_department" max-width="350px">
                   <template v-slot:activator="{ on }">
                     <v-btn
                       color="success"
@@ -231,10 +243,10 @@
                   <th>{{ items + 1 }}</th>
                   <th>{{ item.name }}</th>
                   <th>
-                    <v-btn small class="mr-2 info" @click="editItem(item)">
+                    <!-- <v-btn small class="mr-2 info" @click="editItem(item)">
                       แก้ไข
-                    </v-btn>
-                    <v-btn class="error" small @click="deleteItem(item)">
+                    </v-btn> -->
+                    <v-btn class="error" small @click="deleteDepartment(item)">
                       ลบ
                     </v-btn>
                   </th>
@@ -274,7 +286,8 @@ export default {
         hour: "",
         type: ""
       },
-      typeSubjects: ["วิชาบังคับ", "วิชาเลือก"]
+      typeSubjects: ["วิชาบังคับ", "วิชาเลือก"],
+      department: []
     };
   },
   computed: {
@@ -309,6 +322,7 @@ export default {
        const response = await this.$store.dispatch(
         `department/getDepartment`
       );
+      this.department = this.mapDepartment(response.results)
       return response.results
     },
     async createDepartment() {
@@ -345,6 +359,13 @@ export default {
         input
       );
     },
+    async deleteDepartments(id) {
+      const response = await this.$store.dispatch(
+        `department/deleteDepartment`,
+        id
+      );
+      this.getDepartment().then(result=> (this.items_depart = result))
+    },
     addClasses(item) {
       this.$router.push({
         name: "subjects-id",
@@ -374,6 +395,7 @@ export default {
     },
     close() {
       this.dialog = false;
+      this.dialog_department = false
       this.resetForm();
       setTimeout(() => {
         this.editedIndex = -1;
@@ -392,23 +414,23 @@ export default {
           credit: this.input.credit,
           hour: this.input.hour,
           type: this.input.type,
-          departmant: this.departmant
+          department: this.input.department
         };
         this.updateSubject(editinput);
         this.close();
       } else {
         if (this.$refs.form.validate()) {
           const data = {
-            objectId: this.input.objectId,
+            // objectId: this.input.objectId,
             code: this.input.code,
             codet: this.input.codet,
             sname: this.input.sname,
             credit: this.input.credit,
             hour: this.input.hour,
             type: this.input.type,
-            departmant: this.departmant
+            department: this.input.department
           };
-          console.log("input create", data);
+          // console.log("input create", data);
           this.createSubject(data);
           this.items.push(data);
           this.close();
@@ -425,6 +447,21 @@ export default {
         this.createDepartment()
         this.close();
       }
+    },
+    deleteDepartment(item){
+      if(confirm('ยืนยันการลบ')) {
+        console.log('delete item', item.objectId)
+        this.deleteDepartments(item.objectId)
+      }
+
+    },
+    mapDepartment(item) {
+      var department = []
+      item.forEach(item => {
+        department.push(item.name)
+      })
+      // console.log('item deprt', department)
+      return department
     }
   }
 };

@@ -77,7 +77,7 @@
                 ]"
                 type="number"
                 hide-details="auto"
-                :disabled="items.send_score"
+                :disabled="items.save_score"
               />
             </td>
             <td>
@@ -90,7 +90,7 @@
                   v => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
                   v => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3'
                 ]"
-                :disabled="items.send_score"
+                :disabled="items.save_score"
                 hide-details="auto"
               />
             </td>
@@ -104,7 +104,7 @@
                   v => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
                   v => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3'
                 ]"
-                :disabled="items.send_score"
+                :disabled="items.save_score"
                 hide-details="auto"
               />
             </td>
@@ -148,15 +148,18 @@
       <!-- <v-btn color="orange" dark class="mr-2">reset form</v-btn> -->
       <v-btn class="info mt-5 mr-5" @click="sendGrade">ส่งคะแนน</v-btn>
       <v-btn class="success mt-5 mr-5" @click="previewGrade" dark>Preview</v-btn>
-      <v-btn
-        class="success mt-5 mr-5"
-        v-if="!items.send_score"
-        @click="updateGrade"
-        >บันทึก</v-btn
-      >
-      <v-btn class="orange mt-5 mr-5" @click="editAllGrade" dark v-else
-        >แก้ไข</v-btn
-      >
+      <v-btn class="success mt-5 mr-5" @click="previewSummary" dark>Preview2</v-btn>
+      <div v-if="!items.send_score">
+        <v-btn
+          class="success mt-5 mr-5"
+          v-if="!items.save_score"
+          @click="updateGrade"
+          >บันทึก</v-btn
+        >
+        <v-btn class="orange mt-5 mr-5" @click="editAllGrade" dark v-else
+          >แก้ไข</v-btn
+        >
+      </div>
     </v-row>
   </v-container>
 </template>
@@ -344,13 +347,20 @@ export default {
     },
     async sendGrade() {
       if (confirm("ยืนยันการส่ง")) {
-        this.score.forEach(item => {
-          var data = {
-            objectId: item.objectId,
-            status: "รอการตรวจสอบ"
-          };
-          const response = this.$store.dispatch(`grade/updateGrade`, data);
-        });
+        // this.score.forEach(item => {
+        //   var data = {
+        //     objectId: item.objectId,
+        //     status: "รอการตรวจสอบ"
+        //   };
+        //   const response = this.$store.dispatch(`grade/updateGrade`, data);
+        //   console.log('response esnd score', response)
+        // });
+        var sentScore = {
+          objectId: this.items.objectId,
+          send_score: true
+        };
+        this.items.send_score = true;
+        this.updateTech(sentScore);
       }
     },
     async updateGrade() {
@@ -368,13 +378,13 @@ export default {
           // console.log("score", data);
           const response = this.$store.dispatch(`grade/updateGrade`, data);
         });
-        var sentScore = {
+        var saveScore = {
           objectId: this.items.objectId,
-          send_score: true
+          save_score: true
         };
-        console.log("sentScoreStaus", sentScore);
-        this.items.send_score = true;
-        this.updateTech(sentScore);
+        console.log("saveScore", saveScore);
+        this.items.save_score = true;
+        this.updateTech(saveScore);
       }
     },
     getStudentName(item) {
@@ -443,7 +453,6 @@ export default {
         grade_option: item.grade_option,
         score: item.score
       };
-      // console.log("update row", data);
 
       this.$set(this.edit_mode, index, !this.edit_mode[index]);
       const response = this.$store.dispatch(`grade/updateGrade`, data);
@@ -453,7 +462,7 @@ export default {
       this.$set(this.edit_mode, index, !this.edit_mode[index]);
     },
     editAllGrade() {
-      this.items.send_score = false;
+      this.items.save_score = false;
     },
     addScoreX() {
       console.log("xxxx", this.score_aptitude);
@@ -483,9 +492,12 @@ export default {
       this.$router.go(-1);
     },
     previewGrade() {
-      console.log('preview grade')
+      // console.log('preview grade')
       this.$router.push({name: 'teachers-preview-grade', query: {id: this.$route.query.id}})
       // this.$router.push({name: 'subjects-id', params: { id: `${item.objectId}`}})
+    },
+    previewSummary() {
+      this.$router.push({name: 'teachers-preview-grade', query: {id: this.$route.query.id}})
     }
   }
 };
