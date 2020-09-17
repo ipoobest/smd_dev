@@ -149,7 +149,7 @@ export default {
     async getStudents(items) {
       console.log("items", items);
       const objectId = {
-        $in: items,
+        $in: items
       };
       const response = await this.$store.dispatch(`students/getStudents`, {
         objectId
@@ -165,7 +165,7 @@ export default {
       const query = {
         class: this.student.classRoomLevel,
         objectId: {
-          $nin: items,
+          $nin: items
         }
       };
       const response = await this.$store.dispatch(
@@ -195,7 +195,9 @@ export default {
       );
     },
     async deleteItem(item) {
+      this.studentId = []
       // console.log('delete id', item.objectId)
+      console.log('this.items', this.items)
       const index = this.items.indexOf(item);
       if (confirm("ยืนยีนการลบนักเรียนออกจากชั้นเรียน")) {
         this.items.splice(index, 1);
@@ -203,7 +205,7 @@ export default {
         for (var i = 0; i < this.items.length; i++) {
           this.studentId.push(this.items[i].objectId);
         }
-        // console.log('item push', this.studentId)
+        console.log('item studentId', this.studentId)
         this.addStudents(this.studentId);
       }
     },

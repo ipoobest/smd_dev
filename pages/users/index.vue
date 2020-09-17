@@ -345,7 +345,7 @@ export default {
     editItem(item) {
       this.user = item;
       this.editedIndex = this.items.indexOf(item);
-      this.input = Object.assign({}, item);
+      this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
     async deleteItem(item) {

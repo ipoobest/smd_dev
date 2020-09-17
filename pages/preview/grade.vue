@@ -63,11 +63,11 @@
 <script>
 export default {
   // middleware: 'authentication',
+  layout: 'staff',
   async mounted() {
     // check user type and user layout
    await this.getTeach(this.$route.query.id).then(result => (this.teach = result))
    this.getGrade(this.teach).then(result => (this.score = result))
-   this.layout = await this.checkLayout(this.$store.state.auth.auth.type);
   },
   data() {
     return {

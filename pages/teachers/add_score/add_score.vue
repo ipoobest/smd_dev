@@ -228,6 +228,10 @@ export default {
       this.stu_grade_arr = await this.grade_arr.map(a => a.studentObjectId);
       // console.log('response this.stu_grade_arr', this.stu_grade_arr)
 
+     if (item.students) {
+       console.log('testxxx')
+       this.stu_classes_arr = item.students
+     } else {
       // 2 get stu array class
       const response_classes = await this.$store.dispatch(
         `classes/getClass`,
@@ -235,7 +239,7 @@ export default {
       );
       this.stu_classes_arr = response_classes.studentId;
       // console.log('stu_classes_arr', this.stu_classes_arr)
-
+     }
       // 3 check diff
       var difference = this.stu_classes_arr.filter(
         x => !this.stu_grade_arr.includes(x)

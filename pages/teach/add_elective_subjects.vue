@@ -56,6 +56,16 @@
                           </v-col>
                           <v-col cols="12" sm="6" md="6">
                             <v-select
+                              v-model="input.department"
+                              :items="selectDepartment"
+                              outlined
+                              label="กลุ่มสาระวิชา"
+                              required
+                              :rules="[v => !!v || 'กรุณาเลือกกลุ่มสาระวิชา']"
+                            ></v-select>
+                          </v-col>                          
+                          <v-col cols="12" sm="6" md="6">
+                            <v-select
                               v-model="input.teacher"
                               :items="itemTeachers"
                               item-text="name"
@@ -132,6 +142,7 @@
       await this.getSubjects().then(result => (this.subjects = result))
       await this.getClass().then(result => (this.classes = result))
       await this.getTeacher().then(result => (this.teachers = result))
+      await this.getDepartment().then(result=> (this.selectDepartment = result))
 
       await this.selectInputSubjects()
       await this.selectInputClasses()
@@ -162,6 +173,7 @@
         subjects: [],
         subjectsInTerm: [],
         selectSubjects: [],
+        selectDepartment: [],
         query: {
           schoolYear: '', 
           term: ''
@@ -220,6 +232,13 @@
         const response = await this.$store.dispatch(`classes/getClassesByAcademicYears`, condition)
         return response.results[0].studentId
       },
+      async getDepartment() {
+        const response = await this.$store.dispatch(
+          `department/getDepartment`
+        );
+        var department = this.mapDepartment(response.results)
+        return department
+      },
       async addSubjectToTeach(data) {
         const response = await this.$store.dispatch(`teach/createTeach`, data)
         await this.getSubjectsFromTeach().then(result => (this.subjectsInTerm = result))
@@ -233,11 +252,12 @@
           classRoomName: "รวม",
           rating: [],
           students: [],
+          department: this.input.department,
           teacher: this.input.teacher,
           type: "วิชาเลือกเสรี"
         }
         console.log('teach data', data)
-        this.addSubjectToTeach(data)
+        // this.addSubjectToTeach(data)
         this.resetForm()
         this.close()
       },
@@ -293,6 +313,14 @@
           this.deleteSubject(item.objectId)
         }
       },
+      mapDepartment(item) {
+        var department = []
+        item.forEach(item => {
+          department.push(item.name)
+        })
+        console.log('item deprt', department)
+        return department
+    },
       back() {
         this.$router.go(-1)
       },

@@ -83,9 +83,10 @@ export default {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
         send_score: true,
-        "subject_info.sname": {
-          $regex: `^${this.staff.staffType}`
-        },
+        // "subject_info.sname": {
+        //   $regex: `^${this.staff.staffType}`
+        // },
+        department: `${this.staff.staffType}`,
         classRoomLevel: {
           $in: this.staff.classes
         }

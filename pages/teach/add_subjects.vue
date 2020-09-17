@@ -51,7 +51,7 @@
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
                               <v-select
-                                v-model="input.dapartment"
+                                v-model="input.department"
                                 :items="department"
                                 outlined
                                 label="กลุ่มสาระการเรียนรู้"
@@ -306,7 +306,7 @@ export default {
         rating: [],
         subject_id: this.input.subject_id,
         subject_info: subjectInfo,
-        dapartment: this.input.dapartment,
+        department: this.input.department,
         type: "วิชาบังคับ"
       };
       console.log("teach data", data);
@@ -330,7 +330,7 @@ export default {
           rating: [],
           subject_id: this.input.subject_id,
           // subject_info: this.subjectInfo,
-          dapartment: this.input.dapartment,
+          department: this.input.department,
           type: "วิชาบังคับ"
       };
       console.log("teach data", data);
@@ -351,7 +351,7 @@ export default {
           rating: [],
           subject_id: this.input.subject_id,
           subject_info: this.subjectInfo,
-          dapartment: this.input.dapartment,
+          department: this.input.department,
           type: "วิชาบังคับ"
       };
       console.log("teach data", data);
