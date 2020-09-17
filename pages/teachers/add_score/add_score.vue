@@ -501,7 +501,7 @@ export default {
       // this.$router.push({name: 'subjects-id', params: { id: `${item.objectId}`}})
     },
     previewSummary() {
-      this.$router.push({name: 'teachers-preview-grade', query: {id: this.$route.query.id}})
+      this.$router.push({name: 'teachers-preview-grade_summary', query: {id: this.$route.query.id}})
     }
   }
 };
