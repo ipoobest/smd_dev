@@ -32,7 +32,9 @@
             <th class="text-left" v-for="item in rating" :key="item.name">
               {{ item.name }} , {{ item.score }} คะแนน
             </th>
-           
+             <th class="text-left" v-for="item in rating" :key="item.id">
+              {{ item.name }} , T-score {{ item.rating }} %
+            </th>
             <th>Total Score</th>
             <th>Grade</th>
           </tr>
@@ -46,7 +48,9 @@
             <td v-for="item_in in item_score.score" :key="item_in.name">
               {{item_in}}
             </td>
-        
+            <td v-for="item in calcScore(item_score.score, score_index)" :key="item.key">
+              {{ item }}
+            </td>
             <td>{{item_score.total_score}}</td>
             <td>{{item_score.grade}}</td>
           </tr>
@@ -104,7 +108,19 @@ export default {
       console.log('response_grade',response_grade)
       return response_grade.results
     },
-
+    calcScore(score_array, index) {
+      var calc_score = [];
+      // console.log("calcScore index", index);
+      score_array.forEach((score, index) => {
+        var result =
+          (((score / this.score_array[index]) * 100) / 100) *
+          this.ratio_array[index];
+        // ((( คะแนนที่ได้ / คะแนนเต็ม ) x 100) / 100 ) x ร้อยละ
+        calc_score.push(result.toFixed(2));
+        // console.log('คะแนนที่ผ่านการคำนวน', calc_score[index])
+      });
+      return calc_score
+    },
     mapRating(rating) {
       rating.forEach(item => {
         this.ratio_array.push(item.rating);

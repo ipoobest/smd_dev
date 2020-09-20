@@ -327,9 +327,8 @@ export default {
           classId: objectId,
           teacher: this.input.teacher,
           send_score: false,
-          rating: [],
           subject_id: this.input.subject_id,
-          // subject_info: this.subjectInfo,
+          subject_info: this.subjectInfo,
           department: this.input.department,
           type: "วิชาบังคับ"
       };
@@ -412,7 +411,7 @@ export default {
     },
     editSubjectName() {
       var subject_name = this.subjects.filter(subject => subject.objectId == this.input.subject_id);
-      this.subjectInfo = { codet: subject_name[0].codet,sname: subject_name[0].sname};
+      this.subjectInfo = { codet: subject_name[0].codet,sname: subject_name[0].sname, credit: subject_name[0].credit, hour: subject_name[0].hour};
       console.log('subject infoxx', this.subjectInfo )
     },
     editItem(item) {

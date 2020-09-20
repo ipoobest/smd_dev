@@ -30,7 +30,7 @@
                       <tr>
                         <th class="text-center">หัวข้อ</th>
                         <th class="text-center">คะแนน</th>
-                        <th class="text-center">สัดส่วน</th>
+                        <th class="text-center">ร้อยละ</th>
                         <th class="text-center">จัดการ</th>
                       </tr>
                     </thead>

@@ -108,10 +108,6 @@
               </v-toolbar>
             </template>
             <thead>
-              <!-- { text: 'รหัส/ชื่อวิขา', value: 'sname', align:'center' },
-          { text: 'ระดับชั้น', value: 'classRoomLevel', align:'center'},
-          { text: 'ครูผู้สอน', value: 'teacher.name', align:'center' },
-          { text: 'Actions', value: 'actions', sortable: false, align:'center'} -->
               <tr>
                 <th>รหัส/ชื่อวิขา</th>
                 <th>ระดับชั้น</th>
@@ -121,27 +117,19 @@
             </thead>
             <tbody>
               <tr v-for="(item, index) in subjectsInTerm" :key="index">
-                <th>{{ item.sname }}</th>
-                <th>{{ item.classRoomLevel }}</th>
-                <th>{{ item.teacher.name }}</th>
-                <th>
+                <td>{{ item.sname }}</td>
+                <td>{{ item.classRoomLevel }}</td>
+                <td>{{ item.teacher.name }}</td>
+                <td>
                   <v-btn color="info" @click="addStudent(item)">
                     เพิ่มรายชื่อนักเรียน
                   </v-btn>
                   <v-btn color="error" @click="deleteItem(item)">
                     ลบวิชา
                   </v-btn>
-                </th>
+                </td>
               </tr>
             </tbody>
-            <!-- <template v-slot:item.actions="{ item }">
-              <v-btn color="info" @click="addStudent(item)">
-                เพิ่มรายชื่อนักเรียน
-              </v-btn>
-              <v-btn color="error"  @click="deleteItem(item)">
-                ลบวิชา
-              </v-btn>
-            </template> -->
           </v-simple-table>
         </v-card>
       </v-col>
@@ -281,6 +269,7 @@ export default {
         students: [],
         department: this.input.department,
         teacher: this.input.teacher,
+        subject_info: subjectInfo,
         type: "วิชาเลือกเสรี"
       };
       console.log("teach data", data);
@@ -296,11 +285,21 @@ export default {
       // console.log('response', response)
     },
     selectInputSubjects() {
-      for (var index = 0; index < this.subjects.length; index++) {
-        this.classSubject.push(
-          this.subjects[index].codet + " " + this.subjects[index].sname
-        );
-      }
+      // for (var index = 0; index < this.subjects.length; index++) {
+      //   this.classSubject.push(
+      //     this.subjects[index].codet + " " + this.subjects[index].sname
+      //   );
+      // }
+      // console.log("classSubject index", this.classSubject);
+
+      this.classSubject = [];
+      this.subjects.forEach(subject => {
+        var data = {
+          text: subject.codet + " " + subject.sname,
+          value: subject.objectId
+        };
+        this.classSubject.push(data);
+      });
       console.log("classSubject index", this.classSubject);
     },
     selectInputClasses() {
@@ -324,6 +323,11 @@ export default {
         };
         this.itemTeachers.push(teacher);
       }
+    },
+    editSubjectName() {
+      var subject_name = this.subjects.filter(subject => subject.objectId == this.input.subject_id);
+      this.subjectInfo = { codet: subject_name[0].codet,sname: subject_name[0].sname, credit: subject_name[0].credit, hour: subject_name[0].hour};
+      console.log('subject infoxx', this.subjectInfo )
     },
     addClasses(item) {
       this.$router.push({

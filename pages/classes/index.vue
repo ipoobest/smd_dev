@@ -108,9 +108,6 @@
               <v-btn color="info" @click="addStudent(item)">
                 รายชื่อนักเรียน
               </v-btn>
-              <!-- <v-icon small class="mr-2" @click="editItem(item)">
-                mdi-pencil
-              </v-icon> -->
               <v-btn color="error"  @click="deleteItem(item)">
                 ลบ
               </v-btn>

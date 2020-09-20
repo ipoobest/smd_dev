@@ -55,7 +55,7 @@
       </v-simple-table>
     </v-row>
     <v-row justify="center">
-      <!-- <v-btn class="mt-3 success">export pdf</v-btn> -->
+      <v-btn class="mt-3 success" @click="preview">preview</v-btn>
     </v-row>
   </v-container>
 </template>
@@ -125,6 +125,9 @@ export default {
       });
       // console.log("this.ratio_array", this.ratio_array);
     },
+    preview() {
+      this.$router.push({name: 'preview-grade_summary', query: {id: this.$route.query.id}})
+    }
     // checkLayout(data) {
     //   if(data){
     //     return 'teacher'

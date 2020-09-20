@@ -37,9 +37,10 @@
                   <td><v-btn color="success">สรุป</v-btn></td>
                 </tr>
                 <tr v-for="item in items" :key="item.index">
-                  <td>
+                  <td v-if="item.subject_info">
                     {{ item.subject_info.codet }} {{ item.subject_info.sname }}
                   </td>
+                  <td v-else> {{ item.sname }}</td>
                   <td>{{ item.classRoomLevel }}</td>
                   <td>{{ item.classRoomName }}</td>
                   <td>{{ item.teacher.name }}</td>

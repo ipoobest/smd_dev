@@ -43,7 +43,7 @@
             <th class="text-left">ชื่อ</th>
             <!--- this header -->
             <th class="text-left" v-for="item in rating" :key="item.name">
-              {{ item.score }} คะแนน, {{ item.rating }} %
+             {{ item.name }}, {{ item.score }} , {{ item.rating }} %
             </th>
             <th class="text-left">คุณลักษณะ</th>
             <th class="text-left">การคิดการอ่าน</th>
@@ -147,8 +147,9 @@
     <v-row justify="center">
       <!-- <v-btn color="orange" dark class="mr-2">reset form</v-btn> -->
       <v-btn class="info mt-5 mr-5" @click="sendGrade">ส่งคะแนน</v-btn>
-      <v-btn class="success mt-5 mr-5" @click="previewGrade" dark>Preview</v-btn>
-      <v-btn class="success mt-5 mr-5" @click="previewSummary" dark>Preview2</v-btn>
+      <v-btn class="success mt-5 mr-5" @click="previewGrade" dark>รายงานเกรด</v-btn>
+      <v-btn class="success mt-5 mr-5" @click="previewSummary" dark>ปพ.5</v-btn>
+      <!-- <v-btn class="success mt-5 mr-5" @click="previewTscore" dark>Preview3</v-btn> -->
       <div v-if="!items.send_score">
         <v-btn
           class="success mt-5 mr-5"
@@ -156,7 +157,7 @@
           @click="updateGrade"
           >บันทึก</v-btn
         >
-        <v-btn class="orange mt-5 mr-5" @click="editAllGrade" dark v-else
+        <v-btn v-if="items.save_score" class="orange mt-5 mr-5" @click="editAllGrade" dark 
           >แก้ไข</v-btn
         >
       </div>
@@ -185,7 +186,9 @@ export default {
         score_id: []
       },
       data: "",
-      items: "",
+      items: {
+        save_score: false
+      },
       score: [],
       studentName: [],
       studentId: [],
@@ -229,7 +232,7 @@ export default {
       // console.log('response this.stu_grade_arr', this.stu_grade_arr)
 
      if (item.students) {
-       console.log('testxxx')
+      //  console.log('testxxx')
        this.stu_classes_arr = item.students
      } else {
       // 2 get stu array class
@@ -265,11 +268,11 @@ export default {
         "teach/getSubjectsByConditions",
         conditions
       );
-      console.log("response students", response.results[0].students);
+      // console.log("response students", response.results[0].students);
       return response.results[0].students;
     },
     async getStudent(data) {
-      console.log("data student", data);
+      // console.log("data student", data);
       const query = {
         objectId: {
           $in: data
@@ -279,12 +282,12 @@ export default {
         "students/getStudents",
         query
       );
-      console.log("response student test", response.results);
+      // console.log("response student test", response.results);
       var values = this.getStudentName(response.results);
       var studentName = values[0]
       var studentId = values[1]
-      console.log('studentName', studentName)
-      console.log('studentId xxx', studentId)
+      // console.log('studentName', studentName)
+      // console.log('studentId xxx', studentId)
       return [studentName, studentId];
     },
     async getStudentByClassId(classId) {
@@ -294,7 +297,7 @@ export default {
     },
     async getTechById(id) {
       const response = await this.$store.dispatch("teach/getTeachById", id);
-      console.log("this.item", response);
+      // console.log("this.item", response);
       this.rating = response.rating;
       this.mapRating(this.rating);
       return response;
@@ -302,7 +305,7 @@ export default {
     async getCriteria() {
       // grade
       const response = await this.$store.dispatch(`criteria/getCriteria`);
-      console.log("response", response.results[0]);
+      // console.log("response", response.results[0]);
       return response.results[0].criteria;
     },
     async createGrade(students) {
@@ -348,17 +351,13 @@ export default {
     async updateTech(data) {
       const response = this.$store.dispatch(`teach/updateTeach`, data);
       console.log("update Teach", data);
+
+      this.getTechById(this.$route.query.id).then(
+      result => (this.items = result)
+    );
     },
     async sendGrade() {
       if (confirm("ยืนยันการส่ง")) {
-        // this.score.forEach(item => {
-        //   var data = {
-        //     objectId: item.objectId,
-        //     status: "รอการตรวจสอบ"
-        //   };
-        //   const response = this.$store.dispatch(`grade/updateGrade`, data);
-        //   console.log('response esnd score', response)
-        // });
         var sentScore = {
           objectId: this.items.objectId,
           send_score: true
@@ -386,8 +385,8 @@ export default {
           objectId: this.items.objectId,
           save_score: true
         };
-        console.log("saveScore", saveScore);
-        this.items.save_score = true;
+        // console.log("saveScore", saveScore);
+        this.items.send_score = true
         this.updateTech(saveScore);
       }
     },
@@ -502,6 +501,10 @@ export default {
     },
     previewSummary() {
       this.$router.push({name: 'teachers-preview-grade_summary', query: {id: this.$route.query.id}})
+    },
+    previewTscore() {
+      this.$router.push({name: 'teachers-preview-grade_tscore', query: {id: this.$route.query.id}})
+
     }
   }
 };

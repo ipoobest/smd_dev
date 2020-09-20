@@ -184,6 +184,14 @@ export default {
       // console.log('merged', merged)
       return merged;
     },
+    async getGradeByConditions(condition) {
+      const response = await this.$store.dispatch(
+        `grade/getGradeByConditions`,
+        condition
+      );
+      console.log('grade id', response.results)
+      return response.results
+    },
     async addStudents() {
       const object = {
         classId: this.id,
@@ -194,19 +202,35 @@ export default {
         object
       );
     },
+    async deleteStudentInGrade(id){
+        const response = await this.$store.dispatch(
+        `grade/deleteGrade`,
+        id
+      );
+      console.log('response delete', response)
+    },
     async deleteItem(item) {
       this.studentId = []
-      // console.log('delete id', item.objectId)
-      console.log('this.items', this.items)
+      console.log('item aaas', item)
       const index = this.items.indexOf(item);
       if (confirm("ยืนยีนการลบนักเรียนออกจากชั้นเรียน")) {
         this.items.splice(index, 1);
-        // console.log('item delete', this.items.length, this.items)
         for (var i = 0; i < this.items.length; i++) {
           this.studentId.push(this.items[i].objectId);
         }
-        console.log('item studentId', this.studentId)
-        this.addStudents(this.studentId);
+        // console.log('item studentId', this.studentId)
+        // studentId
+        const data = {
+          studentObjectId: item.objectId,
+          schoolYear:  this.student.schoolYear,
+          term: this.student.term
+        }        
+        var studentId = await this.getGradeByConditions(data)
+        studentId.forEach(item => {
+          console.log('testxx', (item.objectId))
+          this.deleteStudentInGrade(item.objectId)
+        })
+         this.addStudents(this.studentId);
       }
     },
     back() {
