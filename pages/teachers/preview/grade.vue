@@ -13,7 +13,7 @@
     </v-row>
     <v-row justify="center">
       <v-col cols="3" align="start">
-        วันที่ 
+        วันที่ {{gatDate}}
       </v-col>
       <v-col cols="6" align="center">
         วิชา  {{teach.sname}}
@@ -48,7 +48,8 @@
             </td>
         
             <td>{{item_score.total_score}}</td>
-            <td>{{item_score.grade}}</td>
+            <td v-if="item_score.grade_option">{{item_score.grade_option}}</td>
+            <td v-else>{{item_score.grade}}</td>
           </tr>
         </tbody>
       </v-simple-table>
@@ -67,6 +68,20 @@ export default {
     // check user type and user layout
    await this.getTeach(this.$route.query.id).then(result => (this.teach = result))
    this.getGrade(this.teach).then(result => (this.score = result))
+  },
+  computed: {
+    gatDate() {
+      var dt = new Date();
+      var dateTime = `${dt
+        .getDate()
+        .toString()
+        .padStart(2, "0")}/${(dt.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}/${(dt.getFullYear() + 543)
+        .toString()
+        .padStart(4, "0")} `;
+      return dateTime;
+    }
   },
   data() {
     return {
