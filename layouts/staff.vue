@@ -36,6 +36,7 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <v-spacer />
+       {{this.$store.state.auth.auth.title}} {{this.$store.state.auth.auth.firstName}} {{this.$store.state.auth.auth.lastName}}
       <v-btn icon @click="logout" >
         <v-icon>mdi-logout</v-icon>
       </v-btn>

@@ -20,9 +20,14 @@
     </v-row>
     <v-row justify="start" class="pt-10">
       <v-col cols="1">ชื่อวิชา</v-col>
-      <v-col cols="2">{{ items.sname }}</v-col>
+      <v-col v-if="items.subject_info" cols="2">{{
+        items.subject_info.sname
+      }}</v-col>
+      <v-col v-else cols="2">{{ items.sname }}</v-col>
       <v-col cols="1">รหัสวิชา</v-col>
-      <v-col cols="2">{{ items.codet }}</v-col>
+      <v-col v-if="items.subject_info" cols="2">{{
+        items.subject_info.codet
+      }}</v-col>
       <v-col cols="2">ภาคเรียนที่</v-col>
       <v-col cols="1">{{ items.term }}</v-col>
       <v-col cols="2">ปีการศึกษา</v-col>
@@ -34,9 +39,13 @@
         >{{ items.classRoomLevel }}/{{ items.classRoomName }}</v-col
       >
       <v-col cols="2">จำนวนหน่วยกิจ</v-col>
-      <v-col cols="1"></v-col>
+      <v-col v-if="items.subject_info" cols="1">{{
+        items.subject_info.credit
+      }}</v-col>
       <v-col cols="2">เวลาเรียน</v-col>
-      <v-col cols="1"></v-col>
+      <v-col v-if="items.subject_info" cols="1">{{
+        items.subject_info.hour
+      }}</v-col>
       <v-col cols="2">คาบ/สัปดาห์</v-col>
     </v-row>
     <v-row justify="start">
@@ -78,9 +87,27 @@
         <tbody>
           <tr>
             <td>{{ total_students }}</td>
-            <td v-for="grade_num in grade_num_list" :key="grade_num.index">{{ grade_num }}</td>
-            <td v-for="aptitude_score in aptitude_score_num" :key="aptitude_score.index">{{ aptitude_score }}</td>
-            <td v-for="analytical_score in analytical_score_num" :key="analytical_score.index">{{ analytical_score }}</td>
+            <td v-for="grade_num in grade_num_list" :key="grade_num.index">
+              {{ grade_num }}
+            </td>
+            <td
+              v-for="grade_num_option in grade_option_num_list"
+              :key="grade_num_option.index"
+            >
+              {{ grade_num_option }}
+            </td>
+            <td
+              v-for="aptitude_score in aptitude_score_num"
+              :key="aptitude_score.index"
+            >
+              {{ aptitude_score }}
+            </td>
+            <td
+              v-for="analytical_score in analytical_score_num"
+              :key="analytical_score.index"
+            >
+              {{ analytical_score }}
+            </td>
           </tr>
         </tbody>
       </v-simple-table>
@@ -89,20 +116,22 @@
       การอนุมัติผลการเรียน
     </v-row>
     <v-row justify="start" class="pt-5">
-      <v-col cols="4">ชั้นมัธยมศึกษาปีที่</v-col>
-      <v-col cols="7">{{ items.classRoomLevel }}/{{ items.classRoomName }}</v-col>
+      <v-col cols="4">ลงชื่อ อาจารย์ผู้สอน</v-col>
+      <v-col cols="3.5">( {{ items.teacher.name }} )</v-col>
+      <v-col cols="1">วันที่</v-col>
+      <v-col cols="2.5">{{ gatDate }}</v-col>
     </v-row>
     <v-row justify="start" class="pt-5">
       <v-col cols="4">หัวหน้าหลุ่มสาระการเรียนรู้</v-col>
-      <v-col cols="3.5">{{items.department}}</v-col>
+      <v-col cols="3.5">{{ items.department }}</v-col>
       <v-col cols="1">วันที่</v-col>
-      <v-col cols="2.5"></v-col>
+      <v-col cols="2.5">{{ gatDate }}</v-col>
     </v-row>
     <v-row justify="start" class="pt-5">
       <v-col cols="4">ผู้ช่วยรองผู้อำนวยการฝ่ายวิชาการ</v-col>
       <v-col cols="3.5"> </v-col>
       <v-col cols="1">วันที่</v-col>
-      <v-col cols="2.5"></v-col>
+      <v-col cols="2.5">{{ gatDate }}</v-col>
     </v-row>
     <v-row justify="center" class="pt-10 pb-10">
       สำหรับงานทะเบียน
@@ -122,14 +151,17 @@
       </v-row>
     </div>
     <v-row justify="center" class="pt-5">
-      <v-btn color="success">บันทึก</v-btn>
+      <v-col>
+        <v-btn color="success">บันทึก</v-btn>
+        <v-btn color="info">export pdf</v-btn>
+      </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
 export default {
-  layout: "staff",
+  layout: "teacher",
   async mounted() {
     await this.getTechById(this.$route.query.id).then(
       result => (this.items = result)
@@ -137,12 +169,29 @@ export default {
     await this.getGrade(this.items).then(result => (this.students = result));
     await this.summaryGrade(this.students);
   },
+  computed: {
+    gatDate() {
+      var dt = new Date();
+      var dateTime = `${dt
+        .getDate()
+        .toString()
+        .padStart(2, "0")}/${(dt.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}/${(dt.getFullYear() + 543)
+        .toString()
+        .padStart(4, "0")} `;
+      return dateTime;
+    }
+  },
   data() {
     return {
+      date: "",
       items: {
         subject_info: {
           sname: "",
-          codet: ""
+          codet: "",
+          credit: "",
+          hour: ""
         },
         teacher: {
           name: "",
@@ -152,6 +201,7 @@ export default {
       students: [],
       total_students: "",
       grade_num_list: [],
+      grade_option_num_list: [],
       aptitude_score_num: [],
       analytical_score_num: []
     };
@@ -178,35 +228,32 @@ export default {
     summaryGrade(data) {
       this.total_students = data.length;
 
-      var grade_list = [
-        "4",
-        "3.5",
-        "3",
-        "2.5",
-        "2",
-        "1.5",
-        "1",
-        "0",
-        "ร",
-        "มส"
-      ];
+      var grade_list = ["4", "3.5", "3", "2.5", "2", "1.5", "1", "0"];
+      var grade_option = ["ร", "มส"];
+      var other_score = ["3", "2", "1"];
+
       this.special_score = [];
       this.grade_num_list = [];
       grade_list.forEach(grade => {
-        var grade_filter = data.filter(student => student.grade == grade);
+        var grade_filter = data.filter(student => student.grade == grade && ! student.grade_option);
         this.grade_num_list.push(grade_filter.length);
       });
-      // console.log("xxx", this.grade_num_list);
 
-      var other_score = ["3", "2", "1"];
+      // console.log("xxx", this.grade_num_list);
+      this.grade_option_num_list = [];
+      grade_option.forEach(grade => {
+        var grade_filter = data.filter(
+          student => student.grade_option == grade
+        );
+        this.grade_option_num_list.push(grade_filter.length);
+      });
+      console.log("grade options", this.grade_option_num_list);
 
       this.aptitude_score_num = [];
       this.analytical_score_num = [];
 
       other_score.forEach(score => {
-        var aptitude_filter = data.filter(
-          student => student.aptitude == score
-        );
+        var aptitude_filter = data.filter(student => student.aptitude == score);
         this.aptitude_score_num.push(aptitude_filter.length);
 
         var analytical_filter = this.students.filter(

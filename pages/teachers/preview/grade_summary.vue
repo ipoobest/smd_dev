@@ -119,7 +119,7 @@
       <v-col cols="4">ลงชื่อ อาจารย์ผู้สอน</v-col>
       <v-col cols="3.5">( {{ items.teacher.name }} )</v-col>
       <v-col cols="1">วันที่</v-col>
-      <v-col cols="2.5"></v-col>
+      <v-col cols="2.5">{{ gatDate }}</v-col>
     </v-row>
     <v-row justify="start" class="pt-5">
       <v-col cols="4">หัวหน้าหลุ่มสาระการเรียนรู้</v-col>
@@ -151,7 +151,8 @@
       </v-row>
     </div>
     <v-row justify="center" class="pt-5">
-      <v-btn color="success">บันทึก</v-btn>
+        <v-btn color="success">บันทึก</v-btn>
+        <v-btn color="info" class="ml-5">export pdf</v-btn>
     </v-row>
   </v-container>
 </template>
@@ -232,7 +233,7 @@ export default {
       this.special_score = [];
       this.grade_num_list = [];
       grade_list.forEach(grade => {
-        var grade_filter = data.filter(student => student.grade == grade);
+        var grade_filter = data.filter(student => student.grade == grade && ! student.grade_option);
         this.grade_num_list.push(grade_filter.length);
       });
 

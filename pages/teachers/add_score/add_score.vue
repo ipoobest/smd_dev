@@ -40,6 +40,8 @@
       <template v-slot:default>
         <thead>
           <tr>
+            <th>เลขที่</th>
+            <th>รหัส</th>
             <th class="text-left">ชื่อ</th>
             <!--- this header -->
             <th class="text-left" v-for="item in rating" :key="item.name">
@@ -62,6 +64,8 @@
             v-for="(item_score, score_index) in score"
             :key="item_score.studentObjectId"
           >
+            <td>{{ score_index + 1}} </td>
+            <td>{{ item_score.studentId}} </td>
             <td>{{ item_score.studentName }}</td>
             <td v-for="(item_in, index) in item_score.score" :key="index">
               <v-text-field
@@ -429,8 +433,8 @@ export default {
       return sum_score.toFixed(2);
     },
     calcGrade(score) {
-      // console.log('เกณการให้คะแนน', this.items.criteria)
-      if (score >= this.criteria.g4) {
+      console.log('เกณการให้คะแนน', score)
+      if (score == 100 || score >= this.criteria.g4 ) {
         return 4;
       } else if (score >= this.criteria.g3_5) {
         return 3.5;

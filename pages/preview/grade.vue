@@ -1,22 +1,24 @@
 <template>
   <v-container>
+    <v-btn class="mr-5" color="primary" fab small dark @click="back">
+      <v-icon>mdi-arrow-left</v-icon>
+    </v-btn>
     <v-row justify="center">
       <h3>
         รายชื่อนักเรียนโรงเรียนสาธิตมหาวิทยาลัยขอนแก่น (มอดินแดง) จังหวัดขอนแก่น
       </h3>
     </v-row>
     <v-row justify="center" class="mt-3">
-      ชั้นปีที่ {{teach.classRoomLevel}}/{{teach.classRoomName}} ภาคเรียนที่ {{teach.classRootermmName}} ปีการศึกษา {{teach.schoolYear}}
+      ชั้นปีที่ {{ teach.classRoomLevel }}/{{ teach.classRoomName }} ภาคเรียนที่
+      {{ teach.classRootermmName }} ปีการศึกษา {{ teach.schoolYear }}
     </v-row>
     <v-row justify="center">
       <v-col cols="3" align="start">
-        วันที่ 
+        วันที่ {{gatDate}}
       </v-col>
-      <v-col cols="6" align="center">
-        วิชา  {{teach.sname}}
-      </v-col>
+      <v-col cols="6" align="center"> วิชา {{ teach.sname }} </v-col>
       <v-col cols="3" align="end">
-        อาจารย์ผู้สอน {{teach.teacher.name}}
+        อาจารย์ผู้สอน {{ teach.teacher.name }}
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -29,7 +31,7 @@
             <th class="text-left" v-for="item in rating" :key="item.name">
               {{ item.name }} , {{ item.score }} คะแนน
             </th>
-             <th class="text-left" v-for="item in rating" :key="item.id">
+            <th class="text-left" v-for="item in rating" :key="item.id">
               {{ item.name }} , T-score {{ item.rating }} %
             </th>
             <th>Total Score</th>
@@ -37,19 +39,24 @@
           </tr>
         </thead>
         <tbody align="left">
-          <tr v-for="(item_score, score_index) in score"
-            :key="item_score.studentObjectId">
-            <td>{{score_index + 1}} </td>
-            <td>{{ item_score.studentId}} </td>
+          <tr
+            v-for="(item_score, score_index) in sortedData"
+            :key="item_score.studentObjectId"
+          >
+            <td>{{ score_index + 1 }}</td>
+            <td>{{ item_score.studentId }}</td>
             <td>{{ item_score.studentName }}</td>
             <td v-for="item_in in item_score.score" :key="item_in.name">
-              {{item_in}}
+              {{ item_in }}
             </td>
-            <td v-for="item in calcScore(item_score.score, score_index)" :key="item.key">
+            <td
+              v-for="item in calcScore(item_score.score, score_index)"
+              :key="item.key"
+            >
               {{ item }}
             </td>
-            <td>{{item_score.total_score}}</td>
-            <td>{{item_score.grade}}</td>
+            <td>{{ item_score.total_score }}</td>
+            <td>{{ item_score.grade }}</td>
           </tr>
         </tbody>
       </v-simple-table>
@@ -63,27 +70,48 @@
 <script>
 export default {
   // middleware: 'authentication',
-  layout: 'staff',
+  layout: "staff",
   async mounted() {
     // check user type and user layout
-   await this.getTeach(this.$route.query.id).then(result => (this.teach = result))
-   this.getGrade(this.teach).then(result => (this.score = result))
+    await this.getTeach(this.$route.query.id).then(
+      result => (this.teach = result)
+    );
+    this.getGrade(this.teach).then(result => (this.score = result));
+  },
+  computed: {
+    gatDate() {
+      var dt = new Date();
+      var dateTime = `${dt
+        .getDate()
+        .toString()
+        .padStart(2, "0")}/${(dt.getMonth() + 1)
+        .toString()
+        .padStart(2, "0")}/${(dt.getFullYear() + 543)
+        .toString()
+        .padStart(4, "0")} `;
+      return dateTime;
+    },
+    sortedData() {
+      return this.score.sort(function(a, b) {
+        return b.total_score - a.total_score;
+      });
+    }
   },
   data() {
     return {
       teach: {
         teacher: {
-          name: ''
+          name: ""
         }
       },
-      layout: '',
+      layout: "",
       garde: [],
       rating: [],
       score: [],
       processScore: [],
       ratio_array: [],
       score_array: []
-    }
+    };
   },
   methods: {
     async getTeach(id) {
@@ -94,7 +122,7 @@ export default {
       return response;
     },
     async getGrade(item) {
-       const conditions = {
+      const conditions = {
         teachId: item.objectId
       };
       // 1 get stu array grade
@@ -102,8 +130,8 @@ export default {
         "grade/getGradeByConditions",
         conditions
       );
-      console.log('response_grade',response_grade)
-      return response_grade.results
+      console.log("response_grade", response_grade);
+      return response_grade.results;
     },
     calcScore(score_array, index) {
       var calc_score = [];
@@ -116,7 +144,7 @@ export default {
         calc_score.push(result.toFixed(2));
         // console.log('คะแนนที่ผ่านการคำนวน', calc_score[index])
       });
-      return calc_score
+      return calc_score;
     },
     mapRating(rating) {
       rating.forEach(item => {
@@ -126,22 +154,21 @@ export default {
       // console.log("this.ratio_array", this.ratio_array);
     },
     preview() {
-      this.$router.push({name: 'preview-grade_summary', query: {id: this.$route.query.id}})
+      this.$router.push({
+        name: "preview-grade_summary",
+        query: { id: this.$route.query.id }
+      });
+    },
+    back() {
+      this.$router.go(-1);
     }
-    // checkLayout(data) {
-    //   if(data){
-    //     return 'teacher'
-    //   }else{
-    //     return 'staff'
-    //   }
-    // }
   }
 };
 </script>
 
 <style lang="scss" scoped>
 // v-simple-table, th, td {
-  // border: 1px solid black;
-  // border-collapse: collapse;
+// border: 1px solid black;
+// border-collapse: collapse;
 // }
 </style>
