@@ -3,6 +3,7 @@
     <v-btn class="mr-5" color="primary" fab small dark @click="back">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
+    <div id="pdfDom"> 
     <v-row justify="center">
       <h3>
         รายชื่อนักเรียนโรงเรียนสาธิตมหาวิทยาลัยขอนแก่น (มอดินแดง) จังหวัดขอนแก่น
@@ -59,8 +60,9 @@
       </v-simple-table>
     </v-row>
     <v-row justify="center">
-      <v-btn class="mt-3 success">export pdf</v-btn>
+      <v-btn class="mt-3 success" @click="getPdf(htmlTitle)">export pdf</v-btn>
     </v-row>
+    </div>
   </v-container>
 </template>
 
@@ -96,6 +98,7 @@ export default {
   },
   data() {
     return {
+      htmlTitle: "grade",
       teach: {
         teacher: {
           name: ""

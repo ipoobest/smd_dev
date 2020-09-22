@@ -39,7 +39,8 @@ module.exports = {
   plugins: [
     "~/plugins/axios",
     { src: "~/plugins/vuex-persist", ssr: false },
-    { src: "@/plugins/vue-html2pdf", mode: "client" }
+    { src: "@/plugins/vue-html2pdf", mode: "client" },
+    { src: '~/plugins/vue-html-pdf.js', ssr: false },
   ],
   /*
    ** Nuxt.js dev-modules

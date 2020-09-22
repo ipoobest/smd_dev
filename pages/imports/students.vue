@@ -57,7 +57,9 @@
               <!-- Import button -->
             </v-col>
             <v-col align="end" class="mr-3">
-              <v-btn color="info" v-if="dataArr.length != 0" @click="uploadData">upload</v-btn>
+              <v-btn color="info" v-if="dataArr.length != 0" @click="uploadData"
+                >upload</v-btn
+              >
             </v-col>
           </v-row>
         </v-card>
@@ -84,17 +86,20 @@ export default {
         username,
         password,
         type
-      }
-      const response = await this.$store.dispatch(`users/createUser`, data)
+      };
+      const response = await this.$store.dispatch(`users/createUser`, data);
       //  const response = await this.$store.dispatch(`students/createStudent`, object)
 
-       console.log('create' , response)
+      console.log("create", response);
     },
     async createStudent(object) {
       // const response = await this.$store.dispatch(`users/createUser`, object)
-       const response = await this.$store.dispatch(`students/createStudent`, object)
+      const response = await this.$store.dispatch(
+        `students/createStudent`,
+        object
+      );
 
-       console.log('create' , response)
+      console.log("create", response);
     },
     getHeader(sheet) {
       const XLSX = xlsx;
@@ -142,15 +147,15 @@ export default {
           const workbook = XLSX.read(data, {
             type: "binary"
           });
-          const wsname = workbook.SheetNames[0]; 
-          const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]); 
+          const wsname = workbook.SheetNames[0];
+          const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]);
           const excellist = [];
           // Edit data
           for (var i = 0; i < ws.length; i++) {
             excellist.push(ws[i]);
           }
           this.dataArr = excellist;
-          console.log("Read results", excellist); 
+          console.log("Read results", excellist);
         } catch (e) {
           return alert("Read failure!");
         }
@@ -166,73 +171,90 @@ export default {
     },
     uploadData() {
       if (confirm(`ยืนยันการ upload`)) {
+        // // var output = this.dataArr.map( data => ({student_id:data.id }))
+        // var output = this.dataArr.pop();
+        // this.dataArr.forEach(data => {
+        //   data.stu_id = data.idstd;
+        //   data.class = data.class.toString();
+        //   data.study = data.study.toString();
+        //   // data.grade = data.grade.toString()
+        //   data.idcard = data.idcard.toString();
+        //   data.stage = data.stage.toString();
+        //   data.stmonth = data.stmonth.toString();
+        //   data.bday = data.bday.toString();
+        //   data.blood = data.blood.toString();
+        //   data.disease = data.disease.toString();
+        //   data.treatment = data.treatment.toString();
+        //   data.healthpb = data.healthpb.toString();
+        //   // data.residential = data.residential.toString()
+        //   data.domicile = data.domicile.toString();
+        //   data.addres = data.addres.toString();
+        //   data.dorm = data.dorm.toString();
+        //   data.sttell = data.sttell.toString();
+        //   data.sibling = data.sibling.toString();
+        //   data.sibling1 = data.sibling1.toString();
+        //   data.sibling2 = data.sibling2.toString();
+        //   data.sibling3 = data.sibling3.toString();
+        //   data.sbclass1 = data.sbclass1.toString();
+        //   data.sbclass2 = data.sbclass2.toString();
+        //   data.sbclass3 = data.sbclass3.toString();
+        //   data.ctell = data.ctell.toString();
+        //   data.fage = data.fage.toString();
+        //   data.fwork = data.fwork.toString();
+        //   data.fcareer = data.fcareer.toString();
+        //   data.fpost = data.fpost.toString();
+        //   data.fbelong = data.fbelong.toString();
+        //   data.fatwork = data.fatwork.toString();
+        //   data.ftell = data.ftell.toString();
+        //   data.fphone = data.fphone.toString();
+        //   data.fsalary = data.fsalary.toString();
+        //   data.mage = data.mage.toString();
+        //   data.mwork = data.mwork.toString();
+        //   data.mcareer = data.mcareer.toString();
+        //   data.mpost = data.mpost.toString();
+        //   data.mbelong = data.mbelong.toString();
+        //   data.mtell = data.mtell.toString();
+        //   data.mphone = data.mphone.toString();
+        //   data.msalary = data.msalary.toString();
+        //   data.parent = data.parent.toString();
+        //   data.prelated = data.prelated.toString();
+        //   data.pwork = data.pwork.toString();
+        //   data.patwork = data.patwork.toString();
+        //   data.ptell = data.ptell.toString();
+        //   data.personality = data.personality.toString();
+        //   data.bctell = data.bctell.toString();
+        //   data.userreg = data.userreg.toString();
+        //   data.contact = data.contact.toString();
+        //   data.date = data.date.toString();
+        //   data.idstd = data.idstd.toString();
+        //   data.username = data.idstd.toString();
+        //   data.password = data.idcard;
+        //   data.type = "นักเรียน";
+        //   delete data.id;
+        //   this.createStudent(data);
 
-      // // var output = this.dataArr.map( data => ({student_id:data.id }))
-      // var output = this.dataArr.pop();
-       this.dataArr.forEach(data => {
-            data.stu_id = data.idstd
-            data.class =  data.class.toString()
-            data.study = data.study.toString()
-            // data.grade = data.grade.toString()
-            data.idcard = data.idcard.toString()
-            data.stage = data.stage.toString()
-            data.stmonth = data.stmonth.toString()
-            data.bday = data.bday.toString()
-            data.blood = data.blood.toString()
-            data.disease = data.disease.toString()
-            data.treatment = data.treatment.toString()
-            data.healthpb = data.healthpb.toString()
-            // data.residential = data.residential.toString()
-            data.domicile = data.domicile.toString()
-            data.addres = data.addres.toString()
-            data.dorm = data.dorm.toString()
-            data.sttell = data.sttell.toString()
-            data.sibling = data.sibling.toString()
-            data.sibling1 = data.sibling1.toString()
-            data.sibling2 = data.sibling2.toString()
-            data.sibling3 = data.sibling3.toString()
-            data.sbclass1 = data.sbclass1.toString()
-            data.sbclass2 = data.sbclass2.toString()
-            data.sbclass3 = data.sbclass3.toString()
-            data.ctell = data.ctell.toString()
-            data.fage = data.fage.toString()
-            data.fwork = data.fwork.toString()
-            data.fcareer = data.fcareer.toString()
-            data.fpost = data.fpost.toString()
-            data.fbelong = data.fbelong.toString()
-            data.fatwork = data.fatwork.toString()
-            data.ftell = data.ftell.toString()
-            data.fphone = data.fphone.toString()
-            data.fsalary = data.fsalary.toString()
-            data.mage = data.mage.toString()
-            data.mwork = data.mwork.toString()
-            data.mcareer = data.mcareer.toString()
-            data.mpost = data.mpost.toString()
-            data.mbelong = data.mbelong.toString()
-            data.mtell = data.mtell.toString()
-            data.mphone = data.mphone.toString()
-            data.msalary = data.msalary.toString()
-            data.parent = data.parent.toString()
-            data.prelated = data.prelated.toString()
-            data.pwork = data.pwork.toString()
-            data.patwork = data.patwork.toString()
-            data.ptell = data.ptell.toString()
-            data.personality = data.personality.toString()
-            data.bctell = data.bctell.toString()
-            data.userreg = data.userreg.toString()
-            data.contact = data.contact.toString()
-            data.date = data.date.toString()
-            data.idstd = data.idstd.toString()
-            data.username = data.idstd.toString()
-            data.password = data.idcard
-            data.type = "นักเรียน"
-            delete data.id
-            this.createStudent(data)
+        //   this.createUser(data.username, data.password, data.type);
 
-            this.createUser( data.username, data.password, data.type)
+        //   // console.log('user', data)
+        // });
 
-            // console.log('user', data)
-        })
+        this.dataArr.forEach(data => {
+          data.idstd = data.idstd.toString();
+          data.number = data.number
+          data.tth = data.tth.toString();
+          data.namet = data.namet.toString();
+          data.snamet = data.snamet.toString();
+          data.idcard = data.idcard.toString();
+          data.class = data.class.toString();
+          data.room = data.room
+          data.username = data.idstd.toString();
+          data.password = data.idcard;
+          data.type = "นักเรียน";
+          delete data.id;
+          this.createStudent(data);
+
+          this.createUser(data.username, data.password, data.type);
+        });
         // alert('import สำเร็จ')
         // console.log('output',this.dataArr)
         // this.dataArr = []
