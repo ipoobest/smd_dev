@@ -128,7 +128,7 @@ export default {
       studentId: [],
       studentInClassId: [],
       student: {
-        classId: "",
+        objectId: "",
         classRoomLevel: "",
         classRoomName: "",
         term: ""
@@ -158,10 +158,6 @@ export default {
       return response.results;
     },
     async getStudentsNotIn(items) {
-      // console.log("items not in", items);
-      // const objectId = {
-      //   $nin: items
-      // }
       const query = {
         class: this.student.classRoomLevel,
         objectId: {
@@ -194,7 +190,7 @@ export default {
     },
     async addStudents() {
       const object = {
-        classId: this.id,
+        objectId: this.id,
         studentId: this.studentId
       };
       const response = await this.$store.dispatch(

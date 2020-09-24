@@ -358,7 +358,7 @@ export default {
 
       this.getTechById(this.$route.query.id).then(
       result => (this.items = result)
-    );
+     );
     },
     async sendGrade() {
       if (confirm("ยืนยันการส่ง")) {

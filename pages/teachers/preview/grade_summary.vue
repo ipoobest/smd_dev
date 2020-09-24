@@ -1,9 +1,9 @@
 <template>
   <v-container>
-    <v-btn class="mr-5" color="primary" fab small dark @click="back">
+    <v-btn class="mr-5" color="primary" fab small dark @click="back()" >
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
-    <div id="pdfDom">
+    <div id="pdfDom" class="page">
       <v-row justify="center">
         <img height="150" src="~/assets/logo-smd.png" />
       </v-row>
@@ -123,8 +123,10 @@
         <v-col cols="2.5">{{ gatDate }}</v-col>
       </v-row>
       <v-row justify="start" class="pt-5">
-        <v-col cols="4">หัวหน้าหลุ่มสาระการเรียนรู้</v-col>
-        <v-col cols="3.5">{{ items.department }}</v-col>
+        <v-col cols="4"
+          >หัวหน้าหลุ่มสาระการเรียนรู้{{ items.department }}</v-col
+        >
+        <v-col cols="3.5"></v-col>
         <v-col cols="1">วันที่</v-col>
         <v-col cols="2.5">{{ gatDate }}</v-col>
       </v-row>
@@ -153,16 +155,16 @@
       </div>
       <v-row justify="center" class="pt-5">
         <v-btn color="success">บันทึก</v-btn>
-        <!-- <v-btn color="info" @click="getPdf(test)" class="ml-5"
+        <v-btn color="info" class="ml-5"
           >export pdf</v-btn
-        > -->
+        >
       </v-row>
     </div>
   </v-container>
 </template>
 
 <script>
-import jsPDF from 'jspdf'
+import jsPDF from "jspdf";
 export default {
   layout: "teacher",
   async mounted() {
@@ -268,6 +270,9 @@ export default {
         this.analytical_score_num.push(analytical_filter.length);
       });
     },
+    print() {
+      window.print();
+    },
     back() {
       this.$router.go(-1);
     }
@@ -275,4 +280,38 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+    // .page {
+    //     width: 210mm;
+    //     min-height: 297mm;
+    //     padding: 20mm;
+    //     margin: 10mm auto;
+    //     border: 1px #D3D3D3 solid;
+    //     border-radius: 5px;
+    //     background: white;
+    //     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    // }
+    // @page {
+    //     size: A4;
+    //     margin: 0;
+    // }
+    // @media print {
+    //     .v-navigation-drawer__content { display: none}
+    //     html, body {
+    //         width: 210mm;
+    //         height: 297mm;        
+    //     }
+    //     .page {
+    //         margin: 0;
+    //         border: initial;
+    //         border-radius: initial;
+    //         width: initial;
+    //         min-height: initial;
+    //         box-shadow: initial;
+    //         background: initial;
+    //         page-break-after: always;
+    //     }
+    // }
+
+</style>

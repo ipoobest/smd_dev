@@ -116,43 +116,55 @@
       การอนุมัติผลการเรียน
     </v-row>
     <v-row justify="start" class="pt-5">
-      <v-col cols="4">ลงชื่อ อาจารย์ผู้สอน</v-col>
+      <v-col cols="5">ลงชื่อ อาจารย์ผู้สอน</v-col>
       <v-col cols="3.5">( {{ items.teacher.name }} )</v-col>
       <v-col cols="1">วันที่</v-col>
-      <v-col cols="2.5">{{ gatDate }}</v-col>
+      <v-col cols="1.5">{{ gatDate }}</v-col>
     </v-row>
     <v-row justify="start" class="pt-5">
-      <v-col cols="4">หัวหน้าหลุ่มสาระการเรียนรู้</v-col>
-      <v-col cols="3.5">{{ items.department }}</v-col>
+      <v-col cols="5">หัวหน้าหลุ่มสาระการเรียนรู้{{ items.department }}</v-col>
+      <v-col cols="3.5">( {{this.$store.state.auth.auth.title}} {{this.$store.state.auth.auth.firstName}} {{this.$store.state.auth.auth.lastName}} )</v-col>
       <v-col cols="1">วันที่</v-col>
-      <v-col cols="2.5">{{ gatDate }}</v-col>
+      <v-col cols="1.5">{{ gatDate }}</v-col>
     </v-row>
     <v-row justify="start" class="pt-5">
-      <v-col cols="4">ผู้ช่วยรองผู้อำนวยการฝ่ายวิชาการ</v-col>
+      <v-col cols="5">ผู้ช่วยรองผู้อำนวยการฝ่ายวิชาการ</v-col>
       <v-col cols="3.5"> </v-col>
       <v-col cols="1">วันที่</v-col>
-      <v-col cols="2.5">{{ gatDate }}</v-col>
+      <v-col cols="1.5">{{ gatDate }}</v-col>
     </v-row>
     <v-row justify="center" class="pt-10 pb-10">
       สำหรับงานทะเบียน
     </v-row>
     <div style="border-style: solid" class="pa-5">
       <v-row>
-        <v-col cols="2">ตรวจสอบข้อมูล</v-col>
-        <v-col cols="2"><v-checkbox label="เรียบร้อย"></v-checkbox></v-col>
+        <v-col cols="2">ตรวจสอบข้อมูล </v-col>
+        <v-col cols="2">
+           <v-radio-group v-model="items.approved" >
+              <v-radio
+                label="อนุมัติ"
+                value=ture
+              ></v-radio>
+             <v-radio
+                label="ไม่อนุมัติ"
+                value=false
+              ></v-radio>
+           </v-radio-group>
+        </v-col>
+        <v-col cols="6" class="mt-8">
+        <v-text-field
+          v-model="items.approve_message"
+          label="สาเหตุที่ไม่อนุมัติ"
+        ></v-text-field>
+        </v-col>
       </v-row>
-      <v-row>
-        <v-col cols="2"></v-col>
-        <v-col cols="2"><v-checkbox label="ไม่เรียบร้อย"></v-checkbox></v-col>
-        <v-col cols="8"><v-text-field> </v-text-field></v-col>
-      </v-row>
-      <v-row justify="center"
-        ><v-col cols="4">ลงชื่อ <v-text-field> </v-text-field></v-col>
-      </v-row>
+      <v-row justify="center">
+        <v-col cols="4">ลงชื่อ <v-text-field> </v-text-field></v-col>
+      </v-row> 
     </div>
     <v-row justify="center" class="pt-5">
-      <v-col>
-        <v-btn color="success">บันทึก</v-btn>
+      <v-col cols="4">
+        <v-btn color="success" @click="save">บันทึก</v-btn>
         <v-btn color="info">export pdf</v-btn>
       </v-col>
     </v-row>
@@ -196,8 +208,11 @@ export default {
         teacher: {
           name: "",
           value: ""
-        }
+        },
+        approved: null,
+        approve_message: '',
       },
+      
       students: [],
       total_students: "",
       grade_num_list: [],
@@ -224,6 +239,14 @@ export default {
       // console.log("response_grade", response_grade.results.length);
 
       return response_grade.results;
+    },
+    async updateTech(data) {
+      const response = this.$store.dispatch(`teach/updateTeach`, data);
+      console.log("update Teach", data, response);
+      
+      this.getTechById(this.$route.query.id).then(
+      result => (this.items = result)
+     );
     },
     summaryGrade(data) {
       this.total_students = data.length;
@@ -261,6 +284,17 @@ export default {
         );
         this.analytical_score_num.push(analytical_filter.length);
       });
+    },
+    save() {
+      console.log('approve, message', this.approved, this.approve_message)
+      var data = {
+        objectId: this.items.objectId,
+        approved: this.items.approved,
+        approve_message: this.items.approve_message
+      }
+      console.log('data update', data)
+      this.updateTech(data)
+      
     },
     back() {
       this.$router.go(-1);

@@ -45,7 +45,8 @@
                           <v-row>
                             <v-col cols="12" sm="6" md="6">
                               <v-select
-                                v-model="input.classSubject"
+                                v-model="input.subject_id"
+                                @change="editSubjectName"
                                 :items="classSubject"
                                 outlined
                                 label="วิชา"
@@ -117,7 +118,8 @@
             </thead>
             <tbody>
               <tr v-for="(item, index) in subjectsInTerm" :key="index">
-                <td>{{ item.sname }}</td>
+                <td v-if="item.subject_info">{{ item.subject_info.codet }} {{ item.subject_info.sname }} </td>
+                <td v-else>{{ item.sname }}</td>
                 <td>{{ item.classRoomLevel }}</td>
                 <td>{{ item.teacher.name }}</td>
                 <td>
@@ -172,6 +174,7 @@ export default {
       items: [],
       subjects: [],
       subjectsInTerm: [],
+      subjectInfo: [],
       selectSubjects: [],
       selectDepartment: [],
       query: {
@@ -220,6 +223,7 @@ export default {
         `subjects/getSubjectsByConditions`,
         conditions
       );
+      console.log('response subject', response)
       return response.results;
     },
     async getSubjectsFromTeach() {
@@ -232,6 +236,7 @@ export default {
         `teach/getSubjectsByConditions`,
         condition
       );
+      console.log('getSubjectsFromTeach subject', response.results)
       return response.results;
     },
     async getClassesByAcademicYears() {
@@ -259,6 +264,7 @@ export default {
       );
     },
     async addSubject() {
+      var subjectInfo = await this.input.classSubject;
       const data = {
         schoolYear: this.query.schoolYear,
         term: this.query.term,
@@ -269,11 +275,11 @@ export default {
         students: [],
         department: this.input.department,
         teacher: this.input.teacher,
-        subject_info: subjectInfo,
+        subject_info: this.subjectInfo,
         type: "วิชาเลือกเสรี"
       };
       console.log("teach data", data);
-      // this.addSubjectToTeach(data)
+      this.addSubjectToTeach(data)
       this.resetForm();
       this.close();
     },
@@ -285,13 +291,6 @@ export default {
       // console.log('response', response)
     },
     selectInputSubjects() {
-      // for (var index = 0; index < this.subjects.length; index++) {
-      //   this.classSubject.push(
-      //     this.subjects[index].codet + " " + this.subjects[index].sname
-      //   );
-      // }
-      // console.log("classSubject index", this.classSubject);
-
       this.classSubject = [];
       this.subjects.forEach(subject => {
         var data = {
@@ -326,6 +325,7 @@ export default {
     },
     editSubjectName() {
       var subject_name = this.subjects.filter(subject => subject.objectId == this.input.subject_id);
+      console.log('subject_name', subject_name )
       this.subjectInfo = { codet: subject_name[0].codet,sname: subject_name[0].sname, credit: subject_name[0].credit, hour: subject_name[0].hour};
       console.log('subject infoxx', this.subjectInfo )
     },

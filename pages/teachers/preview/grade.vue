@@ -60,7 +60,7 @@
       </v-simple-table>
     </v-row>
     <v-row justify="center">
-      <v-btn class="mt-3 success" @click="getPdf(htmlTitle)">export pdf</v-btn>
+      <v-btn class="mt-3 success" @click="print()">print</v-btn>
     </v-row>
     </div>
   </v-container>
@@ -141,6 +141,9 @@ export default {
         this.score_array.push(item.score);
       });
       // console.log("this.ratio_array", this.ratio_array);
+    },
+    print() {
+      window.print();
     },
     back() {
       this.$router.go(-1);

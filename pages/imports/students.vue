@@ -5,15 +5,23 @@
         <v-card>
           <v-card-title>
             {{ title }}
+            <v-spacer></v-spacer>
+            <v-col cols="2">
+              <v-text-field v-model="year" label="ปีการศึกษา"></v-text-field>
+            </v-col>
+            <v-col cols="2">
+              <v-text-field v-model="term" label="เทอม"></v-text-field>
+            </v-col>
           </v-card-title>
-
           <v-simple-table>
             <template v-slot:default>
               <thead>
                 <tr>
                   <th>รหัสประจำตัวนักเรียน</th>
+                  <th>เลขที่</th>
                   <th>ชื่อ - นามสกุล</th>
                   <th>ระดับชั้น</th>
+                  <th>ห้อง</th>
                   <th class="text-right">จัดการ</th>
                 </tr>
               </thead>
@@ -21,8 +29,10 @@
               <tbody>
                 <tr v-for="(item, key) in dataArr" :key="key">
                   <td>{{ item.idstd }}</td>
+                  <td>{{ item.number }}</td>
                   <td>{{ `${item.tth} ${item.namet} ${item.snamet}` }}</td>
                   <td>{{ item.class }}</td>
+                  <td>{{ item.room }}</td>
                   <td class="text-right">
                     <v-btn
                       color="error"
@@ -77,7 +87,10 @@ export default {
       csv: [],
       dataArr: [],
       title: `นำเข้านักเรียน`,
-      total: 0
+      total: 0,
+      year: "2563",
+      term: "1",
+      test: []
     };
   },
   methods: {
@@ -100,6 +113,7 @@ export default {
       );
 
       console.log("create", response);
+      return response;
     },
     getHeader(sheet) {
       const XLSX = xlsx;
@@ -169,96 +183,82 @@ export default {
         this.dataArr.splice(key, 1);
       }
     },
-    uploadData() {
-      if (confirm(`ยืนยันการ upload`)) {
-        // // var output = this.dataArr.map( data => ({student_id:data.id }))
-        // var output = this.dataArr.pop();
-        // this.dataArr.forEach(data => {
-        //   data.stu_id = data.idstd;
-        //   data.class = data.class.toString();
-        //   data.study = data.study.toString();
-        //   // data.grade = data.grade.toString()
-        //   data.idcard = data.idcard.toString();
-        //   data.stage = data.stage.toString();
-        //   data.stmonth = data.stmonth.toString();
-        //   data.bday = data.bday.toString();
-        //   data.blood = data.blood.toString();
-        //   data.disease = data.disease.toString();
-        //   data.treatment = data.treatment.toString();
-        //   data.healthpb = data.healthpb.toString();
-        //   // data.residential = data.residential.toString()
-        //   data.domicile = data.domicile.toString();
-        //   data.addres = data.addres.toString();
-        //   data.dorm = data.dorm.toString();
-        //   data.sttell = data.sttell.toString();
-        //   data.sibling = data.sibling.toString();
-        //   data.sibling1 = data.sibling1.toString();
-        //   data.sibling2 = data.sibling2.toString();
-        //   data.sibling3 = data.sibling3.toString();
-        //   data.sbclass1 = data.sbclass1.toString();
-        //   data.sbclass2 = data.sbclass2.toString();
-        //   data.sbclass3 = data.sbclass3.toString();
-        //   data.ctell = data.ctell.toString();
-        //   data.fage = data.fage.toString();
-        //   data.fwork = data.fwork.toString();
-        //   data.fcareer = data.fcareer.toString();
-        //   data.fpost = data.fpost.toString();
-        //   data.fbelong = data.fbelong.toString();
-        //   data.fatwork = data.fatwork.toString();
-        //   data.ftell = data.ftell.toString();
-        //   data.fphone = data.fphone.toString();
-        //   data.fsalary = data.fsalary.toString();
-        //   data.mage = data.mage.toString();
-        //   data.mwork = data.mwork.toString();
-        //   data.mcareer = data.mcareer.toString();
-        //   data.mpost = data.mpost.toString();
-        //   data.mbelong = data.mbelong.toString();
-        //   data.mtell = data.mtell.toString();
-        //   data.mphone = data.mphone.toString();
-        //   data.msalary = data.msalary.toString();
-        //   data.parent = data.parent.toString();
-        //   data.prelated = data.prelated.toString();
-        //   data.pwork = data.pwork.toString();
-        //   data.patwork = data.patwork.toString();
-        //   data.ptell = data.ptell.toString();
-        //   data.personality = data.personality.toString();
-        //   data.bctell = data.bctell.toString();
-        //   data.userreg = data.userreg.toString();
-        //   data.contact = data.contact.toString();
-        //   data.date = data.date.toString();
-        //   data.idstd = data.idstd.toString();
-        //   data.username = data.idstd.toString();
-        //   data.password = data.idcard;
-        //   data.type = "นักเรียน";
-        //   delete data.id;
-        //   this.createStudent(data);
 
-        //   this.createUser(data.username, data.password, data.type);
+    async uploadData() {
+      var classItem = { schoolYear: this.year, term: this.term };
+      var classroom_term = await this.$store.dispatch(
+        `classes/getClassesByAcademicYears`,
+        classItem
+      );
 
-        //   // console.log('user', data)
-        // });
+      const level_list = [
+        ...new Set(this.dataArr.map(data => data.class.trim()))
+      ];
+      level_list.forEach(async level => {
+        var student_level = this.dataArr.filter(
+          data => data.class.trim() == level
+        );
+        var room_list = [...new Set(student_level.map(data => data.room))];
 
-        this.dataArr.forEach(data => {
-          data.idstd = data.idstd.toString();
-          data.number = data.number
-          data.tth = data.tth.toString();
-          data.namet = data.namet.toString();
-          data.snamet = data.snamet.toString();
-          data.idcard = data.idcard.toString();
-          data.class = data.class.toString();
-          data.room = data.room
-          data.username = data.idstd.toString();
-          data.password = data.idcard;
-          data.type = "นักเรียน";
-          delete data.id;
-          this.createStudent(data);
-
-          this.createUser(data.username, data.password, data.type);
+        room_list.forEach(async room => {
+          var student_room = student_level.filter(data => data.room == room);
+          var student_id_list = [];
+          for (const student of student_room) {
+            // ถ้าจะเช็ค นร. ให้ get ด้วยเลขบัตรประชาชน ถ้าไม่เจอค่อยทำข้างล่าง => if (! student_exist) ครอบ
+            var object = {
+              idstd: student.idstd.toString(),
+              number: student.number,
+              tth: student.tth,
+              namet: student.namet,
+              snamet: student.snamet,
+              idcard: student.idcard,
+              class: student.class,
+              room: student.room,
+              username: student.idstd.toString(),
+              password: student.idcard,
+              type: "นักเรียน"
+            };
+            console.log("ข้อมูลนักเรียน", object);
+            const response_student = await this.$store.dispatch(
+              `students/createStudent`,
+              object
+            );
+            student_id_list.push(response_student.objectId);
+          }
+          var classroom = classroom_term.results.filter(
+            data => data.classRoomLevel == level && data.classRoomName == room
+          );
+          if (classroom.length > 0) {
+            // หรือ if (classroom.length > 0)
+            var class_data = {
+              objectId: classroom[0].objectId,
+              studentId: classroom[0].studentId.concat(student_id_list)
+            };
+            const response_classroom = await this.$store.dispatch(
+              `classes/updateClasses`,
+              class_data
+            );
+            if(response_classroom) {
+              this.dataArr = []
+            }
+          } else {
+            var class_data = {
+              schoolYear: this.year,
+              term: this.term,
+              classRoomLevel: level,
+              classRoomName: room.toString(),
+              studentId: student_id_list
+            };
+            const response_classroom = await this.$store.dispatch(
+              `classes/createClasses`,
+              class_data
+            );
+            if(response_classroom) {
+              this.dataArr = []
+            }
+          }
         });
-        // alert('import สำเร็จ')
-        // console.log('output',this.dataArr)
-        // this.dataArr = []
-      }
+      });
     }
   }
 };
