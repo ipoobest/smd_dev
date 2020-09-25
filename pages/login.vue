@@ -71,7 +71,7 @@ export default {
           // if(response){
           //   this.$router.replace({name: 'index'})
           // }
-          if (response.type == "ครู") {
+          if (response.type == "ครู" ) {
             // console.log('teacher login')
             this.$router.replace({
               name: "teachers-id",
@@ -82,7 +82,12 @@ export default {
               name: "staff-id",
               params: { id: `${this.$store.state.auth.auth.objectId}` }
             });
-          } else {
+          } else if (response.type == "หัวหน้ากลุ่มประเมิน") {
+            this.$router.replace({
+              name: "assessment-id",
+              params: { id: `${this.$store.state.auth.auth.objectId}` }
+            });
+          }else {
             this.$router.replace({ name: "index" });
           }
         } catch (error) {

@@ -17,7 +17,7 @@
               hide-details
             ></v-text-field>
           </v-card-title>
-          <v-simple-table :search="search">
+          <v-simple-table :headers="headers" :items="items" :search="search">
             <template v-slot:top>
               <v-toolbar flat color="white">
                 <p>
@@ -27,42 +27,12 @@
                 </p>
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <v-spacer></v-spacer>
-
-                <v-dialog v-model="dialog" max-width="700px">
-                  <template v-slot:activator="{ on }">
-                    <v-btn color="success" dark class="mb-2" v-on="on"
-                      >เพิ่มนักเรียน</v-btn
-                    >
-                  </template>
-                  <v-card>
-                    <v-card-title>
-                      <span class="headline">เพิ่มรายชื่อนักเรียน</span>
-                    </v-card-title>
-                    <v-card-text>
-                      <v-data-table
-                        v-model="items"
-                        :headers="headerStudents"
-                        :items="students"
-                        :single-select="singleSelect"
-                        item-key="objectId"
-                        show-select
-                        class="elevation-1"
-                      >
-                      </v-data-table>
-                    </v-card-text>
-
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="red darken-1" text @click="close">ยกเลิก</v-btn>
-                      <v-btn color="blue darken-1" text @click="save">เพิ่ม</v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
               </v-toolbar>
             </template>
             <v-simple-table>
               <thead>
                 <tr>
+                  <th>เลขที่</th>
                   <th>รหัสประจำตัว</th>
                   <th>ชื่อ</th>
                   <th>นามสกุล</th>
@@ -70,13 +40,14 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, index) in items" :key="index">
+                <tr v-for="(item, index) in sortedNumber" :key="index">
+                  <th>{{ item.number }}</th>
                   <th>{{ item.idstd }}</th>
                   <th>{{ item.namet }}</th>
                   <th>{{ item.snamet }}</th>
                   <th>
-                    <v-btn class="error" small @click="deleteItem(item)">
-                      ลบ
+                    <v-btn class="success" small >
+                      ดูคะแนน
                     </v-btn>
                   </th>
                 </tr>
@@ -96,7 +67,14 @@ export default {
     this.studentInClassId = await this.getListClasses();
     this.student = await this.getDataFromApi(this.id);
     this.items = await this.getStudents(this.student.studentId);
-    this.students = await this.getStudentsNotIn(this.student.studentId);
+    // this.students = await this.getStudentsNotIn(this.studentInClassId);
+  },
+  computed: {
+    sortedNumber() {
+      return this.items.sort(function(a, b) {
+        return a.number - b.number;
+      });
+    }
   },
   data() {
     return {
@@ -111,11 +89,6 @@ export default {
         { text: "ชื่อ", value: "namet" },
         { text: "นามสกุล", value: "snamet" },
         { text: "actions", value: "actions", sortable: false }
-      ],
-      headerStudents: [
-        { text: "รหัสประจำตัว", value: "idstd" },
-        { text: "ชื่อ", value: "namet" },
-        { text: "นามสกุล", value: "snamet" }
       ],
       items: [],
       singleSelect: false,
@@ -160,7 +133,6 @@ export default {
           $nin: items
         }
       };
-      console.log('query student notin', query)
       const response = await this.$store.dispatch(
         `students/getStudents`,
         query
@@ -177,57 +149,18 @@ export default {
       // console.log('merged', merged)
       return merged;
     },
-    async getGradeByConditions(condition) {
-      const response = await this.$store.dispatch(
-        `grade/getGradeByConditions`,
-        condition
-      );
-      console.log('grade id', response.results)
-      return response.results
-    },
+
     async addStudents() {
       const object = {
         objectId: this.id,
         studentId: this.studentId
       };
-      console.log('object class', object)
       const response = await this.$store.dispatch(
         `classes/updateClasses`,
         object
       );
-      console.log('response', response)
     },
-    async deleteStudentInGrade(id){
-        const response = await this.$store.dispatch(
-        `grade/deleteGrade`,
-        id
-      );
-      console.log('response delete', response)
-    },
-    async deleteItem(item) {
-      this.studentId = []
-      console.log('item aaas', item)
-      const index = this.items.indexOf(item);
-      if (confirm("ยืนยีนการลบนักเรียนออกจากชั้นเรียน")) {
-        this.items.splice(index, 1);
-        for (var i = 0; i < this.items.length; i++) {
-          this.studentId.push(this.items[i].objectId);
-        }
-        // console.log('item studentId', this.studentId)
-        // studentId
-        const data = {
-          studentObjectId: item.objectId,
-          schoolYear:  this.student.schoolYear,
-          term: this.student.term
-        }        
-        var studentId = await this.getGradeByConditions(data)
-        studentId.forEach(item => {
-          console.log('testxx', (item.objectId))
-          this.deleteStudentInGrade(item.objectId)
-        })
-         this.addStudents(this.studentId);
-      }
-    },
+
     back() {
       this.$router.go(-1);
     },
@@ -237,15 +170,6 @@ export default {
         this.index = -1;
       }, 300);
     },
-    save() {
-      console.log("save", this.items);
-      for (var index = 0; index < this.items.length; index++) {
-        this.studentId.push(this.items[index].objectId);
-      }
-      console.log("looper", this.studentId);
-      this.addStudents(this.studentId);
-      this.close();
-    }
   }
 };
 </script>

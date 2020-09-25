@@ -78,8 +78,8 @@ export const actions = {
   async updateClasses ({ commit }, object) {
     return new Promise(async (resolve, reject) => {
       try {
-        console.log(object)
-        const result = this.$axios.$put(`${process.env.parseUrl}/classes/${classes.class}/${object.classId}`,  object )
+        // console.log(object)
+        const result = this.$axios.$put(`${process.env.parseUrl}/classes/${classes.class}/${object.objectId}`,  object )
 
         commit('setClasses', result)
         resolve(result)
