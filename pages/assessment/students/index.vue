@@ -46,7 +46,7 @@
                   <th>{{ item.namet }}</th>
                   <th>{{ item.snamet }}</th>
                   <th>
-                    <v-btn class="success" small >
+                    <v-btn class="success" @click="studentScore(item)" small >
                       ดูคะแนน
                     </v-btn>
                   </th>
@@ -62,6 +62,7 @@
 
 <script>
 export default {
+  layout: 'assessment',
   async mounted() {
     this.id = this.$route.query.id;
     this.studentInClassId = await this.getListClasses();
@@ -160,7 +161,13 @@ export default {
         object
       );
     },
-
+    async studentScore(item) {
+      console.log('item', item)
+        this.$router.push({
+        name: "assessment-students-grade",
+        query: { id: item.objectId, schoolYear: this.student.schoolYear, term: this.student.term }
+      });
+    },
     back() {
       this.$router.go(-1);
     },
