@@ -154,7 +154,7 @@
         </v-row>
       </div>
       <v-row justify="center" class="pt-5">
-        <v-btn color="success">บันทึก</v-btn>
+        <!-- <v-btn color="success">บันทึก</v-btn> -->
         <v-btn color="info" class="ml-5"
           >export pdf</v-btn
         >

@@ -36,6 +36,13 @@
         <v-btn @click="addScoreX">เพิ่ม</v-btn>
       </v-col>
     </v-row>
+    <v-row justify="center" class="mb-5">
+      <h3 v-if="items.send_score" class="blue--text">รออนุมัติ</h3>
+      <div v-if="items.approve">
+        <h3 v-if="items.approve" class="blue--text">ผ่าน</h3>
+        <h3 v-else class="blue--text">แก้ไข</h3>
+      </div>
+    </v-row>
     <v-simple-table fixed-header v-if="rating">
       <template v-slot:default>
         <thead>
@@ -150,7 +157,7 @@
 
     <v-row justify="center">
       <!-- <v-btn color="orange" dark class="mr-2">reset form</v-btn> -->
-      <v-btn class="info mt-5 mr-5" @click="sendGrade">ส่งคะแนน</v-btn>
+      <v-btn v-if="!items.send_score" class="info mt-5 mr-5" @click="sendGrade">ส่งคะแนน</v-btn>
       <v-btn class="success mt-5 mr-5" @click="previewGrade" dark>รายงานเกรด</v-btn>
       <v-btn class="success mt-5 mr-5" @click="previewSummary" dark>ปพ.5</v-btn>
       <!-- <v-btn class="success mt-5 mr-5" @click="previewTscore" dark>Preview3</v-btn> -->
@@ -301,7 +308,7 @@ export default {
     },
     async getTechById(id) {
       const response = await this.$store.dispatch("teach/getTeachById", id);
-      // console.log("this.item", response);
+      console.log("this.item", response);
       this.rating = response.rating;
       this.mapRating(this.rating);
       return response;
@@ -330,8 +337,14 @@ export default {
       for (var index = 0; index < studentName.length; index++) {
         const data = {
           teachId: this.items.objectId,
+          teachInfo: {
+            techId: this.items.objectId,
+            codet : this.items.subject_info.codet,
+            credit : this.items.subject_info.credit,
+            sname : this.items.subject_info.sname,
+          },
           studentId: studentId[index],
-          subject: this.items.sname,
+          // subject: this.items.sname,
           schoolYear: this.items.schoolYear,
           term: this.items.term,
           classRoomLevel: this.items.classRoomLevel,
