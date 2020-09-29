@@ -37,7 +37,7 @@
                     <td>{{ item.classRoomName }}</td>
                     <td>
                       <v-btn color="info" @click="listStudent(item)">
-                        รายชื่อนักเรียน
+                        ดูข้อมูล
                       </v-btn>
                     </td>
                   </tr>

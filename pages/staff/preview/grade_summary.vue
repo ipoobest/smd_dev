@@ -123,7 +123,11 @@
     </v-row>
     <v-row justify="start" class="pt-5">
       <v-col cols="5">หัวหน้าหลุ่มสาระการเรียนรู้{{ items.department }}</v-col>
-      <v-col cols="3.5">( {{this.$store.state.auth.auth.title}} {{this.$store.state.auth.auth.firstName}} {{this.$store.state.auth.auth.lastName}} )</v-col>
+      <v-col cols="3.5"
+        >( {{ this.$store.state.auth.auth.title }}
+        {{ this.$store.state.auth.auth.firstName }}
+        {{ this.$store.state.auth.auth.lastName }} )</v-col
+      >
       <v-col cols="1">วันที่</v-col>
       <v-col cols="1.5">{{ gatDate }}</v-col>
     </v-row>
@@ -140,27 +144,21 @@
       <v-row>
         <v-col cols="2">ตรวจสอบข้อมูล </v-col>
         <v-col cols="2">
-           <v-radio-group v-model="items.approved" >
-              <v-radio
-                label="อนุมัติ"
-                value=ture
-              ></v-radio>
-             <v-radio
-                label="ไม่อนุมัติ"
-                value=false
-              ></v-radio>
-           </v-radio-group>
+          <v-radio-group v-model="items.approved">
+            <v-radio label="อนุมัติ" value='true'></v-radio>
+            <v-radio label="ไม่อนุมัติ" value='false'></v-radio>
+          </v-radio-group>
         </v-col>
         <v-col cols="6" class="mt-8">
-        <v-text-field
-          v-model="items.approve_message"
-          label="สาเหตุที่ไม่อนุมัติ"
-        ></v-text-field>
+          <v-text-field
+            v-model="items.approve_message"
+            label="สาเหตุที่ไม่อนุมัติ"
+          ></v-text-field>
         </v-col>
       </v-row>
       <v-row justify="center">
         <v-col cols="4">ลงชื่อ <v-text-field> </v-text-field></v-col>
-      </v-row> 
+      </v-row>
     </div>
     <v-row justify="center" class="pt-5">
       <v-col cols="4">
@@ -173,7 +171,7 @@
 
 <script>
 export default {
-  layout: "teacher",
+  layout: "staff",
   async mounted() {
     await this.getTechById(this.$route.query.id).then(
       result => (this.items = result)
@@ -209,10 +207,10 @@ export default {
           name: "",
           value: ""
         },
-        approved: null,
-        approve_message: '',
+        approved: false,
+        approve_message: ""
       },
-      
+
       students: [],
       total_students: "",
       grade_num_list: [],
@@ -243,10 +241,10 @@ export default {
     async updateTech(data) {
       const response = this.$store.dispatch(`teach/updateTeach`, data);
       console.log("update Teach", data, response);
-      
+
       this.getTechById(this.$route.query.id).then(
-      result => (this.items = result)
-     );
+        result => (this.items = result)
+      );
     },
     summaryGrade(data) {
       this.total_students = data.length;
@@ -258,7 +256,9 @@ export default {
       this.special_score = [];
       this.grade_num_list = [];
       grade_list.forEach(grade => {
-        var grade_filter = data.filter(student => student.grade == grade && ! student.grade_option);
+        var grade_filter = data.filter(
+          student => student.grade == grade && !student.grade_option
+        );
         this.grade_num_list.push(grade_filter.length);
       });
 
@@ -286,15 +286,20 @@ export default {
       });
     },
     save() {
-      console.log('approve, message', this.approved, this.approve_message)
-      var data = {
-        objectId: this.items.objectId,
-        approved: this.items.approved,
-        approve_message: this.items.approve_message
+      console.log("approve, message", this.items.approved);
+      // var save_score = (this.items.approved === "true") ? false : true;
+      var send_score = (this.items.approved === "true") ? true : false;
+      if (confirm("ยืนยันการบันทึก")) {
+        var data = {
+          objectId: this.items.objectId,
+          approved: this.items.approved,
+          approve_message: this.items.approve_message,
+          save_score: true,
+          send_score: send_score
+        };
+        console.log("data update", data);
+        this.updateTech(data);
       }
-      console.log('data update', data)
-      this.updateTech(data)
-      
     },
     back() {
       this.$router.go(-1);

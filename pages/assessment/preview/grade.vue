@@ -13,11 +13,11 @@
       {{ teach.classRootermmName }} ปีการศึกษา {{ teach.schoolYear }}
     </v-row>
     <v-row justify="center">
-      <v-col cols="3" align="start">
+      <v-col cols="4" align="start">
         วันที่ {{gatDate}}
       </v-col>
-      <v-col cols="6" align="center"> วิชา {{ teach.sname }} </v-col>
-      <v-col cols="3" align="end">
+      <v-col cols="4" align="center"> วิชา {{ teach.subject_info.sname }} รหัสวิชา {{ teach.subject_info.codet }}  </v-col>
+      <v-col cols="4" align="end">
         อาจารย์ผู้สอน {{ teach.teacher.name }}
       </v-col>
     </v-row>
@@ -31,9 +31,9 @@
             <th class="text-left" v-for="item in rating" :key="item.name">
               {{ item.name }} , {{ item.score }} คะแนน
             </th>
-            <th class="text-left" v-for="item in rating" :key="item.id">
+            <!-- <th class="text-left" v-for="item in rating" :key="item.id">
               {{ item.name }} , T-score {{ item.rating }} %
-            </th>
+            </th> -->
             <th>Total Score</th>
             <th>Grade</th>
           </tr>
@@ -46,17 +46,18 @@
             <td>{{ score_index + 1 }}</td>
             <td>{{ item_score.studentId }}</td>
             <td>{{ item_score.studentName }}</td>
-            <td v-for="item_in in item_score.score" :key="item_in.name">
+            <!-- <td v-for="item_in in item_score.score" :key="item_in.name">
               {{ item_in }}
-            </td>
+            </td> -->
             <td
               v-for="item in calcScore(item_score.score, score_index)"
               :key="item.key"
             >
               {{ item }}
             </td>
-            <td>{{ item_score.total_score }}</td>
-            <td>{{ item_score.grade }}</td>
+            <td >{{ item_score.total_score }}</td>
+            <td v-if="item_score.grade_option">{{ item_score.grade_option }}</td>
+            <td v-else>{{ item_score.grade }}</td>
           </tr>
         </tbody>
       </v-simple-table>
@@ -102,6 +103,10 @@ export default {
       teach: {
         teacher: {
           name: ""
+        },
+        subject_info: {
+          sname: '',
+          codet: ''
         }
       },
       layout: "",
@@ -155,7 +160,7 @@ export default {
     },
     preview() {
       this.$router.push({
-        name: "preview-grade_summary",
+        name: "staff-preview-grade_summary",
         query: { id: this.$route.query.id }
       });
     },

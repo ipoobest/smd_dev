@@ -36,11 +36,20 @@
         <v-btn @click="addScoreX">เพิ่ม</v-btn>
       </v-col>
     </v-row>
-    <v-row justify="center" class="mb-5">
-      <h3 v-if="items.send_score" class="blue--text">รออนุมัติ</h3>
-      <div v-if="items.approve">
-        <h3 v-if="items.approve" class="blue--text">ผ่าน</h3>
-        <h3 v-else class="blue--text">แก้ไข</h3>
+    <v-row  class="mb-5 pl-5" style="border: 1px solid blue">
+      <div v-if="items.send_score">
+        <h3 v-if="!items.approved" class="blue--text">รออนุมัติ</h3>
+      </div>
+      <div v-if="items.approved" >
+        <h3 v-if="items.approved === 'true'" class="green--text">รออนุมัติ</h3>
+        <v-col v-else  cols="12">
+          <v-row>
+            <h4>หมายเหตุจากหัวหน้ากลุ่มสาระ</h4>
+          </v-row>
+          <v-row>
+             <p  class="red--text">{{items.approve_message}}</p>
+          </v-row>
+        </v-col>
       </div>
     </v-row>
     <v-simple-table fixed-header v-if="rating">
@@ -172,6 +181,17 @@
           >แก้ไข</v-btn
         >
       </div>
+      <!-- <div v-else>
+         <v-btn
+          class="success mt-5 mr-5"
+          v-if="!items.save_score"
+          @click="updateGrade"
+          >บันทึก</v-btn
+        >
+        <v-btn v-if="!items.save_score" class="orange mt-5 mr-5" @click="editAllGrade" dark 
+          >แก้ไข</v-btn
+        >
+      </div> -->
     </v-row>
   </v-container>
 </template>
@@ -403,7 +423,7 @@ export default {
           save_score: true
         };
         // console.log("saveScore", saveScore);
-        this.items.send_score = true
+        // this.items.send_score = true
         this.updateTech(saveScore);
       }
     },

@@ -234,7 +234,7 @@ export default {
     },
     goToPreviewGrade(item) {
       console.log('preview grade', item)
-      this.$router.push({name: 'preview-grade', query: {id: item.objectId}})
+      this.$router.push({name: 'staff-preview-grade', query: {id: item.objectId}})
       // this.$router.push({name: 'preview-grade', query: {id: '7NPLER6jFE'}})
       
     },

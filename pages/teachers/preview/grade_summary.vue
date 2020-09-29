@@ -139,20 +139,26 @@
       <v-row justify="center" class="pt-10 pb-10">
         สำหรับงานทะเบียน
       </v-row>
-      <div style="border-style: solid" class="pa-5">
-        <v-row>
-          <v-col cols="2">ตรวจสอบข้อมูล</v-col>
-          <v-col cols="2"><v-checkbox label="เรียบร้อย"></v-checkbox></v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="2"></v-col>
-          <v-col cols="2"><v-checkbox label="ไม่เรียบร้อย"></v-checkbox></v-col>
-          <v-col cols="8"><v-text-field> </v-text-field></v-col>
-        </v-row>
-        <v-row justify="center"
-          ><v-col cols="4">ลงชื่อ <v-text-field> </v-text-field></v-col>
-        </v-row>
-      </div>
+    <div style="border-style: solid" class="pa-5">
+      <v-row>
+        <v-col cols="2">ตรวจสอบข้อมูล </v-col>
+        <v-col cols="2">
+          <v-radio-group v-model="items.approved">
+            <v-radio label="อนุมัติ" value='true'></v-radio>
+            <v-radio label="ไม่อนุมัติ" value='false'></v-radio>
+          </v-radio-group>
+        </v-col>
+        <v-col cols="6" class="mt-8">
+          <v-text-field
+            v-model="items.approve_message"
+            label="สาเหตุที่ไม่อนุมัติ"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row justify="center">
+        <v-col cols="4">ลงชื่อ <v-text-field> </v-text-field></v-col>
+      </v-row>
+    </div>
       <v-row justify="center" class="pt-5">
         <!-- <v-btn color="success">บันทึก</v-btn> -->
         <v-btn color="info" class="ml-5"
