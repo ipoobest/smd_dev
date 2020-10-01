@@ -13,10 +13,11 @@
       {{ teach.classRootermmName }} ปีการศึกษา {{ teach.schoolYear }}
     </v-row>
     <v-row justify="center">
-      <v-col cols="4" align="start">
-        วันที่ {{gatDate}}
+      <v-col cols="4" align="start"> วันที่ {{ gatDate }} </v-col>
+      <v-col cols="4" align="center">
+        วิชา {{ teach.subject_info.sname }} รหัสวิชา
+        {{ teach.subject_info.codet }}
       </v-col>
-      <v-col cols="4" align="center"> วิชา {{ teach.subject_info.sname }} รหัสวิชา {{ teach.subject_info.codet }}  </v-col>
       <v-col cols="4" align="end">
         อาจารย์ผู้สอน {{ teach.teacher.name }}
       </v-col>
@@ -34,13 +35,16 @@
             <!-- <th class="text-left" v-for="item in rating" :key="item.id">
               {{ item.name }} , T-score {{ item.rating }} %
             </th> -->
-            <th>Total Score</th>
+            <th>คุณลักษณะ</th>
+            <th>การคิดการอ่าน</th>
+            <th @click="sorts('total_score')" >Total Score</th>
             <th>Grade</th>
+            <!-- <th>คะแนนรวม</th> -->
           </tr>
         </thead>
         <tbody align="left">
           <tr
-            v-for="(item_score, score_index) in sortedData"
+            v-for="(item_score, score_index) in sortedScore"
             :key="item_score.studentObjectId"
           >
             <td>{{ score_index + 1 }}</td>
@@ -55,15 +59,23 @@
             >
               {{ item }}
             </td>
-            <td >{{ item_score.total_score }}</td>
-            <td v-if="item_score.grade_option">{{ item_score.grade_option }}</td>
+            <td>{{ item_score.aptitude }}</td>
+            <td>{{ item_score.analytical_thinking }}</td>
+
+            <td>{{ item_score.total_score }}</td>
+            <td v-if="item_score.grade_option">
+              {{ item_score.grade_option }}
+            </td>
             <td v-else>{{ item_score.grade }}</td>
+            <!-- <td><v-btn class="success" @click="listStudent(item_score)">เกรดรวม</v-btn></td> -->
           </tr>
         </tbody>
       </v-simple-table>
     </v-row>
     <v-row justify="center">
-      <v-btn class="mt-3 success" @click="preview">preview</v-btn>
+      <v-btn class="mt-3 info" @click="preview">print</v-btn>
+      <v-btn class="mt-3 ml-5 success" @click="approve">อนุมัติ</v-btn>
+      <!-- <v-btn class="mt-3 ml-5 info" @click="listStudent(item)>เกรดรวมรายบุคคล</v-btn> -->
     </v-row>
   </v-container>
 </template>
@@ -71,7 +83,7 @@
 <script>
 export default {
   // middleware: 'authentication',
-  layout: "staff",
+  layout: "assessment",
   async mounted() {
     // check user type and user layout
     await this.getTeach(this.$route.query.id).then(
@@ -92,9 +104,13 @@ export default {
         .padStart(4, "0")} `;
       return dateTime;
     },
-    sortedData() {
-      return this.score.sort(function(a, b) {
-        return b.total_score - a.total_score;
+ sortedScore(){
+      return this.score.sort((a, b) => {
+        let modifier = 1;
+        if(this.currentSortDir === 'desc') modifier = -1;
+        if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+        if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+        return 0;
       });
     }
   },
@@ -105,10 +121,12 @@ export default {
           name: ""
         },
         subject_info: {
-          sname: '',
-          codet: ''
+          sname: "",
+          codet: ""
         }
       },
+      currentSort:'total_score',
+      currentSortDir: 'desc',
       layout: "",
       garde: [],
       rating: [],
@@ -138,6 +156,10 @@ export default {
       console.log("response_grade", response_grade);
       return response_grade.results;
     },
+    async updateGrade(data) {
+      const response = await this.$store.dispatch(`grade/updateGrade`, data);
+      console.log("update response", response);
+    },
     calcScore(score_array, index) {
       var calc_score = [];
       // console.log("calcScore index", index);
@@ -160,9 +182,43 @@ export default {
     },
     preview() {
       this.$router.push({
-        name: "staff-preview-grade_summary",
+        name: "assessment-preview-grade_summary",
         query: { id: this.$route.query.id }
       });
+    },
+    async approve() {
+      if (confirm("ยืนยันการอนุมัติ")) {
+        this.score.forEach(score => {
+          //  console.log(' score a', score.objectId)
+          const data = {
+            objectId: score.objectId,
+            approve: true
+          };
+          console.log('data update', data)
+          this.updateGrade(data);
+        });
+        //updateTeach
+        console.log('teach objectId', this.teach.objectId)
+        const teachData = {
+          objectId: this.teach.objectId,
+          assessment: true
+        }
+        const response = await this.$store.dispatch(`teach/updateTeach`, teachData);
+      }
+    },
+    sorts(s) {
+    console.log('test')
+    if(s === this.currentSort) {
+      this.currentSortDir = this.currentSortDir==='desc'?'asc':'desc';
+      }
+      this.currentSort = s;
+    },
+    listStudent(item) {
+      // console.log("item id ", item);
+      // this.$router.push({
+      //    name: "assessment-students-grade",
+      //   query: { id: item.objectId, schoolYear: item.schoolYear, term: item.term }
+      // });
     },
     back() {
       this.$router.go(-1);

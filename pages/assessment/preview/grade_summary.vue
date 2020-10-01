@@ -144,14 +144,14 @@
       <v-row>
         <v-col cols="2">ตรวจสอบข้อมูล </v-col>
         <v-col cols="2">
-          <v-radio-group v-model="items.approved">
+          <v-radio-group >
+            <!-- //TODO this -->
             <v-radio label="อนุมัติ" value='true'></v-radio>
             <v-radio label="ไม่อนุมัติ" value='false'></v-radio>
           </v-radio-group>
         </v-col>
         <v-col cols="6" class="mt-8">
           <v-text-field
-            v-model="items.approve_message"
             label="สาเหตุที่ไม่อนุมัติ"
           ></v-text-field>
         </v-col>

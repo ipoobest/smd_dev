@@ -14,10 +14,10 @@
       {{ teach.classRootermmName }} ปีการศึกษา {{ teach.schoolYear }}
     </v-row>
     <v-row justify="center">
-      <v-col cols="3" align="start"> วันที่ {{ gatDate }} </v-col>
-      <v-col v-if="teach.subject_info" cols="6" align="center"> วิชา {{ teach.subject_info.sname }}, {{ teach.subject_info.codet }} </v-col>
-      <v-col v-else cols="6" align="center"> วิชา {{ teach.sname }} </v-col>
-      <v-col cols="3" align="end">
+      <v-col cols="4" align="start"> วันที่ {{ gatDate }} </v-col>
+      <v-col v-if="teach.subject_info" cols="4" align="center"> วิชา {{ teach.subject_info.sname }}, {{ teach.subject_info.codet }} </v-col>
+      <v-col v-else cols="4" align="center"> วิชา {{ teach.sname }} </v-col>
+      <v-col cols="4" align="end">
         อาจารย์ผู้สอน {{ teach.teacher.name }}
       </v-col>
     </v-row>
@@ -33,13 +33,13 @@
             </th>
             <th class="text-left">คุณลักษณะ</th>
             <th class="text-left">การคิดการอ่าน</th>
-            <th>Total Score</th>
+            <th @click="sorts('total_score')" >Total Score</th>
             <th>Grade</th>
           </tr>
         </thead>
         <tbody align="left">
           <tr
-            v-for="(item_score, score_index) in sortedData"
+            v-for="(item_score, score_index) in sortedScore"
             :key="item_score.studentObjectId"
           >
             <td>{{ score_index + 1 }}</td>
@@ -94,11 +94,22 @@ export default {
       return this.score.sort(function(a, b) {
         return b.total_score - a.total_score;
       });
+    },
+    sortedScore(){
+      return this.score.sort((a, b) => {
+        let modifier = 1;
+        if(this.currentSortDir === 'desc') modifier = -1;
+        if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+        if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+        return 0;
+      });
     }
   },
   data() {
     return {
       htmlTitle: "grade",
+      currentSort:'total_score',
+      currentSortDir: 'desc',
       teach: {
         teacher: {
           name: ""
@@ -134,7 +145,13 @@ export default {
       console.log("response_grade", response_grade);
       return response_grade.results;
     },
-
+    sorts(s) {
+    console.log('test')
+    if(s === this.currentSort) {
+      this.currentSortDir = this.currentSortDir==='desc'?'asc':'desc';
+      }
+      this.currentSort = s;
+    },
     mapRating(rating) {
       rating.forEach(item => {
         this.ratio_array.push(item.rating);

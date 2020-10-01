@@ -36,7 +36,7 @@
         <v-btn @click="addScoreX">เพิ่ม</v-btn>
       </v-col>
     </v-row>
-    <v-row  class="mb-5 pl-5" style="border: 1px solid blue">
+    <v-row  class="mb-5 pl-5" v-bind:style="!items.approved ? 'border: border: 1px solid red; ': 'border: none;'">
       <div v-if="items.send_score">
         <h3 v-if="!items.approved" class="blue--text">รออนุมัติ</h3>
       </div>
@@ -263,7 +263,6 @@ export default {
       // console.log('response this.stu_grade_arr', this.stu_grade_arr)
 
      if (item.students) {
-      //  console.log('testxxx')
        this.stu_classes_arr = item.students
      } else {
       // 2 get stu array class
@@ -284,7 +283,7 @@ export default {
       if (difference.length != 0) {
         this.createGrade(difference);
       } else {
-        // console.log('xxxxxwwww', response_grade.results)
+        // console.log('grade', response_grade.results)
         return response_grade.results;
       }
     },
@@ -364,6 +363,7 @@ export default {
             sname : this.items.subject_info.sname,
           },
           studentId: studentId[index],
+          studentNumber: studentNumber[index],
           // subject: this.items.sname,
           schoolYear: this.items.schoolYear,
           term: this.items.term,

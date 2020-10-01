@@ -3,7 +3,7 @@
     <v-row align="center">
       <v-col cols="12">
         <v-card>
-          <v-card-title> 
+          <v-card-title>
             {{ title }}
             <v-spacer></v-spacer>
             <v-text-field
@@ -18,8 +18,8 @@
             :headers="headers"
             :items="items"
             :search="search"
-            @click:row="subjectList">
-
+            @click:row="subjectList"
+          >
             <!-- <template v-slot:item.actions="{ item }" >
               <v-btn  color="success" dark class="mr-2" @click="addClasses(item)">
                 เพิ่มชั้นเรียน</v-btn>
@@ -34,44 +34,56 @@
   </v-layout>
 </template>
 <script>
-  export default {
-    layout: 'assessment',
-    mounted () {
-      this.params = this.$route.params.id
-      this.getDataFromApi().then(result => (this.items = result))
-      console.log('this.params', this.params)
-    },
-    data() {
-      return {
-        params: '',
-        headers: [
-        { text: 'ปีการศึกษา', value: 'schoolYear' ,align: 'center',},
-        { text: 'เทอม', value: 'term', align: 'center  '},
+export default {
+  layout: "assessment",
+  mounted() {
+    this.params = this.$route.params.id;
+    this.class = this.$route.query.class;
+    this.getDataFromApi().then(result => (this.items = result));
+    console.log("this.params", this.$route.query);
+  },
+  data() {
+    return {
+      params: "",
+      headers: [
+        { text: "ปีการศึกษา", value: "schoolYear", align: "center" },
+        { text: "เทอม", value: "term", align: "center  " }
         // { text: 'Actions', value: 'actions', sortable: false, align: 'center' }
       ],
-        dialogCreateYear: false,
-        items: [],
-        search: ``,
-        title: `ปีการศึกษา`,
-        academicYear: {
-          schoolYear: '',
-          term: ''
-        }
+      dialogCreateYear: false,
+      items: [],
+      search: ``,
+      title: `ปีการศึกษา`,
+      class: "",
+      academicYear: {
+        schoolYear: "",
+        term: ""
       }
+    };
+  },
+  methods: {
+    async getDataFromApi() {
+      const response = await this.$store.dispatch(
+        `academic_year/getAcademicYear`
+      );
+      console.log("response", response);
+      return response.results;
     },
-    methods: {
-      async getDataFromApi() {
-        const response = await this.$store.dispatch(`academic_year/getAcademicYear`)
-        console.log('response', response)
-        return response.results
-    },
+
     subjectList(item) {
-      console.log(item)
-      this.$router.push({
-        name: 'assessment-classes',
-        query: { schoolYear: item.schoolYear, term: item.term}
-      })
+      console.log(item);
+      if (this.class === "true") {
+        this.$router.push({
+          name: "assessment-classes",
+          query: { schoolYear: item.schoolYear, term: item.term }
+      });
+      } else {
+        this.$router.push({
+          name: "assessment-subjects",
+          query: { schoolYear: item.schoolYear, term: item.term }
+        });
+      }
     }
   }
-}
+};
 </script>

@@ -60,8 +60,8 @@ export default {
     await this.getListClass(this.$route.query).then(
       result => (this.items = result)
     );
-    await this.getListTeacher().then(result => (this.teachers = result));
-    await this.selectItemTeachers();
+    // await this.getListTeacher().then(result => (this.teachers = result));
+    // await this.selectItemTeachers();
   },
   computed: {
     formTitle() {
@@ -105,12 +105,11 @@ export default {
       year: [],
       schoolYear: "",
       term: "",
-      itemLevel: ["ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"],
-      selectItemTeacher: []
     };
   },
   methods: {
     async getListClass(classItem) {
+
       const response = await this.$store.dispatch(
         `classes/getClassesByAcademicYears`,
         classItem
@@ -118,64 +117,7 @@ export default {
       console.log("getListClass", response);
       return response.results;
     },
-    async getListTeacher() {
-      var conditions = {
-        type: "ครู"
-      };
-      const response = await this.$store.dispatch(
-        `users/getUserByConditions`,
-        conditions
-      );
-      return response.results;
-    },
-    async createClasses(data) {
-      const response = await this.$store.dispatch(
-        `classes/createClasses`,
-        data
-      );
-      this.getListClass(this.$route.query).then(
-        result => (this.items = result)
-      );
-    },
-    async deteleClasses(itemId) {
-      console.log("delete ", itemId);
-      const response = await this.$store.dispatch(
-        `classes/deleteClass`,
-        itemId
-      );
-    },
-    async getAcademicYear() {
-      const response = await this.$store.dispatch(
-        `academic_year/getAcademicYear`
-      );
-      return response.results;
-    },
-    selectItemTeachers() {
-      console.log("select item teacher", this.teachers);
-      for (var index = 0; index < this.teachers.length; index++) {
-        this.selectItemTeacher.push(
-          this.teachers[index].title +
-            " " +
-            this.teachers[index].firstName +
-            " " +
-            this.teachers[index].lastName
-        );
-      }
-    },
-    editItem(item) {
-      // console.log('item id ', item)
-      this.editedIndex = this.items.indexOf(item);
-      this.classItem = Object.assign({}, item);
 
-      this.dialog = true;
-    },
-    deleteItem(item) {
-      const index = this.items.indexOf(item);
-      if (confirm("ยืนยีนการลบข้อมูล")) {
-        this.deteleClasses(item.objectId);
-        this.items.splice(index, 1);
-      }
-    },
     back() {
       this.$router.go(-1);
     },
@@ -190,15 +132,7 @@ export default {
         this.editedIndex = -1;
       }, 300);
     },
-    save() {
-      if (this.$refs.form.validate()) {
-        console.log("objects", this.classItem);
-        const data = { ...this.classItem, ...this.$route.query };
-        console.log("data request", data);
-        this.createClasses(data);
-        this.close();
-      }
-    },
+
     listStudent(item) {
       console.log("item id ", item);
       this.$router.push({

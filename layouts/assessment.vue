@@ -65,12 +65,17 @@ export default {
         {
           icon: `mdi-account`,
           title: `ผู้ใช้งาน`,
-          to: `/#`
+          to: `/assessment/#`
         },
         {
           icon: `mdi-book-plus`,
           title: `ปีการศึกษา`,
-          to: `/staff/${this.$store.state.auth.auth.objectId}`
+          to: `/assessment/${this.$store.state.auth.auth.objectId}`
+        },
+        {
+          icon: `mdi-file-document`,
+          title: `คะแนนรายบุคคล`,
+          to: `/assessment/${this.$store.state.auth.auth.objectId}?class=true`
         },
       ],
       miniVariant: false,

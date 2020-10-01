@@ -1,6 +1,10 @@
 <template>
   <v-container>
+
     <v-col cols="12">
+          <v-btn class="mr-5" color="primary" fab small dark @click="back">
+              <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>
       <v-row justify="center" class="mt-5 mb-5"
         ><h3>ใบแจ้งผลการเรียน</h3></v-row
       >
@@ -70,18 +74,18 @@
         <v-col cols="2"> {{ gatDate }} </v-col>
       </v-row>
     </v-col>
-    <v-row justify="center">
+    <!-- <v-row justify="center">
       <v-col cols="2">
         <v-radio-group v-model="items.approved">
           <v-radio label="อนุมัติ" value="ture"></v-radio>
           <v-radio label="ไม่อนุมัติ" value="false"></v-radio>
         </v-radio-group>
       </v-col>
-    </v-row>
+    </v-row> -->
     <v-row justify="center">
       <v-col cols="3">
-        <v-btn color="success">บันทึก</v-btn>
-        <v-btn color="info" class="ml-5">export pdf</v-btn>
+        <!-- <v-btn color="success">บันทึก</v-btn> -->
+        <v-btn color="info" class="ml-5">print</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -139,6 +143,9 @@ export default {
       this.info = response.results[0];
       this.rowSpan = response.results.length;
       return response.results;
+    },
+    back() {
+      this.$router.go(-1);
     }
   }
 };

@@ -21,6 +21,12 @@
         อาจารย์ผู้สอน {{ teach.teacher.name }}
       </v-col>
     </v-row>
+        <v-row  class="mb-5 pl-5" v-bind:style="!teach.assessment ? 'border: border: 1px solid red; ': 'border: none;'">
+      <div v-if="teach.assessment" >
+        <h3 v-if="teach.assessment == true" class="green--text">อนุมัติ</h3>
+        <h3 v-else class="blue--text">รออนุมัติ</h3>
+      </div>
+    </v-row>
     <v-row justify="center">
       <v-simple-table style="width:100%">
         <thead>
@@ -34,13 +40,15 @@
             <!-- <th class="text-left" v-for="item in rating" :key="item.id">
               {{ item.name }} , T-score {{ item.rating }} %
             </th> -->
-            <th>Total Score</th>
+            <th>คุณลักษณะ</th>
+            <th>การคิดการอ่าน</th>
+            <th @click="sorts('total_score')" >Total Score</th>
             <th>Grade</th>
           </tr>
         </thead>
         <tbody align="left">
           <tr
-            v-for="(item_score, score_index) in sortedData"
+            v-for="(item_score, score_index) in sortedScore"
             :key="item_score.studentObjectId"
           >
             <td>{{ score_index + 1 }}</td>
@@ -55,6 +63,8 @@
             >
               {{ item }}
             </td>
+            <td>{{ item_score.aptitude }}</td>
+            <td>{{ item_score.analytical_thinking }}</td>
             <td >{{ item_score.total_score }}</td>
             <td v-if="item_score.grade_option">{{ item_score.grade_option }}</td>
             <td v-else>{{ item_score.grade }}</td>
@@ -92,9 +102,13 @@ export default {
         .padStart(4, "0")} `;
       return dateTime;
     },
-    sortedData() {
-      return this.score.sort(function(a, b) {
-        return b.total_score - a.total_score;
+    sortedScore(){
+      return this.score.sort((a, b) => {
+        let modifier = 1;
+        if(this.currentSortDir === 'desc') modifier = -1;
+        if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+        if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+        return 0;
       });
     }
   },
@@ -109,6 +123,8 @@ export default {
           codet: ''
         }
       },
+      currentSort:'total_score',
+      currentSortDir: 'desc',
       layout: "",
       garde: [],
       rating: [],
@@ -150,6 +166,13 @@ export default {
         // console.log('คะแนนที่ผ่านการคำนวน', calc_score[index])
       });
       return calc_score;
+    },
+    sorts(s) {
+    console.log('test')
+    if(s === this.currentSort) {
+      this.currentSortDir = this.currentSortDir==='asc'?'desc':'asc';
+      }
+      this.currentSort = s;
     },
     mapRating(rating) {
       rating.forEach(item => {
