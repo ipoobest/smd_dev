@@ -40,8 +40,9 @@ export default {
     this.params = this.$route.params.id;
     this.class = this.$route.query.class;
     this.getDataFromApi().then(result => (this.items = result));
-    console.log("this.params", this.$route.query);
+    console.log("this.params",  this.class);
   },
+
   data() {
     return {
       params: "",
@@ -50,10 +51,10 @@ export default {
         { text: "เทอม", value: "term", align: "center  " }
         // { text: 'Actions', value: 'actions', sortable: false, align: 'center' }
       ],
+      title: 'ปีการศึกษา',
       dialogCreateYear: false,
       items: [],
       search: ``,
-      title: `ปีการศึกษา`,
       class: "",
       academicYear: {
         schoolYear: "",

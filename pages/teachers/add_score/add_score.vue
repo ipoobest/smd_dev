@@ -77,7 +77,7 @@
             </v-row>
           </v-col>
           <tr
-            v-for="(item_score, score_index) in score"
+            v-for="(item_score, score_index) in sortNumberStudent"
             :key="item_score.studentObjectId"
           >
             <td>{{ score_index + 1}} </td>
@@ -208,6 +208,11 @@ export default {
     );
     await this.getCriteria().then(result => (this.criteria = result));
   },
+  computed: {
+    sortNumberStudent() {
+      return this.score.sort((a, b) => a.studentId - b.studentId );
+    }
+  },
   data() {
     return {
       title: "เพิ่มคะแนนให้นักเรียน",
@@ -316,9 +321,10 @@ export default {
       var values = this.getStudentName(response.results);
       var studentName = values[0]
       var studentId = values[1]
+      var studentNumber = values[2]
       // console.log('studentName', studentName)
       // console.log('studentId xxx', studentId)
-      return [studentName, studentId];
+      return [studentName, studentId, studentNumber];
     },
     async getStudentByClassId(classId) {
       const response = await this.$store.dispatch(`classes/getClass`, classId);
@@ -342,6 +348,7 @@ export default {
       var values = await this.getStudent(students)
       var studentName = values[0]
       var studentId = values[1]
+      var studentNumber = values[2]
 
       // console.log('student id', values)
       
@@ -430,6 +437,7 @@ export default {
     getStudentName(item) {
       this.studentName = [];
       this.studentId = []
+      this.studentNumber = []
       for (var index = 0; index < item.length; index++) {
         this.studentName.push(
           item[index].tth + " " + item[index].namet + " " + item[index].snamet
@@ -437,9 +445,12 @@ export default {
         this.studentId.push(
           item[index].idstd
         )
+        this.studentNumber.push(
+          item[index].number
+        )
       }
       // console.log("student name", this.studentId);
-      return [this.studentName, this.studentId];
+      return [this.studentName, this.studentId, this.studentNumber];
     },
     mapRating(rating) {
       rating.forEach(item => {

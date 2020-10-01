@@ -87,6 +87,11 @@ export default {
               name: "assessment-id",
               params: { id: `${this.$store.state.auth.auth.objectId}` }
             });
+          } else if (response.type == "นักเรียน") {
+            this.$router.replace({
+              name: "students-id",
+              params: { id: `${this.$store.state.auth.auth.objectId}` }
+            });
           }else {
             this.$router.replace({ name: "index" });
           }

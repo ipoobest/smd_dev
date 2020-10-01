@@ -27,6 +27,7 @@
           <tr>
             <th>ลำดับ</th>
             <th>รหัส</th>
+            <th>เลขที่</th>
             <th>ชื่อ-สกุล</th>
             <th class="text-left" v-for="item in rating" :key="item.name">
               {{ item.name }} , {{ item.score }} คะแนน
@@ -44,6 +45,7 @@
           >
             <td>{{ score_index + 1 }}</td>
             <td>{{ item_score.studentId }}</td>
+            <td>{{ item_score.studentNumber }}</td>
             <td>{{ item_score.studentName }}</td>
             <td v-for="item_in in item_score.score" :key="item_in.name">
               {{ item_in }}

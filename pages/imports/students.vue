@@ -7,10 +7,20 @@
             {{ title }}
             <v-spacer></v-spacer>
             <v-col cols="2">
-              <v-text-field v-model="year" label="ปีการศึกษา"></v-text-field>
+              <v-text-field
+                v-model="year"
+                required
+                :rules="[v => !!v || 'กรุณากรอกปีการศึกษา']"
+                label="ปีการศึกษา"
+              ></v-text-field>
             </v-col>
             <v-col cols="2">
-              <v-text-field v-model="term" label="เทอม"></v-text-field>
+              <v-text-field
+                v-model="term"
+                required
+                :rules="[v => !!v || 'กรุณากรอกเทอม']"
+                label="เทอม"
+              ></v-text-field>
             </v-col>
           </v-card-title>
           <v-simple-table>
@@ -88,8 +98,8 @@ export default {
       dataArr: [],
       title: `นำเข้านักเรียน`,
       total: 0,
-      year: "2563",
-      term: "1",
+      year: "",
+      term: "",
       test: []
     };
   },
@@ -106,7 +116,7 @@ export default {
       console.log("create", response);
     },
     async createStudent(object) {
-      // const response = await this.$store.dispatch(`users/createUser`, object)
+      // const response = await this.$store.dispatch(`users/createUser`, object);
       const response = await this.$store.dispatch(
         `students/createStudent`,
         object
@@ -211,11 +221,11 @@ export default {
               tth: student.tth,
               namet: student.namet,
               snamet: student.snamet,
-              idcard: student.idcard,
+              idcard: student.idcard.toString(),
               class: student.class,
               room: student.room,
               username: student.idstd.toString(),
-              password: student.idcard,
+              password: student.idcard.toString(),
               type: "นักเรียน"
             };
             console.log("ข้อมูลนักเรียน", object);
@@ -224,6 +234,11 @@ export default {
               object
             );
             student_id_list.push(response_student.objectId);
+
+            const response_user = await this.$store.dispatch(
+              `users/createUser`,
+              object
+            );
           }
           var classroom = classroom_term.results.filter(
             data => data.classRoomLevel == level && data.classRoomName == room
@@ -238,8 +253,8 @@ export default {
               `classes/updateClasses`,
               class_data
             );
-            if(response_classroom) {
-              this.dataArr = []
+            if (response_classroom) {
+              this.dataArr = [];
             }
           } else {
             var class_data = {
@@ -253,8 +268,8 @@ export default {
               `classes/createClasses`,
               class_data
             );
-            if(response_classroom) {
-              this.dataArr = []
+            if (response_classroom) {
+              this.dataArr = [];
             }
           }
         });

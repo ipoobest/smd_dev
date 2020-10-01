@@ -54,6 +54,7 @@
 <script>
 export default {
   middleware: "authentication",
+  layout: 'assessment',
   async mounted() {
     // this.classItem = this.$route.query
     console.log("route params", this.$route.query);
@@ -64,9 +65,7 @@ export default {
     // await this.selectItemTeachers();
   },
   computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? "เพิ่มชั้นเรียน" : "แก้ไข";
-    }
+   
   },
   watch: {
     dialog(val) {

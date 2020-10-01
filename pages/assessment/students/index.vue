@@ -40,7 +40,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, index) in sortedNumber" :key="index">
+                <tr v-for="(item, index) in sortNumberStudent" :key="index">
                   <th>{{ item.number }}</th>
                   <th>{{ item.idstd }}</th>
                   <th>{{ item.namet }}</th>
@@ -71,10 +71,13 @@ export default {
     // this.students = await this.getStudentsNotIn(this.studentInClassId);
   },
   computed: {
-    sortedNumber() {
-      return this.items.sort(function(a, b) {
-        return a.number - b.number;
-      });
+    // sortedNumber() {
+    //   return this.items.sort(function(a, b) {
+    //     return a.number - b.number;
+    //   });
+    // },
+    sortNumberStudent() {
+      return this.items.sort((a, b) => a.stu_id - b.stu_id );
     }
   },
   data() {

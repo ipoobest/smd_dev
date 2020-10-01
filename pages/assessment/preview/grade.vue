@@ -28,6 +28,7 @@
           <tr>
             <th>ที่</th>
             <th>รหัส</th>
+            <th>เลขที่</th>
             <th>ชื่อ-สกุล</th>
             <th class="text-left" v-for="item in rating" :key="item.name">
               {{ item.name }} , {{ item.score }} คะแนน
@@ -37,7 +38,7 @@
             </th> -->
             <th>คุณลักษณะ</th>
             <th>การคิดการอ่าน</th>
-            <th @click="sorts('total_score')" >Total Score</th>
+            <th @click="sorts('total_score')">Total Score</th>
             <th>Grade</th>
             <!-- <th>คะแนนรวม</th> -->
           </tr>
@@ -49,16 +50,17 @@
           >
             <td>{{ score_index + 1 }}</td>
             <td>{{ item_score.studentId }}</td>
+            <td>{{ item_score.studentNumber }}</td>
             <td>{{ item_score.studentName }}</td>
-            <!-- <td v-for="item_in in item_score.score" :key="item_in.name">
+            <td v-for="item_in in item_score.score" :key="item_in.name">
               {{ item_in }}
-            </td> -->
-            <td
+            </td>
+            <!-- <td
               v-for="item in calcScore(item_score.score, score_index)"
               :key="item.key"
             >
               {{ item }}
-            </td>
+            </td> -->
             <td>{{ item_score.aptitude }}</td>
             <td>{{ item_score.analytical_thinking }}</td>
 
@@ -74,7 +76,16 @@
     </v-row>
     <v-row justify="center">
       <v-btn class="mt-3 info" @click="preview">print</v-btn>
-      <v-btn class="mt-3 ml-5 success" @click="approve">อนุมัติ</v-btn>
+      <v-btn
+        v-if="!teach.assessment"
+        class="mt-3 ml-5 orange "
+        dark
+        @click="approve"
+        >อนุมัติ</v-btn
+      >
+      <v-btn v-else class="mt-3 ml-5 success" @click="unApprove"
+        >อนุมัติแล้ว</v-btn
+      >
       <!-- <v-btn class="mt-3 ml-5 info" @click="listStudent(item)>เกรดรวมรายบุคคล</v-btn> -->
     </v-row>
   </v-container>
@@ -104,12 +115,12 @@ export default {
         .padStart(4, "0")} `;
       return dateTime;
     },
- sortedScore(){
+    sortedScore() {
       return this.score.sort((a, b) => {
         let modifier = 1;
-        if(this.currentSortDir === 'desc') modifier = -1;
-        if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
-        if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+        if (this.currentSortDir === "desc") modifier = -1;
+        if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+        if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
         return 0;
       });
     }
@@ -125,8 +136,8 @@ export default {
           codet: ""
         }
       },
-      currentSort:'total_score',
-      currentSortDir: 'desc',
+      currentSort: "total_score",
+      currentSortDir: "desc",
       layout: "",
       garde: [],
       rating: [],
@@ -194,22 +205,52 @@ export default {
             objectId: score.objectId,
             approve: true
           };
-          console.log('data update', data)
+          console.log("data update", data);
           this.updateGrade(data);
         });
         //updateTeach
-        console.log('teach objectId', this.teach.objectId)
+        console.log("teach objectId", this.teach.objectId);
         const teachData = {
           objectId: this.teach.objectId,
           assessment: true
-        }
-        const response = await this.$store.dispatch(`teach/updateTeach`, teachData);
+        };
+        const response = await this.$store.dispatch(
+          `teach/updateTeach`,
+          teachData
+        );
+        await this.getTeach(this.$route.query.id).then(
+          result => (this.teach = result)
+        );
+      }
+    },
+    async unApprove() {
+      if (confirm("ยืนยันการยกเลิก")) {
+        this.score.forEach(score => {
+          //  console.log(' score a', score.objectId)
+          const data = {
+            objectId: score.objectId,
+            approve: false
+          };
+          console.log("data update", data);
+          this.updateGrade(data);
+        });
+        const teachData = {
+          objectId: this.teach.objectId,
+          assessment: false
+        };
+        const response = await this.$store.dispatch(
+          `teach/updateTeach`,
+          teachData
+        );
+        await this.getTeach(this.$route.query.id).then(
+          result => (this.teach = result)
+        );
       }
     },
     sorts(s) {
-    console.log('test')
-    if(s === this.currentSort) {
-      this.currentSortDir = this.currentSortDir==='desc'?'asc':'desc';
+      console.log("test");
+      if (s === this.currentSort) {
+        this.currentSortDir = this.currentSortDir === "desc" ? "asc" : "desc";
       }
       this.currentSort = s;
     },

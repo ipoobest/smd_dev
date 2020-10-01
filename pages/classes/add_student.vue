@@ -63,6 +63,7 @@
             <v-simple-table>
               <thead>
                 <tr>
+                  <th>เลขที่</th>
                   <th>รหัสประจำตัว</th>
                   <th>ชื่อ</th>
                   <th>นามสกุล</th>
@@ -70,7 +71,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item, index) in items" :key="index">
+                <tr v-for="(item, index) in sortNumber" :key="index">
+                  <th>{{ item.number }}</th>
                   <th>{{ item.idstd }}</th>
                   <th>{{ item.namet }}</th>
                   <th>{{ item.snamet }}</th>
@@ -97,6 +99,14 @@ export default {
     this.student = await this.getDataFromApi(this.id);
     this.items = await this.getStudents(this.student.studentId);
     this.students = await this.getStudentsNotIn(this.student.studentId);
+  },
+  computed: {
+    sortNumber() {
+      // return this.items.sort((a,b) => {
+      //   a.number - b.number
+      // })
+       return this.items.sort((a, b) => a.number - b.number );
+    }
   },
   data() {
     return {

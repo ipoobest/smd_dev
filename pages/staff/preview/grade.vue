@@ -13,16 +13,22 @@
       {{ teach.classRootermmName }} ปีการศึกษา {{ teach.schoolYear }}
     </v-row>
     <v-row justify="center">
-      <v-col cols="4" align="start">
-        วันที่ {{gatDate}}
+      <v-col cols="4" align="start"> วันที่ {{ gatDate }} </v-col>
+      <v-col cols="4" align="center">
+        วิชา {{ teach.subject_info.sname }} รหัสวิชา
+        {{ teach.subject_info.codet }}
       </v-col>
-      <v-col cols="4" align="center"> วิชา {{ teach.subject_info.sname }} รหัสวิชา {{ teach.subject_info.codet }}  </v-col>
       <v-col cols="4" align="end">
         อาจารย์ผู้สอน {{ teach.teacher.name }}
       </v-col>
     </v-row>
-        <v-row  class="mb-5 pl-5" v-bind:style="!teach.assessment ? 'border: border: 1px solid red; ': 'border: none;'">
-      <div v-if="teach.assessment" >
+    <v-row
+      class="mb-5 pl-5"
+      v-bind:style="
+        !teach.assessment ? 'border: border: 1px solid red; ' : 'border: none;'
+      "
+    >
+      <div v-if="teach.assessment">
         <h3 v-if="teach.assessment == true" class="green--text">อนุมัติ</h3>
         <h3 v-else class="blue--text">รออนุมัติ</h3>
       </div>
@@ -33,6 +39,7 @@
           <tr>
             <th>ที่</th>
             <th>รหัส</th>
+            <th>เลขที่</th>
             <th>ชื่อ-สกุล</th>
             <th class="text-left" v-for="item in rating" :key="item.name">
               {{ item.name }} , {{ item.score }} คะแนน
@@ -42,7 +49,7 @@
             </th> -->
             <th>คุณลักษณะ</th>
             <th>การคิดการอ่าน</th>
-            <th @click="sorts('total_score')" >Total Score</th>
+            <th @click="sorts('total_score')">Total Score</th>
             <th>Grade</th>
           </tr>
         </thead>
@@ -53,20 +60,20 @@
           >
             <td>{{ score_index + 1 }}</td>
             <td>{{ item_score.studentId }}</td>
+            <td>{{ item_score.studentNumber }}</td>
             <td>{{ item_score.studentName }}</td>
             <!-- <td v-for="item_in in item_score.score" :key="item_in.name">
               {{ item_in }}
             </td> -->
-            <td
-              v-for="item in calcScore(item_score.score, score_index)"
-              :key="item.key"
-            >
+            <td v-for="item in item_score.score" :key="item.key">
               {{ item }}
             </td>
             <td>{{ item_score.aptitude }}</td>
             <td>{{ item_score.analytical_thinking }}</td>
-            <td >{{ item_score.total_score }}</td>
-            <td v-if="item_score.grade_option">{{ item_score.grade_option }}</td>
+            <td>{{ item_score.total_score }}</td>
+            <td v-if="item_score.grade_option">
+              {{ item_score.grade_option }}
+            </td>
             <td v-else>{{ item_score.grade }}</td>
           </tr>
         </tbody>
@@ -102,12 +109,12 @@ export default {
         .padStart(4, "0")} `;
       return dateTime;
     },
-    sortedScore(){
+    sortedScore() {
       return this.score.sort((a, b) => {
         let modifier = 1;
-        if(this.currentSortDir === 'desc') modifier = -1;
-        if(a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
-        if(a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
+        if (this.currentSortDir === "desc") modifier = -1;
+        if (a[this.currentSort] < b[this.currentSort]) return -1 * modifier;
+        if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
         return 0;
       });
     }
@@ -119,12 +126,12 @@ export default {
           name: ""
         },
         subject_info: {
-          sname: '',
-          codet: ''
+          sname: "",
+          codet: ""
         }
       },
-      currentSort:'total_score',
-      currentSortDir: 'desc',
+      currentSort: "total_score",
+      currentSortDir: "desc",
       layout: "",
       garde: [],
       rating: [],
@@ -168,9 +175,9 @@ export default {
       return calc_score;
     },
     sorts(s) {
-    console.log('test')
-    if(s === this.currentSort) {
-      this.currentSortDir = this.currentSortDir==='asc'?'desc':'asc';
+      console.log("test");
+      if (s === this.currentSort) {
+        this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
       }
       this.currentSort = s;
     },
