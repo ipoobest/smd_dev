@@ -20,6 +20,13 @@
             :search="search"
             @click:row="subjectList"
           >
+            <!-- <template v-slot:item.actions="{ item }" >
+              <v-btn  color="success" dark class="mr-2" @click="addClasses(item)">
+                เพิ่มชั้นเรียน</v-btn>
+              <v-btn color="error" @click="deleteItem(item)">
+                ลบ
+              </v-btn>
+            </template> -->
           </v-data-table>
         </v-card>
       </v-col>
@@ -28,11 +35,10 @@
 </template>
 <script>
 export default {
-  layout: "student",
+  layout: "assessment",
   mounted() {
-  // get students by idcard
-  console.log('data', this.$store.state.auth.auth.idstd)
-    this.getStudets(this.$store.state.auth.auth.idstd).then(result => (this.student = result))
+    this.params = this.$route.params.id;
+    this.class = this.$route.query.class;
     this.getDataFromApi().then(result => (this.items = result));
     console.log("this.params",  this.class);
   },
@@ -50,7 +56,6 @@ export default {
       items: [],
       search: ``,
       class: "",
-      student: '',
       academicYear: {
         schoolYear: "",
         term: ""
@@ -65,24 +70,20 @@ export default {
       console.log("response", response);
       return response.results;
     },
-    async getStudets(id) {
-      const data = {
-        idstd: id
-      }
-      const response = await this.$store.dispatch(
-        "students/getStudents",
-        data
-      );
-      console.log('response.results', response.results[0])
-      return response.results[0]
-    },
+
     subjectList(item) {
-      // console.log(item, this.student.idstd);
+      console.log(item);
+      if (this.class === "true") {
         this.$router.push({
-          name: "students-grade",
-          query: { id: this.student.idstd ,schoolYear: item.schoolYear, term: item.term }
-          // query: { id: item.idstd, schoolYear: this.student.schoolYear, term: this.student.term }
+          name: "assessment-classes",
+          query: { schoolYear: item.schoolYear, term: item.term }
       });
+      } else {
+        this.$router.push({
+          name: "assessment-subjects",
+          query: { schoolYear: item.schoolYear, term: item.term }
+        });
+      }
     }
   }
 };

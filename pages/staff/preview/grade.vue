@@ -23,14 +23,14 @@
       </v-col>
     </v-row>
     <v-row
-      class="mb-5 pl-5"
-      v-bind:style="
-        !teach.assessment ? 'border: border: 1px solid red; ' : 'border: none;'
-      "
-    >
+      v-if="teach.send_score_assessment" 
+      class="mb-5 pl-5">
       <div v-if="teach.assessment">
-        <h3 v-if="teach.assessment == true" class="green--text">อนุมัติ</h3>
-        <h3 v-else class="blue--text">รออนุมัติ</h3>
+        <h3 v-if="teach.assessment" class="green--text">อนุมัติ</h3>
+        <h3 v-else class="red--text">ไม่อนุมัติ</h3>
+      </div>
+      <div v-else>
+        <h3 class="blue--text">รออนุมัติ</h3>
       </div>
     </v-row>
     <v-row justify="center">
@@ -80,7 +80,7 @@
       </v-simple-table>
     </v-row>
     <v-row justify="center">
-      <v-btn class="mt-3 success" @click="preview">preview</v-btn>
+      <v-btn class="mt-3 success" @click="preview">ปพ.5</v-btn>
     </v-row>
   </v-container>
 </template>

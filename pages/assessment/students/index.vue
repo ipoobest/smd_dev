@@ -168,7 +168,7 @@ export default {
       console.log('item', item)
         this.$router.push({
         name: "assessment-students-grade",
-        query: { id: item.objectId, schoolYear: this.student.schoolYear, term: this.student.term }
+        query: { id: item.idstd, schoolYear: this.student.schoolYear, term: this.student.term }
       });
     },
     back() {

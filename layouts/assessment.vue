@@ -75,7 +75,7 @@ export default {
         {
           icon: `mdi-file-document`,
           title: `คะแนนรายบุคคล`,
-          to: `/assessment/${this.$store.state.auth.auth.objectId}?class=true`
+          to: `/assessment/personal/${this.$store.state.auth.auth.objectId}?class=true`
         },
       ],
       miniVariant: false,

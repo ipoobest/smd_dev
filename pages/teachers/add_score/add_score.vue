@@ -41,7 +41,7 @@
         <h3 v-if="!items.approved" class="blue--text">รออนุมัติ</h3>
       </div>
       <div v-if="items.approved" >
-        <h3 v-if="items.approved === 'true'" class="green--text">รออนุมัติ</h3>
+        <h3 v-if="items.assessment" class="green--text">อนุมัติ</h3>
         <v-col v-else  cols="12">
           <v-row>
             <h4>หมายเหตุจากหัวหน้ากลุ่มสาระ</h4>
@@ -80,7 +80,7 @@
             v-for="(item_score, score_index) in sortNumberStudent"
             :key="item_score.studentObjectId"
           >
-            <td>{{ score_index + 1}} </td>
+            <td>{{ item_score.studentNumber }} </td>
             <td>{{ item_score.studentId}} </td>
             <td>{{ item_score.studentName }}</td>
             <td v-for="(item_in, index) in item_score.score" :key="index">
@@ -259,6 +259,7 @@ export default {
         "grade/getGradeByConditions",
         conditions
       );
+      console.log('gred item', response_grade)
       // console.log('response xxzzzx', response_grade.results)
       this.score = response_grade.results;
       this.edit_mode = new Array(this.score.length);
@@ -477,7 +478,7 @@ export default {
       return sum_score.toFixed(2);
     },
     calcGrade(score) {
-      console.log('เกณการให้คะแนน', score)
+      // console.log('เกณการให้คะแนน', score)
       if (score == 100 || score >= this.criteria.g4 ) {
         return 4;
       } else if (score >= this.criteria.g3_5) {

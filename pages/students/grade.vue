@@ -41,7 +41,8 @@
                 <td>{{ item.teachInfo.codet }}</td>
                 <td>{{ item.teachInfo.sname }}</td>
                 <td>{{ item.teachInfo.credit }}</td>
-                <td>{{ item.grade }}</td>
+                <td v-if="item.approve">{{ item.grade }}</td>
+                <td v-else>รออนุมัติ</td>
               </tr>
             </tbody>
           </template>
@@ -93,7 +94,7 @@
 
 <script>
 export default {
-  layout:'assessment',
+  layout:'student',
   async mounted() {
     this.route = this.$route.query;
     await this.getGradeByConditions().then(result => {
@@ -131,18 +132,24 @@ export default {
   methods: {
     async getGradeByConditions() {
       var conditions = {
-        studentId: this.$route.query.id,
+        studentId : this.$route.query.id,
         schoolYear: this.$route.query.schoolYear,
-        term: this.$route.query.term
+        term: this.$route.query.term,
+        // approve: true
       };
       const response = await this.$store.dispatch(
         `grade/getGradeByConditions`,
         conditions
       );
-      console.log("grade id", response.results[0]);
+      console.log("grade id", response);
       this.info = response.results[0];
       this.rowSpan = response.results.length;
       return response.results;
+    },
+    getStudents() {
+      const condition = {
+
+      }
     },
     back() {
       this.$router.go(-1);

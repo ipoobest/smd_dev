@@ -295,7 +295,8 @@ export default {
           approved: this.items.approved,
           approve_message: this.items.approve_message,
           save_score: true,
-          send_score: send_score
+          send_score: send_score,
+          send_score_assessment: true
         };
         console.log("data update", data);
         this.updateTech(data);
