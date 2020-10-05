@@ -210,7 +210,7 @@ export default {
   },
   computed: {
     sortNumberStudent() {
-      return this.score.sort((a, b) => a.studentId - b.studentId );
+      return this.score.sort((a, b) => a.studentNumber - b.studentNumber );
     }
   },
   data() {

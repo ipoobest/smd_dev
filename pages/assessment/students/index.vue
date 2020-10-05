@@ -77,7 +77,7 @@ export default {
     //   });
     // },
     sortNumberStudent() {
-      return this.items.sort((a, b) => a.stu_id - b.stu_id );
+      return this.items.sort((a, b) => a.number - b.number );
     }
   },
   data() {

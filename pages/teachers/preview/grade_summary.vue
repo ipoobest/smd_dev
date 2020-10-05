@@ -161,7 +161,7 @@
     </div>
       <v-row justify="center" class="pt-5">
         <!-- <v-btn color="success">บันทึก</v-btn> -->
-        <v-btn color="info" class="ml-5"
+        <v-btn color="info" class="ml-5" @click="print()"
           >export pdf</v-btn
         >
       </v-row>
@@ -298,10 +298,7 @@ export default {
         background: white;
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     }
-    @page {
-        size: A4;
-        margin: 0;
-    }
+  
     @media print {
         .v-navigation-drawer__content { display: none}
         html, body {
@@ -309,7 +306,7 @@ export default {
             height: 297mm;        
         }
         .page {
-            margin: 0;
+            margin: -100px;
             border: initial;
             border-radius: initial;
             width: initial;
@@ -318,6 +315,10 @@ export default {
             background: initial;
             page-break-after: always;
         }
+      @page {
+        size: A4;
+        margin: 0;
+    }
     }
 
 </style>
