@@ -1,10 +1,9 @@
 <template>
   <v-container>
-
     <v-col cols="12">
-          <v-btn class="mr-5" color="primary" fab small dark @click="back">
-              <v-icon>mdi-arrow-left</v-icon>
-            </v-btn>
+      <v-btn class="mr-5" color="primary" fab small dark @click="back">
+        <v-icon>mdi-arrow-left</v-icon>
+      </v-btn>
       <v-row justify="center" class="mt-5 mb-5"
         ><h3>ใบแจ้งผลการเรียน</h3></v-row
       >
@@ -50,20 +49,20 @@
       <v-divider class="mt-10"></v-divider>
       <v-row class="mt-10">
         <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
-        <v-col cols="2">x</v-col>
+        <v-col cols="2"></v-col>
         <v-col cols="2">อยู่ลำดับที่</v-col>
-        <v-col cols="1">x</v-col>
+        <v-col cols="1"></v-col>
         <v-col cols="1">จาก</v-col>
-        <v-col cols="1">x</v-col>
+        <v-col cols="1"></v-col>
         <v-col cols="2">ของห้อง</v-col>
       </v-row>
       <v-row>
         <v-col cols="3">หน่วยการเรียน</v-col>
-        <v-col cols="2">x</v-col>
+        <v-col cols="2"></v-col>
         <v-col cols="2">อยู่ลำดับที่</v-col>
-        <v-col cols="1">x</v-col>
+        <v-col cols="1"></v-col>
         <v-col cols="1">จาก</v-col>
-        <v-col cols="1">x</v-col>
+        <v-col cols="1"></v-col>
         <v-col cols="2">ระดับชั้น</v-col>
       </v-row>
       <v-row>
@@ -85,7 +84,8 @@
     <v-row justify="center">
       <v-col cols="3">
         <!-- <v-btn color="success">บันทึก</v-btn> -->
-        <v-btn color="info" class="ml-5">print</v-btn>
+        <v-btn class="ml-5" color="green" dark @click="arrpove">อนุมัติ</v-btn>
+        <!-- <v-btn v-else class="ml-5" color="green" dark @click="unArrpove">online</v-btn> -->
       </v-col>
     </v-row>
   </v-container>
@@ -93,7 +93,7 @@
 
 <script>
 export default {
-  layout:'assessment',
+  layout: "assessment",
   async mounted() {
     this.route = this.$route.query;
     await this.getGradeByConditions().then(result => {
@@ -139,13 +139,44 @@ export default {
         `grade/getGradeByConditions`,
         conditions
       );
-      console.log("grade id", response.results[0]);
+      console.log("grade id", response.results[0].approve);
       this.info = response.results[0];
       this.rowSpan = response.results.length;
       return response.results;
     },
+    async updateGrade(data) {
+      const response = await this.$store.dispatch(`grade/updateGrade`, data);
+      console.log("update response", response);
+    },
     back() {
       this.$router.go(-1);
+    },
+    async arrpove() {
+      //update grade by condition
+      if (confirm("ยืนยันการอนุมัติ")) {
+        this.items.forEach(item => {
+          //  console.log(' score a', score.objectId)
+          const data = {
+            objectId: item.objectId,
+            approve: true
+          };
+          // console.log("data update", data);
+          this.updateGrade(data);
+        });
+      }
+    },
+    async unArrpove() {
+      if (confirm("ยืนยันการยกเลิก")) {
+        this.items.forEach(item => {
+          //  console.log(' score a', score.objectId)
+          const data = {
+            objectId: item.objectId,
+            approve: false
+          };
+          // console.log("data update", data);
+          this.updateGrade(data);
+        });
+      }
     }
   }
 };

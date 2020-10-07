@@ -75,7 +75,7 @@
       </v-simple-table>
     </v-row>
     <v-row justify="center">
-      <v-btn class="mt-3 info" @click="preview">print</v-btn>
+      <v-btn class="mt-3 info" @click="preview">ปพ.5</v-btn>
       <v-btn
         v-if="!teach.assessment"
         class="mt-3 ml-5 orange "
@@ -199,15 +199,15 @@ export default {
     },
     async approve() {
       if (confirm("ยืนยันการอนุมัติ")) {
-        this.score.forEach(score => {
-          //  console.log(' score a', score.objectId)
-          const data = {
-            objectId: score.objectId,
-            approve: true
-          };
-          console.log("data update", data);
-          this.updateGrade(data);
-        });
+        // this.score.forEach(score => {
+        //   //  console.log(' score a', score.objectId)
+        //   const data = {
+        //     objectId: score.objectId,
+        //     approve: true
+        //   };
+        //   console.log("data update", data);
+        //   this.updateGrade(data);
+        // });
         //updateTeach
         console.log("teach objectId", this.teach.objectId);
         const teachData = {
@@ -225,15 +225,15 @@ export default {
     },
     async unApprove() {
       if (confirm("ยืนยันการยกเลิก")) {
-        this.score.forEach(score => {
-          //  console.log(' score a', score.objectId)
-          const data = {
-            objectId: score.objectId,
-            approve: false
-          };
-          console.log("data update", data);
-          this.updateGrade(data);
-        });
+        // this.score.forEach(score => {
+        //   //  console.log(' score a', score.objectId)
+        //   const data = {
+        //     objectId: score.objectId,
+        //     approve: false
+        //   };
+        //   console.log("data update", data);
+        //   this.updateGrade(data);
+        // });
         const teachData = {
           objectId: this.teach.objectId,
           assessment: false
