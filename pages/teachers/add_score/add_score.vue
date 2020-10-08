@@ -239,6 +239,9 @@ export default {
       total_score: "",
       item_grade_option: [
         { text: "0-4", value: null },
+        { text: "ขส", value: "ขส" },
+        { text: "ผ", value: "ผ" },
+        { text: "มผ", value: "มผ" },
         { text: "ร", value: "ร" },
         { text: "มส", value: "มส" }
       ]

@@ -84,8 +84,8 @@
     <v-row justify="center">
       <v-col cols="3">
         <!-- <v-btn color="success">บันทึก</v-btn> -->
-        <v-btn class="ml-5" color="green" dark @click="arrpove">อนุมัติ</v-btn>
-        <!-- <v-btn v-else class="ml-5" color="green" dark @click="unArrpove">online</v-btn> -->
+        <v-btn v-if="!approve" class="ml-5" color="green" dark @click="arrpove">อนุมัติ</v-btn>
+        <v-btn v-else class="ml-5" color="green" dark @click="unArrpove">อนุมัติแล้ว</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -120,6 +120,7 @@ export default {
       route: "",
       items: "",
       rowSpan: "",
+      approve: false,
       info: {
         studentName: "",
         studentId: "",
@@ -142,6 +143,7 @@ export default {
       console.log("grade id", response.results[0].approve);
       this.info = response.results[0];
       this.rowSpan = response.results.length;
+      this.approve = response.results[0].approve
       return response.results;
     },
     async updateGrade(data) {
@@ -162,6 +164,9 @@ export default {
           };
           // console.log("data update", data);
           this.updateGrade(data);
+          this.getGradeByConditions().then(result => {
+           this.items = result;
+          });
         });
       }
     },
@@ -175,6 +180,9 @@ export default {
           };
           // console.log("data update", data);
           this.updateGrade(data);
+          this.getGradeByConditions().then(result => {
+           this.items = result;
+          });
         });
       }
     }
