@@ -17,7 +17,6 @@
           ]"
           label="คุณลักษณะ"
           outlined
-          type="number"
         ></v-text-field>
       </v-col>
       <v-col md="2">
@@ -29,7 +28,6 @@
           ]"
           label="การคิดการอ่าน"
           outlined
-          type="number"
         ></v-text-field>
       </v-col>
       <v-col md="2">
@@ -95,7 +93,6 @@
                     v <= parseInt(rating[index].score) ||
                     `กรุณากรอกคะแนนให้น้อยกว่า ${rating[index].score}`
                 ]"
-                type="number"
                 hide-details="auto"
                 :disabled="items.save_score"
               />
@@ -103,7 +100,6 @@
             <td>
               <v-text-field
                 v-model="item_score.aptitude"
-                type="number"
                 :max="3"
                 :min="0"
                 :rules="[
@@ -117,7 +113,6 @@
             <td>
               <v-text-field
                 v-model="item_score.analytical_thinking"
-                type="number"
                 :max="3"
                 :min="0"
                 :rules="[
