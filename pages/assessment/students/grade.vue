@@ -86,6 +86,10 @@
         <!-- <v-btn color="success">บันทึก</v-btn> -->
         <v-btn v-if="!approve" class="ml-5" color="green" dark @click="arrpove">อนุมัติ</v-btn>
         <v-btn v-else class="ml-5" color="green" dark @click="unArrpove">อนุมัติแล้ว</v-btn>
+      </v-col>      
+      <v-col cols="3">
+        <!-- <v-btn color="success">บันทึก</v-btn> -->
+        <v-btn class="ml-5" color="info" dark >print</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -134,13 +138,14 @@ export default {
       var conditions = {
         studentId: this.$route.query.id,
         schoolYear: this.$route.query.schoolYear,
-        term: this.$route.query.term
+        term: this.$route.query.term,
+        approve: true
       };
       const response = await this.$store.dispatch(
         `grade/getGradeByConditions`,
         conditions
       );
-      console.log("grade id", response.results[0].approve);
+      console.log("grade id", response.results);
       this.info = response.results[0];
       this.rowSpan = response.results.length;
       this.approve = response.results[0].approve

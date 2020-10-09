@@ -81,6 +81,7 @@
     </v-row>
     <v-row justify="center">
       <v-btn class="mt-3 success" @click="preview">ปพ.5</v-btn>
+      <!-- <v-btn class="mt-3 ml-5" color="info" @click="sendGrade">สงเกรด</v-btn> -->
     </v-row>
   </v-container>
 </template>
@@ -193,6 +194,12 @@ export default {
         name: "staff-preview-grade_summary",
         query: { id: this.$route.query.id }
       });
+    },
+    sendGrade() {
+      console.log('this.score', this.score)
+      this.score.forEach(item => {
+        console.log('item ', item.objectId)
+      })
     },
     back() {
       this.$router.go(-1);

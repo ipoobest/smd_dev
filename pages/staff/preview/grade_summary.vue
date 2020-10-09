@@ -234,9 +234,13 @@ export default {
         "grade/getGradeByConditions",
         conditions
       );
-      // console.log("response_grade", response_grade.results.length);
+      console.log("response_grade", response_grade);
 
       return response_grade.results;
+    },
+    async updateGrade(data) {
+      const response = await this.$store.dispatch(`grade/updateGrade`, data);
+      console.log("update response", response);
     },
     async updateTech(data) {
       const response = this.$store.dispatch(`teach/updateTeach`, data);
@@ -290,6 +294,15 @@ export default {
       // var save_score = (this.items.approved === "true") ? false : true;
       var send_score = (this.items.approved === "true") ? true : false;
       if (confirm("ยืนยันการบันทึก")) {
+
+        // this.students.forEach(grade => {
+        //   var data = {
+        //     objectId: grade.objectId,
+        //     staff: true
+        //   }
+        //   // console.log('grade', data)
+        //   this.updateGrade(data)
+        // })
         var data = {
           objectId: this.items.objectId,
           approved: this.items.approved,
@@ -298,7 +311,7 @@ export default {
           send_score: send_score,
           send_score_assessment: true
         };
-        console.log("data update", data);
+        // console.log("data update", data);
         this.updateTech(data);
       }
     },
