@@ -294,15 +294,14 @@ export default {
       // var save_score = (this.items.approved === "true") ? false : true;
       var send_score = (this.items.approved === "true") ? true : false;
       if (confirm("ยืนยันการบันทึก")) {
-
-        // this.students.forEach(grade => {
-        //   var data = {
-        //     objectId: grade.objectId,
-        //     staff: true
-        //   }
-        //   // console.log('grade', data)
-        //   this.updateGrade(data)
-        // })
+        this.students.forEach(grade => {
+          var data = {
+            objectId: grade.objectId,
+            staff: true
+          }
+          // console.log('grade', data)
+          this.updateGrade(data)
+        })
         var data = {
           objectId: this.items.objectId,
           approved: this.items.approved,
