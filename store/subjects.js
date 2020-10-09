@@ -52,7 +52,9 @@ export const actions = {
   async getSubjects({ commit }) {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = this.$axios.$get(`${process.env.parseUrl}/classes/${classes.subjects}`)
+        const result = this.$axios.$get(
+          `${process.env.parseUrl}/classes/${classes.subjects}?limit=500`
+        );
 
         commit('setSubjects', result)
         resolve(result)

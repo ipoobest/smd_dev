@@ -307,7 +307,7 @@ export default {
   methods: {
     async getinputFromApi() {
       const response = await this.$store.dispatch(`subjects/getSubjects`);
-      // console.log('variable', response)
+      console.log('subject ', response)
       return response.results;
     },
     async createSubject(input) {

@@ -139,7 +139,7 @@ export default {
         studentId: this.$route.query.id,
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        approve: true
+        staff: true
       };
       const response = await this.$store.dispatch(
         `grade/getGradeByConditions`,
