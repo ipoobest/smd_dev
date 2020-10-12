@@ -58,7 +58,7 @@ export const actions = {
       try {
         const where = JSON.stringify(conditions)
         console.log('where', where)
-        const result = this.$axios.$get(`${process.env.parseUrl}/classes/${classes.teach}/?where=${where}`)
+        const result = this.$axios.$get(`${process.env.parseUrl}/classes/${classes.teach}/?where=${where}&&limit=500`)
 
         commit('setSubjects', result)
         resolve(result)
