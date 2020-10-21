@@ -39,7 +39,7 @@
           <tr>
             <th>ที่</th>
             <th>รหัส</th>
-            <th>เลขที่</th>
+            <th  @click="sorts('studentNumber')">เลขที่</th>
             <th>ชื่อ-สกุล</th>
             <th class="text-left" v-for="item in rating" :key="item.name">
               {{ item.name }} , {{ item.score }} คะแนน
