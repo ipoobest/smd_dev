@@ -187,7 +187,6 @@ export default {
       return response.results;
     },
     async getCriteria() {
-      // grade
       const response = await this.$store.dispatch(`criteria/getCriteria`);
       console.log("response", response.results[0]);
       return response.results[0].criteria;
@@ -279,38 +278,6 @@ export default {
         score: this.score_criteria.score,
         rating: this.score_criteria.rating
       });
-      // const teach = {
-      //   objectId: this.$route.query.id,
-      //   rating: this.part_rating
-      // };
-      //   this.addRatingToTach(teach);
-      //   this.grade_list.forEach(grade => {
-      //     var grade_id = grade.objectId;
-      //     grade.score.push(0);
-      //     this.updateGrade(grade.objectId, grade.score);
-      //   });
-
-      // this.part_rating.forEach(item => {
-      //   sum_array.push(parseInt(item.rating));
-      // });
-      // sum = sum_array.reduce((a, b) => a + b);
-      // console.log("add rating", sum);
-      // if (sum != 100) {
-      //   alert('กรุณาทำสัดส่วนให้เท่ากับ 100')
-      //   this.part_rating.splice(-1,1);
-      //   return
-      // } else {
-      //   const teach = {
-      //     objectId: this.$route.query.id,
-      //     rating: this.part_rating
-      //   };
-      //   this.addRatingToTach(teach);
-      //   this.grade_list.forEach(grade => {
-      //     var grade_id = grade.objectId;
-      //     grade.score.push(0);
-      //     this.updateGrade(grade.objectId, grade.score);
-      //   });
-      // }
     },
 
     saveRating() {

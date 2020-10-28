@@ -38,7 +38,7 @@
       <v-col cols="1"
         >{{ items.classRoomLevel }}/{{ items.classRoomName }}</v-col
       >
-      <v-col cols="2">จำนวนหน่วยกิจ</v-col>
+      <v-col cols="2">จำนวนหน่วยกิต</v-col>
       <v-col v-if="items.subject_info" cols="1">{{
         items.subject_info.credit
       }}</v-col>

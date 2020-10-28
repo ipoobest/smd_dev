@@ -208,6 +208,7 @@ export default {
       return this.score.sort((a, b) => a.studentNumber - b.studentNumber );
     }
   },
+
   data() {
     return {
       title: "เพิ่มคะแนนให้นักเรียน",
@@ -333,6 +334,7 @@ export default {
     async getTechById(id) {
       const response = await this.$store.dispatch("teach/getTeachById", id);
       console.log("this.item", response);
+      console.log("this.rating", response.rating);
       this.rating = response.rating;
       this.mapRating(this.rating);
       return response;
@@ -456,7 +458,7 @@ export default {
         this.ratio_array.push(item.rating);
         this.score_array.push(item.score);
       });
-      // console.log("this.ratio_array", this.ratio_array);
+      console.log("this.ratio_array", this.ratio_array);
     },
     calcScore(score_array, index) {
       var calc_score = [];
