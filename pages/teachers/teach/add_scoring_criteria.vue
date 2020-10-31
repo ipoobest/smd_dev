@@ -21,8 +21,20 @@
             <v-row>
               <v-col cols="12">
                 <v-row justify="end">
-                  <v-btn class="success mr-5" @click="saveRating">บันทึก</v-btn>
-                  <v-btn class="info mr-5" v-if="edit_mode" @click="editMode">แก้ไข</v-btn>
+                  <v-btn class="info mr-5" v-if="!edit_mode" @click="editMode"
+                    >แก้ไข</v-btn
+                  >
+                  <div v-else>
+                    <v-btn class="success mr-5" @click="saveRating"
+                      >บันทึก</v-btn
+                    >
+                    <v-btn
+                      class="error  mr-5"
+                      v-if="edit_mode"
+                      @click="editMode"
+                      >ยกเลิก</v-btn
+                    >
+                  </div>
                 </v-row>
                 <v-simple-table>
                   <template v-slot:default>
@@ -31,11 +43,13 @@
                         <th class="text-center">หัวข้อ</th>
                         <th class="text-center">คะแนน</th>
                         <th class="text-center">ร้อยละ</th>
-                        <th class="text-center">จัดการ</th>
+                        <th v-if="edit_mode == true" class="text-center">
+                          จัดการ
+                        </th>
                       </tr>
                     </thead>
                     <tbody class="text-center">
-                      <tr>
+                      <tr v-if="edit_mode == true">
                         <td>
                           <v-row align="center" justify="center">
                             <v-col cols="8" class="mt-5">
@@ -81,7 +95,7 @@
                           <v-row align="center" justify="center">
                             <v-col cols="8" class="mt-5">
                               <v-text-field
-                                :disabled="edit_mode"
+                                :disabled="!edit_mode"
                                 v-model="rating.name"
                                 solo
                               ></v-text-field>
@@ -92,7 +106,7 @@
                           <v-row align="center" justify="center">
                             <v-col cols="8" class="mt-5">
                               <v-text-field
-                                :disabled="edit_mode"
+                                :disabled="!edit_mode"
                                 v-model="rating.score"
                                 solo
                               ></v-text-field>
@@ -103,14 +117,14 @@
                           <v-row align="center" justify="center">
                             <v-col cols="8" class="mt-5">
                               <v-text-field
-                                :disabled="edit_mode"
+                                :disabled="!edit_mode"
                                 v-model="rating.rating"
                                 solo
                               ></v-text-field>
                             </v-col>
                           </v-row>
                         </td>
-                        <td>
+                        <td v-if="edit_mode == true">
                           <v-icon
                             small
                             color="red"
@@ -136,11 +150,13 @@
 export default {
   layout: "teacher",
   async mounted() {
+    this.edit_mode = false;
     //get teach by subjects
     await this.getTeachByTeacherId().then(result => (this.items = result));
     await this.getRating(this.items);
     await this.getGradeList().then(result => (this.grade_list = result));
-    await this.getCriteria().then(result => (this.grade = result))
+    await this.getCriteria().then(result => (this.grade = result));
+    console.log("this edit mote", this.edit_mode);
   },
   data() {
     return {
@@ -207,7 +223,7 @@ export default {
       }
       // if (item[0].criteria) {
       //   this.grade = item[0].criteria;
-      // }
+      // }analytical_score_num
     },
     async updateGrade(objectId, score_array) {
       const data = {
@@ -273,7 +289,7 @@ export default {
     addRating() {
       var sum = 0;
       var sum_array = [];
-      this.part_rating.push({
+      this.part_rating.unshift({
         name: this.score_criteria.name,
         score: this.score_criteria.score,
         rating: this.score_criteria.rating
@@ -281,7 +297,7 @@ export default {
     },
 
     saveRating() {
-      this.editMode()
+      this.editMode();
       var sum = 0;
       var sum_array = [];
       this.part_rating.forEach(item => {
@@ -290,9 +306,9 @@ export default {
       sum = sum_array.reduce((a, b) => a + b);
       console.log("add rating", sum);
       if (sum != 100) {
-        alert('กรุณาทำสัดส่วนให้เท่ากับ 100')
-        this.part_rating.splice(-1,1);
-        return
+        alert("กรุณาทำสัดส่วนให้เท่ากับ 100");
+        this.part_rating.splice(-1, 1);
+        return;
       } else {
         const teach = {
           objectId: this.$route.query.id,
@@ -304,7 +320,7 @@ export default {
           grade.score.push(0);
           this.updateGrade(grade.objectId, grade.score);
         });
-      }      
+      }
     }
   }
 };
