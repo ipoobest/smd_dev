@@ -58,7 +58,9 @@
             <th>รหัส</th>
             <th class="text-left">ชื่อ</th>
             <!--- this header -->
-            <th class="text-left" v-for="item in rating" :key="item.name">
+            <!-- <th class="text-left" v-for="item in rating" :key="item.name"> -->
+            <th class="text-left" v-for="(item, index) in rating" :key="index">
+
              {{ item.name }}, {{ item.score }} , {{ item.rating }} %
             </th>
             <th class="text-left">คุณลักษณะ</th>

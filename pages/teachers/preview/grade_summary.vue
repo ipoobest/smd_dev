@@ -161,7 +161,7 @@
     </div>
       <v-row justify="center" class="pt-5">
         <!-- <v-btn color="success">บันทึก</v-btn> -->
-        <v-btn color="info" class="ml-5" @click="print()"
+        <v-btn color="info" class="ml-5" @click="printx()"
           >export pdf</v-btn
         >
       </v-row>
@@ -276,8 +276,17 @@ export default {
         this.analytical_score_num.push(analytical_filter.length);
       });
     },
-    print() {
-      window.print();
+    printx() {
+      var worker = html2pdf()
+      var element = document.getElementById('pdfDom')
+      var opt = {
+        margin:       1,
+        filename:     'myfile.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      worker.set(opt).from(element).save();
     },
     back() {
       this.$router.go(-1);
@@ -299,26 +308,6 @@ export default {
         box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     }
   
-    @media print {
-        .v-navigation-drawer__content { display: none}
-        html, body {
-            width: 210mm;
-            height: 297mm;        
-        }
-        .page {
-            margin: -100px;
-            border: initial;
-            border-radius: initial;
-            width: initial;
-            min-height: initial;
-            box-shadow: initial;
-            background: initial;
-            page-break-after: always;
-        }
-      @page {
-        size: A4;
-        margin: 0;
-    }
-    }
+  
 
 </style>

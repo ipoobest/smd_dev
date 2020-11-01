@@ -289,7 +289,7 @@ export default {
     addRating() {
       var sum = 0;
       var sum_array = [];
-      this.part_rating.unshift({
+      this.part_rating.push({
         name: this.score_criteria.name,
         score: this.score_criteria.score,
         rating: this.score_criteria.rating
