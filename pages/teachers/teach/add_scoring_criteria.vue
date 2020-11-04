@@ -29,8 +29,8 @@
                       >บันทึก</v-btn
                     >
                     <v-btn
+                    v-if="part_rating.length != 0" 
                       class="error  mr-5"
-                      v-if="edit_mode"
                       @click="editMode"
                       >ยกเลิก</v-btn
                     >
@@ -150,7 +150,7 @@
 export default {
   layout: "teacher",
   async mounted() {
-    this.edit_mode = false;
+    // this.edit_mode = false;
     //get teach by subjects
     await this.getTeachByTeacherId().then(result => (this.items = result));
     await this.getRating(this.items);
@@ -219,7 +219,7 @@ export default {
     },
     async getRating(item) {
       // console.log("criteria", this.grade);
-      console.log("this rating", item[0].rating);
+      console.log("this rating", item[0]);
       if (item[0].rating) {
         this.part_num = item[0].rating.length;
         this.part_rating = item[0].rating;

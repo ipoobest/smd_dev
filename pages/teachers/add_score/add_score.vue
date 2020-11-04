@@ -85,13 +85,13 @@
               <v-text-field
                 v-model="item_score.score[index]"
                 :value="item_in"
-                :max="ratio_array[index]"
+                :max="score_array[index]"
                 :min="0"
                 :rules="[
                   v => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
                   v =>
-                    v <= parseInt(ratio_array[index]) ||
-                    `กรุณากรอกคะแนนให้น้อยกว่า ${ratio_array[index]}`
+                    v <= parseInt(score_array[index]) ||
+                    `กรุณากรอกคะแนนให้น้อยกว่า ${score_array[index]}`
                 ]"
                 hide-details="auto"
                 :disabled="items.save_score"
