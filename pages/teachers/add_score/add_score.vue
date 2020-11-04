@@ -58,10 +58,8 @@
             <th>รหัส</th>
             <th class="text-left">ชื่อ</th>
             <!--- this header -->
-            <!-- <th class="text-left" v-for="item in rating" :key="item.name"> -->
             <th class="text-left" v-for="(item, index) in rating" :key="index">
-
-             {{ item.name }}, {{ item.score }} , {{ item.rating }} %
+              {{ item.name }}, {{ item.score }} , {{ item.rating }} %
             </th>
             <th class="text-left">คุณลักษณะ</th>
             <th class="text-left">การคิดการอ่าน</th>
@@ -246,6 +244,7 @@ export default {
         { text: "ผ", value: "ผ" },
         { text: "มผ", value: "มผ" },
         { text: "ร", value: "ร" },
+        { text: "รส", value: "รส" },
         { text: "มส", value: "มส" }
       ]
     };

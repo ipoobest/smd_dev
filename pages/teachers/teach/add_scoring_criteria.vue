@@ -167,6 +167,9 @@ export default {
       part_rating: [],
       part_num: "",
       edit_mode: true,
+      init_rating: [],
+      remove_rating: false,
+      add_rating: 0,
       grade_list: [],
       grade: {
         g4: 0,
@@ -215,11 +218,13 @@ export default {
       }
     },
     async getRating(item) {
-      console.log("criteria", this.grade);
+      // console.log("criteria", this.grade);
       console.log("this rating", item[0].rating);
       if (item[0].rating) {
         this.part_num = item[0].rating.length;
         this.part_rating = item[0].rating;
+        this.init_rating = this.part_rating.slice();
+        console.log("this.init_rating", this.init_rating);
       }
       // if (item[0].criteria) {
       //   this.grade = item[0].criteria;
@@ -230,26 +235,15 @@ export default {
         objectId: objectId,
         score: score_array
       };
-      console.log("score", data);
+      console.log("score updateGrade", data);
       const response = await this.$store.dispatch(`grade/updateGrade`, data);
       console.log("response");
     },
-    saveScoringCriteria() {
-      const data = {
-        objectId: this.$route.query.id,
-        criteria: {
-          g4: this.grade.g4,
-          g3_5: this.grade.g3_5,
-          g3: this.grade.g3,
-          g2_5: this.grade.g2_5,
-          g2: this.grade.g2,
-          g1_5: this.grade.g1_5,
-          g1: this.grade.g1
-        }
-      };
-      console.log("คะแนน", data);
-      this.addRatingToTach(data);
+    async deleteGrade(data) {
+      const response = await this.$store.dispatch(`grade/deleteGrade`, data);
+      console.log("response");
     },
+    
     editMode() {
       if (this.edit_mode) {
         this.edit_mode = false;
@@ -267,24 +261,13 @@ export default {
       console.log("back");
     },
     deleteRating(index) {
-      // const index = this.part_rating.indexOf(item);
-      if (confirm("ยืนยีนการลบข้อมูล")) {
-        this.part_rating.splice(index, 1);
-        const teach = {
-          objectId: this.$route.query.id,
-          rating: this.part_rating
-        };
-        this.addRatingToTach(teach);
-        this.grade_list.forEach(grade => {
-          var grade_id = grade.objectId;
-          // console.log('update grade.score', grade.score)
-          // update score ตารางเกรด
-          this.updateGrade(grade.objectId, grade.score);
-          grade.score.splice(index, 1);
-        });
+      if (index < this.init_rating.length) {
+        this.remove_rating = true;
+      } else {
+        this.add_rating -= 1;
       }
+      this.part_rating.splice(index, 1);
     },
-    // this.part_rating.splice(index, 1);
 
     addRating() {
       var sum = 0;
@@ -294,6 +277,8 @@ export default {
         score: this.score_criteria.score,
         rating: this.score_criteria.rating
       });
+      this.add_rating += 1;
+      console.log("this add ratubg", this.add_rating);
     },
 
     saveRating() {
@@ -315,11 +300,19 @@ export default {
           rating: this.part_rating
         };
         this.addRatingToTach(teach);
-        this.grade_list.forEach(grade => {
+        if (this.remove_rating || this.add_rating > 0) {
+          console.log('reset grade', )
+          this.grade_list.forEach(grade => {
+            console.log('grade objectId', grade.objectId)
+            this.deleteGrade(grade.objectId);
+          });
+        } else {
+          this.grade_list.forEach(grade => {
           var grade_id = grade.objectId;
-          grade.score.push(0);
+          console.log('update grade.score', grade.score)
           this.updateGrade(grade.objectId, grade.score);
         });
+        }
       }
     }
   }

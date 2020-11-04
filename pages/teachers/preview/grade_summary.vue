@@ -3,7 +3,7 @@
     <v-btn class="mr-5" color="primary" fab small dark @click="back()" >
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
-    <div id="pdfDom" class="page">
+    <div ref="pdf" class="page">
       <v-row justify="center">
         <img height="150" src="~/assets/logo-smd.png" />
       </v-row>
@@ -171,6 +171,8 @@
 
 <script>
 import jsPDF from "jspdf";
+import domtoimage from 'dom-to-image';
+
 export default {
   layout: "teacher",
   async mounted() {
@@ -277,16 +279,25 @@ export default {
       });
     },
     printx() {
-      var worker = html2pdf()
-      var element = document.getElementById('pdfDom')
-      var opt = {
-        margin:       1,
-        filename:     'myfile.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2 },
-        jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-      };
-      worker.set(opt).from(element).save();
+        domtoimage
+        .toPng(this.$refs.content)
+        .then(function (dataUrl) {
+          var img = new Image();
+          img.src = dataUrl;
+          const doc = new jsPDF({
+            orientation: 'portrait',
+            // unit: "pt",
+            format: [480, 1700],
+          });
+          doc.addImage(img, 'JPEG', 20, 20);
+          const date = new Date();
+          const filename = 'filename' + '.pdf';
+
+          doc.save(filename);
+        })
+        .catch(function (error) {
+          console.error('oops, something went wrong!', error);
+        });
     },
     back() {
       this.$router.go(-1);
