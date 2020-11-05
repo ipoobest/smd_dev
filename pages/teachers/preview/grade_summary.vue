@@ -5,7 +5,7 @@
     </v-btn>
     <div ref="pdf" class="page">
       <v-row justify="center">
-        <img height="150" src="~/assets/logo-smd.png" />
+        <img height="100" src="~/assets/logo-smd.png" />
       </v-row>
       <v-row justify="center">
         <h3>แบบบันทึกผลการพัฒนาคุณภาพผู้เรียน(ปพ.5)</h3>
@@ -56,7 +56,7 @@
       <v-row justify="center" class="pt-10 pb-5">
         สรุปผลการประเมิน
       </v-row>
-      <v-row>
+      <v-row justify="center">
         <v-simple-table>
           <thead>
             <tr>
@@ -171,7 +171,7 @@
 
 <script>
 import jsPDF from "jspdf";
-import domtoimage from 'dom-to-image';
+import html2canvas from 'html2canvas';
 
 export default {
   layout: "teacher",
@@ -311,7 +311,7 @@ export default {
     .page {
         width: 210mm;
         min-height: 297mm;
-        padding: 20mm;
+        padding: 3.5mm;
         margin: 10mm auto;
         border: 1px #D3D3D3 solid;
         border-radius: 5px;
