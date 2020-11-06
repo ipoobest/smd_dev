@@ -21,20 +21,8 @@
             <v-row>
               <v-col cols="12">
                 <v-row justify="end">
-                  <v-btn class="info mr-5" v-if="!edit_mode" @click="editMode"
-                    >แก้ไข</v-btn
-                  >
-                  <div v-else>
-                    <v-btn class="success mr-5" @click="saveRating"
-                      >บันทึก</v-btn
-                    >
-                    <v-btn
-                    v-if="part_rating.length != 0" 
-                      class="error  mr-5"
-                      @click="editMode"
-                      >ยกเลิก</v-btn
-                    >
-                  </div>
+                  <v-btn class="success mr-5" @click="saveRating">บันทึก</v-btn>
+                  <v-btn class="info mr-5" v-if="edit_mode" @click="editMode">แก้ไข</v-btn>
                 </v-row>
                 <v-simple-table>
                   <template v-slot:default>
@@ -42,14 +30,12 @@
                       <tr>
                         <th class="text-center">หัวข้อ</th>
                         <th class="text-center">คะแนน</th>
-                        <th class="text-center">ร้อยละ</th>
-                        <th v-if="edit_mode == true" class="text-center">
-                          จัดการ
-                        </th>
+                        <th class="text-center">สัดส่วน</th>
+                        <th class="text-center">จัดการ</th>
                       </tr>
                     </thead>
                     <tbody class="text-center">
-                      <tr v-if="edit_mode == true">
+                      <tr>
                         <td>
                           <v-row align="center" justify="center">
                             <v-col cols="8" class="mt-5">
@@ -95,7 +81,7 @@
                           <v-row align="center" justify="center">
                             <v-col cols="8" class="mt-5">
                               <v-text-field
-                                :disabled="!edit_mode"
+                                :disabled="edit_mode"
                                 v-model="rating.name"
                                 solo
                               ></v-text-field>
@@ -106,7 +92,7 @@
                           <v-row align="center" justify="center">
                             <v-col cols="8" class="mt-5">
                               <v-text-field
-                                :disabled="!edit_mode"
+                                :disabled="edit_mode"
                                 v-model="rating.score"
                                 solo
                               ></v-text-field>
@@ -117,14 +103,14 @@
                           <v-row align="center" justify="center">
                             <v-col cols="8" class="mt-5">
                               <v-text-field
-                                :disabled="!edit_mode"
+                                :disabled="edit_mode"
                                 v-model="rating.rating"
                                 solo
                               ></v-text-field>
                             </v-col>
                           </v-row>
                         </td>
-                        <td v-if="edit_mode == true">
+                        <td>
                           <v-icon
                             small
                             color="red"
@@ -150,13 +136,11 @@
 export default {
   layout: "teacher",
   async mounted() {
-    // this.edit_mode = false;
     //get teach by subjects
     await this.getTeachByTeacherId().then(result => (this.items = result));
     await this.getRating(this.items);
     await this.getGradeList().then(result => (this.grade_list = result));
-    await this.getCriteria().then(result => (this.grade = result));
-    console.log("this edit mote", this.edit_mode);
+    await this.getCriteria().then(result => (this.grade = result))
   },
   data() {
     return {
@@ -167,9 +151,6 @@ export default {
       part_rating: [],
       part_num: "",
       edit_mode: true,
-      init_rating: [],
-      remove_rating: false,
-      add_rating: 0,
       grade_list: [],
       grade: {
         g4: 0,
@@ -206,6 +187,7 @@ export default {
       return response.results;
     },
     async getCriteria() {
+      // grade
       const response = await this.$store.dispatch(`criteria/getCriteria`);
       console.log("response", response.results[0]);
       return response.results[0].criteria;
@@ -218,32 +200,41 @@ export default {
       }
     },
     async getRating(item) {
-      // console.log("criteria", this.grade);
-      console.log("this rating", item[0]);
+      console.log("criteria", this.grade);
+      console.log("this rating", item[0].rating);
       if (item[0].rating) {
         this.part_num = item[0].rating.length;
         this.part_rating = item[0].rating;
-        this.init_rating = this.part_rating.slice();
-        console.log("this.init_rating", this.init_rating);
       }
       // if (item[0].criteria) {
       //   this.grade = item[0].criteria;
-      // }analytical_score_num
+      // }
     },
     async updateGrade(objectId, score_array) {
       const data = {
         objectId: objectId,
         score: score_array
       };
-      console.log("score updateGrade", data);
+      console.log("score", data);
       const response = await this.$store.dispatch(`grade/updateGrade`, data);
       console.log("response");
     },
-    async deleteGrade(data) {
-      const response = await this.$store.dispatch(`grade/deleteGrade`, data);
-      console.log("response");
+    saveScoringCriteria() {
+      const data = {
+        objectId: this.$route.query.id,
+        criteria: {
+          g4: this.grade.g4,
+          g3_5: this.grade.g3_5,
+          g3: this.grade.g3,
+          g2_5: this.grade.g2_5,
+          g2: this.grade.g2,
+          g1_5: this.grade.g1_5,
+          g1: this.grade.g1
+        }
+      };
+      console.log("คะแนน", data);
+      this.addRatingToTach(data);
     },
-    
     editMode() {
       if (this.edit_mode) {
         this.edit_mode = false;
@@ -261,13 +252,24 @@ export default {
       console.log("back");
     },
     deleteRating(index) {
-      if (index < this.init_rating.length) {
-        this.remove_rating = true;
-      } else {
-        this.add_rating -= 1;
+      // const index = this.part_rating.indexOf(item);
+      if (confirm("ยืนยีนการลบข้อมูล")) {
+        this.part_rating.splice(index, 1);
+        const teach = {
+          objectId: this.$route.query.id,
+          rating: this.part_rating
+        };
+        this.addRatingToTach(teach);
+        this.grade_list.forEach(grade => {
+          var grade_id = grade.objectId;
+          // console.log('update grade.score', grade.score)
+          // update score ตารางเกรด
+          this.updateGrade(grade.objectId, grade.score);
+          grade.score.splice(index, 1);
+        });
       }
-      this.part_rating.splice(index, 1);
     },
+    // this.part_rating.splice(index, 1);
 
     addRating() {
       var sum = 0;
@@ -277,12 +279,10 @@ export default {
         score: this.score_criteria.score,
         rating: this.score_criteria.rating
       });
-      this.add_rating += 1;
-      console.log("this add ratubg", this.add_rating);
     },
 
     saveRating() {
-      this.editMode();
+      this.editMode()
       var sum = 0;
       var sum_array = [];
       this.part_rating.forEach(item => {
@@ -291,29 +291,21 @@ export default {
       sum = sum_array.reduce((a, b) => a + b);
       console.log("add rating", sum);
       if (sum != 100) {
-        alert("กรุณาทำสัดส่วนให้เท่ากับ 100");
-        this.part_rating.splice(-1, 1);
-        return;
+        alert('กรุณาทำสัดส่วนให้เท่ากับ 100')
+        this.part_rating.splice(-1,1);
+        return
       } else {
         const teach = {
           objectId: this.$route.query.id,
           rating: this.part_rating
         };
         this.addRatingToTach(teach);
-        if (this.remove_rating || this.add_rating > 0) {
-          console.log('reset grade', )
-          this.grade_list.forEach(grade => {
-            console.log('grade objectId', grade.objectId)
-            this.deleteGrade(grade.objectId);
-          });
-        } else {
-          this.grade_list.forEach(grade => {
+        this.grade_list.forEach(grade => {
           var grade_id = grade.objectId;
-          console.log('update grade.score', grade.score)
+          grade.score.push(0);
           this.updateGrade(grade.objectId, grade.score);
         });
-        }
-      }
+      }      
     }
   }
 };

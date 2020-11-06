@@ -273,7 +273,7 @@ export default {
       selectItemStaffType: [],
       selectItemClasses: [
         { text: "ม.ต้น", value: ["ม.1", "ม.2", "ม.3"] },
-        { text: "ม.ปลาย", value: ["ม.4 ม.5 ม.6"] }
+        { text: "ม.ปลาย", value: ["ม.4", "ม.5", "ม.6"] }
       ]
     };
   },
