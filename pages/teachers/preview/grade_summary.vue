@@ -3,7 +3,7 @@
     <v-btn class="mr-5" color="primary" fab small dark @click="back()">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
-    <div >
+    <div>
       <v-row justify="center">
         <img height="100" src="~/assets/logo-smd.png" />
       </v-row>
@@ -19,7 +19,7 @@
         <h3>อำเภอเมืองขอนแก่น จังหวัดขอนแก่น</h3>
       </v-row>
       <v-row justify="center" class="pt-5">
-        ระดับมัธยมศึกษาตอน
+        ระดับมัธยมศึกษาตอน{{ getClasses() }}
       </v-row>
       <v-row justify="start" class="pt-10">
         <v-col cols="1">ชื่อวิชา</v-col>
@@ -46,9 +46,9 @@
           items.subject_info.credit
         }}</v-col>
         <v-col cols="2">เวลาเรียน</v-col>
-        <v-col v-if="items.subject_info" cols="1">{{
-          items.subject_info.hour
-        }}</v-col>
+        <v-col v-if="items.subject_info" cols="1">
+          {{ getPeriod() }}
+        </v-col>
         <v-col cols="2">คาบ/สัปดาห์</v-col>
       </v-row>
       <v-row justify="start">
@@ -375,25 +375,27 @@ export default {
         .toString()
         .padStart(4, "0")} `;
       return dateTime;
-    }
+    },
+
   },
+
   htmlToPdfOptions: {
     margin: 0,
 
     filename: `test.pdf`,
 
     image: {
-        type: 'jpeg', 
-        quality: 0.98
+      type: "jpeg",
+      quality: 0.98
     },
 
     enableLinks: false,
 
     html2canvas: {
-        scale: 1,
-        useCORS: true
-    },
-},
+      scale: 1,
+      useCORS: true
+    }
+  },
   data() {
     return {
       date: "",
@@ -410,6 +412,7 @@ export default {
           value: ""
         }
       },
+      classes: [],
       students: [],
       total_students: "",
       grade_num_list: [],
@@ -436,6 +439,22 @@ export default {
       // console.log("response_grade", response_grade.results.length);
 
       return response_grade.results;
+    },
+    getClasses() {
+      var a = "ต้น"
+      var b = "ปลาย"
+      var classes = this.items.classRoomLevel;
+      if(["ม.1","ม.2","ม.3"].includes(classes)) {
+        return a;
+      } else {
+        return b;
+      }
+    },
+    getPeriod() {
+      var credit = this.items.subject_info.credit
+      var period = credit * 2
+      console.log('period',period)
+      return period
     },
     summaryGrade(data) {
       this.total_students = data.length;
@@ -477,7 +496,7 @@ export default {
       });
     },
     print() {
-      window.print()
+      window.print();
       // console.log("it ok");
       // this.$refs.html2Pdf.generatePdf();
     },
@@ -502,6 +521,8 @@ export default {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 @media print {
-    body {transform: scale(.7);}
+  body {
+    transform: scale(0.7);
+  }
 }
 </style>
