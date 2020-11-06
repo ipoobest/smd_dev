@@ -30,7 +30,7 @@
             <th @click="sorts('studentNumber')">เลขที่</th>
             <th>ชื่อ-สกุล</th>
             <th class="text-left" v-for="item in rating" :key="item.name">
-              {{ item.name }} , {{ item.score }} คะแนน
+              {{ item.score }} คะแนน , {{ item.rating }} %
             </th>
             <th class="text-left">คุณลักษณะ</th>
             <th class="text-left">การคิดการอ่าน</th>
