@@ -126,14 +126,14 @@
       </v-row>
       <v-row justify="start" class="pt-5">
         <v-col cols="4"
-          >หัวหน้าหลุ่มสาระการเรียนรู้{{ items.department }}</v-col
+          >หัวหน้ากลุ่มสาระการเรียนรู้{{ items.department }}</v-col
         >
         <v-col cols="3.5"></v-col>
         <v-col cols="1">วันที่</v-col>
         <v-col cols="2.5">{{ gatDate }}</v-col>
       </v-row>
       <v-row justify="start" class="pt-5">
-        <v-col cols="4">ผู้ช่วยรองผู้อำนวยการฝ่ายวิชาการ</v-col>
+        <v-col cols="4">ผู้ช่วยผู้อำนวยการฝ่ายวิชาการและวิจัย</v-col>
         <v-col cols="3.5"> </v-col>
         <v-col cols="1">วันที่</v-col>
         <v-col cols="2.5">{{ gatDate }}</v-col>
