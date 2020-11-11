@@ -82,6 +82,7 @@
 
 <script>
 export default {
+  middleware: 'admin',
   async mounted() {
     await this.getTeachById(this.$route.query.id).then(result => (this.classInfo = result))
     

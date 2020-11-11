@@ -266,6 +266,7 @@
 <script>
 export default {
   // middleware: 'authentication',
+  middleware: "admin",
   data() {
     return {
       formTitleDepartment: "สร้างกลุ่มสาระการเรียนรู้",

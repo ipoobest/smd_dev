@@ -109,6 +109,7 @@
 
 <script>
   export default {
+    middleware: 'admin',
     async mounted() {
     //  this.params = this.$store.state.teach.classId
     this.query = this.$route.query

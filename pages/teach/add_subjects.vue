@@ -152,6 +152,7 @@
 
 <script>
 export default {
+  middleware: 'admin',
   async mounted() {
     this.query = this.$route.query;
     await this.getSubjectsFromTeach().then(

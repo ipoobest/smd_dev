@@ -44,6 +44,8 @@
 <script>
 export default {
   // middleware: 'authentication',
+  middleware: 'admin',
+
   mounted() {
     this.getDataFromApi().then(result => (this.items = result))
   },  

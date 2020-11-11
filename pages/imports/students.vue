@@ -92,6 +92,7 @@
 import xlsx from "xlsx";
 
 export default {
+  middleware: "admin",
   data() {
     return {
       csv: [],

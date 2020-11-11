@@ -117,6 +117,7 @@
 
 <script>
 export default {
+  middleware: "admin",
   async mounted() {
     await this.getCrieria().then(result => (this.grade = result));
   },
