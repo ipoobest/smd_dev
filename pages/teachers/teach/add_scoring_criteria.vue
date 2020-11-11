@@ -135,6 +135,7 @@
 <script>
 export default {
   layout: "teacher",
+  middleware: "teacher",
   async mounted() {
     //get teach by subjects
     await this.getTeachByTeacherId().then(result => (this.items = result));

@@ -35,7 +35,7 @@
                 </v-card-title>
               </v-toolbar>
             </template>
-            <template v-slot:item.actions="{ item }">
+            <template v-slot:[`item.actions`]="{ item }">
               <v-btn small class="mr-2 info" @click="editItem(item)">
                 แก้ไข
               </v-btn>
@@ -53,7 +53,7 @@
 <script>
 
 export default {
-  middleware: 'authentication',
+  middleware: 'admin',
   data() {
     return {
       dialog: false,

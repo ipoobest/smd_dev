@@ -53,7 +53,7 @@
 
 <script>
 export default {
-  middleware: "authentication",
+  middleware: "assessment",
   layout: 'assessment',
   async mounted() {
     // this.classItem = this.$route.query

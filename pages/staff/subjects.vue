@@ -58,6 +58,7 @@
 <script>
 export default {
   layout: "staff",
+  middleware: 'staff',
   async mounted() {
     this.staff = this.$store.state.auth.auth;
     console.log("staff", this.staff);

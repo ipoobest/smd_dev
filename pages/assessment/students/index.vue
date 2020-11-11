@@ -63,6 +63,7 @@
 <script>
 export default {
   layout: 'assessment',
+  middleware: "assessment",
   async mounted() {
     this.id = this.$route.query.id;
     this.studentInClassId = await this.getListClasses();

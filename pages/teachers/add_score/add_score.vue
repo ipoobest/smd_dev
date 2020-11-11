@@ -34,18 +34,23 @@
         <v-btn @click="addScoreX">เพิ่ม</v-btn>
       </v-col>
     </v-row>
-    <v-row  class="mb-5 pl-5" v-bind:style="!items.approved ? 'border: border: 1px solid red; ': 'border: none;'">
+    <v-row
+      class="mb-5 pl-5"
+      v-bind:style="
+        !items.approved ? 'border: border: 1px solid red; ' : 'border: none;'
+      "
+    >
       <div v-if="items.send_score">
         <h3 v-if="!items.approved" class="blue--text">รออนุมัติ</h3>
       </div>
-      <div v-if="items.approved" >
+      <div v-if="items.approved">
         <h3 v-if="items.assessment" class="green--text">อนุมัติ</h3>
-        <v-col v-else  cols="12">
+        <v-col v-else cols="12">
           <v-row>
             <h4>หมายเหตุจากหัวหน้ากลุ่มสาระ</h4>
           </v-row>
           <v-row>
-             <p  class="red--text">{{items.approve_message}}</p>
+            <p class="red--text">{{ items.approve_message }}</p>
           </v-row>
         </v-col>
       </div>
@@ -78,8 +83,8 @@
             v-for="(item_score, score_index) in sortNumberStudent"
             :key="item_score.studentObjectId"
           >
-            <td>{{ item_score.studentNumber }} </td>
-            <td>{{ item_score.studentId}} </td>
+            <td>{{ item_score.studentNumber }}</td>
+            <td>{{ item_score.studentId }}</td>
             <td>{{ item_score.studentName }}</td>
             <td v-for="(item_in, index) in item_score.score" :key="index">
               <v-text-field
@@ -161,8 +166,12 @@
 
     <v-row justify="center">
       <!-- <v-btn color="orange" dark class="mr-2">reset form</v-btn> -->
-      <v-btn v-if="!items.send_score" class="info mt-5 mr-5" @click="sendGrade">ส่งคะแนน</v-btn>
-      <v-btn class="success mt-5 mr-5" @click="previewGrade" dark>รายงานเกรด</v-btn>
+      <v-btn v-if="!items.send_score" class="info mt-5 mr-5" @click="sendGrade"
+        >ส่งคะแนน</v-btn
+      >
+      <v-btn class="success mt-5 mr-5" @click="previewGrade" dark
+        >รายงานเกรด</v-btn
+      >
       <v-btn class="success mt-5 mr-5" @click="previewSummary" dark>ปพ.5</v-btn>
       <!-- <v-btn class="success mt-5 mr-5" @click="previewTscore" dark>Preview3</v-btn> -->
       <div v-if="!items.send_score">
@@ -172,7 +181,11 @@
           @click="updateGrade"
           >บันทึก</v-btn
         >
-        <v-btn v-if="items.save_score" class="orange mt-5 mr-5" @click="editAllGrade" dark 
+        <v-btn
+          v-if="items.save_score"
+          class="orange mt-5 mr-5"
+          @click="editAllGrade"
+          dark
           >แก้ไข</v-btn
         >
       </div>
@@ -193,6 +206,7 @@
 
 <script>
 export default {
+  middleware: "teacher",
   layout: "teacher",
   async mounted() {
     await this.getTechById(this.$route.query.id).then(
@@ -205,7 +219,7 @@ export default {
   },
   computed: {
     sortNumberStudent() {
-      return this.score.sort((a, b) => a.studentNumber - b.studentNumber );
+      return this.score.sort((a, b) => a.studentNumber - b.studentNumber);
     }
   },
 
@@ -259,7 +273,7 @@ export default {
         "grade/getGradeByConditions",
         conditions
       );
-      console.log('gred item', response_grade)
+      console.log("gred item", response_grade);
       // console.log('response xxzzzx', response_grade.results)
       this.score = response_grade.results;
       this.edit_mode = new Array(this.score.length);
@@ -268,17 +282,17 @@ export default {
       this.stu_grade_arr = await this.grade_arr.map(a => a.studentObjectId);
       // console.log('response this.stu_grade_arr', this.stu_grade_arr)
 
-     if (item.students) {
-       this.stu_classes_arr = item.students
-     } else {
-      // 2 get stu array class
-      const response_classes = await this.$store.dispatch(
-        `classes/getClass`,
-        this.items.classId
-      );
-      this.stu_classes_arr = response_classes.studentId;
-      // console.log('stu_classes_arr', this.stu_classes_arr)
-     }
+      if (item.students) {
+        this.stu_classes_arr = item.students;
+      } else {
+        // 2 get stu array class
+        const response_classes = await this.$store.dispatch(
+          `classes/getClass`,
+          this.items.classId
+        );
+        this.stu_classes_arr = response_classes.studentId;
+        // console.log('stu_classes_arr', this.stu_classes_arr)
+      }
       // 3 check diff
       var difference = this.stu_classes_arr.filter(
         x => !this.stu_grade_arr.includes(x)
@@ -320,9 +334,9 @@ export default {
       );
       // console.log("response student test", response.results);
       var values = this.getStudentName(response.results);
-      var studentName = values[0]
-      var studentId = values[1]
-      var studentNumber = values[2]
+      var studentName = values[0];
+      var studentId = values[1];
+      var studentNumber = values[2];
       // console.log('studentName', studentName)
       // console.log('studentId xxx', studentId)
       return [studentName, studentId, studentNumber];
@@ -347,13 +361,13 @@ export default {
       return response.results[0].criteria;
     },
     async createGrade(students) {
-      var values = await this.getStudent(students)
-      var studentName = values[0]
-      var studentId = values[1]
-      var studentNumber = values[2]
+      var values = await this.getStudent(students);
+      var studentName = values[0];
+      var studentId = values[1];
+      var studentNumber = values[2];
 
       // console.log('student id', values)
-      
+
       // console.log("this.students", studentName);
       var initScore = new Array(this.rating.length);
       initScore.fill(0);
@@ -367,9 +381,9 @@ export default {
           teachId: this.items.objectId,
           teachInfo: {
             techId: this.items.objectId,
-            codet : this.items.subject_info.codet,
-            credit : this.items.subject_info.credit,
-            sname : this.items.subject_info.sname,
+            codet: this.items.subject_info.codet,
+            credit: this.items.subject_info.credit,
+            sname: this.items.subject_info.sname
           },
           studentId: studentId[index],
           studentNumber: studentNumber[index],
@@ -399,8 +413,8 @@ export default {
       console.log("update Teach", data);
 
       this.getTechById(this.$route.query.id).then(
-      result => (this.items = result)
-     );
+        result => (this.items = result)
+      );
     },
     async sendGrade() {
       if (confirm("ยืนยันการส่ง")) {
@@ -438,18 +452,14 @@ export default {
     },
     getStudentName(item) {
       this.studentName = [];
-      this.studentId = []
-      this.studentNumber = []
+      this.studentId = [];
+      this.studentNumber = [];
       for (var index = 0; index < item.length; index++) {
         this.studentName.push(
           item[index].tth + " " + item[index].namet + " " + item[index].snamet
         );
-        this.studentId.push(
-          item[index].idstd
-        )
-        this.studentNumber.push(
-          item[index].number
-        )
+        this.studentId.push(item[index].idstd);
+        this.studentNumber.push(item[index].number);
       }
       // console.log("student name", this.studentId);
       return [this.studentName, this.studentId, this.studentNumber];
@@ -480,7 +490,7 @@ export default {
     },
     calcGrade(score) {
       // console.log('เกณการให้คะแนน', score)
-      if (score == 100 || score >= this.criteria.g4 ) {
+      if (score == 100 || score >= this.criteria.g4) {
         return 4;
       } else if (score >= this.criteria.g3_5) {
         return 3.5;
@@ -546,15 +556,23 @@ export default {
     },
     previewGrade() {
       // console.log('preview grade')
-      this.$router.push({name: 'teachers-preview-grade', query: {id: this.$route.query.id}})
+      this.$router.push({
+        name: "teachers-preview-grade",
+        query: { id: this.$route.query.id }
+      });
       // this.$router.push({name: 'subjects-id', params: { id: `${item.objectId}`}})
     },
     previewSummary() {
-      this.$router.push({name: 'teachers-preview-grade_summary', query: {id: this.$route.query.id}})
+      this.$router.push({
+        name: "teachers-preview-grade_summary",
+        query: { id: this.$route.query.id }
+      });
     },
     previewTscore() {
-      this.$router.push({name: 'teachers-preview-grade_tscore', query: {id: this.$route.query.id}})
-
+      this.$router.push({
+        name: "teachers-preview-grade_tscore",
+        query: { id: this.$route.query.id }
+      });
     }
   }
 };

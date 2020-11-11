@@ -67,6 +67,7 @@
 export default {
   // middleware: 'authentication',
   layout: 'teacher',
+  middleware: 'teacher',
   async mounted() {
     // check user type and user layout
    await this.getTeach(this.$route.query.id).then(result => (this.teach = result))

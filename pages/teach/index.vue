@@ -26,7 +26,7 @@
                 <v-spacer></v-spacer>
               </v-toolbar>
             </template>
-            <template v-slot:item.actions="{ item }" >
+            <template v-slot:[`item.actions`]="{ item }">
               <v-btn  color="success" dark class="mr-2" @click="addSubject(item)">
                 จัดการวิชาบังคับ
               </v-btn>
@@ -45,7 +45,6 @@
 export default {
   // middleware: 'authentication',
   middleware: 'admin',
-
   mounted() {
     this.getDataFromApi().then(result => (this.items = result))
   },  

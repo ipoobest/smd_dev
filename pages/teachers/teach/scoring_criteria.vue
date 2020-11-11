@@ -98,7 +98,7 @@
                 </v-dialog>
               </v-toolbar>
             </template>
-            <!-- <template v-slot:item.actions="{ item }">
+            <!-- <template v-slot:[`item.actions`]="{ item }">
               <v-btn  class="info" @click="goToAddScore(item)">
                จัดการ
               </v-btn>              
@@ -146,6 +146,7 @@
 <script>
 export default {
   layout: "teacher",
+  middleware: "teacher",
   async mounted() {
     this.query = this.$route.query;
     // this.teacherId = this.$store.state.auth.auth.teacherObjectId

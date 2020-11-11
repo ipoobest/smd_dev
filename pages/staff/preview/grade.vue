@@ -88,8 +88,8 @@
 
 <script>
 export default {
-  // middleware: 'authentication',
   layout: "staff",
+  middleware: 'staff',
   async mounted() {
     // check user type and user layout
     await this.getTeach(this.$route.query.id).then(

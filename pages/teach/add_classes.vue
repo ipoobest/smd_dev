@@ -88,7 +88,7 @@
                 </v-dialog> 
               </v-toolbar>
             </template>
-            <template v-slot:item.actions="{ item }">
+            <template v-slot:[`item.actions`]="{ item }">
               <v-btn color="info" @click="addClasses(item)">
                 เพิ่มห้องเรียน/ครูผู้สอน
               </v-btn>

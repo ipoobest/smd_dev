@@ -172,7 +172,8 @@
 
 <script>
 export default {
-  layout: "staff",
+  layout: "assessment",
+  middleware: "assessment",
   async mounted() {
     await this.getTechById(this.$route.query.id).then(
       result => (this.items = result)

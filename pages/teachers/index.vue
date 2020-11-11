@@ -145,7 +145,7 @@
                 </v-dialog>
               </v-toolbar>
             </template>
-            <template v-slot:item.actions="{ item }">
+            <template v-slot:[`item.actions`]="{ item }">
               <v-btn  class="mr-2 info" @click="editItem(item)">
                 แก้ไข
               </v-btn>
@@ -162,7 +162,7 @@
 
 <script>
 export default {
-  middleware: 'authentication',
+  middleware: "teacher",
   mounted() {
     this.getDataFromApi().then((result) => (this.items = result))
   },

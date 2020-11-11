@@ -98,6 +98,7 @@
 <script>
 export default {
   layout: "assessment",
+  middleware: "assessment",
   async mounted() {
     this.route = this.$route.query;
     await this.getGradeByConditions().then(result => {

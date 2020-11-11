@@ -173,6 +173,7 @@
 import VueHtml2pdf from "vue-html2pdf";
 export default {
   layout: "teacher",
+  middleware: 'teacher',
   components: {
     VueHtml2pdf
   },

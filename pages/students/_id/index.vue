@@ -31,7 +31,7 @@ export default {
   layout: "student",
   mounted() {
   // get students by idcard
-  console.log('data', this.$store.state.auth.auth.idstd)
+    console.log('data', this.$store.state.auth.auth.idstd)
     this.getStudets(this.$store.state.auth.auth.idstd).then(result => (this.student = result))
     this.getDataFromApi().then(result => (this.items = result));
     console.log("this.params",  this.class);

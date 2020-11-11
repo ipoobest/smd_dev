@@ -18,7 +18,7 @@
             ></v-text-field>
           </v-card-title>
           <!-- <v-data-table :headers="headers" :items="items" :search="search">
-            <template v-slot:item.actions="{ item }">
+            <template v-slot:[`item.actions`]="{ item }">
               <v-btn class="success" @click="addScore(item)">
                 ให้คะแนน
               </v-btn>
@@ -58,6 +58,7 @@
 <script>
 export default {
   layout: "teacher",
+  middleware: 'teacher',
   async mounted() {
     this.query = this.$route.query;
     // this.teacherId = this.$store.state.auth.auth.teacherObjectId

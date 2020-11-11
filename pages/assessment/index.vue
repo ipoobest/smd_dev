@@ -6,7 +6,8 @@
 
 <script>
   export default {
-    layout: 'assessment'
+    layout: 'assessment',
+    middleware: "assessment",
     
   }
 </script>

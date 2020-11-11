@@ -80,7 +80,7 @@
                 </v-dialog>
               </v-toolbar>
             </template>
-            <template v-slot:item.actions="{ item }" >
+            <template v-slot:[`item.actions`]="{ item }">
               <v-btn  color="success" dark class="mr-2" @click="addClasses(item)">
                 เพิ่มชั้นเรียน</v-btn>
               <v-btn color="error" @click="deleteItem(item)">

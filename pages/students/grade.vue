@@ -96,7 +96,8 @@
 export default {
   layout:'student',
   async mounted() {
-    this.route = this.$route.query;
+    // this.route = this.$route.query;
+    await this.checkStudentId()
     await this.getGradeByConditions().then(result => {
       this.items = result;
     });
@@ -150,6 +151,17 @@ export default {
       const condition = {
 
       }
+    },
+    checkStudentId() {
+      var studentAuthId = this.$store.state.auth.auth.idstd
+      var studentId = this.$route.query.id
+      if(studentAuthId != studentId) {
+        this.$router.push({
+          name: 'students'
+        })
+      }
+      console.log("auth ",  studentAuthId);
+      console.log('this id xxxx', studentId)
     },
     back() {
       this.$router.go(-1);
