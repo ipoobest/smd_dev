@@ -76,6 +76,7 @@
             <th>0</th>
             <th>ร</th>
             <th>มส</th>
+            <th>รส</th>
             <th>3</th>
             <th>2</th>
             <th>1</th>
@@ -254,7 +255,7 @@ export default {
       this.total_students = data.length;
 
       var grade_list = ["4", "3.5", "3", "2.5", "2", "1.5", "1", "0"];
-      var grade_option = ["ร", "มส"];
+      var grade_option = ["ร", "มส","รส"];
       var other_score = ["3", "2", "1"];
 
       this.special_score = [];
