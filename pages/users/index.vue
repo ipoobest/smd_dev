@@ -217,7 +217,7 @@
 
 <script>
 export default {
-  middleware: "authentication",
+  middleware: "admin",
   mounted() {
     // get user not in type student
     this.getDataFromApi().then(result => (this.items = result));
