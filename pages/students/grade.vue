@@ -60,11 +60,11 @@
       </v-row>
       <v-row>
         <v-col cols="3">หน่วยการเรียน</v-col>
-        <v-col cols="2">x</v-col>
+        <v-col cols="2">{{totalCredit}}</v-col>
         <v-col cols="2">อยู่ลำดับที่</v-col>
-        <v-col cols="1">x</v-col>
+        <v-col cols="1"></v-col>
         <v-col cols="1">จาก</v-col>
-        <v-col cols="1">x</v-col>
+        <v-col cols="1"></v-col>
         <v-col cols="2">ระดับชั้น</v-col>
       </v-row>
       <v-row>
@@ -122,6 +122,7 @@ export default {
       route: "",
       items: "",
       rowSpan: "",
+      totalCredit: '',
       info: {
         studentName: "",
         studentId: "",
@@ -162,6 +163,17 @@ export default {
       }
       console.log("auth ",  studentAuthId);
       console.log('this id xxxx', studentId)
+    },
+    sumCredit() {
+      console.log('sss')
+      var sum = 0;
+      this.items.forEach(item => {
+        sum += parseFloat(item.teachInfo.credit)
+        console.log('summ ',sum)
+      })
+      console.log('sum create', sum)
+      this.totalCredit = sum
+      return 
     },
     back() {
       this.$router.go(-1);

@@ -66,8 +66,10 @@
         <v-col cols="2">ระดับชั้น</v-col>
       </v-row>
       <v-row>
-        <v-col cols="2">ภาคเรียนนี้</v-col>
-        <v-col cols="2">ได้เรียน</v-col>
+        <v-col cols="2">ภาคเรียนนี้ </v-col>
+        <v-col cols="1">{{totalCreditInClass}} วิชา</v-col>
+        <v-col cols="1"><p color="green">ได้เรียน</p></v-col>
+        <v-col cols="2">x วิชา</v-col>
       </v-row>
       <v-row>
         <v-col cols="2"> {{ gatDate }} </v-col>
@@ -106,6 +108,8 @@ export default {
       this.items = result;
     });
     this.sumCredit()
+    // this.getTeachInClasses()
+    this.totalCreditInClass = await this.sumCreateInClasses()
 
     // console.log('this.query', this.$route.query)
   },
@@ -130,6 +134,7 @@ export default {
       items: "",
       rowSpan: "",
       totalCredit: 0,
+      totalCreditInClass: 0,
       approve: false,
       info: {
         studentName: "",
@@ -157,20 +162,40 @@ export default {
       this.approve = response.results[0].approve
       return response.results;
     },
+    async getTeachInClasses() {
+      var data = {
+        schoolYear: this.$route.query.schoolYear,
+        term: this.$route.query.term,
+        classRoomLevel: this.info.classRoomLevel,
+        classRoomName: this.info.classRoomName
+      }
+      console.log('data getTeacInClass',data)
+      const response = await this.$store.dispatch(`teach/getSubjectsByConditions`, data);
+      console.log('response teach', response)
+      return response.results
+    },
     async updateGrade(data) {
       const response = await this.$store.dispatch(`grade/updateGrade`, data);
       console.log("update response", response);
     },
     sumCredit() {
-      console.log('sss')
       var sum = 0;
       this.items.forEach(item => {
         sum += parseFloat(item.teachInfo.credit)
-        console.log('summ ',sum)
+        // console.log('summ ',sum)
       })
-      console.log('sum create', sum)
+      // console.log('sum create', sum)
       this.totalCredit = sum
       return 
+    },
+    async sumCreateInClasses() {
+      var teach = await this.getTeachInClasses()
+      var sumTotalCreate = 0
+      teach.forEach(item => {
+        sumTotalCreate += parseFloat(item.subject_info.credit)
+      })
+      console.log('sum total create', sumTotalCreate)
+      return sumTotalCreate
     },
     back() {
       this.$router.go(-1);
