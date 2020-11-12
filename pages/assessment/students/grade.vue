@@ -67,9 +67,9 @@
       </v-row>
       <v-row>
         <v-col cols="2">ภาคเรียนนี้ </v-col>
-        <v-col cols="1">{{totalCreditInClass}} วิชา</v-col>
-        <v-col cols="1"><p color="green">ได้เรียน</p></v-col>
-        <v-col cols="2">x วิชา</v-col>
+        <v-col cols="2">{{totalCreditInClass}} หน่วยกิต</v-col>
+        <v-col cols="2"><p color="green">ได้เรียน</p></v-col>
+        <v-col cols="2"> {{totalCreditInStudent}} หน่วยกิต</v-col>
       </v-row>
       <v-row>
         <v-col cols="2"> {{ gatDate }} </v-col>
@@ -110,7 +110,7 @@ export default {
     this.sumCredit()
     // this.getTeachInClasses()
     this.totalCreditInClass = await this.sumCreateInClasses()
-
+    this.totalCreditInStudent = await this.sumCreditStudent()
     // console.log('this.query', this.$route.query)
   },
   computed: {
@@ -134,6 +134,7 @@ export default {
       items: "",
       rowSpan: "",
       totalCredit: 0,
+      totalCreditInStudent: 0,
       totalCreditInClass: 0,
       approve: false,
       info: {
@@ -188,9 +189,22 @@ export default {
       this.totalCredit = sum
       return 
     },
+    sumCreditStudent() {
+      var sum = 0;
+      this.items.forEach(item => {
+        if(item.grade_option != "ร") {
+          sum += parseFloat(item.teachInfo.credit) 
+        }
+      })
+      // console.log('sumxx', sum)
+      return sum
+    },
     async sumCreateInClasses() {
       var teach = await this.getTeachInClasses()
+      console.log('teach', teach.length)
       var sumTotalCreate = 0
+      var sumSubject = teach.length
+      console.log('total teach', sumSubject)
       teach.forEach(item => {
         sumTotalCreate += parseFloat(item.subject_info.credit)
       })
