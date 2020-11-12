@@ -7,7 +7,7 @@
 <script>
   export default {
     layout: 'assessment',
-    middleware: "assessment",
+    // middleware: "assessment",
     
   }
 </script>

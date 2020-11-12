@@ -58,7 +58,7 @@
       </v-row>
       <v-row>
         <v-col cols="3">หน่วยการเรียน</v-col>
-        <v-col cols="2"></v-col>
+        <v-col cols="2">{{totalCredit}}</v-col>
         <v-col cols="2">อยู่ลำดับที่</v-col>
         <v-col cols="1"></v-col>
         <v-col cols="1">จาก</v-col>
@@ -101,9 +101,12 @@ export default {
   middleware: "assessment",
   async mounted() {
     this.route = this.$route.query;
+    console.log('this. route', this.route)
     await this.getGradeByConditions().then(result => {
       this.items = result;
     });
+    this.sumCredit()
+
     // console.log('this.query', this.$route.query)
   },
   computed: {
@@ -118,13 +121,15 @@ export default {
         .toString()
         .padStart(4, "0")} `;
       return dateTime;
-    }
+    },
+
   },
   data() {
     return {
       route: "",
       items: "",
       rowSpan: "",
+      totalCredit: 0,
       approve: false,
       info: {
         studentName: "",
@@ -155,6 +160,17 @@ export default {
     async updateGrade(data) {
       const response = await this.$store.dispatch(`grade/updateGrade`, data);
       console.log("update response", response);
+    },
+    sumCredit() {
+      console.log('sss')
+      var sum = 0;
+      this.items.forEach(item => {
+        sum += parseFloat(item.teachInfo.credit)
+        console.log('summ ',sum)
+      })
+      console.log('sum create', sum)
+      this.totalCredit = sum
+      return 
     },
     back() {
       this.$router.go(-1);
