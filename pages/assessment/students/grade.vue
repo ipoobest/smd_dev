@@ -68,7 +68,7 @@
       <v-row>
         <v-col cols="2">ภาคเรียนนี้ </v-col>
         <!-- <v-col cols="2">{{totalCreditInClass}} หน่วยกิต</v-col> -->
-        <v-col cols="2"><p color="green">ได้เรียน</p></v-col>
+        <v-col cols="2"><p>ได้ / เรียน</p></v-col>
         <!-- <v-col cols="2"> {{totalCreditInStudent}} หน่วยกิต</v-col> -->
       </v-row>
       <v-row>
@@ -79,13 +79,13 @@
         <v-row justify="center" >ลงชื่อ ......................................................</v-row>
         <v-row  justify="center" class="ml-5 mt-2">( ...................................................... )</v-row>
 
-        <v-row justify="center" >ลงชื่อ ......................................................</v-row>
+        <v-row justify="center"  class="mt-5">ลงชื่อ ......................................................</v-row>
         <v-row justify="center"  class="ml-5 mt-2">( ...................................................... )</v-row>
         <v-row justify="center"  class="ml-5 mt-2">อาจารย์ประจำชั้น</v-row>
       </v-col>
       <v-col cols="6">
         <v-row justify="center">ลงชื่อ ......................................................</v-row>
-        <v-row justify="center" class="ml-5 mt-2">( ...................................................... )</v-row>
+        <v-row justify="center" class="ml-5 mt-2">( ผศ.พิสูตร  บรรดาศักดิ์ไพศาล )</v-row>
         <v-row justify="center" class="ml-5 mt-2">รักษาการรองผู้อำนวยการฝ่ายมัธยมศึกษา (มอดินแดง)</v-row>
         <v-row justify="center" class="ml-5 mt-2">ปฎิบัติราชการแทนผู้อำนวยการ</v-row>
       </v-col>
