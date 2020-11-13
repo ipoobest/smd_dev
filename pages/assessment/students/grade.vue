@@ -85,7 +85,7 @@
       </v-col>
       <v-col cols="6">
         <v-row justify="center">ลงชื่อ ......................................................</v-row>
-        <v-row justify="center" class="ml-5 mt-2">( ผศ.พิสูตร  บรรดาศักดิ์ไพศาล )</v-row>
+        <v-row justify="center" class="ml-5 mt-2">( อาจารย์ ไพทูล นารคร )</v-row>
         <v-row justify="center" class="ml-5 mt-2">รักษาการรองผู้อำนวยการฝ่ายมัธยมศึกษา (มอดินแดง)</v-row>
         <v-row justify="center" class="ml-5 mt-2">ปฎิบัติราชการแทนผู้อำนวยการ</v-row>
       </v-col>
