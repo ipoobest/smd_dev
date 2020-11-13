@@ -9,7 +9,7 @@
       >
       <v-row justify="center"
         ><h4>
-          โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น(มอดินแดง) ระดับมัธยมศึกษาตอนต้น
+          โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น ฝ่ายมัธยมศึกษา (มอดินแดง) {{classes}}
         </h4></v-row
       >
       <v-row class="mt-3">
@@ -57,8 +57,8 @@
         <v-col cols="2">ของห้อง</v-col>
       </v-row>
       <v-row>
-        <v-col cols="3">หน่วยการเรียน</v-col>
-        <v-col cols="2">{{totalCredit}}</v-col>
+        <v-col cols="2">หน่วยการเรียน</v-col>
+        <v-col cols="3">{{totalCreditInClass}} / {{totalCreditInStudent}}</v-col>
         <v-col cols="2">อยู่ลำดับที่</v-col>
         <v-col cols="1"></v-col>
         <v-col cols="1">จาก</v-col>
@@ -67,13 +67,29 @@
       </v-row>
       <v-row>
         <v-col cols="2">ภาคเรียนนี้ </v-col>
-        <v-col cols="2">{{totalCreditInClass}} หน่วยกิต</v-col>
+        <!-- <v-col cols="2">{{totalCreditInClass}} หน่วยกิต</v-col> -->
         <v-col cols="2"><p color="green">ได้เรียน</p></v-col>
-        <v-col cols="2"> {{totalCreditInStudent}} หน่วยกิต</v-col>
+        <!-- <v-col cols="2"> {{totalCreditInStudent}} หน่วยกิต</v-col> -->
       </v-row>
       <v-row>
         <v-col cols="2"> {{ gatDate }} </v-col>
       </v-row>
+      <v-row class="mt-5">
+      <v-col  cols="6">
+        <v-row justify="center" >ลงชื่อ ......................................................</v-row>
+        <v-row  justify="center" class="ml-5 mt-2">( ...................................................... )</v-row>
+
+        <v-row justify="center" >ลงชื่อ ......................................................</v-row>
+        <v-row justify="center"  class="ml-5 mt-2">( ...................................................... )</v-row>
+        <v-row justify="center"  class="ml-5 mt-2">อาจารย์ประจำชั้น</v-row>
+      </v-col>
+      <v-col cols="6">
+        <v-row justify="center">ลงชื่อ ......................................................</v-row>
+        <v-row justify="center" class="ml-5 mt-2">( ...................................................... )</v-row>
+        <v-row justify="center" class="ml-5 mt-2">รักษาการรองผู้อำนวยการฝ่ายมัธยมศึกษา (มอดินแดง)</v-row>
+        <v-row justify="center" class="ml-5 mt-2">ปฎิบัติราชการแทนผู้อำนวยการ</v-row>
+      </v-col>
+    </v-row>
     </v-col>
     <!-- <v-row justify="center">
       <v-col cols="2">
@@ -109,8 +125,10 @@ export default {
     });
     this.sumCredit()
     // this.getTeachInClasses()
+    this.teach = await this.getTeachInClasses()
     this.totalCreditInClass = await this.sumCreateInClasses()
     this.totalCreditInStudent = await this.sumCreditStudent()
+    this.getClass()
     // console.log('this.query', this.$route.query)
   },
   computed: {
@@ -137,6 +155,8 @@ export default {
       totalCreditInStudent: 0,
       totalCreditInClass: 0,
       approve: false,
+      classes:'',
+      teach: '',
       info: {
         studentName: "",
         studentId: "",
@@ -179,6 +199,14 @@ export default {
       const response = await this.$store.dispatch(`grade/updateGrade`, data);
       console.log("update response", response);
     },
+    getClass() {
+      console.log('xxx', this.info.classRoomLevel)
+      if(["ม.1","ม.2","ม.3"].includes(this.info.classRoomLevel)) {
+        this.classes = "ระดับมัธยมศึกษาตอนต้น"
+      }else {
+        this.classes =  "ระดับมัธยมศึกษาตอนปลาย"
+      }
+    },
     sumCredit() {
       var sum = 0;
       this.items.forEach(item => {
@@ -199,13 +227,15 @@ export default {
       // console.log('sumxx', sum)
       return sum
     },
+    calGPA() {
+
+    },
     async sumCreateInClasses() {
-      var teach = await this.getTeachInClasses()
-      console.log('teach', teach.length)
+      console.log('teach', this.teach.length)
       var sumTotalCreate = 0
-      var sumSubject = teach.length
+      var sumSubject = this.teach.length
       console.log('total teach', sumSubject)
-      teach.forEach(item => {
+      this.teach.forEach(item => {
         sumTotalCreate += parseFloat(item.subject_info.credit)
       })
       console.log('sum total create', sumTotalCreate)
