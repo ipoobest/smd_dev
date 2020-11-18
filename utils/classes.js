@@ -11,5 +11,6 @@ export default {
   teach: `Teach`,
   grade: `Grade`,
   criteria: `Criteria`,
-  department: `Department`
+  department: `Department`,
+  ranking: `Ranking`
 };

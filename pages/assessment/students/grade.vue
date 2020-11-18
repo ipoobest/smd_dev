@@ -9,7 +9,8 @@
       >
       <v-row justify="center"
         ><h4>
-          โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น ฝ่ายมัธยมศึกษา (มอดินแดง) {{classes}}
+          โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น ฝ่ายมัธยมศึกษา (มอดินแดง)
+          {{ classes }}
         </h4></v-row
       >
       <v-row class="mt-3">
@@ -49,20 +50,22 @@
       <v-divider class="mt-10"></v-divider>
       <v-row class="mt-10">
         <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
-        <v-col cols="2"></v-col>
+        <v-col cols="2">{{ gpa }}</v-col>
         <v-col cols="2">อยู่ลำดับที่</v-col>
-        <v-col cols="1"></v-col>
+        <v-col cols="1">รอ</v-col>
         <v-col cols="1">จาก</v-col>
-        <v-col cols="1"></v-col>
+        <v-col cols="1">รอ</v-col>
         <v-col cols="2">ของห้อง</v-col>
       </v-row>
       <v-row>
         <v-col cols="2">หน่วยการเรียน</v-col>
-        <v-col cols="3">{{totalCreditInClass}} / {{totalCreditInStudent}}</v-col>
+        <v-col cols="3"
+          >{{ totalCreditInClass }} / {{ totalCreditInStudent }}</v-col
+        >
         <v-col cols="2">อยู่ลำดับที่</v-col>
-        <v-col cols="1"></v-col>
+        <v-col cols="1">รอ</v-col>
         <v-col cols="1">จาก</v-col>
-        <v-col cols="1"></v-col>
+        <v-col cols="1">รอ</v-col>
         <v-col cols="2">ระดับชั้น</v-col>
       </v-row>
       <v-row>
@@ -75,21 +78,40 @@
         <v-col cols="2"> {{ gatDate }} </v-col>
       </v-row>
       <v-row class="mt-5">
-      <v-col  cols="6">
-        <v-row justify="center" >ลงชื่อ ......................................................</v-row>
-        <v-row  justify="center" class="ml-5 mt-2">( ...................................................... )</v-row>
+        <v-col cols="6">
+          <v-row justify="center"
+            >ลงชื่อ
+            ......................................................</v-row
+          >
+          <v-row justify="center" class="ml-5 mt-2"
+            >( ...................................................... )</v-row
+          >
 
-        <v-row justify="center"  class="mt-5">ลงชื่อ ......................................................</v-row>
-        <v-row justify="center"  class="ml-5 mt-2">( ...................................................... )</v-row>
-        <v-row justify="center"  class="ml-5 mt-2">อาจารย์ประจำชั้น</v-row>
-      </v-col>
-      <v-col cols="6">
-        <v-row justify="center">ลงชื่อ ......................................................</v-row>
-        <v-row justify="center" class="ml-5 mt-2">( อาจารย์ ไพทูล นารคร )</v-row>
-        <v-row justify="center" class="ml-5 mt-2">รักษาการรองผู้อำนวยการฝ่ายมัธยมศึกษา (มอดินแดง)</v-row>
-        <v-row justify="center" class="ml-5 mt-2">ปฎิบัติราชการแทนผู้อำนวยการ</v-row>
-      </v-col>
-    </v-row>
+          <v-row justify="center" class="mt-5"
+            >ลงชื่อ
+            ......................................................</v-row
+          >
+          <v-row justify="center" class="ml-5 mt-2"
+            >( ...................................................... )</v-row
+          >
+          <v-row justify="center" class="ml-5 mt-2">อาจารย์ประจำชั้น</v-row>
+        </v-col>
+        <v-col cols="6">
+          <v-row justify="center"
+            >ลงชื่อ
+            ......................................................</v-row
+          >
+          <v-row justify="center" class="ml-5 mt-2"
+            >( อาจารย์ ไพทูล นารคร )</v-row
+          >
+          <v-row justify="center" class="ml-5 mt-2"
+            >รักษาการรองผู้อำนวยการฝ่ายมัธยมศึกษา (มอดินแดง)</v-row
+          >
+          <v-row justify="center" class="ml-5 mt-2"
+            >ปฎิบัติราชการแทนผู้อำนวยการ</v-row
+          >
+        </v-col>
+      </v-row>
     </v-col>
     <!-- <v-row justify="center">
       <v-col cols="2">
@@ -102,12 +124,16 @@
     <v-row justify="center">
       <v-col cols="3">
         <!-- <v-btn color="success">บันทึก</v-btn> -->
-        <v-btn v-if="!approve" class="ml-5" color="green" dark @click="arrpove">อนุมัติ</v-btn>
-        <v-btn v-else class="ml-5" color="green" dark @click="unArrpove">อนุมัติแล้ว</v-btn>
-      </v-col>      
+        <v-btn v-if="!approve" class="ml-5" color="green" dark @click="arrpove"
+          >อนุมัติ</v-btn
+        >
+        <v-btn v-else class="ml-5" color="green" dark @click="unArrpove"
+          >อนุมัติแล้ว</v-btn
+        >
+      </v-col>
       <v-col cols="3">
         <!-- <v-btn color="success">บันทึก</v-btn> -->
-        <v-btn class="ml-5" color="info" dark >print</v-btn>
+        <v-btn class="ml-5" color="info" dark>print</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -119,17 +145,19 @@ export default {
   middleware: "assessment",
   async mounted() {
     this.route = this.$route.query;
-    console.log('this. route', this.route)
+    console.log("this. route", this.route);
     await this.getGradeByConditions().then(result => {
       this.items = result;
     });
-    this.sumCredit()
+    this.sumCredit();
     // this.getTeachInClasses()
-    this.teach = await this.getTeachInClasses()
-    this.totalCreditInClass = await this.sumCreateInClasses()
-    this.totalCreditInStudent = await this.sumCreditStudent()
-    this.getClass()
+    this.teach = await this.getTeachInClasses();
+    this.totalCreditInClass = await this.sumCreateInClasses();
+    this.totalCreditInStudent = await this.sumCreditStudent();
+    this.getClass();
+    this.gpa = this.calGPA();
     // console.log('this.query', this.$route.query)
+    // this.grade = await this.getRanking()
   },
   computed: {
     gatDate() {
@@ -143,8 +171,7 @@ export default {
         .toString()
         .padStart(4, "0")} `;
       return dateTime;
-    },
-
+    }
   },
   data() {
     return {
@@ -155,8 +182,10 @@ export default {
       totalCreditInStudent: 0,
       totalCreditInClass: 0,
       approve: false,
-      classes:'',
-      teach: '',
+      classes: "",
+      teach: "",
+      grade: 0,
+      gpa: 0,
       info: {
         studentName: "",
         studentId: "",
@@ -180,7 +209,7 @@ export default {
       console.log("grade id", response.results);
       this.info = response.results[0];
       this.rowSpan = response.results.length;
-      this.approve = response.results[0].approve
+      this.approve = response.results[0].approve;
       return response.results;
     },
     async getTeachInClasses() {
@@ -189,10 +218,37 @@ export default {
         term: this.$route.query.term,
         classRoomLevel: this.info.classRoomLevel,
         classRoomName: this.info.classRoomName
+      };
+      console.log("data getTeacInClass", data);
+      const response = await this.$store.dispatch(
+        `teach/getSubjectsByConditions`,
+        data
+      );
+      console.log("response teach", response);
+      return response.results;
+    },
+    async createRanking() {
+      var data = {
+        schoolYear: this.$route.query.schoolYear,
+        term: this.$route.query.term,
+        classRoomLevel: this.info.classRoomLevel,
+        classRoomName: this.info.classRoomName,
+        grade: this.grade,
+        studentId: this.$route.id
       }
-      console.log('data getTeacInClass',data)
-      const response = await this.$store.dispatch(`teach/getSubjectsByConditions`, data);
-      console.log('response teach', response)
+      const response = await this.$store.dispatch(`ranking/createRanking`, data);
+
+    },
+    async getRanking (data) {
+      var condition = {
+        schoolYear: this.$route.query.schoolYear,
+        term: this.$route.query.term,
+        classRoomLevel: this.info.classRoomLevel,
+        classRoomName: this.info.classRoomName,
+        studentId: this.$route.id
+      }
+      const response = await this.$store.dispatch(`ranking/getRankingByConditions`, data);
+      console.log('grade', response.results)
       return response.results
     },
     async updateGrade(data) {
@@ -200,46 +256,57 @@ export default {
       console.log("update response", response);
     },
     getClass() {
-      console.log('xxx', this.info.classRoomLevel)
-      if(["ม.1","ม.2","ม.3"].includes(this.info.classRoomLevel)) {
-        this.classes = "ระดับมัธยมศึกษาตอนต้น"
-      }else {
-        this.classes =  "ระดับมัธยมศึกษาตอนปลาย"
+      console.log("xxx", this.info.classRoomLevel);
+      if (["ม.1", "ม.2", "ม.3"].includes(this.info.classRoomLevel)) {
+        this.classes = "ระดับมัธยมศึกษาตอนต้น";
+      } else {
+        this.classes = "ระดับมัธยมศึกษาตอนปลาย";
       }
     },
     sumCredit() {
       var sum = 0;
       this.items.forEach(item => {
-        sum += parseFloat(item.teachInfo.credit)
+        sum += parseFloat(item.teachInfo.credit);
         // console.log('summ ',sum)
-      })
+      });
       // console.log('sum create', sum)
-      this.totalCredit = sum
-      return 
+      this.totalCredit = sum;
+      return;
     },
     sumCreditStudent() {
       var sum = 0;
       this.items.forEach(item => {
-        if(item.grade_option != "ร") {
-          sum += parseFloat(item.teachInfo.credit) 
+        if (item.grade_option != "ร") {
+          sum += parseFloat(item.teachInfo.credit);
         }
-      })
+      });
       // console.log('sumxx', sum)
-      return sum
+      return sum;
     },
     calGPA() {
-
+      var gpa = 0
+      var grade = 0
+      this.items.forEach(item => {
+        grade += parseFloat(item.grade) * parseFloat(item.teachInfo.credit)
+        // console.log('grade',grade)
+      })
+      console.log('grade', grade)
+      gpa = parseFloat(grade) / parseFloat(this.totalCreditInStudent)
+      console.log('grade / totalCreditInStudent = ', grade, this.totalCreditInStudent, gpa)
+      return gpa.toFixed(2)
+      // this.items เกรดจริง
+      // this.totalCreditInClass หน่วยกิตรวม
     },
     async sumCreateInClasses() {
-      console.log('teach', this.teach.length)
-      var sumTotalCreate = 0
-      var sumSubject = this.teach.length
-      console.log('total teach', sumSubject)
+      console.log("teach", this.teach.length);
+      var sumTotalCreate = 0;
+      var sumSubject = this.teach.length;
+      console.log("total teach", sumSubject);
       this.teach.forEach(item => {
-        sumTotalCreate += parseFloat(item.subject_info.credit)
-      })
-      console.log('sum total create', sumTotalCreate)
-      return sumTotalCreate
+        sumTotalCreate += parseFloat(item.subject_info.credit);
+      });
+      console.log("sum total create", sumTotalCreate);
+      return sumTotalCreate;
     },
     back() {
       this.$router.go(-1);
@@ -256,7 +323,7 @@ export default {
           // console.log("data update", data);
           this.updateGrade(data);
           this.getGradeByConditions().then(result => {
-           this.items = result;
+            this.items = result;
           });
         });
       }
@@ -272,7 +339,7 @@ export default {
           // console.log("data update", data);
           this.updateGrade(data);
           this.getGradeByConditions().then(result => {
-           this.items = result;
+            this.items = result;
           });
         });
       }
