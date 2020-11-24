@@ -137,9 +137,11 @@
       </v-col>
       <v-col cols="3">
         <!-- <v-btn color="success">บันทึก</v-btn> -->
-        <v-btn class="ml-5" color="info" dark @click="saveGpa"
+        
+        <v-btn v-if="save == false" class="ml-5" color="info" dark @click="saveGpa"
           >บันทึกเกรด</v-btn
         >
+        <v-btn v-else @click="save == false">แก้ไข</v-btn>
       </v-col>
       <v-col cols="3">
         <!-- <v-btn color="success">บันทึก</v-btn> -->
@@ -197,6 +199,7 @@ export default {
       grade: 0,
       gpa: 0,
       teacher: "",
+      save: false,
       info: {
         studentName: "",
         studentId: "",
@@ -272,7 +275,7 @@ export default {
         term: this.$route.query.term,
         classRoomLevel: this.info.classRoomLevel,
         classRoomName: this.info.classRoomName,
-        studentId: this.$route.id
+        studentId: this.$route.query.id
       };
       const response = await this.$store.dispatch(
         `ranking/getRankingByConditions`,
@@ -287,15 +290,21 @@ export default {
         term: this.$route.query.term,
         classRoomLevel: this.info.classRoomLevel,
         classRoomName: this.info.classRoomName,
-        studentId: this.$route.id,
+        studentId: this.$route.query.id,
         gpa: this.gpa,
         rankingInRoom: 0,
         rankingInClasses: 0
       };
+      this.save = true
+      console.log('save gpa', data)
       const response = await this.$store.dispatch(
         `ranking/createRanking`,
         data
       );
+      console.log('response create ranking');
+      if (response) {
+        alert('บันทึกสำเร็จ')
+      }
     },
     async updateGrade(data) {
       const response = await this.$store.dispatch(`grade/updateGrade`, data);
