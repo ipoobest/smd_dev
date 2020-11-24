@@ -97,6 +97,10 @@
           <v-row justify="center" class="ml-5 mt-2">อาจารย์ประจำชั้น</v-row>
         </v-col>
         <v-col cols="6">
+          <!-- <img height="50" src="~/assets/logo-smd.png" /> -->
+          <v-row justify="center">
+            <img height="100" src="~/assets/signature.jpg" />
+          </v-row>
           <v-row justify="center"
             >ลงชื่อ
             ......................................................</v-row
