@@ -40,7 +40,7 @@
                 <td>{{ route.term }}/{{ route.schoolYear }}</td>
                 <td>{{ item.teachInfo.codet }}</td>
                 <td>{{ item.teachInfo.sname }}</td>
-                <td>{{ item.teachInfo.credit }}</td>
+                <td>{{ parseFloat(item.teachInfo.credit).toFixed(1) }}</td>
                 <td>{{ item.grade }}</td>
               </tr>
             </tbody>
