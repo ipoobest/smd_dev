@@ -9,7 +9,7 @@
           label="Standard"
           @change="getStudent()"
         ></v-select>
-        </v-col>
+      </v-col>
     </v-row>
     <v-row justify="center">
       <v-btn @click="create" class="success">init</v-btn>
@@ -28,15 +28,8 @@ export default {
   data() {
     return {
       students: [],
-      classes: '',
-      items: [
-        "ม.1",
-        "ม.2",
-        "ม.3",
-        "ม.4",
-        "ม.5",
-        "ม.6",
-      ]
+      classes: "",
+      items: ["ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"]
     };
   },
   // 1 get student
@@ -57,30 +50,34 @@ export default {
       students.filter(function(item) {
         var i = resArr.findIndex(x => x.studentId == item.studentId);
         if (i <= -1) {
-          resArr.push({ studentId: item.studentId, schoolYear: item.schoolYear, term: item.term, gpa: 0, rankingInRoom: 0, rankingInClasses: 0, classRoomLevel: item.classRoomLevel,});
+          resArr.push({
+            studentId: item.studentId,
+            schoolYear: item.schoolYear,
+            term: item.term,
+            gpa: 0,
+            rankingInRoom: 0,
+            rankingInClasses: 0,
+            classRoomLevel: item.classRoomLevel,
+            classRoomName: item.classRoomName
+          });
         }
         return null;
       });
-      // xxx = response.results[0].filter((x, i, a) => a.indexOf(x) == i)
       console.log("response.results", resArr);
-      // ar unique = a.filter( onlyUnique );
-      this.students = resArr
+      this.students = resArr;
       // return resArr
     },
     async createRanking(data) {
-      var response = await this.$store.dispatch(
-        `ranking/createRanking`,
-        data
-      );
-      console.log('respose create success', response)
+      var response = await this.$store.dispatch(`ranking/createRanking`, data);
+      console.log("respose create success", response);
     },
     async create() {
-      console.log('xxxx')
+      console.log("xxxx");
       this.students.forEach(item => {
-        this.createRanking(item)
+        this.createRanking(item);
         // console.log('item : ', item.studentId)
-      })
-      alert('init success')
+      });
+      alert("init success");
     }
   }
 };

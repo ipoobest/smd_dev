@@ -38,7 +38,7 @@ export const actions = {
     return new Promise(async (resolve, reject) => {
       try {
         const result = this.$axios.$get(
-          `${process.env.parseUrl}/classes/${classes.ranking}/`
+          `${process.env.parseUrl}/classes/${classes.ranking}?limit=1000`
         );
 
         commit("setRanking", result);
@@ -56,7 +56,7 @@ export const actions = {
         const where = JSON.stringify(conditions);
         console.log("where", where);
         const result = this.$axios.$get(
-          `${process.env.parseUrl}/classes/${classes.ranking}?where=${where}`
+          `${process.env.parseUrl}/classes/${classes.ranking}?where=${where}&limit=1000`
         );
 
         commit("setRanking", result);
@@ -74,7 +74,8 @@ export const actions = {
       try {
         console.log("data", object);
         const result = this.$axios.$put(
-          `${process.env.parseUrl}/classes/${classes.ranking}/${object}`
+          `${process.env.parseUrl}/classes/${classes.ranking}/${object.objectId}`,
+          object
         );
         commit("setRanking", null);
         resolve(result);

@@ -18,7 +18,8 @@
               ></v-select>
             </v-col>
             <v-col cols="2">
-              <v-btn class="success" :disabled="disable" @click="calGradeRaking()">คำนวนเกรด</v-btn>
+              <!-- <v-btn class="success" :disabled="disable" @click="calGradeRaking()">คำนวนเกรด</v-btn> -->
+              <v-btn class="success" @click="calGradeRaking()">คำนวนเกรด</v-btn>
             </v-col>
           </v-card-title>
           <v-simple-table v-if="classesRoomLevel" width="100%">
@@ -92,35 +93,28 @@ export default {
       studentsNamr: [],
       rating: [],
       items: [],
-      classesRoomLevel: '',
-      classes: [
-        "ม.1",
-        "ม.2",
-        "ม.3",
-        "ม.4",
-        "ม.5",
-        "ม.6",
-      ]
+      classesRoomLevel: "",
+      classes: ["ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"]
     };
   },
   methods: {
     async getTeachByConditions() {
-      var approved
+      var approved;
       const data = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
         // $nin: approved,
-        approved: null,
+        approved: null
       };
       const response = await this.$store.dispatch(
         `teach/getTeachByTeacherId`,
         data
       );
       console.log("response getTeachByTeacherId", response);
-      return response.results;
+      // return response.results;
     },
-    async getTeachByClasses () {
-      var approved
+    async getTeachByClasses() {
+      var approved;
       const data = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
@@ -132,13 +126,13 @@ export default {
         data
       );
       console.log("response getTeachByTeacherId", response);
-      this.items = response.results
-      console.log('xxx', this.items.length)
-      if(this.items.length == 0) {
-        this.disable = false
-        console.log('this disable', this.disable)
+      this.items = response.results;
+      console.log("xxx", this.items.length);
+      if (this.items.length == 0) {
+        this.disable = false;
+        console.log("this disable", this.disable);
       } else {
-        console.log('this disable', this.disable)
+        console.log("this disable", this.disable);
       }
     },
     async getTeachByTeacherId(teacherId) {
@@ -158,13 +152,14 @@ export default {
       const conditions = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        classRoomLevel: this.classesRoomLevel,
+        classRoomLevel: this.classesRoomLevel
       };
+      console.log("conditoin grade", conditions);
       const response = await this.$store.dispatch(
         `grade/getGradeByConditions`,
         conditions
       );
-      console.log("response get grade", response.results);
+      // console.log("response get grade", response.results);
       return response.results;
     },
     async getStudentByTeach(item) {
@@ -208,64 +203,118 @@ export default {
       var condition = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        classRoomLevel: this.classesRoomLevel,
+        classRoomLevel: this.classesRoomLevel
       };
       const response = await this.$store.dispatch(
         `ranking/getRankingByConditions`,
         condition
       );
-      console.log("getRankingByConditions", response.results);
+      // console.log("getRankingByConditions", response.results);
       return response.results;
     },
+    async updateRaning(data) {
+        const response = await this.$store.dispatch(
+        `ranking/updateRanking`,
+        data
+      );
+      console.log("updateRanking", response.results);
+      return 
+    },
     async calGradeRaking() {
-      var student_ranking = this.getRanking()
-      var grade_subject  = this.getGradeByConditions()
-
+      var student_ranking = await this.getRanking();
+      var grade_subject = await this.getGradeByConditions();
+      console.log('student_ranking.length', student_ranking.length)
       // คำนวณเกรดนร. ในระดับ
-      for (student of student_ranking) {
-        var student_grade_list = grade_subject.filter(grade => grade.studentId == student.studentId)
-        student.gpa = this.calGpa(student_grade_list)
+      for (const student of student_ranking) {
+        var student_grade_list = grade_subject.filter(
+          grade => grade.studentId == student.studentId
+        );
+        student.gpa = this.calculateGpa(student_grade_list);
       }
       // Order by GPA
-      student_ranking.sort((a, b) => (a.gpa < b.gpa) ? 1 : -1)
+      student_ranking.sort((a, b) => (a.gpa < b.gpa ? 1 : -1));
 
       // จัดอันดับที่ใน ระดับชั้น
-      student_ranking = this.sortByGPA(student_ranking, student_ranking.rankingInClasses)
+      student_ranking = this.sortByGPA(
+        student_ranking,
+        'rankingInClasses'
+      );
 
-    // สร้าง Array ห้องเรียน(ที่ไม่ซ้ำ) เพื่อเอาไป filter แบ่งนร.เป็นห้อง
-      var student_class = student_ranking.map(student => student.classRoomName) // ดึงค่าห้องเรียนจากตาราง ranking มาเป็น array. (ยังมีค่าซ้ำ)
-      var classroom = Array.from(new Set(student_class)) // ทำเป็น Set เพื่อไม่ให้มีค่าซ้ำ -> แล้วแปลง Set กลับไปเป็น Array
-    // จัดอันดับที่ให้ ห้องเรียน + update DB
-      for(room of classroom) {
-        var room_ranking = student_ranking.filter(student => student.classRoomName == room)
+      // สร้าง Array ห้องเรียน(ที่ไม่ซ้ำ) เพื่อเอาไป filter แบ่งนร.เป็นห้อง
+      var student_class = student_ranking.map(student => student.classRoomName); // ดึงค่าห้องเรียนจากตาราง ranking มาเป็น array. (ยังมีค่าซ้ำ)
+      var classroom = Array.from(new Set(student_class)); // ทำเป็น Set เพื่อไม่ให้มีค่าซ้ำ -> แล้วแปลง Set กลับไปเป็น Array
+      // จัดอันดับที่ให้ ห้องเรียน + update DB
+      for (const room of classroom) {
+        var room_ranking = student_ranking.filter(
+          student => student.classRoomName == room
+        );
 
         // จัดอันดับที่ให้ ห้องเรียน
-        room_ranking = this.sortByGPA(room_ranking, student_ranking.rankingInRoom) // ‘rankingInRoom’ คือ ชื่อฟิล ‘ลำดับในห้อง’ 
+        room_ranking = this.sortByGPA(
+          room_ranking,
+          'rankingInRoom'
+        ); // ‘rankingInRoom’ คือ ชื่อฟิล ‘ลำดับในห้อง’
 
         // update DB
-        room_ranking.forEach(std => {
+        room_ranking.forEach(async std =>  {
           // *** update ’std’ เข้าตาราง Ranking *** //
-        })
+          var data = {
+            classRoomLevel: std.classRoomLevel,
+            classRoomName: std.classRoomName,
+            gpa: std.gpa,
+            objectId: std.objectId,
+            rankingInClasses: std.rankingInClasses,
+            rankingInRoom: std.rankingInRoom,
+            schoolYear: std.schoolYear,
+            studentId: std.studentId,
+            term: std.term,
+          }
+          await this.updateRaning(data)
+        });
       }
     },
-    calGPA(grade_list) {
+    calculateGpa(grade_list) {
+      // console.log("grade list", grade_list);
       var gpa = 0;
       var grade = 0;
       var totalCreditInStudent = 0;
       grade_list.forEach(item => {
-        var credit_float = parseFloat(item.teachInfo.credit)
-        grade += parseFloat(item.grade) * credit_float ;
-        totalCreditInStudent += credit_float
+        var credit_float = parseFloat(item.teachInfo.credit) || 0;
+        if(item.grade_option == null) {
+          var grade_float = parseFloat(item.grade) || 0 ;
+          grade += ( grade_float * credit_float);
+          totalCreditInStudent += credit_float;
+        }
       });
       console.log("grade", grade);
-      gpa = parseFloat(grade) / parseFloat(this.totalCreditInStudent);
-      // console.log(
-      //   "grade / totalCreditInStudent = ",
-      //   grade,
-      //   this.totalCreditInStudent,
-      //   gpa
-      // );
+      gpa = parseFloat(grade) / parseFloat(totalCreditInStudent);
+      console.log(
+        "grade / totalCreditInStudent = ",
+        grade,
+        totalCreditInStudent,
+        gpa
+      );
       return gpa;
+    },
+    sortByGPA(std_list, key) {
+      console.log('key', std_list.length)
+      var rank = 1;
+      var i;
+
+      // ***Array เรียงลำดับตามเกรดมาอยู่แล้ว
+      std_list[0][key] = rank; // index แรก คนเกรดสูงสุด (อันดับ 1)
+      for (i = 1; i < std_list.length; i++) {
+        console.log('loopp')
+        // เทียบกับเกรดก่อนหน้า ถ้าเกรดเท่ากัน อันดับไม่เปลี่ยน * ถ้าไม่เท่าให้เพิ่มค่าอันดับ (อันดับจะจัดตามข้างล่าง)
+        if (std_list[i].gpa < std_list[i - 1].gpa) {
+          rank = i + 1;
+        }
+        // ‘rankingInRoom’ บรรทัดนี้คือ std_list[i].rankingInRoom = rank
+        std_list[i][key] = rank; 
+        console.log('rank in loop : ', rank)
+
+      }
+      return std_list;
     },
     addPartNumber() {
       this.part_rating = [];
