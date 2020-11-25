@@ -10,7 +10,6 @@
           @change="getStudent()"
         ></v-select>
         </v-col>
-        
     </v-row>
     <v-row justify="center">
       <v-btn @click="create" class="success">init</v-btn>
@@ -20,7 +19,7 @@
 
 <script>
 export default {
-  layout: "blank",
+  layout: "assessment",
   async mounted() {
     await this.getStudent().then(result => {
       this.students = result;
