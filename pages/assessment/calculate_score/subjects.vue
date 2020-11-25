@@ -276,7 +276,7 @@ export default {
       grade_list.forEach(item => {
         var credit_float = parseFloat(item.teachInfo.credit) || 0;
         // เช็คเกรด
-        if(item.grade_option == null) {
+        if(item.grade_option == null && item.grade == 0) {
           var grade_float = parseFloat(item.grade) || 0 ;
           // เกรด * หน่วยกิต
           grade +=  grade_float * credit_float;

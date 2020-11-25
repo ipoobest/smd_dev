@@ -52,7 +52,7 @@
       <v-row class="mt-10">
         <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
         <!-- <v-col cols="2">{{ parseFloat(grade.gpa).toFixed(3) }}</v-col> -->
-         <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
+        <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
         <v-col cols="2">{{ parseFloat(gpa).toFixed(3) }}</v-col>
         <v-col cols="2">อยู่ลำดับที่</v-col>
         <v-col cols="1">{{ grade.rankingInRoom }}</v-col>
@@ -180,6 +180,9 @@ export default {
         .toString()
         .padStart(4, "0")} `;
       return dateTime;
+    },
+    sortSubject() {
+      //  return this.score.sort((a, b) => a.studentNumber - b.studentNumber);
     }
   },
   data() {
@@ -365,7 +368,7 @@ export default {
       var sum = 0;
       this.items.forEach(item => {
         //  sum += parseFloat(item.teachInfo.credit);
-        if (item.grade_option == null) {
+        if (item.grade_option == null || item.grade_option == "ผ") {
           sum += parseFloat(item.teachInfo.credit);
         }
       });
@@ -384,18 +387,21 @@ export default {
     calGPA() {
       var gpa = 0;
       var grade = 0;
+      var totalCreditInStudent = 0;
       this.items.forEach(item => {
         if(item.grade_option == null) {
           grade += parseFloat(item.grade) * parseFloat(item.teachInfo.credit);
+          var credit_float = parseFloat(item.teachInfo.credit) || 0;
+          totalCreditInStudent += credit_float
         }
         // console.log('grade',grade)
       });
       console.log("grade", grade);
-      gpa = parseFloat(grade) / parseFloat(this.totalCreditInStudent);
+      gpa = parseFloat(grade) / parseFloat(totalCreditInStudent);
       console.log(
         "grade / totalCreditInStudent = ",
         grade,
-        this.totalCreditInStudent,
+        totalCreditInStudent,
         gpa
       );
       return gpa;
