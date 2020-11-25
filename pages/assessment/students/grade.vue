@@ -350,17 +350,6 @@ export default {
       // console.log('sumxx', sum)
       return sum;
     },
-    // async sumCreateInClasses() {
-    //   console.log("teach", this.teach.length);
-    //   var sumTotalCreate = 0;
-    //   var sumSubject = this.teach.length;
-    //   console.log("total teach", sumSubject);
-    //   this.teach.forEach(item => {
-    //     sumTotalCreate += parseFloat(item.subject_info.credit);
-    //   });
-    //   console.log("sum total create", sumTotalCreate);
-    //   return sumTotalCreate;
-    // },
     calGPA() {
       var gpa = 0;
       var grade = 0;

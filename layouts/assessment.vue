@@ -76,6 +76,11 @@ export default {
           icon: `mdi-file-document`,
           title: `คะแนนรายบุคคล`,
           to: `/assessment/personal/${this.$store.state.auth.auth.objectId}?class=true`
+        }, 
+        {
+          icon: `mdi-calculator`,
+          title: `คำนวนลำดับ`,
+          to: `/assessment/calculate_score`
         },
       ],
       miniVariant: false,
