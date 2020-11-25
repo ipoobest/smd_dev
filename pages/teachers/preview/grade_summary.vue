@@ -1,11 +1,11 @@
 <template>
-  <v-container>
-    <v-btn class="mr-5" color="primary" fab small dark @click="back()">
+  <v-container class="page">
+    <v-btn class="mr-5 btnBack"  color="primary" fab small dark @click="back()">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
     <div>
       <v-row justify="center">
-        <img height="100" src="~/assets/logo-smd.png" />
+        <img height="50" src="~/assets/logo-smd.png" />
       </v-row>
       <v-row justify="center">
         <h3>แบบบันทึกผลการพัฒนาคุณภาพผู้เรียน(ปพ.5)</h3>
@@ -341,9 +341,23 @@ export default {
   background: white;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
+
 @media print {
-  body {
-    transform: scale(0.7);
+  v-btn .btnBack {
+    visibility: hidden; 
   }
+  .page {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 3.5mm;
+  padding-top: 10mm;
+  padding-bottom: 10mm;
+  margin: 10mm auto;
+  border: 1px #d3d3d3 solid;
+  border-radius: 5px;
+  background: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
 }
 </style>

@@ -68,6 +68,42 @@ export const actions = {
       }
     });
   },
+  async getRankingCount({ commit }, conditions) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const where = JSON.stringify(conditions);
+        console.log("where", where);
+        const result = this.$axios.$get(
+          `${process.env.parseUrl}/classes/${classes.ranking}?where=${where}&count=1&limit=0`
+        );
+
+        commit("setRanking", result);
+        resolve(result);
+      } catch (error) {
+        console.log({ error });
+        commit(`setError`, error);
+        reject(error);
+      }
+    });
+  },
+  async getRankingByConditions({ commit }, conditions) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const where = JSON.stringify(conditions);
+        console.log("where", where);
+        const result = this.$axios.$get(
+          `${process.env.parseUrl}/classes/${classes.ranking}?where=${where}&limit=1000`
+        );
+
+        commit("setRanking", result);
+        resolve(result);
+      } catch (error) {
+        console.log({ error });
+        commit(`setError`, error);
+        reject(error);
+      }
+    });
+  },
 
   async updateRanking({ commit }, object) {
     return new Promise(async (resolve, reject) => {
