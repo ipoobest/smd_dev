@@ -1,10 +1,10 @@
 <template>
-  <v-container>
+  <v-container >
     <v-col cols="12">
-      <v-btn class="mr-5" color="primary" fab small dark @click="back">
+      <!-- <v-btn class="mr-5" color="primary" fab small dark @click="back">
         <v-icon>mdi-arrow-left</v-icon>
-      </v-btn>
-      <v-row justify="center" class="mt-5 mb-5"
+      </v-btn> -->
+      <v-row justify="center" class="mt-2 mb-2"
         ><h3>ใบแจ้งผลการเรียน</h3></v-row
       >
       <v-row justify="center"
@@ -48,8 +48,8 @@
           </template>
         </v-simple-table>
       </v-row>
-      <v-divider class="mt-10"></v-divider>
-      <v-row class="mt-10">
+      <v-divider class="mt-2"></v-divider>
+      <v-row class="mt-2">
         <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
         <!-- <v-col cols="2">{{ parseFloat(grade.gpa).toFixed(3) }}</v-col> -->
         <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
@@ -77,10 +77,10 @@
         <v-col cols="2"><p>ได้ / เรียน</p></v-col>
         <!-- <v-col cols="2"> {{totalCreditInStudent}} หน่วยกิต</v-col> -->
       </v-row>
-      <v-row>
+      <v-row style="margin-top:-20px;">
         <v-col cols="2"> {{ gatDate }} </v-col>
       </v-row>
-      <v-row class="mt-5">
+      <v-row class="mt-2">
         <v-col cols="6">
           <v-row justify="center"
             >ลงชื่อ
@@ -99,7 +99,7 @@
           >
           <v-row justify="center" class="ml-5 mt-2">อาจารย์ประจำชั้น</v-row>
         </v-col>
-        <v-col cols="6">
+        <v-col class="test" cols="6" style="margin-top:-60px;"> 
           <!-- <img height="50" src="~/assets/logo-smd.png" /> -->
           <v-row justify="center">
             <img height="100" src="~/assets/signature.jpg" />
@@ -120,15 +120,7 @@
         </v-col>
       </v-row>
     </v-col>
-    <!-- <v-row justify="center">
-      <v-col cols="2">
-        <v-radio-group v-model="items.approved">
-          <v-radio label="อนุมัติ" value="ture"></v-radio>
-          <v-radio label="ไม่อนุมัติ" value="false"></v-radio>
-        </v-radio-group>
-      </v-col>
-    </v-row> -->
-    <v-row justify="center">
+    <v-row class="btnApprove" justify="center">
       <v-col cols="3">
         <!-- <v-btn color="success">บันทึก</v-btn> -->
         <v-btn v-if="!approve" class="ml-5" color="green" dark @click="arrpove"
@@ -152,11 +144,11 @@ export default {
   middleware: "assessment",
   async mounted() {
     this.route = this.$route.query;
-    console.log("this. route", this.route);
+    // console.log("this. route", this.route);
     await this.getGradeByConditions().then(result => {
       this.items = result;
     });
-    this.teach = await this.getTeachInClasses();
+    // this.teach = await this.getTeachInClasses();
     this.totalCreditInClass = await this.sumCreateInClasses();
     this.totalCreditInStudent = await this.sumCreditStudent();
     this.teacher = await this.getTeacher();
@@ -181,14 +173,12 @@ export default {
         .padStart(4, "0")} `;
       return dateTime;
     },
-    sortSubject() {
-      //  return this.score.sort((a, b) => a.studentNumber - b.studentNumber);
-    }
   },
   data() {
     return {
       route: "",
       items: "",
+      newItems: '',
       rowSpan: "",
       totalCredit: 0,
       totalCreditInStudent: 0,
@@ -224,6 +214,7 @@ export default {
         conditions
       );
       console.log("grade id", response.results);
+      this.newItems = response.results
       this.info = response.results[0];
       this.rowSpan = response.results.length;
       this.approve = response.results[0].approve;
@@ -411,8 +402,23 @@ export default {
       // this.items เกรดจริง
       // this.totalCreditInClass หน่วยกิตรวม
     },
+    sortSubject() {
+      const sortedBy = {
+        'คณิตศาสตร์'  : 0, 
+        'วิทยาศาสตร์'   : 1, 
+        'สังคม' : 2,
+        'สุขศึกษา' : 3,
+        'การงาน' : 4,
+        'ภาษาต่างประเทศ' : 5,
+        'ภาษาไทย' : 6,
+        'ศิลปะ' : 7,
+        'กิจกกรม' : 8,
+      }
+      // (a, b) => sortedBy[a.state] - sortedBy[b.state]
+        return this.newItems.sort((a, b) => a.codet - b.codet);
+    },
     print() {
-      window.print();
+      window.print(1);
       // console.log("it ok");
       // this.$refs.html2Pdf.generatePdf();
     },
@@ -470,8 +476,19 @@ export default {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 @media print {
+  header {
+    visibility: hidden;
+  }
+  .btnApprove {
+    margin-top: -200px;
+    visibility: hidden;
+  }
+  v-toolbar v-app-bar {
+    visibility: hidden;
+  }
   body {
     transform: scale(0.7);
+    // overflow: hidden;
   }
 }
 </style>
