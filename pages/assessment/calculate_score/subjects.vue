@@ -217,7 +217,7 @@ export default {
         `ranking/updateRanking`,
         data
       );
-      console.log("updateRanking", response.results);
+      console.log("updateRanking", response);
       return 
     },
     async calGradeRaking() {
@@ -267,10 +267,9 @@ export default {
             rankingInClasses: std.rankingInClasses,
             rankingInRoom: std.rankingInRoom,
             schoolYear: std.schoolYear,
-            studentId: std.studentId,
             term: std.term,
           }
-          // console.log('room ', data)
+          // console.log('room xxx', data)
           await this.updateRaning(data)
         });
       }
