@@ -12,7 +12,7 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-btn @click="create" class="success">init</v-btn>
+      <!-- <v-btn @click="create" class="success">init</v-btn> -->
     </v-row>
   </div>
 </template>
@@ -41,31 +41,48 @@ export default {
         classRoomLevel: this.classes
       };
       const response = await this.$store.dispatch(
-        "grade/getGradeByConditions",
+        "classes/getClassesByAcademicYears",
         query
       );
       // console.log('response.results', response.results)
-      var students = response.results;
-      var resArr = [];
-      students.filter(function(item) {
-        var i = resArr.findIndex(x => x.studentId == item.studentId);
-        if (i <= -1) {
-          resArr.push({
-            studentId: item.studentId,
+      var classes = response.results;
+      var langht = 0
+      console.log('classes', classes)
+      classes.forEach(item => {
+        item.studentId.forEach(async student => {
+          console.log('student obj',item.schoolYear,item.term, item.classRoomLevel, item.classRoomName, student)
+          var data = {
             schoolYear: item.schoolYear,
             term: item.term,
-            gpa: 0,
-            rankingInRoom: 0,
-            rankingInClasses: 0,
             classRoomLevel: item.classRoomLevel,
-            classRoomName: item.classRoomName
-          });
-        }
-        return null;
-      });
-      console.log("response.results", resArr);
-      this.students = resArr;
-      // return resArr
+            classRoomName: item.classRoomName,
+            studentObjectId: student
+          }
+          await this.createRanking(data)
+          langht += 1
+        })
+      })
+      console.log('student obj langht', langht)
+
+      // var resArr = [];
+      // students.filter(function(item) {
+      //   var i = resArr.findIndex(x => x.studentId == item.studentId);
+      //   if (i <= -1) {
+      //     resArr.push({
+      //       studentId: item.studentId,
+      //       schoolYear: item.schoolYear,
+      //       term: item.term,
+      //       gpa: 0,
+      //       rankingInRoom: 0,
+      //       rankingInClasses: 0,
+      //       classRoomLevel: item.classRoomLevel,
+      //       classRoomName: item.classRoomName
+      //     });
+      //   }
+      //   return null;
+      // });
+      // console.log("response.results", resArr);
+      // this.students = resArr;
     },
     async createRanking(data) {
       var response = await this.$store.dispatch(`ranking/createRanking`, data);

@@ -54,7 +54,7 @@ export const actions = {
       try {
         const where = JSON.stringify(conditions);
         const result = await this.$axios.$get(
-          `${process.env.parseUrl}/classes/${classes.grade}?where=${where}&&limit=2000`
+          `${process.env.parseUrl}/classes/${classes.grade}?where=${where}&&limit=10000`
         );
         console.log(
           "grades url",

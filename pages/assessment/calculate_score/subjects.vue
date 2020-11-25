@@ -159,7 +159,7 @@ export default {
         `grade/getGradeByConditions`,
         conditions
       );
-      // console.log("response get grade", response.results);
+      console.log("response get grade", response.results);
       return response.results;
     },
     async getStudentByTeach(item) {
@@ -223,12 +223,13 @@ export default {
     async calGradeRaking() {
       var student_ranking = await this.getRanking();
       var grade_subject = await this.getGradeByConditions();
-      console.log('student_ranking.length', student_ranking.length)
+      // console.log('student_ranking.length', student_ranking.length)
       // คำนวณเกรดนร. ในระดับ
       for (const student of student_ranking) {
         var student_grade_list = grade_subject.filter(
-          grade => grade.studentId == student.studentId
+          grade => grade.studentObjectId == student.studentObjectId
         );
+        console.log('student_grade_list', student_grade_list)
         student.gpa = this.calculateGpa(student_grade_list);
       }
       // Order by GPA
@@ -269,12 +270,13 @@ export default {
             studentId: std.studentId,
             term: std.term,
           }
+          // console.log('room ', data)
           await this.updateRaning(data)
         });
       }
     },
     calculateGpa(grade_list) {
-      // console.log("grade list", grade_list);
+      console.log("grade list", grade_list);
       var gpa = 0;
       var grade = 0;
       var totalCreditInStudent = 0;
