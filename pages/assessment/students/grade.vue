@@ -137,14 +137,6 @@
       </v-col>
       <v-col cols="3">
         <!-- <v-btn color="success">บันทึก</v-btn> -->
-        
-        <v-btn v-if="save == false" class="ml-5" color="info" dark @click="saveGpa"
-          >บันทึกเกรด</v-btn
-        >
-        <v-btn v-else @click="save == false">แก้ไข</v-btn>
-      </v-col>
-      <v-col cols="3">
-        <!-- <v-btn color="success">บันทึก</v-btn> -->
         <v-btn class="ml-5" color="info" dark>print</v-btn>
       </v-col>
     </v-row>
