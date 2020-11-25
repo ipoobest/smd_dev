@@ -368,11 +368,14 @@ export default {
       var sum = 0;
       this.items.forEach(item => {
         //  sum += parseFloat(item.teachInfo.credit);
+        console.log(typeof item.grade)
         if (item.grade_option == null || item.grade_option == "ผ") {
-          sum += parseFloat(item.teachInfo.credit);
+          if(item.grade != "0") {
+            sum += parseFloat(item.teachInfo.credit);
+          }
         }
       });
-      // console.log('sumxx', sum)
+      console.log('sumxx', sum)
       return sum;
     },
     async sumCreateInClasses() {
