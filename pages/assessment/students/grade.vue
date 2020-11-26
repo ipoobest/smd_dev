@@ -1,9 +1,9 @@
 <template>
   <v-container >
     <v-col cols="12">
-      <!-- <v-btn class="mr-5" color="primary" fab small dark @click="back">
+      <v-btn class="mr-5 btnBack" color="primary" fab small dark @click="back">
         <v-icon>mdi-arrow-left</v-icon>
-      </v-btn> -->
+      </v-btn>
       <v-row justify="center" class="mt-2 mb-2"
         ><h3>ใบแจ้งผลการเรียน</h3></v-row
       >
@@ -30,7 +30,7 @@
               <tr>
                 <th :rowspan="2">ภาคการเรียนที่</th>
                 <th>รหัสวิชา</th>
-                <th>ชื่อวิชา</th>
+                <th @click="sortData()">ชื่อวิชา</th>
                 <th>หน่วย</th>
                 <th>ระดับ</th>
               </tr>
@@ -77,7 +77,7 @@
         <v-col cols="2"><p>ได้ / เรียน</p></v-col>
         <!-- <v-col cols="2"> {{totalCreditInStudent}} หน่วยกิต</v-col> -->
       </v-row>
-      <v-row style="margin-top:-20px;">
+      <v-row style="margin-top:-30px;">
         <v-col cols="2"> {{ gatDate }} </v-col>
       </v-row>
       <v-row class="mt-2">
@@ -99,7 +99,7 @@
           >
           <v-row justify="center" class="ml-5 mt-2">อาจารย์ประจำชั้น</v-row>
         </v-col>
-        <v-col class="test" cols="6" style="margin-top:-60px;"> 
+        <v-col class="test" cols="6" style="margin-top:-70px;"> 
           <!-- <img height="50" src="~/assets/logo-smd.png" /> -->
           <v-row justify="center">
             <img height="100" src="~/assets/signature.jpg" />
@@ -144,11 +144,7 @@ export default {
   middleware: "assessment",
   async mounted() {
     this.route = this.$route.query;
-    // console.log("this. route", this.route);
-    await this.getGradeByConditions().then(result => {
-      this.items = result;
-    });
-    // this.teach = await this.getTeachInClasses();
+    this.items = await this.getGradeByConditions()
     this.totalCreditInClass = await this.sumCreateInClasses();
     this.totalCreditInStudent = await this.sumCreditStudent();
     this.teacher = await this.getTeacher();
@@ -172,7 +168,7 @@ export default {
         .toString()
         .padStart(4, "0")} `;
       return dateTime;
-    },
+    },   
   },
   data() {
     return {
@@ -219,21 +215,6 @@ export default {
       this.rowSpan = response.results.length;
       this.approve = response.results[0].approve;
       this.studentObjectId = response.results[0].studentObjectId;
-      return response.results;
-    },
-    async getTeachInClasses() {
-      var data = {
-        schoolYear: this.$route.query.schoolYear,
-        term: this.$route.query.term,
-        classRoomLevel: this.info.classRoomLevel,
-        classRoomName: this.info.classRoomName
-      };
-      console.log("data getTeacInClass", data);
-      const response = await this.$store.dispatch(
-        `teach/getSubjectsByConditions`,
-        data
-      );
-      console.log("response teach", response);
       return response.results;
     },
     async getTeacher() {
@@ -336,7 +317,6 @@ export default {
       console.log("update response", response);
     },
     getClass() {
-      // console.log("xxx", this.info.classRoomLevel);
       if (["ม.1", "ม.2", "ม.3"].includes(this.info.classRoomLevel)) {
         this.classes = "ระดับมัธยมศึกษาตอนต้น";
       } else {
@@ -352,7 +332,6 @@ export default {
         // console.log('summ ',sum)
       });
       // console.log('sum create', sum)
-      // this.totalCredit = sum;
       return sum;
     },
     sumCreditStudent() {
@@ -399,8 +378,6 @@ export default {
         gpa
       );
       return gpa;
-      // this.items เกรดจริง
-      // this.totalCreditInClass หน่วยกิตรวม
     },
     sortSubject() {
       const sortedBy = {
@@ -415,7 +392,10 @@ export default {
         'กิจกกรม' : 8,
       }
       // (a, b) => sortedBy[a.state] - sortedBy[b.state]
-        return this.newItems.sort((a, b) => a.codet - b.codet);
+        return this.items.sort((a, b) => a.codet - b.codet);
+    },
+    sortData() {
+      return this.items.sort((a, b) => a.teachInfo.codet - b.teachInfo.codet);
     },
     print() {
       window.print(1);
@@ -463,20 +443,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.page {
-  width: 210mm;
-  min-height: 297mm;
-  padding: 3.5mm;
-  padding-top: 10mm;
-  padding-bottom: 10mm;
-  margin: 10mm auto;
-  border: 1px #d3d3d3 solid;
-  border-radius: 5px;
-  background: white;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
 @media print {
   header {
+    visibility: hidden;
+  }
+  .btnBack {
+    margin-top: -200px;
     visibility: hidden;
   }
   .btnApprove {
