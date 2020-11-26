@@ -148,7 +148,7 @@ export default {
     this.totalCreditInClass = await this.sumCreateInClasses();
     this.totalCreditInStudent = await this.sumCreditStudent();
     this.teacher = await this.getTeacher();
-    this.gpa = this.calGPA();
+    // this.gpa = this.calGPA();
     this.totalCredit = this.sumCredit();
     this.getClass();
     // console.log('this.query', this.$route.query)
@@ -250,14 +250,15 @@ export default {
         term: this.$route.query.term,
         classRoomLevel: this.info.classRoomLevel,
         classRoomName: this.info.classRoomName,
-        studentObjectId: this.studentObjectId
+        // studentObjectId: this.studentObjectId
+        studentId: this.$route.query.id
       };
       console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
         `ranking/getRankingByConditions`,
         condition
       );
-      console.log("grade ปปป", response.results[0]);
+      console.log("grade ranking", response.results[0]);
       return response.results[0];
     },
     async countRankingClasses() {
