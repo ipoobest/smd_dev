@@ -93,7 +93,8 @@ export default {
       studentsId: [],
       studentsNamr: [],
       rating: [],
-      items: []
+      items: [],
+      ranking: ''
     };
   },
   methods: {
@@ -241,6 +242,7 @@ export default {
       this.$router.go(-1);
       console.log("back");
     },
+    
     goToPreviewGrade(item) {
       this.$router.push({
         name: "assessment-preview-grade",

@@ -9,13 +9,9 @@
             </v-btn>
             {{ title }}
             <v-spacer></v-spacer>
-            <v-text-field
-              v-model="search"
-              append-icon="mdi-magnify"
-              label="Search"
-              single-line
-              hide-details
-            ></v-text-field>
+            <v-col cols="3">
+              <v-btn class="success" @click="exportXml()">export ranking</v-btn>
+            </v-col>
           </v-card-title>
           <v-simple-table :headers="headers" :items="items" :search="search">
             <template v-slot:top>
@@ -61,6 +57,7 @@
 </template>
 
 <script>
+import XLSX from "xlsx";
 export default {
   layout: 'assessment',
   middleware: "assessment",
@@ -154,7 +151,6 @@ export default {
       // console.log('merged', merged)
       return merged;
     },
-
     async addStudents() {
       const object = {
         objectId: this.id,
@@ -171,6 +167,30 @@ export default {
         name: "assessment-students-grade",
         query: { id: item.idstd, schoolYear: this.student.schoolYear, term: this.student.term }
       });
+    },
+    async getRanking() {
+      var condition = {
+        schoolYear: this.student.schoolYear,
+        term: this.student.term,
+        classRoomLevel: this.student.classRoomLevel,
+        classRoomName: this.student.classRoomName
+      };
+      console.log('condition getRanking', condition)
+      const response = await this.$store.dispatch(
+        `ranking/getRankingByConditions`,
+        condition
+      );
+      console.log("getListClass", response);
+      return response.results;
+    },
+    async exportXml() {
+        this.ranking = await this.getRanking()
+        var data = this.ranking.sort((a, b) => a.rankingInClasses - b.rankingInClasses)
+        // console.log('data sort', data)
+        const dataWS = XLSX.utils.json_to_sheet(data)
+        const wb = XLSX.utils.book_new()
+        XLSX.utils.book_append_sheet(wb, dataWS)
+        XLSX.writeFile(wb,`rankking-${this.student.schoolYear}-${this.student.term}-${this.student.classRoomLevel}/${this.student.classRoomName}.xlsx`)
     },
     back() {
       this.$router.go(-1);
