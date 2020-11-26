@@ -51,9 +51,9 @@
       <v-divider class="mt-2"></v-divider>
       <v-row class="mt-2">
         <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
-        <!-- <v-col cols="2">{{ parseFloat(grade.gpa).toFixed(3) }}</v-col> -->
+        <v-col cols="2">{{ parseFloat(grade.gpa).toFixed(3) }}</v-col>
         <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
-        <v-col cols="2">{{ parseFloat(gpa).toFixed(3) }}</v-col>
+        <!-- <v-col cols="2">{{ parseFloat(gpa).toFixed(3) }}</v-col> -->
         <v-col cols="2">อยู่ลำดับที่</v-col>
         <v-col cols="1">{{ grade.rankingInRoom }}</v-col>
         <v-col cols="1">จาก</v-col>
@@ -209,8 +209,7 @@ export default {
         `grade/getGradeByConditions`,
         conditions
       );
-      console.log("grade id", response.results);
-      this.newItems = response.results
+      console.log("grade list Gpa", response.results);
       this.info = response.results[0];
       this.rowSpan = response.results.length;
       this.approve = response.results[0].approve;
@@ -290,28 +289,6 @@ export default {
       console.log("grade room", response);
       return response;
     },
-    async saveGpa() {
-      var data = {
-        schoolYear: this.$route.query.schoolYear,
-        term: this.$route.query.term,
-        classRoomLevel: this.info.classRoomLevel,
-        classRoomName: this.info.classRoomName,
-        studentId: this.$route.query.id,
-        gpa: this.gpa,
-        rankingInRoom: 0,
-        rankingInClasses: 0
-      };
-      this.save = true;
-      console.log("save gpa", data);
-      const response = await this.$store.dispatch(
-        `ranking/createRanking`,
-        data
-      );
-      console.log("response create ranking");
-      if (response) {
-        alert("บันทึกสำเร็จ");
-      }
-    },
     async updateGrade(data) {
       const response = await this.$store.dispatch(`grade/updateGrade`, data);
       console.log("update response", response);
@@ -354,7 +331,7 @@ export default {
         //  sum += parseFloat(item.teachInfo.credit);
         sum += parseFloat(item.teachInfo.credit);
       });
-      // console.log('sumxx', sum)
+      // console.log('sumCreateInClasses', sum)
       return sum;
     },
     calGPA() {

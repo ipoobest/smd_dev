@@ -153,7 +153,8 @@ export default {
       const conditions = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        classRoomLevel: this.classesRoomLevel
+        classRoomLevel: this.classesRoomLevel,
+        staff: true
       };
       console.log("conditoin grade", conditions);
       const response = await this.$store.dispatch(
@@ -230,8 +231,8 @@ export default {
         var student_grade_list = grade_subject.filter(
           grade => grade.studentObjectId == student.studentObjectId
         );
-        console.log("student_grade_list", student_grade_list);
-        student.gpa = this.calculateGpa(student_grade_list);
+        // console.log("student_grade_list", student_grade_list, student.studentObjectId);
+        student.gpa = this.calculateGpa(student_grade_list, student.studentObjectId);
       }
       // Order by GPA
       student_ranking.sort((a, b) => (a.gpa < b.gpa ? 1 : -1));
@@ -244,15 +245,17 @@ export default {
       var classroom = Array.from(new Set(student_class)); // ทำเป็น Set เพื่อไม่ให้มีค่าซ้ำ -> แล้วแปลง Set กลับไปเป็น Array
       // จัดอันดับที่ให้ ห้องเรียน + update DB
       for (const room of classroom) {
+        console.log('room', room)
         var room_ranking = student_ranking.filter(
           student => student.classRoomName == room
         );
 
         // จัดอันดับที่ให้ ห้องเรียน
         room_ranking = this.sortByGPA(room_ranking, "rankingInRoom"); // ‘rankingInRoom’ คือ ชื่อฟิล ‘ลำดับในห้อง’
-
+        console.log('ranking', room_ranking)
         // update DB
         room_ranking.forEach(async std => {
+          console.log('std', std)
           // *** update ’std’ เข้าตาราง Ranking *** //
           var data = {
             classRoomLevel: std.classRoomLevel,
@@ -264,20 +267,20 @@ export default {
             schoolYear: std.schoolYear,
             term: std.term
           };
-          console.log('room xxx', data)
+          // console.log('ranking', data)
           // await this.updateRaning(data);
         });
       }
     },
-    calculateGpa(grade_list) {
-      console.log("grade list", grade_list);
+    calculateGpa(grade_list, objectId) {
+      console.log("grade list calculateGpa", grade_list, objectId);
       var gpa = 0;
       var grade = 0;
       var totalCreditInStudent = 0;
       grade_list.forEach(item => {
         var credit_float = parseFloat(item.teachInfo.credit) || 0;
         // เช็คเกรด
-        if(item.grade_option == null && item.grade == 0) {
+        if(item.grade_option == null ) {
           var grade_float = parseFloat(item.grade) || 0 ;
           // เกรด * หน่วยกิต
           grade +=  grade_float * credit_float;
@@ -285,15 +288,15 @@ export default {
           totalCreditInStudent += credit_float
         }
       });
-      console.log('totalCreditInStudent (หน่วยกิตทั้งหมด)', totalCreditInStudent)
-      console.log("grade (เกรด * หน่วยกิต)", grade);
+      // console.log('totalCreditInStudent (หน่วยกิตทั้งหมด)', totalCreditInStudent)
+      console.log("grade (เกรด * หน่วยกิต)", grade , totalCreditInStudent ,objectId);
       gpa = parseFloat(grade) / parseFloat(totalCreditInStudent);
-      console.log(
-        "grade / totalCreditInStudent = ",
-        grade,
-        totalCreditInStudent,
-        gpa
-      );
+      // console.log(
+      //   "grade / totalCreditInStudent = ",
+      //   grade,
+      //   totalCreditInStudent,
+      //   gpa
+      // );
       return gpa;
     
     },
@@ -305,14 +308,13 @@ export default {
       // ***Array เรียงลำดับตามเกรดมาอยู่แล้ว
       std_list[0][key] = rank; // index แรก คนเกรดสูงสุด (อันดับ 1)
       for (i = 1; i < std_list.length; i++) {
-        console.log("loopp");
         // เทียบกับเกรดก่อนหน้า ถ้าเกรดเท่ากัน อันดับไม่เปลี่ยน * ถ้าไม่เท่าให้เพิ่มค่าอันดับ (อันดับจะจัดตามข้างล่าง)
         if (std_list[i].gpa < std_list[i - 1].gpa) {
           rank = i + 1;
         }
         // ‘rankingInRoom’ บรรทัดนี้คือ std_list[i].rankingInRoom = rank
         std_list[i][key] = rank;
-        console.log("rank in loop : ", rank);
+        // console.log("rank in loop : ", rank);
       }
       return std_list;
     },

@@ -50,7 +50,8 @@ export default {
       console.log('classes', classes)
       classes.forEach(item => {
         item.studentId.forEach(async student => {
-          console.log('student obj',item.schoolYear,item.term, item.classRoomLevel, item.classRoomName, student)
+          console.log('students xxx', student)
+          console.log('student obj',item.schoolYear,item.term, item.classRoomLevel, item.classRoomName, item)
           var data = {
             schoolYear: item.schoolYear,
             term: item.term,
@@ -58,7 +59,8 @@ export default {
             classRoomName: item.classRoomName,
             studentObjectId: student
           }
-          await this.createRanking(data)
+          console.log('data', data)
+          // await this.createRanking(data)
           langht += 1
         })
       })
