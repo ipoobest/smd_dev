@@ -268,7 +268,7 @@ export default {
             term: std.term
           };
           // console.log('ranking', data)
-          // await this.updateRaning(data);
+          await this.updateRaning(data);
         });
       }
     },

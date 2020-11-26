@@ -48,19 +48,23 @@ export default {
       var classes = response.results;
       var langht = 0
       console.log('classes', classes)
-      classes.forEach(item => {
+      classes.forEach( item => {
         item.studentId.forEach(async student => {
-          console.log('students xxx', student)
-          console.log('student obj',item.schoolYear,item.term, item.classRoomLevel, item.classRoomName, item)
-          var data = {
+          //get Students by student
+          var studentObject = await this.getStudentFromStudentClass(student)
+          console.log('students xxx', studentObject)
+          // console.log('student obj',item.schoolYear,item.term, item.classRoomLevel, item.classRoomName, studentObject)
+          var  data = {
             schoolYear: item.schoolYear,
             term: item.term,
             classRoomLevel: item.classRoomLevel,
             classRoomName: item.classRoomName,
-            studentObjectId: student
+            studentObjectId: student,
+            studentName: `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`,
+            studentId: studentObject.idstd
           }
           console.log('data', data)
-          // await this.createRanking(data)
+          await this.createRanking(data)
           langht += 1
         })
       })
@@ -85,6 +89,11 @@ export default {
       // });
       // console.log("response.results", resArr);
       // this.students = resArr;
+    },
+    async getStudentFromStudentClass(objectId) {
+      var response = await this.$store.dispatch(`students/getStudentById`, objectId);
+      console.log("respose create success", response);
+      return response
     },
     async createRanking(data) {
       var response = await this.$store.dispatch(`ranking/createRanking`, data);
