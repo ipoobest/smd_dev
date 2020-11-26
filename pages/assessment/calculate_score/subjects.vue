@@ -61,6 +61,7 @@
 </template>
 
 <script>
+
 export default {
   layout: "assessment",
   middleware: "assessment",

@@ -1,6 +1,6 @@
 <template>
   <v-layout>
-    <v-row >
+    <v-row>
       <v-col cols="12">
         <v-card>
           <v-card-title>
@@ -10,41 +10,41 @@
             {{ title }} ของปีการศีกษา {{ this.$route.query.schoolYear }} เทอม
             {{ this.$route.query.term }}
             <v-spacer></v-spacer>
-            <v-col cols="12" sm="6" md="3">
-              <v-text-field
-                v-model="search"
-                append-icon="mdi-magnify"
-                label="Search"
-                single-line
-                hide-details
-              ></v-text-field>
+            <v-col cols="2">
+              <v-select
+                v-model="classesExport"
+                :items="classes"
+                label="ระดับชั้น"
+              ></v-select>
+            </v-col>
+            <v-col cols="3" sm="6" md="3">
+              <v-btn class="success" @click="exportXml()">Export</v-btn>
             </v-col>
           </v-card-title>
-            <v-simple-table :search="search" style="width:100%">
-              <template>
-                <thead >
-                  <tr >
-                    <th class="text-center">รหัสห้อง</th>
-                    <th class="text-center">ระดับชั้น</th>
-                    <th class="text-center">ห้อง</th>
-                    <th class="text-center">action</th>
-                  </tr>
-                </thead>
-                <tbody align="center">
-                  <tr v-for="(item, index) in items" :key="index">
-                    <td>{{ item.classRoomId }}</td>
-                    <td>{{ item.classRoomLevel }}</td>
-                    <td>{{ item.classRoomName }}</td>
-                    <td>
-                      <v-btn color="info" @click="listStudent(item)">
-                        ดูข้อมูล
-                      </v-btn>
-                    </td>
-                  </tr>
-                </tbody>
-              </template>
-          
-            </v-simple-table>
+          <v-simple-table :search="search" style="width:100%">
+            <template>
+              <thead>
+                <tr>
+                  <th class="text-center">รหัสห้อง</th>
+                  <th class="text-center">ระดับชั้น</th>
+                  <th class="text-center">ห้อง</th>
+                  <th class="text-center">action</th>
+                </tr>
+              </thead>
+              <tbody align="center">
+                <tr v-for="(item, index) in items" :key="index">
+                  <td>{{ item.classRoomId }}</td>
+                  <td>{{ item.classRoomLevel }}</td>
+                  <td>{{ item.classRoomName }}</td>
+                  <td>
+                    <v-btn color="info" @click="listStudent(item)">
+                      ดูข้อมูล
+                    </v-btn>
+                  </td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
         </v-card>
       </v-col>
     </v-row>
@@ -52,9 +52,11 @@
 </template>
 
 <script>
+import XLSX from "xlsx";
+
 export default {
   middleware: "assessment",
-  layout: 'assessment',
+  layout: "assessment",
   async mounted() {
     // this.classItem = this.$route.query
     console.log("route params", this.$route.query);
@@ -64,9 +66,7 @@ export default {
     // await this.getListTeacher().then(result => (this.teachers = result));
     // await this.selectItemTeachers();
   },
-  computed: {
-   
-  },
+  computed: {},
   watch: {
     dialog(val) {
       val || this.close();
@@ -86,6 +86,7 @@ export default {
       search: ``,
       title: `ห้องเรียน`,
       editedIndex: -1,
+      ranking: '',
       classItem: {
         schoolYear: "",
         term: "",
@@ -104,11 +105,12 @@ export default {
       year: [],
       schoolYear: "",
       term: "",
+      classesExport: "0",
+      classes: ["ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"]
     };
   },
   methods: {
     async getListClass(classItem) {
-
       const response = await this.$store.dispatch(
         `classes/getClassesByAcademicYears`,
         classItem
@@ -116,7 +118,19 @@ export default {
       console.log("getListClass", response);
       return response.results;
     },
-
+    async getRanking() {
+      var condition = {
+        schoolYear: this.$route.query.schoolYear,
+        term: this.$route.query.term,
+        classRoomLevel: this.classesExport
+      };
+      const response = await this.$store.dispatch(
+        `ranking/getRankingByConditions`,
+        condition
+      );
+      console.log("getListClass", response);
+      return response.results;
+    },
     back() {
       this.$router.go(-1);
     },
@@ -141,6 +155,20 @@ export default {
     },
     resetForm() {
       this.$refs.form.reset();
+    },
+    async exportXml() {
+      // console.log("xxx", this.classesExport);
+      if(this.classesExport == "0") {
+        alert('กรุณาเลือกระดับชั้น')
+      } else {
+        this.ranking = await this.getRanking()
+        var data = this.ranking.sort((a, b) => a.rankingInClasses - b.rankingInClasses)
+        // console.log('data sort', data)
+        const dataWS = XLSX.utils.json_to_sheet(data)
+        const wb = XLSX.utils.book_new()
+        XLSX.utils.book_append_sheet(wb, dataWS)
+        XLSX.writeFile(wb,'export.xlsx')
+      }
     }
   }
 };
