@@ -1,5 +1,5 @@
 <template>
-  <v-container >
+  <v-container>
     <v-col cols="12">
       <v-btn class="mr-5 btnBack" color="primary" fab small dark @click="back">
         <v-icon>mdi-arrow-left</v-icon>
@@ -52,14 +52,16 @@
       <v-row class="mt-2">
         <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
         <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
-        <v-col cols="2" v-if="grade">{{ parseFloat(grade.gpa).toFixed(3) }}</v-col>
+        <v-col cols="2" v-if="grade">{{
+          parseFloat(grade.gpa).toFixed(3)
+        }}</v-col>
         <v-col cols="2" v-else>0</v-col>
         <!-- <v-col cols="2">{{ parseFloat(gpa).toFixed(3) }}</v-col> -->
         <v-col cols="2">อยู่ลำดับที่</v-col>
         <v-col cols="1" v-if="grade">{{ grade.rankingInRoom }}</v-col>
-         <v-col cols="2" v-else>0</v-col>
+        <v-col cols="2" v-else>0</v-col>
         <v-col cols="1">จาก</v-col>
-        <v-col cols="1">{{totalStudentInRoom.count}}</v-col>
+        <v-col cols="1">{{ totalStudentInRoom.count }}</v-col>
         <v-col cols="2">ของห้อง</v-col>
       </v-row>
       <v-row>
@@ -69,7 +71,7 @@
         </v-col>
         <v-col cols="2">อยู่ลำดับที่</v-col>
         <v-col cols="1" v-if="grade">{{ grade.rankingInClasses }}</v-col>
-         <v-col cols="2" v-else>0</v-col>
+        <v-col cols="2" v-else>0</v-col>
         <v-col cols="1">จาก</v-col>
         <v-col cols="1">{{ totalStudentInClasses.count }}</v-col>
         <v-col cols="2">ของระดับชั้น</v-col>
@@ -102,7 +104,7 @@
           >
           <v-row justify="center" class="ml-5 mt-2">อาจารย์ประจำชั้น</v-row>
         </v-col>
-        <v-col class="test" cols="6" style="margin-top:-70px;"> 
+        <v-col class="test" cols="6" style="margin-top:-70px;">
           <!-- <img height="50" src="~/assets/logo-smd.png" /> -->
           <v-row justify="center">
             <img height="100" src="~/assets/signature.jpg" />
@@ -146,9 +148,8 @@ export default {
   layout: "assessment",
   middleware: "assessment",
   async mounted() {
-    // this.initGrade()
     this.route = this.$route.query;
-    this.items = await this.getGradeByConditions()
+    this.items = await this.getGradeByConditions();
     this.totalCreditInClass = await this.sumCreateInClasses();
     this.totalCreditInStudent = await this.sumCreditStudent();
     this.teacher = await this.getTeacher();
@@ -157,8 +158,8 @@ export default {
     this.getClass();
     // console.log('this.query', this.$route.query)
     this.grade = await this.getRanking();
-    this.totalStudentInClasses = await this.countRankingClasses()
-    this.totalStudentInRoom = await this.countRankingRoom()
+    this.totalStudentInClasses = await this.countRankingClasses();
+    this.totalStudentInRoom = await this.countRankingRoom();
   },
   computed: {
     gatDate() {
@@ -172,13 +173,13 @@ export default {
         .toString()
         .padStart(4, "0")} `;
       return dateTime;
-    },   
+    }
   },
   data() {
     return {
       route: "",
       items: "",
-      newItems: '',
+      newItems: "",
       rowSpan: "",
       totalCredit: 0,
       totalCreditInStudent: 0,
@@ -188,9 +189,9 @@ export default {
       classes: "",
       teach: "",
       grade: {
-        gpa : 0,
-        rankingInRoom : 0,
-        rankingInClasses : 0
+        gpa: 0,
+        rankingInRoom: 0,
+        rankingInClasses: 0
       },
       teacher: "",
       save: false,
@@ -205,11 +206,6 @@ export default {
     };
   },
   methods: {
-    initGrade() {
-      this.grade.gpa = 0,
-      this.grade.rankingInRoom = 0,
-      this.grade.rankingInClasses = 0
-    },
     async getGradeByConditions() {
       var conditions = {
         studentId: this.$route.query.id,
@@ -292,7 +288,7 @@ export default {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
         classRoomLevel: this.info.classRoomLevel,
-        classRoomName: this.info.classRoomName,
+        classRoomName: this.info.classRoomName
       };
       console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
@@ -328,14 +324,14 @@ export default {
       var sum = 0;
       this.items.forEach(item => {
         //  sum += parseFloat(item.teachInfo.credit);
-        console.log(typeof item.grade)
+        console.log(typeof item.grade);
         if (item.grade_option == null || item.grade_option == "ผ") {
-          if(item.grade != "0") {
+          if (item.grade != "0") {
             sum += parseFloat(item.teachInfo.credit);
           }
         }
       });
-      console.log('sumxx', sum)
+      console.log("sumxx", sum);
       return sum;
     },
     async sumCreateInClasses() {
@@ -352,10 +348,10 @@ export default {
       var grade = 0;
       var totalCreditInStudent = 0;
       this.items.forEach(item => {
-        if(item.grade_option == null) {
+        if (item.grade_option == null) {
           grade += parseFloat(item.grade) * parseFloat(item.teachInfo.credit);
           var credit_float = parseFloat(item.teachInfo.credit) || 0;
-          totalCreditInStudent += credit_float
+          totalCreditInStudent += credit_float;
         }
         // console.log('grade',grade)
       });
@@ -371,18 +367,18 @@ export default {
     },
     sortSubject() {
       const sortedBy = {
-        'คณิตศาสตร์'  : 0, 
-        'วิทยาศาสตร์'   : 1, 
-        'สังคม' : 2,
-        'สุขศึกษา' : 3,
-        'การงาน' : 4,
-        'ภาษาต่างประเทศ' : 5,
-        'ภาษาไทย' : 6,
-        'ศิลปะ' : 7,
-        'กิจกกรม' : 8,
-      }
+        คณิตศาสตร์: 0,
+        วิทยาศาสตร์: 1,
+        สังคม: 2,
+        สุขศึกษา: 3,
+        การงาน: 4,
+        ภาษาต่างประเทศ: 5,
+        ภาษาไทย: 6,
+        ศิลปะ: 7,
+        กิจกกรม: 8
+      };
       // (a, b) => sortedBy[a.state] - sortedBy[b.state]
-        return this.items.sort((a, b) => a.codet - b.codet);
+      return this.items.sort((a, b) => a.codet - b.codet);
     },
     sortData() {
       return this.items.sort((a, b) => a.teachInfo.codet - b.teachInfo.codet);
