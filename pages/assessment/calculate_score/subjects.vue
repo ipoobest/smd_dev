@@ -18,8 +18,7 @@
               ></v-select>
             </v-col>
             <v-col cols="2">
-              <!-- <v-btn class="success" :disabled="disable" @click="calGradeRaking()">คำนวนเกรด</v-btn> -->
-              <v-btn class="success" @click="calGradeRaking()">คำนวนเกรด</v-btn>
+              <v-btn class="success" :disabled="disable" @click="calGradeRaking()">คำนวนเกรด</v-btn>
             </v-col>
           </v-card-title>
           <v-simple-table v-if="classesRoomLevel" width="100%">
@@ -214,7 +213,7 @@ export default {
       // console.log("getRankingByConditions", response.results);
       return response.results;
     },
-    async updateRaning(data) {
+    async updateRanking(data) {
       const response = await this.$store.dispatch(
         `ranking/updateRanking`,
         data
@@ -229,7 +228,8 @@ export default {
       // คำนวณเกรดนร. ในระดับ
       for (const student of student_ranking) {
         var student_grade_list = grade_subject.filter(
-          grade => grade.studentObjectId == student.studentObjectId
+          // grade => grade.studentObjectId == student.studentObjectId
+          grade => grade.studentId == student.studentId
         );
         // console.log("student_grade_list", student_grade_list, student.studentObjectId);
         student.gpa = this.calculateGpa(student_grade_list, student.studentObjectId);
@@ -252,7 +252,7 @@ export default {
 
         // จัดอันดับที่ให้ ห้องเรียน
         room_ranking = this.sortByGPA(room_ranking, "rankingInRoom"); // ‘rankingInRoom’ คือ ชื่อฟิล ‘ลำดับในห้อง’
-        console.log('ranking', room_ranking)
+        // console.log('ranking', room_ranking)
         // update DB
         room_ranking.forEach(async std => {
           console.log('std', std)
@@ -265,10 +265,11 @@ export default {
             rankingInClasses: std.rankingInClasses,
             rankingInRoom: std.rankingInRoom,
             schoolYear: std.schoolYear,
-            term: std.term
+            term: std.term, 
+            studentId: std.studentId
           };
-          // console.log('ranking', data)
-          await this.updateRaning(data);
+          console.log('ranking', data)
+          await this.updateRanking(data);
         });
       }
     },

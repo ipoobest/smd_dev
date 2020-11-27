@@ -113,7 +113,7 @@ export const actions = {
           `${process.env.parseUrl}/classes/${classes.ranking}/${object.objectId}`,
           object
         );
-        commit("setRanking", null);
+        commit("setRanking", result);
         resolve(result);
       } catch (error) {
         commit(`setError`, error);

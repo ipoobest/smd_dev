@@ -51,8 +51,8 @@
       <v-divider class="mt-2"></v-divider>
       <v-row class="mt-2">
         <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
-        <v-col cols="2">{{ parseFloat(grade.gpa).toFixed(3) }}</v-col>
         <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
+        <v-col cols="2">{{ parseFloat(grade.gpa).toFixed(3) }}</v-col>
         <!-- <v-col cols="2">{{ parseFloat(gpa).toFixed(3) }}</v-col> -->
         <v-col cols="2">อยู่ลำดับที่</v-col>
         <v-col cols="1">{{ grade.rankingInRoom }}</v-col>
@@ -250,8 +250,8 @@ export default {
         term: this.$route.query.term,
         classRoomLevel: this.info.classRoomLevel,
         classRoomName: this.info.classRoomName,
-        // studentObjectId: this.studentObjectId
-        studentId: this.$route.query.id
+        studentObjectId: this.studentObjectId
+        // studentId: this.$route.query.id
       };
       console.log("ranking condition", condition);
       const response = await this.$store.dispatch(

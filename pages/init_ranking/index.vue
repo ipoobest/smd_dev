@@ -52,7 +52,7 @@ export default {
         item.studentId.forEach(async student => {
           //get Students by student
           var studentObject = await this.getStudentFromStudentClass(student)
-          console.log('students xxx', studentObject)
+          // console.log('students xxx', `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`)
           // console.log('student obj',item.schoolYear,item.term, item.classRoomLevel, item.classRoomName, studentObject)
           var  data = {
             schoolYear: item.schoolYear,
@@ -68,27 +68,6 @@ export default {
           langht += 1
         })
       })
-      console.log('student obj langht', langht)
-
-      // var resArr = [];
-      // students.filter(function(item) {
-      //   var i = resArr.findIndex(x => x.studentId == item.studentId);
-      //   if (i <= -1) {
-      //     resArr.push({
-      //       studentId: item.studentId,
-      //       schoolYear: item.schoolYear,
-      //       term: item.term,
-      //       gpa: 0,
-      //       rankingInRoom: 0,
-      //       rankingInClasses: 0,
-      //       classRoomLevel: item.classRoomLevel,
-      //       classRoomName: item.classRoomName
-      //     });
-      //   }
-      //   return null;
-      // });
-      // console.log("response.results", resArr);
-      // this.students = resArr;
     },
     async getStudentFromStudentClass(objectId) {
       var response = await this.$store.dispatch(`students/getStudentById`, objectId);
