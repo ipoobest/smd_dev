@@ -52,10 +52,12 @@
       <v-row class="mt-2">
         <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
         <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
-        <v-col cols="2">{{ parseFloat(grade.gpa).toFixed(3) }}</v-col>
+        <v-col cols="2" v-if="grade">{{ parseFloat(grade.gpa).toFixed(3) }}</v-col>
+        <v-col cols="2" v-else>0</v-col>
         <!-- <v-col cols="2">{{ parseFloat(gpa).toFixed(3) }}</v-col> -->
         <v-col cols="2">อยู่ลำดับที่</v-col>
-        <v-col cols="1">{{ grade.rankingInRoom }}</v-col>
+        <v-col cols="1" v-if="grade">{{ grade.rankingInRoom }}</v-col>
+         <v-col cols="2" v-else>0</v-col>
         <v-col cols="1">จาก</v-col>
         <v-col cols="1">{{totalStudentInRoom.count}}</v-col>
         <v-col cols="2">ของห้อง</v-col>
@@ -66,7 +68,8 @@
           >{{ totalCreditInStudent }} / {{ totalCreditInClass }}
         </v-col>
         <v-col cols="2">อยู่ลำดับที่</v-col>
-        <v-col cols="1">{{ grade.rankingInClasses }}</v-col>
+        <v-col cols="1" v-if="grade">{{ grade.rankingInClasses }}</v-col>
+         <v-col cols="2" v-else>0</v-col>
         <v-col cols="1">จาก</v-col>
         <v-col cols="1">{{ totalStudentInClasses.count }}</v-col>
         <v-col cols="2">ของระดับชั้น</v-col>
@@ -143,6 +146,7 @@ export default {
   layout: "assessment",
   middleware: "assessment",
   async mounted() {
+    // this.initGrade()
     this.route = this.$route.query;
     this.items = await this.getGradeByConditions()
     this.totalCreditInClass = await this.sumCreateInClasses();
@@ -183,8 +187,11 @@ export default {
       studentObjectId: "",
       classes: "",
       teach: "",
-      grade: 0,
-      gpa: 0,
+      grade: {
+        gpa : 0,
+        rankingInRoom : 0,
+        rankingInClasses : 0
+      },
       teacher: "",
       save: false,
       totalStudentInClasses: 0,
@@ -198,6 +205,11 @@ export default {
     };
   },
   methods: {
+    initGrade() {
+      this.grade.gpa = 0,
+      this.grade.rankingInRoom = 0,
+      this.grade.rankingInClasses = 0
+    },
     async getGradeByConditions() {
       var conditions = {
         studentId: this.$route.query.id,
