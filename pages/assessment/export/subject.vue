@@ -105,6 +105,11 @@ export default {
       // console.log("response getSubjects", response.results);
       this.mapSubject(response.results);
     },
+    async getSubjectByName(data) {
+      var response = await this.$store.dispatch(`subjects/getSubjectsByConditions`, data);
+      console.log('getSubjectByName', response.results[0])
+      return response.results[0]
+    },
     mapSchoolYear(data) {
       data.forEach(item => {
         this.itemSchoolYear.push(item.schoolYear),
@@ -124,14 +129,19 @@ export default {
     async exportXmls() {
       var newData = []
       var grade = await this.getGradebyConditions()
-      console.log('grade', grade)
+      console.log('grade', grade, this.subject)
       var data = grade.sort((a, b) => b.total_score - a.total_score)
-
+      var querySubject = {
+        sname: this.subject,
+        codet: data[0].teachInfo.codet
+      }
+      var codeSubject = await this.getSubjectByName(querySubject)
       data.forEach(item => {
         var newJson = {
           "รหัสนักเรียน": item.studentId,
           "ชื่อ-สกุล": item.studentName,
-          "รหัสวิชา": item.teachInfo.codet,
+          "รหัสวิชา": codeSubject.code,
+          "รหัสวิชาภาษาไทย": item.teachInfo.codet,
           "ชื่อวิขา": item.teachInfo.sname,
           "ปีการศึกษา": item.schoolYear,
           "ภาคเรียน": item.term,
@@ -148,7 +158,7 @@ export default {
         var dataWS = XLSX.utils.json_to_sheet(newData)
         var wb = XLSX.utils.book_new()
         XLSX.utils.book_append_sheet(wb, dataWS)
-        XLSX.writeFile(wb,'export.xlsx')
+        XLSX.writeFile(wb,`${this.subject}-${this.schoolYear}-${this.term}-${this.classRoomLevel}.xlsx`)
     }
   }
 };
