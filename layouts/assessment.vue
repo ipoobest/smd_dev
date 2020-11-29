@@ -82,6 +82,23 @@ export default {
           title: `คำนวนลำดับ`,
           to: `/assessment/calculate_score`
         },
+        {
+          icon: `mdi-briefcase-download`,
+          title: `export`,
+          to: `/assessment/export`,
+            childs: [
+              {
+                icon: `mdi-chart-line`,
+                title: `ลำดับ`,
+                to: `/assessment/export/ranking`
+              },
+              {
+                icon: `mdi-account-arrow-right-outline`,
+                title: `รายวิชา`,
+                to: `/assessment/export/subject`
+              },
+            ]
+        },
       ],
       miniVariant: false,
       right: true,
