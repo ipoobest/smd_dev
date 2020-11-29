@@ -75,7 +75,7 @@ export const actions = {
       try {
         const where = JSON.stringify(conditions);
         const result = await this.$axios.$get(
-          `${process.env.parseUrl}/classes/${classes.grade}?where=${where}&&limit=10000&&keys=studentId,studentName,teachInfo,code,codeth,subject,schoolYear,term,classRoomLevel,classRoomName,total_score,grade,analytical_thinking,aptotude}
+          `${process.env.parseUrl}/classes/${classes.grade}?where=${where}&&limit=10000&&keys=studentId,studentName,teachInfo,code,codeth,subject,schoolYear,term,classRoomLevel,classRoomName,total_score,grade,analytical_thinking,aptitude}
           `
         );
         console.log(
