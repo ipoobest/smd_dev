@@ -127,26 +127,25 @@ export default {
       console.log('grade', grade)
       var data = grade.sort((a, b) => b.total_score - a.total_score)
 
-      // data.forEach(item => {
-      //   var newJson = {
-      //     "รหัสนักเรียน": item.studentId,
-      //     "ชื่อ-สกุล": item.studentName,
-      //     "รหัสวิชา": item.teachInfo.codet,
-      //     "ชื่อวิขา": item.teachInfo.sname,
-      //     "ปีการศึกษา": item.schoolYear,
-      //     "ภาคเรียน": item.term,
-      //     "ระดับชั้น": item.classRoomLevel,
-      //     "ห้องเรียน": item.classRoomName,
-      //     "คะแนนรวม": item.total_score,
-      //     "เกรด": item.grade,
-      //     "คุณลักษณะ": item.aptitude,
-      //     "การอ่านคิดวิเคราะห์และเขียน": item.analytical_thinking
-      //   }
-      //   newData.push(newJson)
-      // })
+      data.forEach(item => {
+        var newJson = {
+          "รหัสนักเรียน": item.studentId,
+          "ชื่อ-สกุล": item.studentName,
+          "รหัสวิชา": item.teachInfo.codet,
+          "ชื่อวิขา": item.teachInfo.sname,
+          "ปีการศึกษา": item.schoolYear,
+          "ภาคเรียน": item.term,
+          "ระดับชั้น": item.classRoomLevel,
+          "ห้องเรียน": item.classRoomName,
+          "คะแนนรวม": item.total_score,
+          "เกรด": item.grade,
+          "คุณลักษณะ": item.aptitude,
+          "การอ่านคิดวิเคราะห์และเขียน": item.analytical_thinking
+        }
+        newData.push(newJson)
+      })
       // console.log('new data', newData)
         var dataWS = XLSX.utils.json_to_sheet(newData)
-        XLSX.utils.sheet_add_aoa(dataWS, [  [ 'header1', 'header2', 'header3' ]]);
         var wb = XLSX.utils.book_new()
         XLSX.utils.book_append_sheet(wb, dataWS)
         XLSX.writeFile(wb,'export.xlsx')
