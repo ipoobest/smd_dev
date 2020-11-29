@@ -144,6 +144,7 @@ export default {
         }
         newData.push(newJson)
       })
+      // console.log('new data', newData)
         var dataWS = XLSX.utils.json_to_sheet(newData)
         var wb = XLSX.utils.book_new()
         XLSX.utils.book_append_sheet(wb, dataWS)
