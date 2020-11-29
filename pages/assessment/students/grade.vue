@@ -258,8 +258,7 @@ export default {
         term: this.$route.query.term,
         classRoomLevel: this.info.classRoomLevel,
         classRoomName: this.info.classRoomName,
-        studentObjectId: this.studentObjectId
-        // studentId: this.$route.query.id
+        studentId: this.$route.query.id
       };
       console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
