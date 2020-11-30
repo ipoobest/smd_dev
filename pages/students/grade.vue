@@ -85,7 +85,9 @@
       </v-row>
     </v-col>
     <v-col v-else>
-      <h3>เกรดยังไม่ออก</h3>
+      <v-row justify="center">
+        <h3>ไม่มีข้อมูลที่จะแสดลผล</h3>
+      </v-row>
     </v-col>
   </v-container>
 </template>
