@@ -149,7 +149,7 @@ export default {
   middleware: "assessment",
   async mounted() {
     this.route = this.$route.query;
-    this.items = await this.getGradeByConditions();
+    await this.getGradeByConditions();
     this.totalCreditInClass = await this.sumCreateInClasses();
     this.totalCreditInStudent = await this.sumCreditStudent();
     this.teacher = await this.getTeacher();
@@ -222,7 +222,8 @@ export default {
       this.rowSpan = response.results.length;
       this.approve = response.results[0].approve;
       this.studentObjectId = response.results[0].studentObjectId;
-      return response.results;
+      this.items = response.results
+      // return response.results;
     },
     async getTeacher() {
       const data = {
@@ -364,23 +365,11 @@ export default {
       );
       return gpa;
     },
-    sortSubject() {
-      const sortedBy = {
-        คณิตศาสตร์: 0,
-        วิทยาศาสตร์: 1,
-        สังคม: 2,
-        สุขศึกษา: 3,
-        การงาน: 4,
-        ภาษาต่างประเทศ: 5,
-        ภาษาไทย: 6,
-        ศิลปะ: 7,
-        กิจกกรม: 8
-      };
-      // (a, b) => sortedBy[a.state] - sortedBy[b.state]
-      return this.items.sort((a, b) => a.codet - b.codet);
-    },
-    sortData() {
-      return this.items.sort((a, b) => a.teachInfo.codet - b.teachInfo.codet);
+
+    sortData(data) {
+      var newItems = data.sort((a, b) => a.teachInfo.total_score - b.teachInfo.total_score);
+      console.log('sort items', newItems)
+      return newItems
     },
     print() {
       window.print(1);
