@@ -151,7 +151,7 @@ export default {
     this.query = this.$route.query;
     // this.teacherId = this.$store.state.auth.auth.teacherObjectId
     console.log("params", this.query.id);
-    await this.getTeachByTeacherId(this.query.id).then(
+    await this.getTeachByConditions(this.query.id).then(
       result => (this.items = result)
     );
     // get rating
@@ -190,17 +190,17 @@ export default {
     };
   },
   methods: {
-    async getTeachByTeacherId(teacherId) {
+    async getTeachByConditions(teacherId) {
       const data = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
         "teacher.value": teacherId
       };
       const response = await this.$store.dispatch(
-        `teach/getTeachByTeacherId`,
+        `teach/getTeachByConditions`,
         data
       );
-      console.log("response getTeachByTeacherId", response);
+      console.log("response getTeachByConditions", response);
       return response.results;
     },
     async getGradeByConditions(item) {

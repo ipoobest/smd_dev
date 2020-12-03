@@ -188,20 +188,6 @@ export default {
       console.log("response getClasses", response.results[0].teatherName);
       return response.results[0].teatherName;
     },
-    async createRanking() {
-      var data = {
-        schoolYear: this.$route.query.schoolYear,
-        term: this.$route.query.term,
-        classRoomLevel: this.info.classRoomLevel,
-        classRoomName: this.info.classRoomName,
-        grade: this.grade,
-        studentId: this.$route.id
-      };
-      const response = await this.$store.dispatch(
-        `ranking/createRanking`,
-        data
-      );
-    },
     async getRanking() {
       var condition = {
         schoolYear: this.$route.query.schoolYear,

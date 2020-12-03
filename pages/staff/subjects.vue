@@ -98,7 +98,7 @@ export default {
         `teach/getSubjectsByConditions`,
         conditions
       );
-      console.log("response getTeachByTeacherId", response);
+      console.log("response getTeachByConditions", response);
       return response.results;
     },
     async getGradeByConditions(item) {

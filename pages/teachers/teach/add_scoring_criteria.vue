@@ -138,7 +138,7 @@ export default {
   middleware: "teacher",
   async mounted() {
     //get teach by subjects
-    await this.getTeachByTeacherId().then(result => (this.items = result));
+    await this.getTeachByConditions().then(result => (this.items = result));
     await this.getRating(this.items);
     await this.getGradeList().then(result => (this.grade_list = result));
     await this.getCriteria().then(result => (this.grade = result))
@@ -165,15 +165,15 @@ export default {
     };
   },
   methods: {
-    async getTeachByTeacherId() {
+    async getTeachByConditions() {
       const data = {
         objectId: this.$route.query.id
       };
       const response = await this.$store.dispatch(
-        `teach/getTeachByTeacherId`,
+        `teach/getTeachByConditions`,
         data
       );
-      console.log("response getTeachByTeacherId", response.results);
+      console.log("response getTeachByConditions", response.results);
       return response.results;
     },
     async getGradeList() {

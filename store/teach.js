@@ -82,7 +82,7 @@ export const actions = {
       }
     })
   },
-  async getTeachByTeacherId ({ commit }, conditions) {
+  async getTeachByConditions ({ commit }, conditions) {
     return new Promise(async (resolve, reject) => {
       try {
         const where = JSON.stringify(conditions);

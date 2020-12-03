@@ -105,23 +105,23 @@ export default {
         approved: "true"
       };
       const response = await this.$store.dispatch(
-        `teach/getTeachByTeacherId`,
+        `teach/getTeachByConditions`,
         data
       );
-      console.log("response getTeachByTeacherId", response);
+      console.log("response getTeachByConditions", response);
       return response.results;
     },
-    async getTeachByTeacherId(teacherId) {
+    async getTeachByConditions(teacherId) {
       const data = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
         "teacher.value": teacherId
       };
       const response = await this.$store.dispatch(
-        `teach/getTeachByTeacherId`,
+        `teach/getTeachByConditions`,
         data
       );
-      console.log("response getTeachByTeacherId", response);
+      console.log("response getTeachByConditions", response);
       return response.results;
     },
     async getGradeByConditions(item) {

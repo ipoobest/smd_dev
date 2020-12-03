@@ -107,10 +107,10 @@ export default {
         approved: null
       };
       const response = await this.$store.dispatch(
-        `teach/getTeachByTeacherId`,
+        `teach/getTeachByConditions`,
         data
       );
-      console.log("response getTeachByTeacherId", response);
+      console.log("response getTeachByConditions", response);
       // return response.results;
     },
     async getTeachByClasses() {
@@ -122,10 +122,10 @@ export default {
         classRoomLevel: this.classesRoomLevel
       };
       const response = await this.$store.dispatch(
-        `teach/getTeachByTeacherId`,
+        `teach/getTeachByConditions`,
         data
       );
-      console.log("response getTeachByTeacherId", response);
+      console.log("response getTeachByConditions", response);
       this.items = response.results;
       console.log("xxx", this.items.length);
       if (this.items.length == 0) {
@@ -135,17 +135,17 @@ export default {
         console.log("this disable", this.disable);
       }
     },
-    async getTeachByTeacherId(teacherId) {
+    async getTeachByConditions(teacherId) {
       const data = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
         "teacher.value": teacherId
       };
       const response = await this.$store.dispatch(
-        `teach/getTeachByTeacherId`,
+        `teach/getTeachByConditions`,
         data
       );
-      console.log("response getTeachByTeacherId", response);
+      console.log("response getTeachByConditions", response);
       return response.results;
     },
     async getGradeByConditions() {
