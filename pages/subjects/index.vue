@@ -324,7 +324,8 @@ export default {
         `department/getDepartment`
       );
       this.department = this.mapDepartment(response.results)
-      return response.results
+      var item = this.sortDepartment(response.results)
+      return item
     },
     async createDepartment() {
       const data = {
@@ -375,6 +376,9 @@ export default {
     },
     initialize() {
       this.getinputFromApi().then(result => (this.items = result));
+    },
+    sortDepartment(item) {
+      return item.sort((a,b) => a.number - b.number)
     },
     editItem(item) {
       this.editedIndex = this.items.indexOf(item);

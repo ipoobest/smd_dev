@@ -164,28 +164,28 @@ export default {
       })
     },
     checkDepartmentNumber(data) {
-      if (data == "คณิตศาสตร์") {
+      if (data == "ภาษาไทย") {
         return 1;
       }
-      if (data == "วิทยาศาสตร์") {
+      if (data == "คณิตศาสตร์" ) {
         return 2;
       }
-      if (data == "สังคมศึกษา ศาสนา และวัฒนธรรม") {
+      if (data == "วิทยาศาสตร์")  {
         return 3;
       }
-      if (data == "สุขศึกษาและพลศึกษา") {
+      if (data == "สังคมศึกษา ศาสนา และวัฒนธรรม") {
         return 4;
       }
-      if (data == "การงานอาชีพและเทคโนโลยี") {
+      if (data == "สุขศึกษาและพลศึกษา") {
         return 5;
       }
-      if (data == "ภาษาต่างประเทศ") {
+      if (data == "ศิลปะ") {
         return 6;
       }
-      if (data == "ภาษาไทย") {
+      if (data == "การงานอาชีพและเทคโนโลยี") {
         return 7;
       }
-      if (data == "ศิลปะ") {
+      if (data == "ภาษาต่างประเทศ") {
         return 8;
       }
       if (data == "กิจกรรมพัฒนาผู้เรียน") {
