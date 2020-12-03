@@ -153,6 +153,7 @@ export default {
         data
       );
       console.log('updateGrade result', response)
+      this.getGrade()
     },
     back() {
       this.$router.push({ name: "index" });
