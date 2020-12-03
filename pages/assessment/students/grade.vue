@@ -30,7 +30,7 @@
               <tr>
                 <th :rowspan="2">ภาคการเรียนที่</th>
                 <th>รหัสวิชา</th>
-                <th @click="sortData()">ชื่อวิชา</th>
+                <th>ชื่อวิชา</th>
                 <th>หน่วย</th>
                 <th>ระดับ</th>
               </tr>
@@ -222,7 +222,7 @@ export default {
       this.rowSpan = response.results.length;
       this.approve = response.results[0].approve;
       this.studentObjectId = response.results[0].studentObjectId;
-      this.items = response.results
+      this.items = this.sortData(response.results)
       // return response.results;
     },
     async getTeacher() {
@@ -367,7 +367,7 @@ export default {
     },
 
     sortData(data) {
-      var newItems = data.sort((a, b) => a.teachInfo.total_score - b.teachInfo.total_score);
+      var newItems = data.sort((a, b) => a.department_number - b.department_number);
       console.log('sort items', newItems)
       return newItems
     },
