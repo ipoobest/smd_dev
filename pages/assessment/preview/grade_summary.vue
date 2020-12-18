@@ -164,13 +164,14 @@
     <v-row justify="center" class="pt-5">
       <v-col cols="4">
         <v-btn color="success" @click="save">บันทึก</v-btn>
-        <v-btn color="info">export pdf</v-btn>
+        <v-btn color="info" @click="exports" >export pdf</v-btn>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
+import pdfMake from 'pdfmake'
 export default {
   layout: "assessment",
   middleware: "assessment",
@@ -302,6 +303,8 @@ export default {
         console.log("data update", data);
         this.updateTech(data);
       }
+    },
+    exports() {
     },
     back() {
       this.$router.go(-1);

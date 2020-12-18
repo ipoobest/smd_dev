@@ -105,7 +105,7 @@ export default {
       // return this.items.sort((a,b) => {
       //   a.number - b.number
       // })
-       return this.items.sort((a, b) => a.number - b.number );
+      return this.items.sort((a, b) => a.number - b.number );
     }
   },
   data() {
@@ -144,7 +144,7 @@ export default {
   methods: {
     async getDataFromApi(classId) {
       const response = await this.$store.dispatch(`classes/getClass`, classId);
-      console.log("response xxxid", response);
+      console.log("response studen id", response);
       return response;
     },
     async getStudent() {

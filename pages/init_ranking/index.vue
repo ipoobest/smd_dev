@@ -4,6 +4,7 @@
     <v-row justify="center">
       <v-col cols="3">
         <v-select
+          :disabled="true"
           v-model="classes"
           :items="items"
           label="Standard"
