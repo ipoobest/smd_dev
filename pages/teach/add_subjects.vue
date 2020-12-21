@@ -20,7 +20,12 @@
               ></v-text-field>
             </v-col>
           </v-card-title>
-          <v-simple-table :search="search" align="center">
+          <v-data-table
+            :headers="headers"
+            :items="items"
+            :search="search"
+            align="center"
+          >
             <template v-slot:top>
               <v-toolbar flat color="white">
                 <v-spacer></v-spacer>
@@ -107,7 +112,7 @@
                         class="success"
                         color=" darken-1"
                         text
-                        @click="save1"
+                        @click="createTeach"
                         >บันทึก</v-btn
                       >
                     </v-card-actions>
@@ -115,54 +120,34 @@
                 </v-dialog>
               </v-toolbar>
             </template>
-            <thead>
-              <tr>
-                <th>รหัส/ชื่อ</th>
-                <th>ระดับชั้น</th>
-                <th>ห้องเรียน</th>
-                <th>ครูผู้สอน</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item, index) in subjectsInTerm" :key="index">
-                <td v-if="item.subject_info">
-                  {{ item.subject_info.codet }} {{ item.subject_info.sname }}
-                </td>
-                <td v-else>{{ item.sname }}</td>
-                <th>{{ item.classRoomLevel }}</th>
-                <th>{{ item.classRoomName }}</th>
-                <th>{{ item.teacher.name }}</th>
-                <th>
-                  <v-btn color="info" @click="editItem(item)">
-                    แก้ไข
-                  </v-btn>
-                  <v-btn color="error" @click="deleteItem(item)">
-                    ลบ
-                  </v-btn>
-                </th>
-              </tr>
-            </tbody>
-          </v-simple-table>
+            <template v-slot:[`item.teacherName`]="{ item }">{{ item.teachers.title }} {{ item.teachers.firstName }} {{ item.teachers.lastName }}</template>
+              <template v-slot:[`item.actions`]="{ item }">
+              <v-btn color="info" @click="editItem(item)">
+                แก้ไข
+              </v-btn>
+              <v-btn color="error" @click="deleteItem(item)">
+                ลบ
+              </v-btn>
+            </template>
+          </v-data-table>
         </v-card>
       </v-col>
     </v-row>
   </v-layout>
 </template>
-
 <script>
 export default {
-  middleware: 'admin',
+  middleware: "admin",
   async mounted() {
     this.query = this.$route.query;
     await this.getSubjectsFromTeach().then(
-      result => (this.subjectsInTerm = result)
+      result => (this.items = result)
     );
 
     await this.getSubjects().then(result => (this.subjects = result));
     await this.getClass().then(result => (this.classes = result));
     await this.getTeacher().then(result => (this.teachers = result));
-    await this.getDepartment().then(result=> (this.items_depart = result))
+    await this.getDepartment().then(result => (this.items_depart = result));
     await this.selectInputSubjects();
     await this.selectInputClasses();
     await this.selectInputTeacher();
@@ -176,15 +161,17 @@ export default {
     },
     formTitle() {
       return this.editedIndex === -1 ? "สร้าง" : "แก้ไข";
-    },
-    // watch: {
-    //   dialog(val) {
-    //     val || this.close();
-    //   }
-    // },
+    }
   },
   data() {
     return {
+      headers: [
+        { text: "วิชา", value: "subject.sname" },
+        { text: "ชั้นเรียน", value: "classRoomLevel" },
+        { text: "ห้องเรียน", value: "classRoomName" },
+        { text: "ครูผู้สอน", value: "teacherName" },
+        { text: "Actions", value: "actions", sortable: false, align: "center" }
+      ],
       title: "การจัดการวิชา",
       search: "",
       dialog: false,
@@ -256,7 +243,7 @@ export default {
         `teach/getSubjectsByConditions`,
         condition
       );
-      console.log('this xxx', response.results)
+      console.log("subject", response.results);
       return response.results;
     },
     async getClassesByAcademicYears() {
@@ -274,14 +261,14 @@ export default {
       return response.results[0].objectId;
     },
     async getDepartment() {
-      const response = await this.$store.dispatch(
-        `department/getDepartment`
-      );
-      this.department = this.mapDepartment(response.results)
-      return response.results
+      const response = await this.$store.dispatch(`department/getDepartment`);
+      this.department = this.mapDepartment(response.results);
+      return response.results;
     },
     async addSubjectToTeach(data) {
+      console.log("create teach data", data);
       const response = await this.$store.dispatch(`teach/createTeach`, data);
+      console.log("response create teach", response);
       await this.getSubjectsFromTeach().then(
         result => (this.subjectsInTerm = result)
       );
@@ -292,72 +279,63 @@ export default {
         result => (this.subjectsInTerm = result)
       );
     },
-    async save() {
-      // query studets id เอาแต่ students id
-      const objectId = await this.getClassesByAcademicYears();
-      var subjectInfo = await this.input.classSubject;
-      const data = {
-        schoolYear: this.query.schoolYear,
-        term: this.query.term,
-        classRoomLevel: this.input.classRoomLevel,
-        classRoomName: this.input.classRoomName,
-        classId: objectId,
-        teacher: this.input.teacher,
-        send_score: false,
-        rating: [],
-        subject_id: this.input.subject_id,
-        subject_info: subjectInfo,
-        department: this.input.department,
-        type: "วิชาบังคับ"
-      };
-      console.log("teach data", data);
-      this.addSubjectToTeach(data);
-      this.resetForm();
-      this.close();
-    },
-    async save1() {
-      if(this.editedIndex > -1) {
-        console.log('edit')
-         const objectId = await this.getClassesByAcademicYears();
+    async createTeach() {
+      if (this.editedIndex > -1) {
+        console.log("edit");
+        const objectId = await this.getClassesByAcademicYears();
         const data = {
-          objectId: this.input.objectId ,
+          objectId: this.input.objectId,
           schoolYear: this.query.schoolYear,
           term: this.query.term,
           classRoomLevel: this.input.classRoomLevel,
           classRoomName: this.input.classRoomName,
           classId: objectId,
-          teacher: this.input.teacher,
           send_score: false,
-          subject_id: this.input.subject_id,
-          subject_info: this.subjectInfo,
+          subject: {
+            __type: "Pointer",
+            className: "Subjects",
+            objectId: this.subjectId
+          },
+          teachers: {
+            __type: "Pointer",
+            className: "_User",
+            objectId: this.input.teacher.value
+          },
           department: this.input.department,
           type: "วิชาบังคับ"
-      };
-      console.log("teach data", data);
-      this.updateSubjectToTeach(data);
-      this.resetForm();
-      this.close();
+        };
+        console.log("teach data", data);
+        this.updateSubjectToTeach(data);
+        this.resetForm();
+        this.close();
       } else {
-        console.log('save')
-         const objectId = await this.getClassesByAcademicYears();
+        console.log("save");
+        const objectId = await this.getClassesByAcademicYears();
         const data = {
           schoolYear: this.query.schoolYear,
           term: this.query.term,
           classRoomLevel: this.input.classRoomLevel,
           classRoomName: this.input.classRoomName,
           classId: objectId,
-          teacher: this.input.teacher,
           send_score: false,
           rating: [],
-          subject_id: this.input.subject_id,
-          subject_info: this.subjectInfo,
+          subject: {
+            __type: "Pointer",
+            className: "Subjects",
+            objectId: this.subjectId
+          },
+          teachers: {
+            __type: "Pointer",
+            className: "_User",
+            objectId: this.input.teacher.value
+          },
           department: this.input.department,
           type: "วิชาบังคับ"
-      };
-      console.log("teach data", data);
-      this.addSubjectToTeach(data);
-      this.resetForm();
-      this.close();
+        };
+        console.log("teach data", data);
+        this.addSubjectToTeach(data);
+        this.resetForm();
+        this.close();
       }
     },
     async deleteSubject(objectId) {
@@ -411,17 +389,18 @@ export default {
       });
     },
     editSubjectName() {
-      var subject_name = this.subjects.filter(subject => subject.objectId == this.input.subject_id);
-      this.subjectInfo = { codet: subject_name[0].codet,sname: subject_name[0].sname, credit: subject_name[0].credit, hour: subject_name[0].hour};
-      console.log('subject infoxx', this.subjectInfo )
+      var subject_name = this.subjects.filter(
+        subject => subject.objectId == this.input.subject_id
+      );
+      // this.subjectInfo = { codet: subject_name[0].codet,sname: subject_name[0].sname, credit: subject_name[0].credit, hour: subject_name[0].hour};
+      this.subjectId = subject_name[0].objectId;
+      console.log("subject infoxx", this.subjectId);
     },
     editItem(item) {
-
       this.editedIndex = this.subjectsInTerm.indexOf(item);
       this.input = Object.assign({}, item);
       console.log("item edit", this.input);
       this.dialog = true;
-
     },
     deleteItem(item) {
       const index = this.subjectsInTerm.indexOf(item);
@@ -431,12 +410,12 @@ export default {
       }
     },
     mapDepartment(item) {
-      var department = []
+      var department = [];
       item.forEach(item => {
-        department.push(item.name)
-      })
+        department.push(item.name);
+      });
       // console.log('item deprt', department)
-      return department
+      return department;
     },
     back() {
       this.$router.go(-1);
