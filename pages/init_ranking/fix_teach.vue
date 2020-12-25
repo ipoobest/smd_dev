@@ -15,8 +15,8 @@
         :items-per-page="100"
         class="elevation-1"
       >
-       <!-- <template #item.fullName="{ item }" > -->
-         <!-- <template v-slot:[`item.fullName`]="{ item }">{{ item.teachers.title }} {{ item.teachers.firstName }} {{ item.teachers.lastName }}</template> -->
+        <!-- <template #item.fullName="{ item }" > -->
+        <!-- <template v-slot:[`item.fullName`]="{ item }">{{ item.teachers.title }} {{ item.teachers.firstName }} {{ item.teachers.lastName }}</template> -->
       </v-data-table>
     </v-card>
   </div>
@@ -33,11 +33,11 @@ export default {
       headers: [
         { text: "ชั้นเรียน", value: "classRoomLevel" },
         { text: "ห้องเรียน", value: "classRoomName" },
-        { text: "ชื่อวิชา",value: "subject_info.sname"},
+        { text: "ชื่อวิชา", value: "subject_info.sname" },
         { text: "วิชา(pointer)", value: "subject.sname" },
         { text: "ครูผู้สอน", value: "teacher.name" },
         { text: "ครูผู้สอน(pointer)", value: "teachers.firstName" },
-        { text: "กลุ่มสาระ", value: "department" },
+        { text: "กลุ่มสาระ", value: "department" }
 
         // { text: "นักเรียน(pointer)", value: "classRoomName" }
       ],
@@ -88,6 +88,11 @@ export default {
       const response = await this.$store.dispatch(`teach/updateTeach`, data);
       console.log("response", response);
     },
+    async updateStudent(data) {
+
+      const response = await this.$store.dispatch(`teach/updateTeach`, data);
+      console.log('success')
+    },
     update() {
       console.log("this.pointer", this.pointer);
       switch (this.pointer) {
@@ -103,11 +108,35 @@ export default {
           console.log("teacher");
           this.data.forEach(async item => {
             // console.log('teacherId', item.teacher.value)
-            await this.updateTeacher(item.objectId, item.teacher.value)
-          })
+            await this.updateTeacher(item.objectId, item.teacher.value);
+          });
           break;
         case "นักเรียน":
           console.log("นักเรียน");
+          this.data.forEach(async item => {
+            var studentPointer = [];
+            if (item.students) {
+              var studentId = item.students;
+              studentId.forEach(id => {
+                var students = {
+                  __type: "Pointer",
+                  className: "Students",
+                  objectId: id
+                };
+                studentPointer.push(students);
+              });
+              var data = {
+                objectId: item.objectId,
+                student: {
+                  __op: "AddRelation",
+                  objects: studentPointer
+                }
+              }
+              console.log("studenId นักเรียน", data);
+              await this.updateStudent(data)
+            }
+            console.log("-------------------");
+          });
           break;
         default:
           alert("กรุณาเลือก pointer");
