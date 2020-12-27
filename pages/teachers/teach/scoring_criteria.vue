@@ -229,7 +229,7 @@ export default {
         classRoomName: item.classRoomName
       };
       const response = await this.$store.dispatch(
-        "classes/getClassesByAcademicYears",
+        "classes/getClassesByConditins",
         conditions
       );
       console.log("response students", response.results[0].studentId);

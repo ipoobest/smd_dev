@@ -61,7 +61,7 @@ export const actions = {
     })
   },
 
-  async getClassesByAcademicYears ({ commit }, conditions) {
+  async getClassesByConditins ({ commit }, conditions) {
     return new Promise(async (resolve, reject) => {
       try {
         const where = JSON.stringify(conditions)

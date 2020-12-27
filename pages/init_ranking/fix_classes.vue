@@ -2,7 +2,7 @@
   <div>
     <v-card>
       <v-card-title>
-        แก้ไขการเรียนการสอน
+        แก้ไขห้องเรียน
         <v-spacer></v-spacer>
         <v-col cols="2">
           <v-select :items="items" v-model="pointer" label="pointer"></v-select>
@@ -43,7 +43,7 @@ export default {
       ],
       data: [],
       pointer: "",
-      items: ["วิชา", "ครู", "นักเรียน"]
+      items: ["2563 ", "2564"]
     };
   },
   methods: {

@@ -120,8 +120,11 @@
                 </v-dialog>
               </v-toolbar>
             </template>
-            <template v-slot:[`item.teacherName`]="{ item }">{{ item.teachers.title }} {{ item.teachers.firstName }} {{ item.teachers.lastName }}</template>
-              <template v-slot:[`item.actions`]="{ item }">
+            <template v-slot:[`item.teacherName`]="{ item }"
+              >{{ item.teachers.title }} {{ item.teachers.firstName }}
+              {{ item.teachers.lastName }}</template
+            >
+            <template v-slot:[`item.actions`]="{ item }">
               <v-btn color="info" @click="editItem(item)">
                 แก้ไข
               </v-btn>
@@ -140,9 +143,7 @@ export default {
   middleware: "admin",
   async mounted() {
     this.query = this.$route.query;
-    await this.getSubjectsFromTeach().then(
-      result => (this.items = result)
-    );
+    await this.getSubjectsFromTeach().then(result => (this.items = result));
 
     await this.getSubjects().then(result => (this.subjects = result));
     await this.getClass().then(result => (this.classes = result));
@@ -207,7 +208,7 @@ export default {
         term: this.query.term
       };
       const response = await this.$store.dispatch(
-        `classes/getClassesByAcademicYears`,
+        `classes/getClassesByConditins`,
         conditions
       );
       console.log("class", response);
@@ -246,7 +247,7 @@ export default {
       console.log("subject", response.results);
       return response.results;
     },
-    async getClassesByAcademicYears() {
+    async getClassesByConditins() {
       const condition = {
         schoolYear: this.query.schoolYear,
         term: this.query.term,
@@ -254,7 +255,7 @@ export default {
         classRoomName: this.input.classRoomName
       };
       const response = await this.$store.dispatch(
-        `classes/getClassesByAcademicYears`,
+        `classes/getClassesByConditins`,
         condition
       );
       console.log("getClassss ", response.results[0].objectId);
@@ -279,10 +280,35 @@ export default {
         result => (this.subjectsInTerm = result)
       );
     },
-    async createTeach() {
+
+    async save() {
+      // query studets id เอาแต่ students id
+      const objectId = await this.getClassesByConditins();
+      var subjectInfo = await this.input.classSubject;
+      const data = {
+        schoolYear: this.query.schoolYear,
+        term: this.query.term,
+        classRoomLevel: this.input.classRoomLevel,
+        classRoomName: this.input.classRoomName,
+        classId: objectId,
+        teacher: this.input.teacher,
+        send_score: false,
+        rating: [],
+        subject_id: this.input.subject_id,
+        subject_info: subjectInfo,
+        department: this.input.department,
+        type: "วิชาบังคับ"
+      };
+      console.log("teach data", data);
+      this.addSubjectToTeach(data);
+      this.resetForm();
+      this.close();
+    },
+    async save1() {
       if (this.editedIndex > -1) {
         console.log("edit");
-        const objectId = await this.getClassesByAcademicYears();
+        const objectId = await this.getClassesByConditins();
+        refactor_parse;
         const data = {
           objectId: this.input.objectId,
           schoolYear: this.query.schoolYear,
@@ -310,7 +336,8 @@ export default {
         this.close();
       } else {
         console.log("save");
-        const objectId = await this.getClassesByAcademicYears();
+        const objectId = await this.getClassesByConditins();
+        refactor_parse;
         const data = {
           schoolYear: this.query.schoolYear,
           term: this.query.term,
