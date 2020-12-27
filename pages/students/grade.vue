@@ -182,7 +182,7 @@ export default {
         classRoomName: this.info.classRoomName
       };
       const response = await this.$store.dispatch(
-        `classes/getClassesByAcademicYears`,
+        `classes/getClassesByConditins`,
         data
       );
       console.log("response getClasses", response.results[0].teatherName);

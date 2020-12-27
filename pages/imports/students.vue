@@ -198,7 +198,7 @@ export default {
     async uploadData() {
       var classItem = { schoolYear: this.year, term: this.term };
       var classroom_term = await this.$store.dispatch(
-        `classes/getClassesByAcademicYears`,
+        `classes/getClassesByConditins`,
         classItem
       );
 

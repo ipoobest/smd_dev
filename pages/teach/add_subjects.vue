@@ -220,7 +220,7 @@ export default {
         term: this.query.term
       };
       const response = await this.$store.dispatch(
-        `classes/getClassesByAcademicYears`,
+        `classes/getClassesByConditins`,
         conditions
       );
       console.log("class", response);
@@ -259,7 +259,7 @@ export default {
       console.log('this xxx', response.results)
       return response.results;
     },
-    async getClassesByAcademicYears() {
+    async getClassesByConditins() {
       const condition = {
         schoolYear: this.query.schoolYear,
         term: this.query.term,
@@ -267,7 +267,7 @@ export default {
         classRoomName: this.input.classRoomName
       };
       const response = await this.$store.dispatch(
-        `classes/getClassesByAcademicYears`,
+        `classes/getClassesByConditins`,
         condition
       );
       console.log("getClassss ", response.results[0].objectId);
@@ -294,7 +294,7 @@ export default {
     },
     async save() {
       // query studets id เอาแต่ students id
-      const objectId = await this.getClassesByAcademicYears();
+      const objectId = await this.getClassesByConditins();
       var subjectInfo = await this.input.classSubject;
       const data = {
         schoolYear: this.query.schoolYear,
@@ -318,7 +318,7 @@ export default {
     async save1() {
       if(this.editedIndex > -1) {
         console.log('edit')
-         const objectId = await this.getClassesByAcademicYears();
+         const objectId = await this.getClassesByConditins();
         const data = {
           objectId: this.input.objectId ,
           schoolYear: this.query.schoolYear,
@@ -339,7 +339,7 @@ export default {
       this.close();
       } else {
         console.log('save')
-         const objectId = await this.getClassesByAcademicYears();
+         const objectId = await this.getClassesByConditins();
         const data = {
           schoolYear: this.query.schoolYear,
           term: this.query.term,
