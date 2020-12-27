@@ -75,7 +75,7 @@ export default {
         {
           icon: `mdi-format-align-justify`,
           title: `ปีการศึกษา`,
-          to: `/academic_year`
+          to: `/academic_year`,
         },
         {
           icon: `mdi-book-plus`,

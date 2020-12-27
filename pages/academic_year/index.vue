@@ -26,6 +26,9 @@
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialogCreateYear" max-width="700px">
                   <template v-slot:activator="{ on }">
+                    <v-btn color="orange" dark class="mr-2" @click="goToUpdate()"
+                      >เลื่อนชั้น/เปลี่ยนเทอม</v-btn
+                    >
                     <v-btn color="info" dark class="mr-2" v-on="on"
                       >เพิ่มปีการศึกษา</v-btn
                     >
@@ -137,6 +140,9 @@ export default {
     async deteleAcademicYear(itemId) {
       const response = await this.$store.dispatch(`academic_year/deleteAcademicYear`, itemId)
       console.log('res ', response)
+    },
+    goToUpdate(){
+      this.$router.push({name: 'classes-upgrade'})
     },
     addClasses(item) {
       this.$router.push({
