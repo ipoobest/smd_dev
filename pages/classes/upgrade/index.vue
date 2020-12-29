@@ -213,11 +213,11 @@ export default {
       teachers: [],
       year: [],
       schoolYear: "2563",
-      newSchoolYear: "",
+      newSchoolYear: "2563",
       classRoomLevel: "ม.1",
-      newClassRoomLevel: "",
+      newClassRoomLevel: "ม.2",
       term: "1",
-      newTerm: "",
+      newTerm: "1",
       itemTerm: ["1", "2"],
       itemLevel: ["ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"],
       selectItemTeacher: []
@@ -265,9 +265,11 @@ export default {
     async upgradeClasses() {
       console.log("item update", this.items);
       this.items.forEach(async item => {
-        console.log(`item `, item);
+        // console.log(`item `, item);
+        var newClassRoomId = this.newClassRoomLevel.substring(2) + "00" + item.classRoomName
+        // console.log('new lcassroom Id', newClassRoomId)
         var data = {
-          classRoomId: item.classRoomId,
+          classRoomId: newClassRoomId,
           classRoomLevel: this.newClassRoomLevel,
           classRoomName: item.classRoomName,
           schoolYear: this.newSchoolYear,
@@ -277,12 +279,13 @@ export default {
         await this.createClasses(data);
         // console.log("new data", data);
       });
+
       var newData = {
         schoolYear: this.newSchoolYear,
         term: this.newTerm,
         classRoomLevel: this.newClassRoomLevel
       };
-      console.log('newdata', newData)
+      // console.log('newdata', newData)
       this.newItems = await this.getListClass(newData);
     },
     editItem(item) {
