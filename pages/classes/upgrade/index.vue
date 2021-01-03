@@ -53,39 +53,50 @@
                     hide-details
                   ></v-select>
                 </v-col>
-
                 <v-col cols="1">
                   <v-btn color="info" dark class="mr-2" @click="getClassesItems"
                     >get</v-btn
                   >
                 </v-col>
                 <v-col cols="1">ไปยัง</v-col>
-                <v-col cols="2">
-                  <v-text-field
-                    v-model="newSchoolYear"
-                    label="ปีการศึกษา"
-                    single-line
-                    hide-details
-                  ></v-text-field>
-                </v-col>
-                <!-- newClassRoomLevel -->
-                <v-col cols="2">
-                  <v-select
-                    v-model="newClassRoomLevel"
-                    :items="itemLevel"
-                    label="ระดับชั้น"
-                    single-line
-                    hide-details
-                  ></v-select>
-                </v-col>
-                <v-col cols="1">
-                  <v-select
-                    v-model="newTerm"
-                    label="เทอม"
-                    :items="itemTerm"
-                    single-line
-                    hide-details
-                  ></v-select>
+                <v-col
+                  v-if="
+                    (classRoomLevel == 'ม.3' || classRoomLevel == 'ม.6') &&
+                      term == '2'
+                  "
+                  cols="5"
+                >
+                  จบการศึกษา</v-col
+                >
+                <v-col v-else cols="5">
+                  <v-row>
+                    <v-col cols="4"
+                      ><v-text-field
+                        v-model="newSchoolYear"
+                        label="ปีการศึกษา"
+                        single-line
+                        hide-details
+                      ></v-text-field
+                    ></v-col>
+                    <v-col cols="4">
+                      <v-select
+                        v-model="newClassRoomLevel"
+                        :items="itemLevel"
+                        label="ระดับชั้น"
+                        single-line
+                        hide-details
+                      ></v-select
+                    ></v-col>
+                    <v-col cols="4"
+                      ><v-select
+                        v-model="newTerm"
+                        label="เทอม"
+                        :items="itemTerm"
+                        single-line
+                        hide-details
+                      ></v-select
+                    ></v-col>
+                  </v-row>
                 </v-col>
               </v-toolbar>
               <v-col cols="2">
@@ -213,7 +224,7 @@ export default {
       teachers: [],
       year: [],
       schoolYear: "2563",
-      newSchoolYear: "2563",
+      newSchoolYear: "",
       classRoomLevel: "ม.1",
       newClassRoomLevel: "ม.2",
       term: "1",
@@ -263,21 +274,36 @@ export default {
       );
     },
     async upgradeClasses() {
-      console.log("item update", this.items);
+      // 1. check academic year update
+      // 2. create academic year
+      // console.log("item update", this.items);
       this.items.forEach(async item => {
         // console.log(`item `, item);
-        var newClassRoomId = this.newClassRoomLevel.substring(2) + "00" + item.classRoomName
+        var newClassRoomLevel;
+        var newSchoolYear;
+        if (
+          (this.classRoomLevel == "ม.3" || this.classRoomLevel == "ม.6") &&
+          this.term == "2"
+        ) {
+          newClassRoomLevel = "จบการศึกษา";
+          newSchoolYear = this.schoolYear;
+        } else {
+          newClassRoomLevel = this.newClassRoomLevel;
+          newSchoolYear = this.newSchoolYear;
+        }
+        var newClassRoomId =
+          this.newClassRoomLevel.substring(2) + "00" + item.classRoomName;
         // console.log('new lcassroom Id', newClassRoomId)
         var data = {
           classRoomId: newClassRoomId,
-          classRoomLevel: this.newClassRoomLevel,
+          classRoomLevel: newClassRoomLevel,
           classRoomName: item.classRoomName,
-          schoolYear: this.newSchoolYear,
+          schoolYear: newSchoolYear,
           term: this.newTerm,
           studentId: item.studentId
         };
-        await this.createClasses(data);
-        // console.log("new data", data);
+        // await this.createClasses(data);
+        console.log("new data", data);
       });
 
       var newData = {

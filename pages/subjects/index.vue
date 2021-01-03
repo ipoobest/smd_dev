@@ -453,7 +453,8 @@ export default {
           credit: this.input.credit,
           hour: this.input.hour,
           type: this.input.type,
-          department: this.input.department
+          department: this.input.department,
+          term: this.input.term
         };
         this.updateSubject(editinput);
         this.close();
@@ -467,7 +468,8 @@ export default {
             credit: this.input.credit,
             hour: this.input.hour,
             type: this.input.type,
-            department: this.input.department
+            department: this.input.department,
+            term: this.input.term
           };
           // console.log("input create", data);
           this.createSubject(data);
