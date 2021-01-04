@@ -53,7 +53,7 @@ export const actions = {
     return new Promise(async (resolve, reject) => {
       try {
         const result = this.$axios.$get(
-          `${process.env.parseUrl}/classes/${classes.subjects}?limit=500`
+          `${process.env.parseUrl}/classes/${classes.subjects}?limit=500&order=-createdAt`
         );
 
         commit('setSubjects', result)
@@ -70,7 +70,9 @@ export const actions = {
       try {
         const where = JSON.stringify(conditions)
         console.log('where', where)
-        const result = this.$axios.$get(`${process.env.parseUrl}/classes/${classes.subjects}?where=${where}&&limit=500`)
+        const result = this.$axios.$get(
+          `${process.env.parseUrl}/classes/${classes.subjects}?where=${where}&&limit=500&order=-createdAt`
+        );
 
         commit("setSubjects", result);
         resolve(result)

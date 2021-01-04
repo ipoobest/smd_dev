@@ -27,37 +27,53 @@
           >
             <template v-slot:top>
               <v-toolbar flat color="white">
-                <v-col cols="2">
-                  <v-text-field
-                    v-model="schoolYear"
-                    label="ปีการศึกษา"
-                    single-line
-                    hide-details
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="2">
-                  <v-select
-                    v-model="classRoomLevel"
-                    :items="itemLevel"
-                    label="ระดับชั้น"
-                    single-line
-                    hide-details
-                  ></v-select>
-                </v-col>
-                <v-col cols="1">
-                  <v-select
-                    v-model="term"
-                    :items="itemTerm"
-                    label="เทอม"
-                    single-line
-                    hide-details
-                  ></v-select>
-                </v-col>
-                <v-col cols="1">
-                  <v-btn color="info" dark class="mr-2" @click="getClassesItems"
-                    >get</v-btn
-                  >
-                </v-col>
+                <v-col cols="6">
+                  <v-form ref="formGetClasses" validation>
+                    <v-row>
+                      <v-col cols="4">
+                        <v-text-field
+                          v-model="schoolYear"
+                          label="ปีการศึกษา"
+                          single-line
+                          hide-details
+                          require
+                          :rules="[v => !!v || 'กรุณากรอกข้อมูล ปีการศึกษา']"
+                        ></v-text-field>
+                      </v-col>
+                      <v-col cols="4">
+                        <v-select
+                          v-model="classRoomLevel"
+                          :items="itemLevel"
+                          label="ระดับชั้น"
+                          require
+                          :rules="[v => !!v || 'กรุณาเลือกข้ออมูล ระดับชั้น']"
+                          single-line
+                          hide-details
+                        ></v-select>
+                      </v-col>
+                      <v-col cols="2">
+                        <v-select
+                          v-model="term"
+                          :items="itemTerm"
+                          label="เทอม"
+                          single-line
+                          require
+                          :rules="[v => !!v || 'กรุณาเลือกข้ออมูล เทอม']"
+                          hide-details
+                        ></v-select>
+                      </v-col>
+                      <v-col cols="2">
+                        <v-btn
+                          color="info"
+                          dark
+                          class="mr-2"
+                          @click="getClassesItems"
+                          >get</v-btn
+                        >
+                      </v-col>
+                    </v-row></v-form
+                  ></v-col
+                >
                 <v-col cols="1">ไปยัง</v-col>
                 <v-col
                   v-if="
@@ -69,42 +85,51 @@
                   จบการศึกษา</v-col
                 >
                 <v-col v-else cols="5">
-                  <v-row>
-                    <v-col cols="4"
-                      ><v-text-field
-                        v-model="newSchoolYear"
-                        label="ปีการศึกษา"
-                        single-line
-                        hide-details
-                      ></v-text-field
-                    ></v-col>
-                    <v-col cols="4">
-                      <v-select
-                        v-model="newClassRoomLevel"
-                        :items="itemLevel"
-                        label="ระดับชั้น"
-                        single-line
-                        hide-details
-                      ></v-select
-                    ></v-col>
-                    <v-col cols="4"
-                      ><v-select
-                        v-model="newTerm"
-                        label="เทอม"
-                        :items="itemTerm"
-                        single-line
-                        hide-details
-                      ></v-select
-                    ></v-col>
-                  </v-row>
+                  <v-form ref="formToClasses" validation>
+                    <v-row>
+                      <v-col cols="4"
+                        ><v-text-field
+                          v-model="newSchoolYear"
+                          label="ปีการศึกษา"
+                          :rules="[v => !!v || 'กรุณากรอกข้อมูล ปีการศึกษา']"
+                          require
+                          single-line
+                          hide-details
+                        ></v-text-field
+                      ></v-col>
+                      <v-col cols="4">
+                        <v-select
+                          v-model="newClassRoomLevel"
+                          :items="itemLevel"
+                          label="ระดับชั้น"
+                          :rules="[v => !!v || 'กรุณาเลือกข้ออมูล ระดับชั้น']"
+                          require
+                          single-line
+                          hide-details
+                        ></v-select
+                      ></v-col>
+                      <v-col cols="4"
+                        ><v-select
+                          v-model="newTerm"
+                          label="เทอม"
+                          :rules="[v => !!v || 'กรุณาเลือกข้ออมูล เทอม']"
+                          :items="itemTerm"
+                          require
+                          single-line
+                          hide-details
+                        ></v-select
+                      ></v-col>
+                    </v-row>
+                  </v-form>
                 </v-col>
               </v-toolbar>
+
               <v-col cols="2">
                 <v-btn
                   color="success"
                   dark
                   class="mr-2"
-                  @click="upgradeClasses()"
+                  @click="checkAcademicYear()"
                   >อัดเดทชั้นเรียน</v-btn
                 >
               </v-col>
@@ -223,11 +248,11 @@ export default {
       selectAcademic: [],
       teachers: [],
       year: [],
-      schoolYear: "2563",
+      schoolYear: "",
       newSchoolYear: "",
-      classRoomLevel: "ม.1",
+      classRoomLevel: "",
       newClassRoomLevel: "ม.2",
-      term: "1",
+      term: "",
       newTerm: "1",
       itemTerm: ["1", "2"],
       itemLevel: ["ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"],
@@ -236,18 +261,14 @@ export default {
   },
   methods: {
     async getClassesItems() {
-      console.log(
-        "getClasses",
-        this.schoolYear,
-        this.term,
-        this.classRoomLevel
-      );
-      var data = {
-        schoolYear: this.schoolYear,
-        term: this.term,
-        classRoomLevel: this.classRoomLevel
-      };
-      this.items = await this.getListClass(data);
+      if (this.$refs.formGetClasses.validate()) {
+        var data = {
+          schoolYear: this.schoolYear,
+          term: this.term,
+          classRoomLevel: this.classRoomLevel
+        };
+        this.items = await this.getListClass(data);
+      }
     },
     async getListClass(classItem) {
       const response = await this.$store.dispatch(
@@ -255,6 +276,22 @@ export default {
         classItem
       );
       console.log("getListClass", response);
+      return response.results;
+    },
+    async getAcademicYear(data) {
+      const response = await this.$store.dispatch(
+        `academic_year/getAcademicYearByCondition`,
+        data
+      );
+      console.log("getAcademicYear", response.results);
+      return response.results;
+    },
+    async createAcademiYear(data) {
+      const response = await this.$store.dispatch(
+        `academic_year/createAcademicYear`,
+        data
+      );
+      console.log("createAcademicYear", response.results);
       return response.results;
     },
     async createClasses(data) {
@@ -272,6 +309,44 @@ export default {
         `classes/deleteClass`,
         itemId
       );
+    },
+    async checkAcademicYear() {
+      if (this.$refs.formToClasses.validate()) {
+        // 2. get academtiYear
+        var data = {
+          schoolYear: this.newSchoolYear,
+          term: this.newTerm
+        }
+        const acadamicYear = await this.getAcademicYear(data)
+        if (!acadamicYear.length) {
+          // create academic year
+          console.log('acadamicYear ok', acadamicYear.length)
+          await this.createAcademiYear(data)
+          this.checkClassesUpdate()
+          //3 call check update
+        }else{
+          //3 call check update
+          console.log('acadamicYear okxx', acadamicYear.length)
+          this.checkClassesUpdate()
+        }
+      }
+      // 1. check input
+      // this.$refs.form.validate()
+    },
+    async checkClassesUpdate() {
+      var data = {
+        schoolYear: this.newSchoolYear,
+        term: this.newTerm,
+        classRoomLevel: this.newClassRoomLevel,
+        term: this.newTerm
+      }
+      const classes = await this.getListClass(data)
+      if (!classes.length) {
+        console.log('okk', classes.length)
+        /// create classes
+      } else{
+        console.log('sss', classes.length)
+      }
     },
     async upgradeClasses() {
       // 1. check academic year update
@@ -302,8 +377,8 @@ export default {
           term: this.newTerm,
           studentId: item.studentId
         };
-        // await this.createClasses(data);
-        console.log("new data", data);
+        await this.createClasses(data);
+        // console.log("new data", data);
       });
 
       var newData = {
