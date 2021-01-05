@@ -130,7 +130,7 @@
                   dark
                   class="mr-2"
                   @click="checkAcademicYear()"
-                  >อัดเดทชั้นเรียน</v-btn
+                  >อัพเดทชั้นเรียน</v-btn
                 >
               </v-col>
             </template>
@@ -299,9 +299,8 @@ export default {
         `classes/createClasses`,
         data
       );
-      // this.getListClass(this.$route.query).then(
-      //   result => (this.items = result)
-      // );
+      // initRanking
+      
     },
     async deteleClasses(itemId) {
       console.log("delete ", itemId);
@@ -311,6 +310,10 @@ export default {
       );
     },
     async checkAcademicYear() {
+      if(this.items.length == 0) {
+        alert('กรุณาเลือกชั้นเรียนที่จะ upgrade')
+        return
+      }
       if (this.$refs.formToClasses.validate()) {
         // 2. get academtiYear
         var data = {
@@ -320,13 +323,13 @@ export default {
         const acadamicYear = await this.getAcademicYear(data)
         if (!acadamicYear.length) {
           // create academic year
-          console.log('acadamicYear ok', acadamicYear.length)
+          // console.log('acadamicYear ok', acadamicYear.length)
           await this.createAcademiYear(data)
           this.checkClassesUpdate()
           //3 call check update
         }else{
           //3 call check update
-          console.log('acadamicYear okxx', acadamicYear.length)
+          // console.log('acadamicYear okxx', acadamicYear.length)
           this.checkClassesUpdate()
         }
       }
@@ -343,9 +346,13 @@ export default {
       const classes = await this.getListClass(data)
       if (!classes.length) {
         console.log('okk', classes.length)
-        /// create classes
+        alert('ชั้นเรียนนี้ถูก update แล้ว')
+        
       } else{
         console.log('sss', classes.length)
+        /// create classes
+        alert('update classes')
+        this.upgradeClasses()
       }
     },
     async upgradeClasses() {
