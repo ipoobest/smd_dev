@@ -47,7 +47,7 @@ export default {
       );
       // console.log('response.results', response.results)
       var classes = response.results;
-      var length = 0
+      // var length = 0
       console.log('classes', classes)
       classes.forEach( item => {
         item.studentId.forEach(async student => {
@@ -66,7 +66,7 @@ export default {
           }
           console.log('data', data)
           await this.createRanking(data)
-          length += 1
+          // length += 1
         })
       })
     },

@@ -325,7 +325,7 @@ export default {
     },
     async createRanking() {
       var response = await this.$store.dispatch(`ranking/createRanking`, data);
-      console.log("respose create success", response);
+      // console.log("respose create success", response);
     },
     async checkAcademicYear() {
       this.ranking = true;
@@ -470,26 +470,21 @@ export default {
       console.log("data init ranking", data);
       // var classes = data;
       var length = 0;
-      data.forEach(async item => {
-        item.studentId.forEach(async student => {
-          //get Students by student
-          var studentObject = await this.getStudentFromStudentClass(student);
-          // console.log('students xxx', `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`)
-          // console.log('student obj',item.schoolYear,item.term, item.classRoomLevel, item.classRoomName, studentObject)
-          var data = {
-            schoolYear: item.schoolYear,
-            term: item.term,
-            classRoomLevel: item.classRoomLevel,
-            classRoomName: item.classRoomName,
-            studentObjectId: student,
+
+      data.studentId.forEach(async item => {
+        var studentObject = await this.getStudentFromStudentClass(item);
+        var data = {
+            schoolYear: this.newSchoolYear,
+            term: this.newTerm,
+            classRoomLevel: this.newClassRoomLevel,
+            classRoomName: this.newClassRoomName,
+            studentObjectId: item,
             studentName: `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`,
-            studentId: studentObject.idstd
-          };
-          console.log("data", data);
-          // await this.createRanking(data)
-          length += 1;
-        });
-      });
+            studentId: studentObject.idstd 
+        }
+      })
+      console.log('initRanking', data)
+      await this.createRanking(data)
     },
     addStudent(item) {
       console.log("item id ", item.objectId);
