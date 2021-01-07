@@ -291,7 +291,7 @@ export default {
         `students/getStudentById`,
         objectId
       );
-      console.log("respose create success", response);
+      console.log("getStudentFromStudentClass", response);
       return response;
     },
     async getRanking(data) {
@@ -323,9 +323,9 @@ export default {
         itemId
       );
     },
-    async createRanking() {
+    async createRanking(data) {
       var response = await this.$store.dispatch(`ranking/createRanking`, data);
-      // console.log("respose create success", response);
+      console.log("respose create success", response);
     },
     async checkAcademicYear() {
       this.ranking = true;
@@ -363,14 +363,14 @@ export default {
         classRoomName: item.classRoomName
       };
       console.log("data checkRanking", data);
-      var ranking = await this.getRanking(data)
-      console.log('data rankgin', ranking.results.length)
+      var ranking = await this.getRanking(data);
+      console.log("data rankgin", ranking.results.length);
 
-      if(ranking.results.length != 0) {
-        alert('ชั้นเรียนนี้ update ranking แล้ว')
-        return
+      if (ranking.results.length != 0) {
+        alert("ชั้นเรียนนี้ update ranking แล้ว");
+        return;
       } else {
-        await this.initRanking(item)
+        await this.initRanking(item);
       }
     },
     async checkClassesUpdate() {
@@ -474,17 +474,18 @@ export default {
       data.studentId.forEach(async item => {
         var studentObject = await this.getStudentFromStudentClass(item);
         var data = {
-            schoolYear: this.newSchoolYear,
-            term: this.newTerm,
-            classRoomLevel: this.newClassRoomLevel,
-            classRoomName: this.newClassRoomName,
-            studentObjectId: item,
-            studentName: `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`,
-            studentId: studentObject.idstd 
-        }
-      })
-      console.log('initRanking', data)
-      await this.createRanking(data)
+          schoolYear: this.newSchoolYear,
+          term: this.newTerm,
+          classRoomLevel: this.newClassRoomLevel,
+          classRoomName: `${studentObject.room}`,
+          studentObjectId: item,
+          studentName: `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`,
+          studentId: studentObject.idstd
+        };
+        // console.log("initRanking", data);
+      await this.createRanking(data);
+      });
+      // console.log("initRanking", data);
     },
     addStudent(item) {
       console.log("item id ", item.objectId);
