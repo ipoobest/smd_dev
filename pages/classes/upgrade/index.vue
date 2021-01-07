@@ -343,12 +343,13 @@ export default {
         if (acadamicYear.length != 0) {
           // create academic year
           // console.log('acadamicYear ok', acadamicYear.length)
-          await this.createAcademiYear(data);
+          // await this.createAcademiYear(data);
           this.checkClassesUpdate();
           //3 call check update
         } else {
           //3 call check update
           // console.log('acadamicYear okxx', acadamicYear.length)
+          await this.createAcademiYear(data);
           this.checkClassesUpdate();
         }
       }
@@ -467,7 +468,7 @@ export default {
     },
     async initRanking(data) {
       // checkRanking
-      console.log("data init ranking", data);
+      // console.log("data init ranking", data);
       // var classes = data;
       var length = 0;
 
@@ -488,7 +489,7 @@ export default {
       // console.log("initRanking", data);
     },
     addStudent(item) {
-      console.log("item id ", item.objectId);
+      // console.log("item id ", item.objectId);
       this.$router.push({
         name: "classes-add_student",
         query: { id: item.objectId }
