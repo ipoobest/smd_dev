@@ -1,5 +1,5 @@
 <template>
-  <v-container class="page">
+  <v-container ref="document">
     <v-btn class="mr-5 btnBack"  color="primary" fab small dark @click="back()">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
@@ -171,6 +171,8 @@
 
 <script>
 import VueHtml2pdf from "vue-html2pdf";
+import html2pdf from 'html2pdf.js'
+
 export default {
   layout: "teacher",
   middleware: 'teacher',
@@ -301,7 +303,7 @@ export default {
         );
         this.grade_option_num_list.push(grade_filter.length);
       });
-      console.log("grade options", this.grade_option_num_list);
+      // console.log("grade options", this.grade_option_num_list);
 
       this.aptitude_score_num = [];
       this.analytical_score_num = [];
@@ -317,7 +319,14 @@ export default {
       });
     },
     print() {
-      window.print();
+      // window.print();
+      	html2pdf(this.$refs.document, {
+					margin: 1,
+					filename: 'document.pdf',
+					image: { type: 'jpeg', quality: 0.98 },
+					html2canvas: { dpi: 192, letterRendering: true },
+					jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+				})
       // console.log("it ok");
       // this.$refs.html2Pdf.generatePdf();
     },
