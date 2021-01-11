@@ -112,7 +112,7 @@
                         class="success"
                         color=" darken-1"
                         text
-                        @click="createTeach"
+                        @click="save"
                         >บันทึก</v-btn
                       >
                     </v-card-actions>
@@ -226,7 +226,8 @@ export default {
     },
     async getSubjects() {
       var conditions = {
-        type: "วิชาบังคับ"
+        type: "วิชาบังคับ",
+        term: this.query.term
       };
       const response = await this.$store.dispatch(
         `subjects/getSubjectsByConditions`,
@@ -281,30 +282,30 @@ export default {
       );
     },
 
+    // async save() {
+    //   // query studets id เอาแต่ students id
+    //   const objectId = await this.getClassesByConditins();
+    //   var subjectInfo = await this.input.classSubject;
+    //   const data = {
+    //     schoolYear: this.query.schoolYear,
+    //     term: this.query.term,
+    //     classRoomLevel: this.input.classRoomLevel,
+    //     classRoomName: this.input.classRoomName,
+    //     classId: objectId,
+    //     teacher: this.input.teacher,
+    //     send_score: false,
+    //     rating: [],
+    //     subject_id: this.input.subject_id,
+    //     subject_info: subjectInfo,
+    //     department: this.input.department,
+    //     type: "วิชาบังคับ"
+    //   };
+    //   console.log("teach data", data);
+    //   this.addSubjectToTeach(data);
+    //   this.resetForm();
+    //   this.close();
+    // },
     async save() {
-      // query studets id เอาแต่ students id
-      const objectId = await this.getClassesByConditins();
-      var subjectInfo = await this.input.classSubject;
-      const data = {
-        schoolYear: this.query.schoolYear,
-        term: this.query.term,
-        classRoomLevel: this.input.classRoomLevel,
-        classRoomName: this.input.classRoomName,
-        classId: objectId,
-        teacher: this.input.teacher,
-        send_score: false,
-        rating: [],
-        subject_id: this.input.subject_id,
-        subject_info: subjectInfo,
-        department: this.input.department,
-        type: "วิชาบังคับ"
-      };
-      console.log("teach data", data);
-      this.addSubjectToTeach(data);
-      this.resetForm();
-      this.close();
-    },
-    async save1() {
       if (this.editedIndex > -1) {
         console.log("edit");
         const objectId = await this.getClassesByConditins();
@@ -381,7 +382,7 @@ export default {
         };
         this.classSubject.push(data);
       });
-      console.log("classSubject index", this.classSubject);
+      console.log("classSubject index", this.classSubject, this.classSubject.length);
     },
     selectInputClasses() {
       console.log("this classes", this.classes);

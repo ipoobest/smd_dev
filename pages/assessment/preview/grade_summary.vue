@@ -145,16 +145,14 @@
       <v-row>
         <v-col cols="2">ตรวจสอบข้อมูล </v-col>
         <v-col cols="2">
-          <v-radio-group >
+          <v-radio-group>
             <!-- //TODO this -->
-            <v-radio label="อนุมัติ" value='true'></v-radio>
-            <v-radio label="ไม่อนุมัติ" value='false'></v-radio>
+            <v-radio label="อนุมัติ" value="true"></v-radio>
+            <v-radio label="ไม่อนุมัติ" value="false"></v-radio>
           </v-radio-group>
         </v-col>
         <v-col cols="6" class="mt-8">
-          <v-text-field
-            label="สาเหตุที่ไม่อนุมัติ"
-          ></v-text-field>
+          <v-text-field label="สาเหตุที่ไม่อนุมัติ"></v-text-field>
         </v-col>
       </v-row>
       <v-row justify="center">
@@ -164,14 +162,14 @@
     <v-row justify="center" class="pt-5">
       <v-col cols="4">
         <v-btn color="success" @click="save">บันทึก</v-btn>
-        <v-btn color="info" @click="exports" >export pdf</v-btn>
+        <v-btn color="info" @click="exports">export pdf</v-btn>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-import pdfMake from 'pdfmake'
+import jsPDF from "jspdf";
 export default {
   layout: "assessment",
   middleware: "assessment",
@@ -290,8 +288,8 @@ export default {
     },
     save() {
       console.log("approve, message", this.items.approved);
-      var save_score = (this.items.approved === "true") ? false : true;
-      var send_score = (this.items.approved === "true") ? true : false;
+      var save_score = this.items.approved === "true" ? false : true;
+      var send_score = this.items.approved === "true" ? true : false;
       if (confirm("ยืนยันการบันทึก")) {
         var data = {
           objectId: this.items.objectId,
@@ -305,6 +303,9 @@ export default {
       }
     },
     exports() {
+      const doc = new jsPDF();
+      doc.text("Hello world!", 10, 10);
+      doc.save("a4.pdf");
     },
     back() {
       this.$router.go(-1);

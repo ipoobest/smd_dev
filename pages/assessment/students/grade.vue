@@ -417,6 +417,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+header {
+    visibility: hidden;
+}
 @media print {
   header {
     visibility: hidden;

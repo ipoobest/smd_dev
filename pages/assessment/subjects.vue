@@ -24,7 +24,8 @@
               </v-btn>
             </template>
           </v-data-table> -->
-          <v-simple-table width="100%">
+          <v-simple-table 
+            width="100%">
             <template v-slot:default>
               <thead>
                 <tr>
@@ -48,13 +49,14 @@
                     <v-btn color="info" @click="goToPreviewGrade(item)"
                       >จัดการ</v-btn
                     >
-                    <!-- <v-btn @click="goToPreviewScore(item)" color="success"
+                    <v-btn @click="goToPreviewScore(item)" color="success"
                       >คะแนน</v-btn
-                    > -->
+                    >
                   </td>
                 </tr>
               </tbody>
             </template>
+          <template v-slot:[`item.subjectInfo`]="{ item }">{{ item.teachers.title }} {{ item.teachers.firstName }} {{ item.teachers.lastName }}</template>
           </v-simple-table>
         </v-card>
       </v-col>
@@ -79,6 +81,13 @@ export default {
   },
   data() {
     return {
+        headers: [
+        { text: 'รหัส/ชื่อวิชา', value: 'subjectInfo' },
+        { text: 'ระดับชั้น', value: 'classRoomId'},
+        { text: 'ห้องเรียน', value: 'classRoomName' },
+        { text: 'ครูผู้สอน', value: 'teatherId' }
+        // { text: 'Actions', value: 'actions', sortable: false }
+      ],
       dialog: false,
       formTitle: "เกณฑ์การให้คะแนน",
       title: "เลือกห้องเรียน",

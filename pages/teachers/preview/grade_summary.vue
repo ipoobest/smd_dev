@@ -1,5 +1,5 @@
-<template>
-  <v-container ref="document">
+<template ref="document">
+  <v-container >
     <v-btn class="mr-5 btnBack"  color="primary" fab small dark @click="back()">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
@@ -320,11 +320,10 @@ export default {
     },
     print() {
       // window.print();
-      	html2pdf(this.$refs.document, {
+      html2pdf(this.$refs.document, {
 					margin: 1,
 					filename: 'document.pdf',
 					image: { type: 'jpeg', quality: 0.98 },
-					html2canvas: { dpi: 192, letterRendering: true },
 					jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
 				})
       // console.log("it ok");
@@ -338,35 +337,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.page {
-  width: 210mm;
-  min-height: 297mm;
-  padding: 3.5mm;
-  padding-top: 10mm;
-  padding-bottom: 10mm;
-  margin: 10mm auto;
-  border: 1px #d3d3d3 solid;
-  border-radius: 5px;
-  background: white;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
 
-@media print {
-  v-btn .btnBack {
-    visibility: hidden; 
-  }
-  .page {
-  width: 210mm;
-  min-height: 297mm;
-  padding: 3.5mm;
-  padding-top: 10mm;
-  padding-bottom: 10mm;
-  margin: 10mm auto;
-  border: 1px #d3d3d3 solid;
-  border-radius: 5px;
-  background: white;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
-}
 </style>
