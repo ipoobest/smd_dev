@@ -1,150 +1,335 @@
 <template>
   <v-container>
-    <v-col cols="12">
-      <v-btn class="mr-5 btnBack" color="primary" fab small dark @click="back">
-        <v-icon>mdi-arrow-left</v-icon>
-      </v-btn>
-      <v-row justify="center" class="mt-2 mb-2"
-        ><h3>ใบแจ้งผลการเรียน</h3></v-row
-      >
-      <v-row justify="center"
-        ><h4>
-          โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น ฝ่ายมัธยมศึกษา (มอดินแดง)
-          {{ classes }}
-        </h4></v-row
-      >
-      <v-row class="mt-3">
-        <v-col cols="2">ชื่อ-นามสกุล</v-col>
-        <v-col cols="3">{{ info.studentName }}</v-col>
-        <v-col cols="2">เลขประจำตัว</v-col>
-        <v-col cols="1">{{ info.studentId }}</v-col>
-        <v-col cols="1">ชั้น</v-col>
-        <v-col cols="2"
-          >{{ info.classRoomLevel }}/{{ info.classRoomName }}</v-col
-        >
-      </v-row>
-      <v-row class="mt-5">
-        <v-simple-table style="width:100%">
-          <template>
-            <thead>
-              <tr>
-                <th :rowspan="2">ภาคการเรียนที่</th>
-                <th>รหัสวิชา</th>
-                <th>ชื่อวิชา</th>
-                <th>หน่วย</th>
-                <th>ระดับ</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(item, index) in items" :key="index">
-                <td>{{ route.term }}/{{ route.schoolYear }}</td>
-                <td>{{ item.teachInfo.codet }}</td>
-                <td>{{ item.teachInfo.sname }}</td>
-                <td>{{ parseFloat(item.teachInfo.credit).toFixed(1) }}</td>
-                <td v-if="item.grade_option">{{ item.grade_option }}</td>
-                <td v-else>{{ parseFloat(item.grade).toFixed(1) }}</td>
-              </tr>
-            </tbody>
-          </template>
-        </v-simple-table>
-      </v-row>
-      <v-divider class="mt-2"></v-divider>
-      <v-row class="mt-2">
-        <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
-        <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
-        <v-col cols="2" v-if="grade">{{
-          parseFloat(grade.gpa).toFixed(3)
-        }}</v-col>
-        <v-col cols="2" v-else>0</v-col>
-        <!-- <v-col cols="2">{{ parseFloat(gpa).toFixed(3) }}</v-col> -->
-        <v-col cols="2">อยู่ลำดับที่</v-col>
-        <v-col cols="1" v-if="grade">{{ grade.rankingInRoom }}</v-col>
-        <v-col cols="2" v-else>0</v-col>
-        <v-col cols="1">จาก</v-col>
-        <v-col cols="1">{{ totalStudentInRoom.count }}</v-col>
-        <v-col cols="2">ของห้อง</v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="2">หน่วยการเรียน</v-col>
-        <v-col cols="3"
-          >{{ totalCreditInStudent }} / {{ totalCreditInClass }}
-        </v-col>
-        <v-col cols="2">อยู่ลำดับที่</v-col>
-        <v-col cols="1" v-if="grade">{{ grade.rankingInClasses }}</v-col>
-        <v-col cols="2" v-else>0</v-col>
-        <v-col cols="1">จาก</v-col>
-        <v-col cols="1">{{ totalStudentInClasses.count }}</v-col>
-        <v-col cols="2">ของระดับชั้น</v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="2">ภาคเรียนนี้ </v-col>
-        <!-- <v-col cols="2">{{totalCreditInClass}} หน่วยกิต</v-col> -->
-        <v-col cols="2"><p>ได้ / เรียน</p></v-col>
-        <!-- <v-col cols="2"> {{totalCreditInStudent}} หน่วยกิต</v-col> -->
-      </v-row>
-      <v-row style="margin-top:-30px;">
-        <v-col cols="2"> {{ gatDate }} </v-col>
-      </v-row>
-      <v-row class="mt-2">
-        <v-col cols="6">
+    <div>
+      <v-col cols="12">
+          <v-btn
+            class="mr-5 btnBack"
+            color="primary"
+            fab
+            small
+            dark
+            @click="back"
+          >
+            <v-icon>mdi-arrow-left</v-icon>
+          </v-btn>
+      </v-col>
+      <div id="pdfDom">
+        <v-col cols="12">
+          <!-- <v-btn
+            class="mr-5 btnBack"
+            color="primary"
+            fab
+            small
+            dark
+            @click="back"
+          >
+            <v-icon>mdi-arrow-left</v-icon>
+          </v-btn> -->
+          <v-row justify="center" class="mt-2 mb-2"
+            ><h3>ใบแจ้งผลการเรียน</h3></v-row
+          >
           <v-row justify="center"
-            >ลงชื่อ
-            ......................................................</v-row
+            ><h4>
+              โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น ฝ่ายมัธยมศึกษา (มอดินแดง)
+              {{ classes }}
+            </h4></v-row
           >
-          <v-row justify="center" class="ml-5 mt-2"
-            >( {{ teacher.teather1 }} )</v-row
-          >
-
-          <v-row justify="center" class="mt-5"
-            >ลงชื่อ
-            ......................................................</v-row
-          >
-          <v-row justify="center" class="ml-5 mt-2"
-            >( {{ teacher.teather2 }} )</v-row
-          >
-          <v-row justify="center" class="ml-5 mt-2">อาจารย์ประจำชั้น</v-row>
-        </v-col>
-        <v-col class="test" cols="6" style="margin-top:-70px;">
-          <!-- <img height="50" src="~/assets/logo-smd.png" /> -->
-          <v-row justify="center">
-            <img height="100" src="~/assets/signature.jpg" />
+          <v-row class="mt-3">
+            <v-col cols="2">ชื่อ-นามสกุล</v-col>
+            <v-col cols="3">{{ info.studentName }}</v-col>
+            <v-col cols="2">เลขประจำตัว</v-col>
+            <v-col cols="1">{{ info.studentId }}</v-col>
+            <v-col cols="1">ชั้น</v-col>
+            <v-col cols="2"
+              >{{ info.classRoomLevel }}/{{ info.classRoomName }}</v-col
+            >
           </v-row>
-          <v-row justify="center"
-            >ลงชื่อ
-            ......................................................</v-row
+          <v-row class="mt-5">
+            <v-simple-table style="width:100%">
+              <template>
+                <thead>
+                  <tr>
+                    <th :rowspan="2">ภาคการเรียนที่</th>
+                    <th>รหัสวิชา</th>
+                    <th>ชื่อวิชา</th>
+                    <th>หน่วย</th>
+                    <th>ระดับ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(item, index) in items" :key="index">
+                    <td>{{ route.term }}/{{ route.schoolYear }}</td>
+                    <td>{{ item.teachInfo.codet }}</td>
+                    <td>{{ item.teachInfo.sname }}</td>
+                    <td>{{ parseFloat(item.teachInfo.credit).toFixed(1) }}</td>
+                    <td v-if="item.grade_option">{{ item.grade_option }}</td>
+                    <td v-else>{{ parseFloat(item.grade).toFixed(1) }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
+          </v-row>
+          <v-divider class="mt-2"></v-divider>
+          <v-row class="mt-2">
+            <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
+            <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
+            <v-col cols="2" v-if="grade">{{
+              parseFloat(grade.gpa).toFixed(3)
+            }}</v-col>
+            <v-col cols="2" v-else>0</v-col>
+            <!-- <v-col cols="2">{{ parseFloat(gpa).toFixed(3) }}</v-col> -->
+            <v-col cols="2">อยู่ลำดับที่</v-col>
+            <v-col cols="1" v-if="grade">{{ grade.rankingInRoom }}</v-col>
+            <v-col cols="2" v-else>0</v-col>
+            <v-col cols="1">จาก</v-col>
+            <v-col cols="1">{{ totalStudentInRoom.count }}</v-col>
+            <v-col cols="2">ของห้อง</v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="2">หน่วยการเรียน</v-col>
+            <v-col cols="3"
+              >{{ totalCreditInStudent }} / {{ totalCreditInClass }}
+            </v-col>
+            <v-col cols="2">อยู่ลำดับที่</v-col>
+            <v-col cols="1" v-if="grade">{{ grade.rankingInClasses }}</v-col>
+            <v-col cols="2" v-else>0</v-col>
+            <v-col cols="1">จาก</v-col>
+            <v-col cols="1">{{ totalStudentInClasses.count }}</v-col>
+            <v-col cols="2">ของระดับชั้น</v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="2">ภาคเรียนนี้ </v-col>
+            <!-- <v-col cols="2">{{totalCreditInClass}} หน่วยกิต</v-col> -->
+            <v-col cols="2"><p>ได้ / เรียน</p></v-col>
+            <!-- <v-col cols="2"> {{totalCreditInStudent}} หน่วยกิต</v-col> -->
+          </v-row>
+          <v-row style="margin-top:-30px;">
+            <v-col cols="2"> {{ gatDate }} </v-col>
+          </v-row>
+          <v-row class="mt-2">
+            <v-col cols="6">
+              <v-row justify="center"
+                >ลงชื่อ
+                ......................................................</v-row
+              >
+              <v-row justify="center" class="ml-5 mt-2"
+                >( {{ teacher.teather1 }} )</v-row
+              >
+
+              <v-row justify="center" class="mt-5"
+                >ลงชื่อ
+                ......................................................</v-row
+              >
+              <v-row justify="center" class="ml-5 mt-2"
+                >( {{ teacher.teather2 }} )</v-row
+              >
+              <v-row justify="center" class="ml-5 mt-2">อาจารย์ประจำชั้น</v-row>
+            </v-col>
+            <v-col class="test" cols="6" style="margin-top:-70px;">
+              <!-- <img height="50" src="~/assets/logo-smd.png" /> -->
+              <v-row justify="center">
+                <img height="100" src="~/assets/signature.jpg" />
+              </v-row>
+              <v-row justify="center"
+                >ลงชื่อ
+                ......................................................</v-row
+              >
+              <v-row justify="center" class="ml-5 mt-2"
+                >( อาจารย์ ไพทูล นารคร )</v-row
+              >
+              <v-row justify="center" class="ml-5 mt-2"
+                >รักษาการรองผู้อำนวยการฝ่ายมัธยมศึกษา (มอดินแดง)</v-row
+              >
+              <v-row justify="center" class="ml-5 mt-2"
+                >ปฎิบัติราชการแทนผู้อำนวยการ</v-row
+              >
+            </v-col>
+          </v-row>
+        </v-col>
+      </div>
+
+      <v-row class="btnApprove" justify="center">
+        <v-col cols="3">
+          <!-- <v-btn color="success">บันทึก</v-btn> -->
+          <v-btn
+            v-if="!approve"
+            class="ml-5"
+            color="green"
+            dark
+            @click="arrpove"
+            >อนุมัติ</v-btn
           >
-          <v-row justify="center" class="ml-5 mt-2"
-            >( อาจารย์ ไพทูล นารคร )</v-row
+          <v-btn v-else class="ml-5" color="green" dark @click="unArrpove"
+            >อนุมัติแล้ว</v-btn
           >
-          <v-row justify="center" class="ml-5 mt-2"
-            >รักษาการรองผู้อำนวยการฝ่ายมัธยมศึกษา (มอดินแดง)</v-row
-          >
-          <v-row justify="center" class="ml-5 mt-2"
-            >ปฎิบัติราชการแทนผู้อำนวยการ</v-row
+        </v-col>
+        <v-col cols="3">
+          <!-- <v-btn color="success">บันทึก</v-btn> -->
+          <v-btn class="ml-5" color="info" dark @click="getPdf('ssss')"
+            >print</v-btn
           >
         </v-col>
       </v-row>
-    </v-col>
-    <v-row class="btnApprove" justify="center">
-      <v-col cols="3">
-        <!-- <v-btn color="success">บันทึก</v-btn> -->
-        <v-btn v-if="!approve" class="ml-5" color="green" dark @click="arrpove"
-          >อนุมัติ</v-btn
-        >
-        <v-btn v-else class="ml-5" color="green" dark @click="unArrpove"
-          >อนุมัติแล้ว</v-btn
-        >
-      </v-col>
-      <v-col cols="3">
-        <!-- <v-btn color="success">บันทึก</v-btn> -->
-        <v-btn class="ml-5" color="info" dark @click="print">print</v-btn>
-      </v-col>
-    </v-row>
+    </div>
+
+    <client-only>
+      <vue-html2pdf
+        :show-layout="false"
+        :float-layout="true"
+        :enable-download="true"
+        :preview-modal="true"
+        filename="hehehe"
+        :pdf-quality="1"
+        pdf-format="a4"
+        pdf-orientation="portrait"
+        :manual-pagination="true"
+        ref="html2Pdf"
+      >
+        <section slot="pdf-content">
+          <div>
+            <v-col cols="12">
+              <v-row justify="center" class="mt-2 mb-2"
+                ><h3>ใบแจ้งผลการเรียน</h3></v-row
+              >
+              <v-row justify="center"
+                ><h4>
+                  โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น ฝ่ายมัธยมศึกษา (มอดินแดง)
+                  {{ classes }}
+                </h4></v-row
+              >
+              <v-row class="mt-3">
+                <v-col cols="2">ชื่อ-นามสกุล</v-col>
+                <v-col cols="3">{{ info.studentName }}</v-col>
+                <v-col cols="2">เลขประจำตัว</v-col>
+                <v-col cols="1">{{ info.studentId }}</v-col>
+                <v-col cols="1">ชั้น</v-col>
+                <v-col cols="2"
+                  >{{ info.classRoomLevel }}/{{ info.classRoomName }}</v-col
+                >
+              </v-row>
+              <v-row class="mt-5">
+                <v-simple-table style="width:100%">
+                  <template>
+                    <thead>
+                      <tr>
+                        <th :rowspan="2">ภาคการเรียนที่</th>
+                        <th>รหัสวิชา</th>
+                        <th>ชื่อวิชา</th>
+                        <th>หน่วย</th>
+                        <th>ระดับ</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(item, index) in items" :key="index">
+                        <td>{{ route.term }}/{{ route.schoolYear }}</td>
+                        <td>{{ item.teachInfo.codet }}</td>
+                        <td>{{ item.teachInfo.sname }}</td>
+                        <td>
+                          {{ parseFloat(item.teachInfo.credit).toFixed(1) }}
+                        </td>
+                        <td v-if="item.grade_option">
+                          {{ item.grade_option }}
+                        </td>
+                        <td v-else>{{ parseFloat(item.grade).toFixed(1) }}</td>
+                      </tr>
+                    </tbody>
+                  </template>
+                </v-simple-table>
+              </v-row>
+              <v-divider class="mt-2"></v-divider>
+              <v-row class="mt-2">
+                <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
+                <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
+                <v-col cols="2" v-if="grade">{{
+                  parseFloat(grade.gpa).toFixed(3)
+                }}</v-col>
+                <v-col cols="2" v-else>0</v-col>
+                <!-- <v-col cols="2">{{ parseFloat(gpa).toFixed(3) }}</v-col> -->
+                <v-col cols="2">อยู่ลำดับที่</v-col>
+                <v-col cols="1" v-if="grade">{{ grade.rankingInRoom }}</v-col>
+                <v-col cols="2" v-else>0</v-col>
+                <v-col cols="1">จาก</v-col>
+                <v-col cols="1">{{ totalStudentInRoom.count }}</v-col>
+                <v-col cols="2">ของห้อง</v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="2">หน่วยการเรียน</v-col>
+                <v-col cols="3"
+                  >{{ totalCreditInStudent }} / {{ totalCreditInClass }}
+                </v-col>
+                <v-col cols="2">อยู่ลำดับที่</v-col>
+                <v-col cols="1" v-if="grade">{{
+                  grade.rankingInClasses
+                }}</v-col>
+                <v-col cols="2" v-else>0</v-col>
+                <v-col cols="1">จาก</v-col>
+                <v-col cols="1">{{ totalStudentInClasses.count }}</v-col>
+                <v-col cols="2">ของระดับชั้น</v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="2">ภาคเรียนนี้ </v-col>
+                <!-- <v-col cols="2">{{totalCreditInClass}} หน่วยกิต</v-col> -->
+                <v-col cols="2"><p>ได้ / เรียน</p></v-col>
+                <!-- <v-col cols="2"> {{totalCreditInStudent}} หน่วยกิต</v-col> -->
+              </v-row>
+              <v-row style="margin-top:-30px;">
+                <v-col cols="2"> {{ gatDate }} </v-col>
+              </v-row>
+              <v-row class="mt-2">
+                <v-col cols="6">
+                  <v-row justify="center"
+                    >ลงชื่อ
+                    ......................................................</v-row
+                  >
+                  <v-row justify="center" class="ml-5 mt-2"
+                    >( {{ teacher.teather1 }} )</v-row
+                  >
+
+                  <v-row justify="center" class="mt-5"
+                    >ลงชื่อ
+                    ......................................................</v-row
+                  >
+                  <v-row justify="center" class="ml-5 mt-2"
+                    >( {{ teacher.teather2 }} )</v-row
+                  >
+                  <v-row justify="center" class="ml-5 mt-2"
+                    >อาจารย์ประจำชั้น</v-row
+                  >
+                </v-col>
+                <v-col class="test" cols="6" style="margin-top:-70px;">
+                  <!-- <img height="50" src="~/assets/logo-smd.png" /> -->
+                  <v-row justify="center">
+                    <img height="100" src="~/assets/signature.jpg" />
+                  </v-row>
+                  <v-row justify="center"
+                    >ลงชื่อ
+                    ......................................................</v-row
+                  >
+                  <v-row justify="center" class="ml-5 mt-2"
+                    >( อาจารย์ ไพทูล นารคร )</v-row
+                  >
+                  <v-row justify="center" class="ml-5 mt-2"
+                    >รักษาการรองผู้อำนวยการฝ่ายมัธยมศึกษา (มอดินแดง)</v-row
+                  >
+                  <v-row justify="center" class="ml-5 mt-2"
+                    >ปฎิบัติราชการแทนผู้อำนวยการ</v-row
+                  >
+                </v-col>
+              </v-row>
+            </v-col>
+          </div>
+        </section>
+      </vue-html2pdf>
+    </client-only>
   </v-container>
 </template>
 
 <script>
+import VueHtml2pdf from "vue-html2pdf";
 export default {
+  components: {
+    VueHtml2pdf
+  },
   layout: "assessment",
   middleware: "assessment",
   async mounted() {
@@ -206,6 +391,30 @@ export default {
     };
   },
   methods: {
+    generateReport() {
+      this.$refs.html2Pdf.generatePdf();
+    },
+    async beforeDownload({ html2pdf, options, pdfContent }) {
+      await html2pdf()
+        .set(options)
+        .from(pdfContent)
+        .toPdf()
+        .get("pdf")
+        .then(pdf => {
+          const totalPages = pdf.internal.getNumberOfPages();
+          for (let i = 1; i <= totalPages; i++) {
+            pdf.setPage(i);
+            pdf.setFontSize(10);
+            pdf.setTextColor(150);
+            pdf.text(
+              "Page " + i + " of " + totalPages,
+              pdf.internal.pageSize.getWidth() * 0.88,
+              pdf.internal.pageSize.getHeight() - 0.3
+            );
+          }
+        })
+        .save();
+    },
     async getGradeByConditions() {
       var conditions = {
         studentId: this.$route.query.id,
@@ -222,7 +431,7 @@ export default {
       this.rowSpan = response.results.length;
       this.approve = response.results[0].approve;
       this.studentObjectId = response.results[0].studentObjectId;
-      this.items = this.sortData(response.results)
+      this.items = this.sortData(response.results);
       // return response.results;
     },
     async getTeacher() {
@@ -367,9 +576,11 @@ export default {
     },
 
     sortData(data) {
-      var newItems = data.sort((a, b) => a.department_number - b.department_number);
-      console.log('sort items', newItems)
-      return newItems
+      var newItems = data.sort(
+        (a, b) => a.department_number - b.department_number
+      );
+      console.log("sort items", newItems);
+      return newItems;
     },
     print() {
       window.print(1);
@@ -396,6 +607,9 @@ export default {
         });
       }
     },
+    generatePdf() {
+      this.$refs.html2Pdf.generatePdf();
+    },
     async unArrpove() {
       if (confirm("ยืนยันการยกเลิก")) {
         this.items.forEach(item => {
@@ -418,7 +632,7 @@ export default {
 
 <style lang="scss" scoped>
 header {
-    visibility: hidden;
+  visibility: hidden;
 }
 @media print {
   header {
