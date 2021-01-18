@@ -260,12 +260,13 @@ export default {
           objectId: this.$route.query.id,
           rating: this.part_rating
         };
-        this.addRatingToTach(teach);
+        console.log('teach delete', teach)
+        // this.addRatingToTach(teach);
         this.grade_list.forEach(grade => {
           var grade_id = grade.objectId;
-          // console.log('update grade.score', grade.score)
+          console.log('update grade.score', grade.score)
           // update score ตารางเกรด
-          this.updateGrade(grade.objectId, grade.score);
+          // this.updateGrade(grade.objectId, grade.score);
           grade.score.splice(index, 1);
         });
       }
@@ -300,10 +301,14 @@ export default {
           objectId: this.$route.query.id,
           rating: this.part_rating
         };
+        console.log('part_rating', teach.rating.length)
+        var arr_score = Array(teach.rating.length).fill(0);
+        console.log('new score', arr_score)
         this.addRatingToTach(teach);
         this.grade_list.forEach(grade => {
           var grade_id = grade.objectId;
-          grade.score.push(0);
+          grade.score = arr_score
+          // console.log('save', grade.objectId, grade.score)
           this.updateGrade(grade.objectId, grade.score);
         });
       }      
