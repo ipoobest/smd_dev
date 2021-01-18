@@ -382,7 +382,7 @@ export default {
       };
       const classes = await this.getListClass(data);
       if (classes.length != 0) {
-        console.log("okk", classes.length);
+        // console.log("okk", classes.length);
         alert("ชั้นเรียนนี้ถูก update แล้ว");
         var newData = {
           schoolYear: this.newSchoolYear,
@@ -391,7 +391,7 @@ export default {
         };
         this.newItems = await this.getListClass(newData);
       } else {
-        console.log("sss", classes.length);
+        // console.log("sss", classes.length);
         /// create classes
         // alert('update classes')
         this.upgradeClasses();
@@ -436,6 +436,7 @@ export default {
         classRoomLevel: this.newClassRoomLevel
       };
       // console.log('newdata', newData)
+      alert('อัพเกรดสำเร็จ')
       this.newItems = await this.getListClass(newData);
     },
     editItem(item) {
@@ -486,6 +487,7 @@ export default {
         // console.log("initRanking", data);
       await this.createRanking(data);
       });
+      alert('init ranking สำเร็จ');
       // console.log("initRanking", data);
     },
     addStudent(item) {

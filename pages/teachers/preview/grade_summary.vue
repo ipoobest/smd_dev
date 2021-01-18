@@ -3,7 +3,7 @@
     <v-btn class="mr-5 btnBack"  color="primary" fab small dark @click="back()">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
-    <div>
+    <div id="gradeSummary">
       <v-row justify="center">
         <img height="50" src="~/assets/logo-smd.png" />
       </v-row>
@@ -162,10 +162,10 @@
           <v-col cols="4">ลงชื่อ <v-text-field> </v-text-field></v-col>
         </v-row>
       </div>
-      <v-row justify="center" class="mt-5">
-        <v-btn color="info" class="ml-5" @click="print()">print</v-btn>
-      </v-row>
     </div>
+          <v-row justify="center" class="mt-5">
+        <v-btn color="info" class="ml-5"  @click="getPdfGradeSumary('ssss')">print</v-btn>
+      </v-row>
   </v-container>
 </template>
 
