@@ -7,14 +7,18 @@ export default {
       html2Canvas(document.querySelector("#pdfDom"), {
         allowTaint: false,
         useCORS: true,
-        x: 260,
-        y: 90
+        width: 1200,
+        height: 1200 
+        // x: 260,
+        // y: 140,
       }).then(function(canvas) {
-        let pageWidth = 595.28;
-        let pageHeight = canvas.height / (canvas.width / 592.28);
+        // let pageWidth = 595.28;
+        // let pageHeight = canvas.height / (canvas.width / 592.28);
+        var width = canvas.width;
+        var height = canvas.height;
         let pageData = canvas.toDataURL("image/jpeg", 1.0);
-        let PDF = new JsPDF("", "pt", [pageWidth, pageHeight]);
-        PDF.addImage(pageData, "JPEG", 0, 0, pageWidth, pageHeight);
+        let PDF = new JsPDF("p","mm","a4")
+        PDF.addImage(pageData, "JPEG", 0, 0, width, height);
         PDF.save(title + ".pdf");
       });
     };

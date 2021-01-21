@@ -13,18 +13,8 @@
             <v-icon>mdi-arrow-left</v-icon>
           </v-btn>
       </v-col>
-      <div id="pdfDom">
-        <v-col cols="12">
-          <!-- <v-btn
-            class="mr-5 btnBack"
-            color="primary"
-            fab
-            small
-            dark
-            @click="back"
-          >
-            <v-icon>mdi-arrow-left</v-icon>
-          </v-btn> -->
+      <div id="pdfDom" style="width:90%; height:90%;">
+        <v-col cols="12" class="page" >
           <v-row justify="center" class="mt-2 mb-2"
             ><h3>ใบแจ้งผลการเรียน</h3></v-row
           >
@@ -34,7 +24,7 @@
               {{ classes }}
             </h4></v-row
           >
-          <v-row class="mt-3">
+          <v-row class="mt-3" justify="center">
             <v-col cols="2">ชื่อ-นามสกุล</v-col>
             <v-col cols="3">{{ info.studentName }}</v-col>
             <v-col cols="2">เลขประจำตัว</v-col>
@@ -44,12 +34,12 @@
               >{{ info.classRoomLevel }}/{{ info.classRoomName }}</v-col
             >
           </v-row>
-          <v-row class="mt-5">
-            <v-simple-table style="width:100%">
+          <v-row class="mt-5" justify="center">
+            <v-simple-table style="width:90%">
               <template>
                 <thead>
                   <tr>
-                    <th :rowspan="2">ภาคการเรียนที่</th>
+                    <th >ภาคการเรียนที่</th>
                     <th>รหัสวิชา</th>
                     <th>ชื่อวิชา</th>
                     <th>หน่วย</th>
@@ -172,155 +162,6 @@
       </v-row>
     </div>
 
-    <client-only>
-      <vue-html2pdf
-        :show-layout="false"
-        :float-layout="true"
-        :enable-download="true"
-        :preview-modal="true"
-        filename="hehehe"
-        :pdf-quality="1"
-        pdf-format="a4"
-        pdf-orientation="portrait"
-        :manual-pagination="true"
-        ref="html2Pdf"
-      >
-        <section slot="pdf-content">
-          <div>
-            <v-col cols="12">
-              <v-row justify="center" class="mt-2 mb-2"
-                ><h3>ใบแจ้งผลการเรียน</h3></v-row
-              >
-              <v-row justify="center"
-                ><h4>
-                  โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น ฝ่ายมัธยมศึกษา (มอดินแดง)
-                  {{ classes }}
-                </h4></v-row
-              >
-              <v-row class="mt-3">
-                <v-col cols="2">ชื่อ-นามสกุล</v-col>
-                <v-col cols="3">{{ info.studentName }}</v-col>
-                <v-col cols="2">เลขประจำตัว</v-col>
-                <v-col cols="1">{{ info.studentId }}</v-col>
-                <v-col cols="1">ชั้น</v-col>
-                <v-col cols="2"
-                  >{{ info.classRoomLevel }}/{{ info.classRoomName }}</v-col
-                >
-              </v-row>
-              <v-row class="mt-5">
-                <v-simple-table style="width:100%">
-                  <template>
-                    <thead>
-                      <tr>
-                        <th :rowspan="2">ภาคการเรียนที่</th>
-                        <th>รหัสวิชา</th>
-                        <th>ชื่อวิชา</th>
-                        <th>หน่วย</th>
-                        <th>ระดับ</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(item, index) in items" :key="index">
-                        <td>{{ route.term }}/{{ route.schoolYear }}</td>
-                        <td>{{ item.teachInfo.codet }}</td>
-                        <td>{{ item.teachInfo.sname }}</td>
-                        <td>
-                          {{ parseFloat(item.teachInfo.credit).toFixed(1) }}
-                        </td>
-                        <td v-if="item.grade_option">
-                          {{ item.grade_option }}
-                        </td>
-                        <td v-else>{{ parseFloat(item.grade).toFixed(1) }}</td>
-                      </tr>
-                    </tbody>
-                  </template>
-                </v-simple-table>
-              </v-row>
-              <v-divider class="mt-2"></v-divider>
-              <v-row class="mt-2">
-                <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
-                <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
-                <v-col cols="2" v-if="grade">{{
-                  parseFloat(grade.gpa).toFixed(3)
-                }}</v-col>
-                <v-col cols="2" v-else>0</v-col>
-                <!-- <v-col cols="2">{{ parseFloat(gpa).toFixed(3) }}</v-col> -->
-                <v-col cols="2">อยู่ลำดับที่</v-col>
-                <v-col cols="1" v-if="grade">{{ grade.rankingInRoom }}</v-col>
-                <v-col cols="2" v-else>0</v-col>
-                <v-col cols="1">จาก</v-col>
-                <v-col cols="1">{{ totalStudentInRoom.count }}</v-col>
-                <v-col cols="2">ของห้อง</v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="2">หน่วยการเรียน</v-col>
-                <v-col cols="3"
-                  >{{ totalCreditInStudent }} / {{ totalCreditInClass }}
-                </v-col>
-                <v-col cols="2">อยู่ลำดับที่</v-col>
-                <v-col cols="1" v-if="grade">{{
-                  grade.rankingInClasses
-                }}</v-col>
-                <v-col cols="2" v-else>0</v-col>
-                <v-col cols="1">จาก</v-col>
-                <v-col cols="1">{{ totalStudentInClasses.count }}</v-col>
-                <v-col cols="2">ของระดับชั้น</v-col>
-              </v-row>
-              <v-row>
-                <v-col cols="2">ภาคเรียนนี้ </v-col>
-                <!-- <v-col cols="2">{{totalCreditInClass}} หน่วยกิต</v-col> -->
-                <v-col cols="2"><p>ได้ / เรียน</p></v-col>
-                <!-- <v-col cols="2"> {{totalCreditInStudent}} หน่วยกิต</v-col> -->
-              </v-row>
-              <v-row style="margin-top:-30px;">
-                <v-col cols="2"> {{ gatDate }} </v-col>
-              </v-row>
-              <v-row class="mt-2">
-                <v-col cols="6">
-                  <v-row justify="center"
-                    >ลงชื่อ
-                    ......................................................</v-row
-                  >
-                  <v-row justify="center" class="ml-5 mt-2"
-                    >( {{ teacher.teather1 }} )</v-row
-                  >
-
-                  <v-row justify="center" class="mt-5"
-                    >ลงชื่อ
-                    ......................................................</v-row
-                  >
-                  <v-row justify="center" class="ml-5 mt-2"
-                    >( {{ teacher.teather2 }} )</v-row
-                  >
-                  <v-row justify="center" class="ml-5 mt-2"
-                    >อาจารย์ประจำชั้น</v-row
-                  >
-                </v-col>
-                <v-col class="test" cols="6" style="margin-top:-70px;">
-                  <!-- <img height="50" src="~/assets/logo-smd.png" /> -->
-                  <v-row justify="center">
-                    <img height="100" src="~/assets/signature.jpg" />
-                  </v-row>
-                  <v-row justify="center"
-                    >ลงชื่อ
-                    ......................................................</v-row
-                  >
-                  <v-row justify="center" class="ml-5 mt-2"
-                    >( อาจารย์ ไพทูล นารคร )</v-row
-                  >
-                  <v-row justify="center" class="ml-5 mt-2"
-                    >รักษาการรองผู้อำนวยการฝ่ายมัธยมศึกษา (มอดินแดง)</v-row
-                  >
-                  <v-row justify="center" class="ml-5 mt-2"
-                    >ปฎิบัติราชการแทนผู้อำนวยการ</v-row
-                  >
-                </v-col>
-              </v-row>
-            </v-col>
-          </div>
-        </section>
-      </vue-html2pdf>
-    </client-only>
   </v-container>
 </template>
 
@@ -631,27 +472,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-header {
-  visibility: hidden;
+.page {
 }
-@media print {
-  header {
-    visibility: hidden;
-  }
-  .btnBack {
-    margin-top: -200px;
-    visibility: hidden;
-  }
-  .btnApprove {
-    margin-top: -200px;
-    visibility: hidden;
-  }
-  v-toolbar v-app-bar {
-    visibility: hidden;
-  }
-  body {
-    transform: scale(0.7);
-    // overflow: hidden;
-  }
+@page {
+  size: A4 portrait;
+  // left: 0.1;
+  // top: -5;
 }
 </style>
