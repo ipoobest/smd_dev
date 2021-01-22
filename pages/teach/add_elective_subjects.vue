@@ -218,7 +218,8 @@ export default {
     },
     async getSubjects() {
       var conditions = {
-        type: "วิชาเลือก"
+        type: "วิชาเลือก",
+        term: this.query.term
       };
       const response = await this.$store.dispatch(
         `subjects/getSubjectsByConditions`,

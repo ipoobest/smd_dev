@@ -3,9 +3,9 @@
     <v-btn class="mr-5 btnBack"  color="primary" fab small dark @click="back()">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
-    <div id="gradeSummary">
+    <div id="pdfDom" class="page">
       <v-row justify="center">
-        <img height="50" src="~/assets/logo-smd.png" />
+        <img height="100" src="~/assets/logo-smd.png" />
       </v-row>
       <v-row justify="center">
         <h3>แบบบันทึกผลการพัฒนาคุณภาพผู้เรียน(ปพ.5)</h3>
@@ -164,7 +164,7 @@
       </div>
     </div>
           <v-row justify="center" class="mt-5">
-        <v-btn color="info" class="ml-5"  @click="getPdfGradeSumary('ssss')">print</v-btn>
+        <v-btn color="info" class="ml-5"  @click="getPdf('ssss')">print</v-btn>
       </v-row>
   </v-container>
 </template>
@@ -337,5 +337,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.page {
+  width: 90%;
+  margin: auto;
+  size: A4 portrait; 
+}
 </style>
