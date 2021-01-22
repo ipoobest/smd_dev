@@ -13,9 +13,9 @@
             <v-icon>mdi-arrow-left</v-icon>
           </v-btn>
       </v-col>
-      <div id="pdfDom" style="width:90%; height:90%;">
+      <div id="pdfDom" class="page">
         <v-col cols="12" class="page" >
-          <v-row justify="center" class="mt-2 mb-2"
+          <v-row justify="center" class="mt-5 mb-2"
             ><h3>ใบแจ้งผลการเรียน</h3></v-row
           >
           <v-row justify="center"
@@ -60,6 +60,7 @@
             </v-simple-table>
           </v-row>
           <v-divider class="mt-2"></v-divider>
+          <div style="width:90%; margin:auto;">
           <v-row class="mt-2">
             <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
             <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
@@ -135,6 +136,7 @@
               >
             </v-col>
           </v-row>
+          </div>
         </v-col>
       </div>
 
@@ -155,7 +157,7 @@
         </v-col>
         <v-col cols="3">
           <!-- <v-btn color="success">บันทึก</v-btn> -->
-          <v-btn class="ml-5" color="info" dark @click="getPdf('ssss')"
+          <v-btn class="ml-5" color="info" dark @click="getPdf(`ใบแจ้งผลการเรียน-${route.schoolYear}-0${route.term}-${info.studentId}`)"
             >print</v-btn
           >
         </v-col>
@@ -228,7 +230,8 @@ export default {
         studentId: "",
         classRoomLevel: "",
         classRoomName: ""
-      }
+      },
+      // pdfTitle: `ใบแจ้งผลการเรียน-${this.$route.query.schoolYear}-${this.$route.term}-${this.info.classRoomLevel}-${this.info.classRoomName}-${this.info.studentId}`
     };
   },
   methods: {
@@ -473,6 +476,9 @@ export default {
 
 <style lang="scss" scoped>
 .page {
+  width: 90%;
+  margin: auto;
+  size: A4 portrait; 
 }
 @page {
   size: A4 portrait;
