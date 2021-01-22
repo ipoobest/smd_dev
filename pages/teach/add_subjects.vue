@@ -309,7 +309,6 @@ export default {
       if (this.editedIndex > -1) {
         console.log("edit");
         const objectId = await this.getClassesByConditins();
-        refactor_parse;
         const data = {
           objectId: this.input.objectId,
           schoolYear: this.query.schoolYear,
@@ -334,11 +333,11 @@ export default {
         console.log("teach data", data);
         this.updateSubjectToTeach(data);
         this.resetForm();
+        await this.getSubjectsFromTeach().then(result => (this.items = result));
         this.close();
       } else {
         console.log("save");
         const objectId = await this.getClassesByConditins();
-        refactor_parse;
         const data = {
           schoolYear: this.query.schoolYear,
           term: this.query.term,
@@ -363,6 +362,7 @@ export default {
         console.log("teach data", data);
         this.addSubjectToTeach(data);
         this.resetForm();
+        await this.getSubjectsFromTeach().then(result => (this.items = result));
         this.close();
       }
     },
