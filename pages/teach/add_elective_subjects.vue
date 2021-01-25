@@ -20,10 +20,7 @@
               ></v-text-field>
             </v-col>
           </v-card-title>
-          <v-simple-table
-            :search="search"
-            align="center"
-          >
+          <v-simple-table :search="search" align="center">
             <template v-slot:top>
               <v-toolbar flat color="white">
                 <v-spacer></v-spacer>
@@ -118,7 +115,9 @@
             </thead>
             <tbody>
               <tr v-for="(item, index) in subjectsInTerm" :key="index">
-                <td v-if="item.subject_info">{{ item.subject_info.codet }} {{ item.subject_info.sname }} </td>
+                <td v-if="item.subject_info">
+                  {{ item.subject_info.codet }} {{ item.subject_info.sname }}
+                </td>
                 <td v-else>{{ item.sname }}</td>
                 <td>{{ item.classRoomLevel }}</td>
                 <td>{{ item.teacher.name }}</td>
@@ -141,7 +140,7 @@
 
 <script>
 export default {
-  middleware: 'admin',
+  middleware: "admin",
   async mounted() {
     this.query = this.$route.query;
     await this.getSubjectsFromTeach().then(
@@ -225,7 +224,7 @@ export default {
         `subjects/getSubjectsByConditions`,
         conditions
       );
-      console.log('response subject', response)
+      console.log("response subject", response);
       return response.results;
     },
     async getSubjectsFromTeach() {
@@ -238,7 +237,7 @@ export default {
         `teach/getSubjectsByConditions`,
         condition
       );
-      console.log('getSubjectsFromTeach subject', response.results)
+      console.log("getSubjectsFromTeach subject", response.results);
       return response.results;
     },
     async getClassesByConditins() {
@@ -276,12 +275,22 @@ export default {
         rating: [],
         students: [],
         department: this.input.department,
-        teacher: this.input.teacher,
-        subject_info: this.subjectInfo,
+        // teacher: this.input.teacher,
+        // subject_info: this.subjectinfo,
+        subject: {
+          __type: "Pointer",
+          className: "Subjects",
+          objectId: this.subjectInfo.id
+        },
+        teachers: {
+          __type: "Pointer",
+          className: "_User",
+          objectId: this.input.teacher.value
+        },
         type: "วิชาเลือกเสรี"
       };
       console.log("teach data", data);
-      this.addSubjectToTeach(data)
+      this.addSubjectToTeach(data);
       this.resetForm();
       this.close();
     },
@@ -326,9 +335,11 @@ export default {
       }
     },
     editSubjectName() {
-      var subject_name = this.subjects.filter(subject => subject.objectId == this.input.subject_id);
-      console.log('subject_name', subject_name )
-      this.subjectInfo = { codet: subject_name[0].codet,sname: subject_name[0].sname, credit: subject_name[0].credit, hour: subject_name[0].hour};
+      var subject_name = this.subjects.filter(
+        subject => subject.objectId == this.input.subject_id
+      );
+      console.log("subject_name", subject_name);
+      this.subjectInfo = {id: subject_name[0].objectId , codet: subject_name[0].codet,sname: subject_name[0].sname, credit: subject_name[0].credit, hour: subject_name[0].hour};
       console.log('subject infoxx', this.subjectInfo )
     },
     addClasses(item) {
