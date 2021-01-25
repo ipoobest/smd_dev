@@ -71,7 +71,7 @@ export const actions = {
         const where = JSON.stringify(conditions)
         console.log('where', where)
         const result = this.$axios.$get(
-          `${process.env.parseUrl}/classes/${classes.subjects}?where=${where}&&limit=500&order=-createdAt`
+          `${process.env.parseUrl}/classes/${classes.subjects}?where=${where}&&limit=500&order=-createdAt&include=teachers,subject`
         );
 
         commit("setSubjects", result);

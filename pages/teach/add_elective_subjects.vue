@@ -118,9 +118,11 @@
                 <td v-if="item.subject_info">
                   {{ item.subject_info.codet }} {{ item.subject_info.sname }}
                 </td>
-                <td v-else>{{ item.sname }}</td>
+                <td v-else>{{item.subject.codet}} {{item.subject.sname}}</td>
+                <!-- <td v-else>{{ item.sname }}</td> -->
                 <td>{{ item.classRoomLevel }}</td>
-                <td>{{ item.teacher.name }}</td>
+                <td v-if="item.teacher">{{ item.teacher.name }}</td>
+                <td v-else> {{item.teachers.title}} {{item.teachers.firstName}} {{item.teachers.lastName}}</td>
                 <td>
                   <v-btn color="info" @click="addStudent(item)">
                     เพิ่มรายชื่อนักเรียน
