@@ -271,9 +271,9 @@ export default {
       console.log("create teach data", data);
       const response = await this.$store.dispatch(`teach/createTeach`, data);
       console.log("response create teach", response);
-      await this.getSubjectsFromTeach().then(
-        result => (this.subjectsInTerm = result)
-      );
+      // await this.getSubjectsFromTeach().then(
+      //   result => (this.subjectsInTerm = result)
+      // );
     },
     async updateSubjectToTeach(data) {
       const response = await this.$store.dispatch(`teach/updateTeach`, data);
@@ -331,7 +331,7 @@ export default {
           type: "วิชาบังคับ"
         };
         console.log("teach data", data);
-        this.updateSubjectToTeach(data);
+        await this.updateSubjectToTeach(data);
         this.resetForm();
         await this.getSubjectsFromTeach().then(result => (this.items = result));
         this.close();
@@ -360,7 +360,7 @@ export default {
           type: "วิชาบังคับ"
         };
         console.log("teach data", data);
-        this.addSubjectToTeach(data);
+        await this.addSubjectToTeach(data);
         this.resetForm();
         await this.getSubjectsFromTeach().then(result => (this.items = result));
         this.close();
