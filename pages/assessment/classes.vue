@@ -21,30 +21,18 @@
               <v-btn class="success" @click="exportXml()">Export</v-btn>
             </v-col>
           </v-card-title>
-          <v-simple-table :search="search" style="width:100%">
-            <template>
-              <thead>
-                <tr>
-                  <th class="text-center">รหัสห้อง</th>
-                  <th class="text-center">ระดับชั้น</th>
-                  <th class="text-center">ห้อง</th>
-                  <th class="text-center">action</th>
-                </tr>
-              </thead>
-              <tbody align="center">
-                <tr v-for="(item, index) in items" :key="index">
-                  <td>{{ item.classRoomId }}</td>
-                  <td>{{ item.classRoomLevel }}</td>
-                  <td>{{ item.classRoomName }}</td>
-                  <td>
-                    <v-btn color="info" @click="listStudent(item)">
-                      ดูข้อมูล
-                    </v-btn>
-                  </td>
-                </tr>
-              </tbody>
+          <v-data-table
+            style="width:100%"
+            :search="search"
+            :items="items"
+            :headers="headers"
+          >
+            <template v-slot:[`item.actions`]="{ item }">
+              <v-btn color="info" @click="listStudent(item)">
+                ดูข้อมูล
+              </v-btn>
             </template>
-          </v-simple-table>
+          </v-data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -86,7 +74,7 @@ export default {
       search: ``,
       title: `ห้องเรียน`,
       editedIndex: -1,
-      ranking: '',
+      ranking: "",
       classItem: {
         schoolYear: "",
         term: "",
@@ -106,7 +94,8 @@ export default {
       schoolYear: "",
       term: "",
       classesExport: "0",
-      classes: ["ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"]
+      classes: ["ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"],
+      listSize: [10, 15, 20, 50, 100]
     };
   },
   methods: {
@@ -158,16 +147,18 @@ export default {
     },
     async exportXml() {
       // console.log("xxx", this.classesExport);
-      if(this.classesExport == "0") {
-        alert('กรุณาเลือกระดับชั้น')
+      if (this.classesExport == "0") {
+        alert("กรุณาเลือกระดับชั้น");
       } else {
-        this.ranking = await this.getRanking()
-        var data = this.ranking.sort((a, b) => a.rankingInClasses - b.rankingInClasses)
+        this.ranking = await this.getRanking();
+        var data = this.ranking.sort(
+          (a, b) => a.rankingInClasses - b.rankingInClasses
+        );
         // console.log('data sort', data)
-        const dataWS = XLSX.utils.json_to_sheet(data)
-        const wb = XLSX.utils.book_new()
-        XLSX.utils.book_append_sheet(wb, dataWS)
-        XLSX.writeFile(wb,'export.xlsx')
+        const dataWS = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, dataWS);
+        XLSX.writeFile(wb, "export.xlsx");
       }
     }
   }

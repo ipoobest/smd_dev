@@ -17,47 +17,20 @@
               hide-details
             ></v-text-field>
           </v-card-title>
-          <!-- <v-data-table :headers="headers" :items="items" :search="search">
+          <v-data-table :headers="headers" :items="items" :search="search">
+            <template v-slot:[`item.subjectInfo`]="{ item }">
+              {{item.subject.codet}} {{item.subject.sname}}
+            </template>
+            <template v-slot:[`item.teacherName`]="{ item }"
+              >{{ item.teachers.title }} {{ item.teachers.firstName }}
+              {{ item.teachers.lastName }}</template
+            >
             <template v-slot:[`item.actions`]="{ item }">
               <v-btn class="success" @click="addScore(item)">
                 ให้คะแนน
-              </v-btn>
+              </v-btn> 
             </template>
-          </v-data-table> -->
-          <v-simple-table 
-            width="100%">
-            <template v-slot:default>
-              <thead>
-                <tr>
-                  <th>รหัส/ชื่อวิขา</th>
-                  <th>ระดับชั้น</th>
-                  <th>ห้องเรียน</th>
-                  <th>ครูผู้สอน</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="item in items" :key="item.index">
-                  <td v-if="item.subject_info">
-                    {{ item.subject_info.codet }} {{ item.subject_info.sname }}
-                  </td>
-                  <td v-else>{{ item.sname }}</td>
-                  <td>{{ item.classRoomLevel }}</td>
-                  <td>{{ item.classRoomName }}</td>
-                  <td>{{ item.teacher.name }}</td>
-                  <td>
-                    <v-btn color="info" @click="goToPreviewGrade(item)"
-                      >จัดการ</v-btn
-                    >
-                    <v-btn @click="goToPreviewScore(item)" color="success"
-                      >คะแนน</v-btn
-                    >
-                  </td>
-                </tr>
-              </tbody>
-            </template>
-          <template v-slot:[`item.subjectInfo`]="{ item }">{{ item.teachers.title }} {{ item.teachers.firstName }} {{ item.teachers.lastName }}</template>
-          </v-simple-table>
+          </v-data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -83,10 +56,10 @@ export default {
     return {
         headers: [
         { text: 'รหัส/ชื่อวิชา', value: 'subjectInfo' },
-        { text: 'ระดับชั้น', value: 'classRoomId'},
+        { text: 'ระดับชั้น', value: 'classRoomLevel'},
         { text: 'ห้องเรียน', value: 'classRoomName' },
-        { text: 'ครูผู้สอน', value: 'teatherId' }
-        // { text: 'Actions', value: 'actions', sortable: false }
+        { text: 'ครูผู้สอน', value: 'teacherName' },
+        { text: 'Actions', value: 'actions', sortable: false }
       ],
       dialog: false,
       formTitle: "เกณฑ์การให้คะแนน",

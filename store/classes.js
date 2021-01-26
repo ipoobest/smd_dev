@@ -65,7 +65,9 @@ export const actions = {
     return new Promise(async (resolve, reject) => {
       try {
         const where = JSON.stringify(conditions)
-        const result = this.$axios.$get(`${process.env.parseUrl}/classes/${classes.class}/?where=${where}`)
+        const result = this.$axios.$get(
+          `${process.env.parseUrl}/classes/${classes.class}/?where=${where}&order=classRoomId`
+        );
         commit('setClasses', result)
         resolve(result)
       } catch (error) {

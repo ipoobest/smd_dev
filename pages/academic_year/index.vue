@@ -58,7 +58,7 @@
                                 outlined
                                 label="เทอม"
                                 required
-                               :rules="[v => !!v || 'กรุณากรอกข้อมูล เทอม']"
+                                :rules="[v => !!v || 'กรุณากรอกข้อมูล เทอม']"
                               ></v-text-field>
                             </v-col>
                           </v-row>
