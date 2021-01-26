@@ -1,6 +1,6 @@
 <template ref="document">
   <v-container >
-    <v-btn class="mr-5 btnBack"  color="primary" fab small dark @click="back()">
+    <v-btn class="mr-5 btnBack" id="backButton" color="primary" fab small dark @click="back()">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
     <div id="pdfDom" class="page">
@@ -164,21 +164,17 @@
       </div>
     </div>
           <v-row justify="center" class="mt-5">
-        <v-btn color="info" class="ml-5"  @click="getPdf('ssss')">print</v-btn>
+        <v-btn color="info" class="ml-5" id="printButton" @click="print()">print</v-btn>
       </v-row>
   </v-container>
 </template>
 
 <script>
-import VueHtml2pdf from "vue-html2pdf";
-import html2pdf from 'html2pdf.js'
 
 export default {
   layout: "teacher",
   middleware: 'teacher',
-  components: {
-    VueHtml2pdf
-  },
+
   async mounted() {
     await this.getTechById(this.$route.query.id).then(
       result => (this.items = result)
@@ -202,23 +198,6 @@ export default {
 
   },
 
-  htmlToPdfOptions: {
-    margin: 0,
-
-    filename: `test.pdf`,
-
-    image: {
-      type: "jpeg",
-      quality: 0.98
-    },
-
-    enableLinks: false,
-
-    html2canvas: {
-      scale: 1,
-      useCORS: true
-    }
-  },
   data() {
     return {
       date: "",
@@ -319,15 +298,7 @@ export default {
       });
     },
     print() {
-      // window.print();
-      html2pdf(this.$refs.document, {
-					margin: 1,
-					filename: 'document.pdf',
-					image: { type: 'jpeg', quality: 0.98 },
-					jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-				})
-      // console.log("it ok");
-      // this.$refs.html2Pdf.generatePdf();
+      window.print();
     },
     back() {
       this.$router.go(-1);
@@ -341,5 +312,16 @@ export default {
   width: 90%;
   margin: auto;
   size: A4 portrait; 
+}
+@media print {
+  header {
+    visibility: hidden;
+  }
+  #backButton {
+    visibility: hidden;
+  }
+  #printButton {
+    visibility: hidden;
+  }
 }
 </style>

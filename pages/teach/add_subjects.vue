@@ -279,7 +279,8 @@ export default {
       await this.getSubjectsFromTeach().then(
         result => (this.subjectsInTerm = result)
       );
-    
+    },
+    async save() {
       if (this.editedIndex > -1) {
         console.log("edit");
         const objectId = await this.getClassesByConditins();

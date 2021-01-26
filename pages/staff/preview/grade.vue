@@ -44,9 +44,6 @@
             <th class="text-left" v-for="item in rating" :key="item.name">
               {{ item.name }} , {{ item.score }} คะแนน
             </th>
-            <!-- <th class="text-left" v-for="item in rating" :key="item.id">
-              {{ item.name }} , T-score {{ item.rating }} %
-            </th> -->
             <th>คุณลักษณะ</th>
             <th>การคิดการอ่าน</th>
             <th @click="sorts('total_score')">Total Score</th>
@@ -62,10 +59,7 @@
             <td>{{ item_score.studentId }}</td>
             <td>{{ item_score.studentNumber }}</td>
             <td>{{ item_score.studentName }}</td>
-            <!-- <td v-for="item_in in item_score.score" :key="item_in.name">
-              {{ item_in }}
-            </td> -->
-            <td v-for="item in item_score.score" :key="item.key">
+            <td v-for="item in item_score.score" :key="item.index">
               {{ item }}
             </td>
             <td>{{ item_score.aptitude }}</td>

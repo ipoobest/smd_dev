@@ -1,6 +1,14 @@
 <template>
   <v-container>
-    <v-btn class="mr-5" color="primary" fab small dark @click="back">
+    <v-btn
+      class="mr-5"
+      color="primary"
+      id="backButton"
+      fab
+      small
+      dark
+      @click="back"
+    >
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
     <v-row justify="center">
@@ -162,7 +170,7 @@
     <v-row justify="center" class="pt-5">
       <v-col cols="4">
         <v-btn color="success" @click="save">บันทึก</v-btn>
-        <v-btn color="info" @click="exports">export pdf</v-btn>
+        <v-btn color="info" id="printButton" @click="print()">print</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -236,7 +244,6 @@ export default {
         conditions
       );
       // console.log("response_grade", response_grade.results.length);
-
       return response_grade.results;
     },
     async updateTech(data) {
@@ -302,10 +309,8 @@ export default {
         this.updateTech(data);
       }
     },
-    exports() {
-      const doc = new jsPDF();
-      doc.text("Hello world!", 10, 10);
-      doc.save("a4.pdf");
+    print() {
+      window.print();
     },
     back() {
       this.$router.go(-1);
@@ -314,4 +319,24 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+header {
+  visibility: hidden;
+}
+.page {
+  width: 90%;
+  margin: auto;
+  size: A4 portrait;
+}
+@media print {
+  header {
+    visibility: hidden;
+  }
+  #backButton {
+    visibility: hidden;
+  }
+  #printButton {
+    visibility: hidden;
+  }
+}
+</style>

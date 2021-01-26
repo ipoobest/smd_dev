@@ -98,17 +98,7 @@
                 </v-dialog>
               </v-toolbar>
             </template>
-            <!-- <template v-slot:[`item.actions`]="{ item }">
-              <v-btn  class="info" @click="goToAddScore(item)">
-               จัดการ
-              </v-btn>              
-            </template> -->
             <thead>
-              <!-- { text: 'รหัส/ชื่อวิขา', value: 'sname', align:'center' },
-          { text: 'ระดับชั้น', value: 'classRoomLevel', align:'center'},
-          { text: 'ห้องเรียน', value: 'classRoomName', align:'center'},
-          { text: 'ครูผู้สอน', value: 'teacher.name', align:'center' },
-          { text: 'Actions', value: 'actions', sortable: false, align:'center'} -->
               <tr>
                 <th>รหัส/ชื่อวิขา</th>
                 <th>ระดับชั้น</th>
@@ -122,10 +112,12 @@
                 <td v-if="item.subject_info">
                   {{ item.subject_info.codet }} {{ item.subject_info.sname }}
                 </td>
-                <td v-else>{{ item.sname }}</td>
+                <td v-else>{{ item.subject.codet }} {{item.subject.sname}}</td>
                 <th>{{ item.classRoomLevel }}</th>
                 <th>{{ item.classRoomName }}</th>
-                <th>{{ item.teacher.name }}</th>
+                <th v-if="item.teacher">{{ item.teacher.name }}</th>
+                <th v-else>{{ item.teachers.title }} {{ item.teachers.firstName }}
+              {{ item.teachers.lastName }}
                 <th>
                   <v-btn color="info" @click="goToAddScore(item)">
                     จัดการ
@@ -154,6 +146,12 @@ export default {
     await this.getTeachByConditions(this.query.id).then(
       result => (this.items = result)
     );
+    if (this.items.length == 0) {
+      console.log('testttttt')
+      await this.getTeachByConditionsFixed(this.query.id).then(
+        result => (this.items = result)
+      );
+    }
     // get rating
     // this.part_rating = this.items.rating
     // console.log('rating', this.items)
@@ -196,6 +194,24 @@ export default {
         term: this.$route.query.term,
         "teacher.value": teacherId
       };
+      const response = await this.$store.dispatch(
+        `teach/getTeachByConditions`,
+        data
+      );
+      console.log("response getTeachByConditions", response);
+      return response.results;
+    },
+    async getTeachByConditionsFixed(teacherId) {
+      const data = {
+        schoolYear: this.$route.query.schoolYear,
+        term: this.$route.query.term,
+        teachers: {
+          __type: "Pointer",
+          className: "_User",
+          objectId: teacherId
+        }
+      };
+      console.log('teacher', data)
       const response = await this.$store.dispatch(
         `teach/getTeachByConditions`,
         data
