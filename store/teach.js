@@ -120,7 +120,7 @@ export const actions = {
       try {
         const where = JSON.stringify(conditions);
         const result = this.$axios.$get(
-          `${process.env.parseUrl}/classes/${classes.teach}?where=${where}&&limit=500`
+          `${process.env.parseUrl}/classes/${classes.teach}?where=${where}&&limit=500&include=teachers,subject`
         );
 
         commit("setSubjects", result);

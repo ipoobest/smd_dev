@@ -35,15 +35,19 @@
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody >
+              <tbody>
                 <tr v-for="item in items" :key="item.index">
                   <td v-if="item.subject_info">
                     {{ item.subject_info.codet }} {{ item.subject_info.sname }}
                   </td>
-                  <td v-else>{{ item.sname }}</td>
+                  <td v-else>{{ item.subject.codet }} {{ item.subject.sname}}</td>
                   <td>{{ item.classRoomLevel }}</td>
                   <td>{{ item.classRoomName }}</td>
-                  <td>{{ item.teacher.name }}</td>
+                  <td v-if="item.teacher">{{ item.teacher.name }}</td>
+                  <td v-else>
+                    {{ item.teachers.title }} {{ item.teachers.firstName }}
+                    {{ item.teachers.lastName }}
+                  </td>
                   <td><v-btn @click="addScore(item)">จัดการ</v-btn></td>
                 </tr>
               </tbody>
@@ -58,7 +62,7 @@
 <script>
 export default {
   layout: "teacher",
-  middleware: 'teacher',
+  middleware: "teacher",
   async mounted() {
     this.query = this.$route.query;
     // this.teacherId = this.$store.state.auth.auth.teacherObjectId
@@ -66,6 +70,11 @@ export default {
     await this.getTeachByConditions(this.query.id).then(
       result => (this.items = result)
     );
+    if(this.items.length == 0) {
+      await this.getTeachByConditionsFixed(this.query.id).then(
+        result => (this.items = result)
+      )
+    }
   },
   watch: {
     dialog(val) {
@@ -104,12 +113,37 @@ export default {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
         "teacher.value": teacherId
+        // teachers: {
+        //   __type: "Pointer",
+        //   className: "_User",
+        //   objectId: teacherId
+        // }
       };
+      console.log("tesacher id", teacherId);
       const response = await this.$store.dispatch(
         `teach/getTeachByConditions`,
         data
       );
       console.log("response getTeachByConditions", response);
+        return response.results;
+    },
+    async getTeachByConditionsFixed(teacherId) {
+      const data = {
+        schoolYear: this.$route.query.schoolYear,
+        term: this.$route.query.term,
+        // "teacher.value": teacherId,
+        teachers: {
+          __type: "Pointer",
+          className: "_User",
+          objectId: teacherId
+        }
+      };
+      console.log("tesacher id", teacherId);
+      const response = await this.$store.dispatch(
+        `teach/getTeachByConditions`,
+        data
+      );
+      console.log("response getTeachByConditions zzz", response);
       return response.results;
     },
     async getGradeByConditions(item) {
@@ -218,8 +252,8 @@ export default {
     },
     async addScore(item) {
       // เช็คก่อนว่ามมี data ใน gradeรึยัง (1)
-      console.log('addScore 1', item)
-      this.goToAddScore(item)
+      console.log("addScore 1", item);
+      this.goToAddScore(item);
     },
     save() {
       var rating = this.part_rating.map(result => parseInt(result.rating));

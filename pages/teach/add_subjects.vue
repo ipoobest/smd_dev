@@ -144,7 +144,6 @@ export default {
   async mounted() {
     this.query = this.$route.query;
     await this.getSubjectsFromTeach().then(result => (this.items = result));
-
     await this.getSubjects().then(result => (this.subjects = result));
     await this.getClass().then(result => (this.classes = result));
     await this.getTeacher().then(result => (this.teachers = result));
@@ -280,32 +279,7 @@ export default {
       await this.getSubjectsFromTeach().then(
         result => (this.subjectsInTerm = result)
       );
-    },
-
-    // async save() {
-    //   // query studets id เอาแต่ students id
-    //   const objectId = await this.getClassesByConditins();
-    //   var subjectInfo = await this.input.classSubject;
-    //   const data = {
-    //     schoolYear: this.query.schoolYear,
-    //     term: this.query.term,
-    //     classRoomLevel: this.input.classRoomLevel,
-    //     classRoomName: this.input.classRoomName,
-    //     classId: objectId,
-    //     teacher: this.input.teacher,
-    //     send_score: false,
-    //     rating: [],
-    //     subject_id: this.input.subject_id,
-    //     subject_info: subjectInfo,
-    //     department: this.input.department,
-    //     type: "วิชาบังคับ"
-    //   };
-    //   console.log("teach data", data);
-    //   this.addSubjectToTeach(data);
-    //   this.resetForm();
-    //   this.close();
-    // },
-    async save() {
+    
       if (this.editedIndex > -1) {
         console.log("edit");
         const objectId = await this.getClassesByConditins();
@@ -336,7 +310,7 @@ export default {
         await this.getSubjectsFromTeach().then(result => (this.items = result));
         this.close();
       } else {
-        console.log("save");
+        // console.log("save");
         const objectId = await this.getClassesByConditins();
         const data = {
           schoolYear: this.query.schoolYear,
@@ -385,7 +359,7 @@ export default {
       console.log("classSubject index", this.classSubject, this.classSubject.length);
     },
     selectInputClasses() {
-      console.log("this classes", this.classes);
+      // console.log("this classes", this.classes);
       for (var index = 0; index < this.classes.length; index++) {
         this.classRoomLevel.push(this.classes[index].classRoomLevel);
         this.classRoomName.push(this.classes[index].classRoomName);
