@@ -326,17 +326,16 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-header {
-  visibility: hidden;
-}
+<style lang="scss">
 .page {
   width: 90%;
   margin: auto;
   size: A4 portrait; 
 }
 @media print {
-
+  .page {
+    margin-top: -5%;
+  }
   header {
     visibility: hidden;
   }

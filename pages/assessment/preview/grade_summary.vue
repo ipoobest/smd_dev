@@ -1,14 +1,6 @@
 <template>
   <v-container>
-    <v-btn
-      class="mr-5"
-      color="primary"
-      id="backButton"
-      fab
-      small
-      dark
-      @click="back"
-    >
+    <v-btn class="mr-5" color="primary" id="backButton" fab small dark @click="back">
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
     <v-row justify="center">
@@ -309,8 +301,8 @@ export default {
         this.updateTech(data);
       }
     },
-    print() {
-      window.print();
+    print(){
+      window.print()
     },
     back() {
       this.$router.go(-1);
@@ -319,16 +311,16 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-header {
-  visibility: hidden;
-}
+<style lang="scss" >
 .page {
   width: 90%;
   margin: auto;
-  size: A4 portrait;
+  size: A4 portrait; 
 }
 @media print {
+  .page {
+    margin-top: -5%;
+  }
   header {
     visibility: hidden;
   }
