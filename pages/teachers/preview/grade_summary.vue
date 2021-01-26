@@ -1,6 +1,14 @@
 <template ref="document">
-  <v-container >
-    <v-btn class="mr-5 btnBack" id="backButton" color="primary" fab small dark @click="back()">
+  <v-container>
+    <v-btn
+      class="mr-5 btnBack"
+      id="backButton"
+      color="primary"
+      fab
+      small
+      dark
+      @click="back()"
+    >
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
     <div id="pdfDom" class="page">
@@ -59,7 +67,7 @@
         สรุปผลการประเมิน
       </v-row>
       <v-row justify="center">
-        <v-simple-table>
+        <v-simple-table style="width:100%">
           <thead>
             <tr>
               <th>จำนวนนักเรียนที่ลงทะเบียน</th>
@@ -163,17 +171,19 @@
         </v-row>
       </div>
     </div>
-          <v-row justify="center" class="mt-5">
-        <v-btn color="info" class="ml-5" id="printButton" @click="print()">print</v-btn>
-      </v-row>
+    <v-row justify="center" class="mt-5">
+      <!-- <v-btn color="success" id="btnSave" @click="save">บันทึก</v-btn> -->
+      <v-btn color="info" class="ml-5" id="printButton" @click="print()"
+        >print</v-btn
+      >
+    </v-row>
   </v-container>
 </template>
 
 <script>
-
 export default {
   layout: "teacher",
-  middleware: 'teacher',
+  middleware: "teacher",
 
   async mounted() {
     await this.getTechById(this.$route.query.id).then(
@@ -194,8 +204,7 @@ export default {
         .toString()
         .padStart(4, "0")} `;
       return dateTime;
-    },
-
+    }
   },
 
   data() {
@@ -243,26 +252,26 @@ export default {
       return response_grade.results;
     },
     getClasses() {
-      var a = "ต้น"
-      var b = "ปลาย"
+      var a = "ต้น";
+      var b = "ปลาย";
       var classes = this.items.classRoomLevel;
-      if(["ม.1","ม.2","ม.3"].includes(classes)) {
+      if (["ม.1", "ม.2", "ม.3"].includes(classes)) {
         return a;
       } else {
         return b;
       }
     },
     getPeriod() {
-      var credit = this.items.subject_info.credit
-      var period = credit * 2
-      console.log('period',period)
-      return period
+      var credit = this.items.subject_info.credit;
+      var period = credit * 2;
+      console.log("period", period);
+      return period;
     },
     summaryGrade(data) {
       this.total_students = data.length;
 
       var grade_list = ["4", "3.5", "3", "2.5", "2", "1.5", "1", "0"];
-      var grade_option = ["ร", "มส","รส"];
+      var grade_option = ["ร", "มส", "รส"];
       var other_score = ["3", "2", "1"];
 
       this.special_score = [];
@@ -311,7 +320,7 @@ export default {
 .page {
   width: 90%;
   margin: auto;
-  size: A4 portrait; 
+  size: A4 portrait;
 }
 @media print {
   .page {

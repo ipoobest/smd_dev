@@ -1,174 +1,185 @@
-<template>
+<template ref="document">
   <v-container>
-    <v-btn class="mr-5" color="primary" id="backButton" fab small dark @click="back">
+    <v-btn
+      class="mr-5 btnBack"
+      id="backButton"
+      color="primary"
+      fab
+      small
+      dark
+      @click="back()"
+    >
       <v-icon>mdi-arrow-left</v-icon>
     </v-btn>
-    <v-row justify="center">
-      <img height="150" src="~/assets/logo-smd.png" />
-    </v-row>
-    <v-row justify="center">
-      <h3>แบบบันทึกผลการพัฒนาคุณภาพผู้เรียน(ปพ.5)</h3>
-    </v-row>
-    <v-row justify="center">
-      <h3>โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น (มอดินแดง) ระดับมัธยมศึกษา</h3>
-    </v-row>
-    <v-row justify="center">
-      <h3>อำเภอเมืองขอนแก่น จังหวัดขอนแก่น</h3>
-    </v-row>
-    <v-row justify="center" class="pt-5">
-      ระดับมัธยมศึกษาตอน
-    </v-row>
-    <v-row justify="start" class="pt-10">
-      <v-col cols="1">ชื่อวิชา</v-col>
-      <v-col v-if="items.subject_info" cols="2">{{
-        items.subject_info.sname
-      }}</v-col>
-      <v-col v-else cols="2">{{ items.sname }}</v-col>
-      <v-col cols="1">รหัสวิชา</v-col>
-      <v-col v-if="items.subject_info" cols="2">{{
-        items.subject_info.codet
-      }}</v-col>
-      <v-col cols="2">ภาคเรียนที่</v-col>
-      <v-col cols="1">{{ items.term }}</v-col>
-      <v-col cols="2">ปีการศึกษา</v-col>
-      <v-col cols="1">{{ items.schoolYear }}</v-col>
-    </v-row>
-    <v-row justify="start">
-      <v-col cols="2">ชั้นมัธยมศึกษาปีที่</v-col>
-      <v-col cols="1"
-        >{{ items.classRoomLevel }}/{{ items.classRoomName }}</v-col
-      >
-      <v-col cols="2">จำนวนหน่วยกิต</v-col>
-      <v-col v-if="items.subject_info" cols="1">{{
-        items.subject_info.credit
-      }}</v-col>
-      <v-col cols="2">เวลาเรียน</v-col>
-      <v-col v-if="items.subject_info" cols="1">{{
-        items.subject_info.hour
-      }}</v-col>
-      <v-col cols="2">คาบ/สัปดาห์</v-col>
-    </v-row>
-    <v-row justify="start">
-      <v-col cols="2">ชื่อาอาจารย์ผู้สอน</v-col>
-      <v-col>{{ items.teacher.name }}</v-col>
-    </v-row>
-    <v-row justify="center" class="pt-10 pb-5">
-      สรุปผลการประเมิน
-    </v-row>
-    <v-row>
-      <v-simple-table style="width:100%;">
-        <thead>
-          <tr>
-            <th>จำนวนนักเรียนที่ลงทะเบียน</th>
-            <th colspan="10">ระดับผลการเรียน</th>
-            <th colspan="3">คุณลักษณะอันพึงประสงค์</th>
-            <th colspan="3">การอ่านคิดวิเคราะห์และเขียน</th>
-          </tr>
-          <tr>
-            <th></th>
-            <th>4.0</th>
-            <th>3.5</th>
-            <th>3.0</th>
-            <th>2.5</th>
-            <th>2.0</th>
-            <th>1.5</th>
-            <th>1.0</th>
-            <th>0</th>
-            <th>ร</th>
-            <th>มส</th>
-            <th>รส</th>
-            <th>3</th>
-            <th>2</th>
-            <th>1</th>
-            <th>3</th>
-            <th>2</th>
-            <th>1</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{{ total_students }}</td>
-            <td v-for="grade_num in grade_num_list" :key="grade_num.index">
-              {{ grade_num }}
-            </td>
-            <td
-              v-for="grade_num_option in grade_option_num_list"
-              :key="grade_num_option.index"
-            >
-              {{ grade_num_option }}
-            </td>
-            <td
-              v-for="aptitude_score in aptitude_score_num"
-              :key="aptitude_score.index"
-            >
-              {{ aptitude_score }}
-            </td>
-            <td
-              v-for="analytical_score in analytical_score_num"
-              :key="analytical_score.index"
-            >
-              {{ analytical_score }}
-            </td>
-          </tr>
-        </tbody>
-      </v-simple-table>
-    </v-row>
-    <v-row justify="center" class="pt-10">
-      การอนุมัติผลการเรียน
-    </v-row>
-    <v-row justify="start" class="pt-5">
-      <v-col cols="5">ลงชื่อ อาจารย์ผู้สอน</v-col>
-      <v-col cols="3.5">( {{ items.teacher.name }} )</v-col>
-      <v-col cols="1">วันที่</v-col>
-      <v-col cols="1.5">{{ gatDate }}</v-col>
-    </v-row>
-    <v-row justify="start" class="pt-5">
-      <v-col cols="5">หัวหน้าหลุ่มสาระการเรียนรู้{{ items.department }}</v-col>
-      <v-col cols="3.5"
-        >( {{ this.$store.state.auth.auth.title }}
-        {{ this.$store.state.auth.auth.firstName }}
-        {{ this.$store.state.auth.auth.lastName }} )</v-col
-      >
-      <v-col cols="1">วันที่</v-col>
-      <v-col cols="1.5">{{ gatDate }}</v-col>
-    </v-row>
-    <v-row justify="start" class="pt-5">
-      <v-col cols="5">ผู้ช่วยรองผู้อำนวยการฝ่ายวิชาการ</v-col>
-      <v-col cols="3.5"> </v-col>
-      <v-col cols="1">วันที่</v-col>
-      <v-col cols="1.5">{{ gatDate }}</v-col>
-    </v-row>
-    <v-row justify="center" class="pt-10 pb-10">
-      สำหรับงานทะเบียน
-    </v-row>
-    <div style="border-style: solid" class="pa-5">
-      <v-row>
-        <v-col cols="2">ตรวจสอบข้อมูล </v-col>
-        <v-col cols="2">
-          <v-radio-group v-model="items.approved">
-            <v-radio label="อนุมัติ" value='true'></v-radio>
-            <v-radio label="ไม่อนุมัติ" value='false'></v-radio>
-          </v-radio-group>
-        </v-col>
-        <v-col cols="6" class="mt-8">
-          <v-text-field
-            v-model="items.approve_message"
-            label="สาเหตุที่ไม่อนุมัติ"
-          ></v-text-field>
-        </v-col>
+    <div id="pdfDom" class="page">
+      <v-row justify="center">
+        <img height="100" src="~/assets/logo-smd.png" />
       </v-row>
       <v-row justify="center">
-        <v-col cols="4">ลงชื่อ <v-text-field> </v-text-field></v-col>
+        <h3>แบบบันทึกผลการพัฒนาคุณภาพผู้เรียน(ปพ.5)</h3>
       </v-row>
+      <v-row justify="center">
+        <h3>
+          โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น (มอดินแดง) ระดับมัธยมศึกษา
+        </h3>
+      </v-row>
+      <v-row justify="center">
+        <h3>อำเภอเมืองขอนแก่น จังหวัดขอนแก่น</h3>
+      </v-row>
+      <v-row justify="center" class="pt-5">
+        ระดับมัธยมศึกษาตอน{{ getClasses() }}
+      </v-row>
+      <v-row justify="start" class="pt-10">
+        <v-col cols="1">ชื่อวิชา</v-col>
+        <v-col v-if="items.subject_info" cols="2">{{
+          items.subject_info.sname
+        }}</v-col>
+        <v-col v-else cols="2">{{ items.sname }}</v-col>
+        <v-col cols="1">รหัสวิชา</v-col>
+        <v-col v-if="items.subject_info" cols="2">{{
+          items.subject_info.codet
+        }}</v-col>
+        <v-col cols="2">ภาคเรียนที่</v-col>
+        <v-col cols="1">{{ items.term }}</v-col>
+        <v-col cols="2">ปีการศึกษา</v-col>
+        <v-col cols="1">{{ items.schoolYear }}</v-col>
+      </v-row>
+      <v-row justify="start">
+        <v-col cols="2">ชั้นมัธยมศึกษาปีที่</v-col>
+        <v-col cols="1"
+          >{{ items.classRoomLevel }}/{{ items.classRoomName }}</v-col
+        >
+        <v-col cols="2">จำนวนหน่วยกิต</v-col>
+        <v-col v-if="items.subject_info" cols="1">{{
+          items.subject_info.credit
+        }}</v-col>
+        <v-col cols="2">เวลาเรียน</v-col>
+        <v-col v-if="items.subject_info" cols="1">
+          {{ getPeriod() }}
+        </v-col>
+        <v-col cols="2">คาบ/สัปดาห์</v-col>
+      </v-row>
+      <v-row justify="start">
+        <v-col cols="2">ชื่อาอาจารย์ผู้สอน</v-col>
+        <v-col>{{ items.teacher.name }}</v-col>
+      </v-row>
+      <v-row justify="center" class="pt-10 pb-5">
+        สรุปผลการประเมิน
+      </v-row>
+      <v-row justify="center">
+        <v-simple-table style="width:100%">
+          <thead>
+            <tr>
+              <th>จำนวนนักเรียนที่ลงทะเบียน</th>
+              <th colspan="10">ระดับผลการเรียน</th>
+              <th colspan="3">คุณลักษณะอันพึงประสงค์</th>
+              <th colspan="3">การอ่านคิดวิเคราะห์และเขียน</th>
+            </tr>
+            <tr>
+              <th></th>
+              <th>4.0</th>
+              <th>3.5</th>
+              <th>3.0</th>
+              <th>2.5</th>
+              <th>2.0</th>
+              <th>1.5</th>
+              <th>1.0</th>
+              <th>0</th>
+              <th>ร</th>
+              <th>มส</th>
+              <th>รส</th>
+              <th>3</th>
+              <th>2</th>
+              <th>1</th>
+              <th>3</th>
+              <th>2</th>
+              <th>1</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{{ total_students }}</td>
+              <td v-for="grade_num in grade_num_list" :key="grade_num.index">
+                {{ grade_num }}
+              </td>
+              <td
+                v-for="grade_num_option in grade_option_num_list"
+                :key="grade_num_option.index"
+              >
+                {{ grade_num_option }}
+              </td>
+              <td
+                v-for="aptitude_score in aptitude_score_num"
+                :key="aptitude_score.index"
+              >
+                {{ aptitude_score }}
+              </td>
+              <td
+                v-for="analytical_score in analytical_score_num"
+                :key="analytical_score.index"
+              >
+                {{ analytical_score }}
+              </td>
+            </tr>
+          </tbody>
+        </v-simple-table>
+      </v-row>
+      <v-row justify="center" class="pt-10">
+        การอนุมัติผลการเรียน
+      </v-row>
+      <v-row justify="start" class="pt-5">
+        <v-col cols="4">ลงชื่อ อาจารย์ผู้สอน</v-col>
+        <v-col cols="3.5">( {{ items.teacher.name }} )</v-col>
+        <v-col cols="1">วันที่</v-col>
+        <v-col cols="2.5">{{ gatDate }}</v-col>
+      </v-row>
+      <v-row justify="start" class="pt-5">
+        <v-col cols="4"
+          >หัวหน้ากลุ่มสาระการเรียนรู้{{ items.department }}</v-col
+        >
+        <v-col cols="3.5"></v-col>
+        <v-col cols="1">วันที่</v-col>
+        <v-col cols="2.5">{{ gatDate }}</v-col>
+      </v-row>
+      <v-row justify="start" class="pt-5">
+        <v-col cols="4">ผู้ช่วยผู้อำนวยการฝ่ายวิชาการและวิจัย</v-col>
+        <v-col cols="3.5"> </v-col>
+        <v-col cols="1">วันที่</v-col>
+        <v-col cols="2.5">{{ gatDate }}</v-col>
+      </v-row>
+      <v-row justify="center" class="pt-10 pb-10">
+        สำหรับงานทะเบียน
+      </v-row>
+      <div style="border-style: solid" class="pa-5">
+        <v-row>
+          <v-col cols="2">ตรวจสอบข้อมูล </v-col>
+          <v-col cols="2">
+            <v-radio-group v-model="items.approved">
+              <v-radio label="อนุมัติ" value="true"></v-radio>
+              <v-radio label="ไม่อนุมัติ" value="false"></v-radio>
+            </v-radio-group>
+          </v-col>
+          <v-col cols="6" class="mt-8">
+            <v-text-field
+              v-model="items.approve_message"
+              label="สาเหตุที่ไม่อนุมัติ"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-row justify="center">
+          <v-col cols="4">ลงชื่อ <v-text-field> </v-text-field></v-col>
+        </v-row>
+      </div>
     </div>
-    <v-row justify="center" class="pt-5">
-      <v-col cols="4">
-        <v-btn color="success" @click="save">บันทึก</v-btn>
-        <v-btn color="info" @click="print()" id="printButton">Print</v-btn>
-      </v-col>
+    <v-row justify="center" class="mt-5">
+      <v-btn color="success" id="saveButton" @click="save">บันทึก</v-btn>
+      <v-btn color="info" class="ml-5" id="printButton" @click="print()"
+        >print</v-btn
+      >
     </v-row>
   </v-container>
 </template>
+
 
 <script>
 export default {
@@ -239,6 +250,22 @@ export default {
       console.log("response_grade", response_grade);
 
       return response_grade.results;
+    },
+    getClasses() {
+      var a = "ต้น";
+      var b = "ปลาย";
+      var classes = this.items.classRoomLevel;
+      if (["ม.1", "ม.2", "ม.3"].includes(classes)) {
+        return a;
+      } else {
+        return b;
+      }
+    },
+    getPeriod() {
+      var credit = this.items.subject_info.credit;
+      var period = credit * 2;
+      console.log("period", period);
+      return period;
     },
     async updateGrade(data) {
       const response = await this.$store.dispatch(`grade/updateGrade`, data);
@@ -337,6 +364,9 @@ export default {
     margin-top: -5%;
   }
   header {
+    visibility: hidden;
+  }
+  #saveButton {
     visibility: hidden;
   }
   #backButton {

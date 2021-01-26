@@ -67,7 +67,7 @@
         สรุปผลการประเมิน
       </v-row>
       <v-row justify="center">
-        <v-simple-table>
+        <v-simple-table style="width:100%">
           <thead>
             <tr>
               <th>จำนวนนักเรียนที่ลงทะเบียน</th>
