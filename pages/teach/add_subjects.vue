@@ -71,7 +71,6 @@
                                 v-model="input.teachers.objectId"
                                 :items="itemTeachers"
                                 item-text="name"
-                                return-object
                                 outlined
                                 label="ครูผู้สอน"
                                 require
@@ -120,7 +119,7 @@
                 </v-dialog>
               </v-toolbar>
             </template>
-            <template v-if="items.teachers" v-slot:[`item.teacherName`]="{ item }"
+            <template v-slot:[`item.teacherName`]="{ item }"
               >{{ item.teachers.title }} {{ item.teachers.firstName }}
               {{ item.teachers.lastName }}</template
             >
@@ -296,7 +295,7 @@ export default {
           subject: {
             __type: "Pointer",
             className: "Subjects",
-            objectId: this.subjectId
+            objectId: this.input.subject.objectId
           },
           teachers: {
             __type: "Pointer",
@@ -325,7 +324,7 @@ export default {
           subject: {
             __type: "Pointer",
             className: "Subjects",
-            objectId: this.subjectId
+            objectId: this.input.subject.objectId
           },
           teachers: {
             __type: "Pointer",
@@ -336,9 +335,9 @@ export default {
           type: "วิชาบังคับ"
         };
         console.log("teach data", data);
-        // await this.addSubjectToTeach(data);
+        await this.addSubjectToTeach(data);
         this.resetForm();
-        // await this.getSubjectsFromTeach().then(result => (this.items = result));
+        await this.getSubjectsFromTeach().then(result => (this.items = result));
         this.close();
       }
     },
@@ -402,13 +401,6 @@ export default {
       // this.subjectInfo = { codet: subject_name[0].codet,sname: subject_name[0].sname, credit: subject_name[0].credit, hour: subject_name[0].hour};
       this.subjectId = subject_name[0].objectId;
       console.log("subjectId", this.subjectId);
-    },
-    editTeacherName() {
-      var teacher_name = this.teachers.filter(
-        teacher = teacher_name[0].objectId
-      )
-      this.teacherId = teacher_name[0].objectId
-      console.log('teacherId', this.teacherId)
     },
     editItem(item) {
       this.editedIndex = this.items.indexOf(item)
