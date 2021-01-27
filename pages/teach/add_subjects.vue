@@ -120,7 +120,7 @@
                 </v-dialog>
               </v-toolbar>
             </template>
-            <template v-slot:[`item.teacherName`]="{ item }"
+            <template v-if="items.teachers" v-slot:[`item.teacherName`]="{ item }"
               >{{ item.teachers.title }} {{ item.teachers.firstName }}
               {{ item.teachers.lastName }}</template
             >
@@ -262,6 +262,8 @@ export default {
       );
       console.log("getClassss ", response.results[0].objectId);
       return response.results[0].objectId;
+      // console.log('getClass by con : ', response.results)
+      // return response.results
     },
     async getDepartment() {
       const response = await this.$store.dispatch(`department/getDepartment`);
@@ -299,15 +301,15 @@ export default {
           teachers: {
             __type: "Pointer",
             className: "_User",
-            objectId: this.input.teacher.value
+            objectId: this.input.teachers.objectId
           },
           department: this.input.department,
           type: "วิชาบังคับ"
         };
         console.log("teach data", data);
-        // await this.updateSubjectToTeach(data);
+        await this.updateSubjectToTeach(data);
         this.resetForm();
-        // await this.getSubjectsFromTeach().then(result => (this.items = result));
+        await this.getSubjectsFromTeach().then(result => (this.items = result));
         this.close();
       } else {
         console.log("save");
@@ -328,7 +330,7 @@ export default {
           teachers: {
             __type: "Pointer",
             className: "_User",
-            objectId: this.input.teacher.value
+            objectId: this.input.teachers.objectId
           },
           department: this.input.department,
           type: "วิชาบังคับ"
@@ -345,6 +347,7 @@ export default {
         `teach/deleteSubjectInTeach`,
         objectId
       );
+      await this.getSubjectsFromTeach().then(result => (this.items = result));
       // console.log('response', response)
     },
     selectInputSubjects() {
