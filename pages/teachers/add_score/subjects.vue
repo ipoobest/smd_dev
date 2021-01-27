@@ -70,11 +70,11 @@ export default {
     await this.getTeachByConditions(this.query.id).then(
       result => (this.items = result)
     );
-    if(this.items.length == 0) {
-      await this.getTeachByConditionsFixed(this.query.id).then(
-        result => (this.items = result)
-      )
-    }
+    // if(this.items.length == 0) {
+    //   await this.getTeachByConditionsFixed(this.query.id).then(
+    //     result => (this.items = result)
+    //   )
+    // }
   },
   watch: {
     dialog(val) {
@@ -112,26 +112,7 @@ export default {
       const data = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        "teacher.value": teacherId
-        // teachers: {
-        //   __type: "Pointer",
-        //   className: "_User",
-        //   objectId: teacherId
-        // }
-      };
-      console.log("tesacher id", teacherId);
-      const response = await this.$store.dispatch(
-        `teach/getTeachByConditions`,
-        data
-      );
-      console.log("response getTeachByConditions", response);
-        return response.results;
-    },
-    async getTeachByConditionsFixed(teacherId) {
-      const data = {
-        schoolYear: this.$route.query.schoolYear,
-        term: this.$route.query.term,
-        // "teacher.value": teacherId,
+        // "teacher.value": teacherId
         teachers: {
           __type: "Pointer",
           className: "_User",
@@ -143,9 +124,28 @@ export default {
         `teach/getTeachByConditions`,
         data
       );
-      console.log("response getTeachByConditions zzz", response);
-      return response.results;
+      console.log("response getTeachByConditions", response);
+        return response.results;
     },
+    // async getTeachByConditionsFixed(teacherId) {
+    //   const data = {
+    //     schoolYear: this.$route.query.schoolYear,
+    //     term: this.$route.query.term,
+    //     // "teacher.value": teacherId,
+    //     teachers: {
+    //       __type: "Pointer",
+    //       className: "_User",
+    //       objectId: teacherId
+    //     }
+    //   };
+    //   console.log("tesacher id", teacherId);
+    //   const response = await this.$store.dispatch(
+    //     `teach/getTeachByConditions`,
+    //     data
+    //   );
+    //   console.log("response getTeachByConditions zzz", response);
+    //   return response.results;
+    // },
     async getGradeByConditions(item) {
       console.log("where item", item);
 

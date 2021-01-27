@@ -192,7 +192,12 @@ export default {
       const data = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        "teacher.value": teacherId
+        // "teacher.value": teacherId,
+        teachers: {
+          __type: "Pointer",
+          className: "_User",
+          objectId: teacherId
+        }
       };
       const response = await this.$store.dispatch(
         `teach/getTeachByConditions`,
