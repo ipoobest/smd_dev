@@ -104,7 +104,7 @@ export const actions = {
     return new Promise(async (resolve, reject) => {
       try {
         const result = this.$axios.$get(
-          `${process.env.parseUrl}/classes/${classes.teach}/${id}`
+          `${process.env.parseUrl}/classes/${classes.teach}/${id}?include=subject,teachers`
         );
         commit("setSubjects", result);
         resolve(result);

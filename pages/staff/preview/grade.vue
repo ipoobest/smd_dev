@@ -15,11 +15,11 @@
     <v-row justify="center">
       <v-col cols="4" align="start"> วันที่ {{ gatDate }} </v-col>
       <v-col cols="4" align="center">
-        วิชา {{ teach.subject_info.sname }} รหัสวิชา
-        {{ teach.subject_info.codet }}
+        วิชา {{ teach.subject.sname }} รหัสวิชา
+        {{ teach.subject.codet }}
       </v-col>
-      <v-col cols="4" align="end">
-        อาจารย์ผู้สอน {{ teach.teacher.name }}
+      <v-col  cols="4" align="end" >
+        อาจารย์ผู้สอน {{ teach.teachers.title }} {{ teach.teachers.firstName}} {{ teach.teachers.lastName }}
       </v-col>
     </v-row>
     <v-row
@@ -117,10 +117,12 @@ export default {
   data() {
     return {
       teach: {
-        teacher: {
-          name: ""
+        teachers: {
+          title: "",
+          firstName: "",
+          lastName: ""
         },
-        subject_info: {
+        subject: {
           sname: "",
           codet: ""
         }
