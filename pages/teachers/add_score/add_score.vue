@@ -381,9 +381,9 @@ export default {
           teachId: this.items.objectId,
           teachInfo: {
             techId: this.items.objectId,
-            codet: this.items.subject_info.codet,
-            credit: this.items.subject_info.credit,
-            sname: this.items.subject_info.sname
+            codet: this.items.subject.codet,
+            credit: this.items.subject.credit,
+            sname: this.items.subject.sname
           },
           studentId: studentId[index],
           studentNumber: studentNumber[index],
