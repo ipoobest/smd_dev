@@ -45,7 +45,7 @@
                           <v-row>
                             <v-col cols="12" sm="6" md="6">
                               <v-select
-                                v-model="input.subject_id"
+                                v-model="input.subject.objectId"
                                 @change="editSubjectName"
                                 :items="classSubject"
                                 outlined
@@ -68,7 +68,7 @@
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
                               <v-select
-                                v-model="input.teacher"
+                                v-model="input.teachers.objectId"
                                 :items="itemTeachers"
                                 item-text="name"
                                 return-object
@@ -188,6 +188,8 @@ export default {
         term: ""
       },
       input: {
+        subject: {},
+        teachers: {},
         classSubject: "",
         classRoomLevel: "",
         classRoomName: "",
@@ -270,9 +272,6 @@ export default {
       console.log("create teach data", data);
       const response = await this.$store.dispatch(`teach/createTeach`, data);
       console.log("response create teach", response);
-      // await this.getSubjectsFromTeach().then(
-      //   result => (this.subjectsInTerm = result)
-      // );
     },
     async updateSubjectToTeach(data) {
       const response = await this.$store.dispatch(`teach/updateTeach`, data);
@@ -306,12 +305,12 @@ export default {
           type: "วิชาบังคับ"
         };
         console.log("teach data", data);
-        await this.updateSubjectToTeach(data);
+        // await this.updateSubjectToTeach(data);
         this.resetForm();
-        await this.getSubjectsFromTeach().then(result => (this.items = result));
+        // await this.getSubjectsFromTeach().then(result => (this.items = result));
         this.close();
       } else {
-        // console.log("save");
+        console.log("save");
         const objectId = await this.getClassesByConditins();
         const data = {
           schoolYear: this.query.schoolYear,
@@ -335,9 +334,9 @@ export default {
           type: "วิชาบังคับ"
         };
         console.log("teach data", data);
-        await this.addSubjectToTeach(data);
+        // await this.addSubjectToTeach(data);
         this.resetForm();
-        await this.getSubjectsFromTeach().then(result => (this.items = result));
+        // await this.getSubjectsFromTeach().then(result => (this.items = result));
         this.close();
       }
     },
@@ -368,6 +367,7 @@ export default {
       console.log("classRoomLevel index", this.classRoomLevel);
     },
     selectInputTeacher() {
+      this.itemTeachers = []
       for (var index = 0; index < this.teachers.length; index++) {
         const teacher = {
           name:
@@ -380,6 +380,7 @@ export default {
         };
         this.itemTeachers.push(teacher);
       }
+      console.log('option teacher : ', this.itemTeachers)
     },
     addClasses(item) {
       this.$router.push({
@@ -393,16 +394,23 @@ export default {
     },
     editSubjectName() {
       var subject_name = this.subjects.filter(
-        subject => subject.objectId == this.input.subject_id
+        subject => subject.objectId == this.input.subject.objectId
       );
       // this.subjectInfo = { codet: subject_name[0].codet,sname: subject_name[0].sname, credit: subject_name[0].credit, hour: subject_name[0].hour};
       this.subjectId = subject_name[0].objectId;
-      console.log("subject infoxx", this.subjectId);
+      console.log("subjectId", this.subjectId);
+    },
+    editTeacherName() {
+      var teacher_name = this.teachers.filter(
+        teacher = teacher_name[0].objectId
+      )
+      this.teacherId = teacher_name[0].objectId
+      console.log('teacherId', this.teacherId)
     },
     editItem(item) {
-      this.editedIndex = this.subjectsInTerm.indexOf(item);
+      this.editedIndex = this.items.indexOf(item)
+      console.log('object assign to input item.teachers', Object.assign({}, item.teachers))
       this.input = Object.assign({}, item);
-      console.log("item edit", this.input);
       this.dialog = true;
     },
     deleteItem(item) {
@@ -427,6 +435,7 @@ export default {
       this.$refs.form.reset();
     },
     close() {
+      this.resetForm()
       this.dialog = false;
       this.editedIndex = -1;
     }
