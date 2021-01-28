@@ -75,6 +75,7 @@
 <script>
 export default {
   // middleware: 'authentication',
+  layout: 'fix_data',
   mounted() {},
   watch: {
     dialog(val) {

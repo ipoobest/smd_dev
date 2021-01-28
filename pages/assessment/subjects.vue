@@ -213,7 +213,7 @@ export default {
     async addScore(item) {
       // เช็คก่อนว่ามมี data ใน gradeรึยัง (1)
       console.log("addScore 1", item);
-      this.goToAddScore(item);
+      this.goToPreviewScore(item);
     },
     close() {
       this.dialog = false;

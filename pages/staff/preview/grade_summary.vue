@@ -34,11 +34,12 @@
         <v-col v-if="items.subject_info" cols="2">{{
           items.subject_info.sname
         }}</v-col>
-        <v-col v-else cols="2">{{ items.sname }}</v-col>
+        <v-col v-else cols="2">{{ items.subject.sname }}</v-col>
         <v-col cols="1">รหัสวิชา</v-col>
         <v-col v-if="items.subject_info" cols="2">{{
           items.subject_info.codet
         }}</v-col>
+        <v-col v-else>{{ items.subject.codet }}</v-col>
         <v-col cols="2">ภาคเรียนที่</v-col>
         <v-col cols="1">{{ items.term }}</v-col>
         <v-col cols="2">ปีการศึกษา</v-col>
@@ -53,15 +54,20 @@
         <v-col v-if="items.subject_info" cols="1">{{
           items.subject_info.credit
         }}</v-col>
+        <v-col v-else>{{ items.subject.credit }}</v-col>
         <v-col cols="2">เวลาเรียน</v-col>
-        <v-col v-if="items.subject_info" cols="1">
+        <v-col cols="1">
           {{ getPeriod() }}
         </v-col>
         <v-col cols="2">คาบ/สัปดาห์</v-col>
       </v-row>
       <v-row justify="start">
         <v-col cols="2">ชื่อาอาจารย์ผู้สอน</v-col>
-        <v-col>{{ items.teacher.name }}</v-col>
+        <v-col v-if="items.teacher">{{ items.teacher.name }}</v-col>
+        <v-col v-else
+          >{{ items.teachers.title }} {{ items.teachers.firstName }}
+          {{ items.teachers.lastName }}</v-col
+        >
       </v-row>
       <v-row justify="center" class="pt-10 pb-5">
         สรุปผลการประเมิน
@@ -129,7 +135,13 @@
       </v-row>
       <v-row justify="start" class="pt-5">
         <v-col cols="4">ลงชื่อ อาจารย์ผู้สอน</v-col>
-        <v-col cols="3.5">( {{ items.teacher.name }} )</v-col>
+        <v-col v-if="items.teacher" cols="3.5"
+          >( {{ items.teacher.name }} )</v-col
+        >
+        <v-col v-else
+          >{{ items.teachers.title }} {{ items.teachers.firstName }}
+          {{ items.teachers.lastName }}</v-col
+        >
         <v-col cols="1">วันที่</v-col>
         <v-col cols="2.5">{{ gatDate }}</v-col>
       </v-row>
@@ -180,11 +192,10 @@
   </v-container>
 </template>
 
-
 <script>
 export default {
   layout: "staff",
-  middleware: 'staff',
+  middleware: "staff",
   async mounted() {
     await this.getTechById(this.$route.query.id).then(
       result => (this.items = result)
@@ -210,11 +221,15 @@ export default {
     return {
       date: "",
       items: {
+        subject: {
+          credit: ""
+        },
         subject_info: {
           sname: "",
           codet: "",
           credit: "",
-          hour: ""
+          hour: "",
+          credit: ""
         },
         teacher: {
           name: "",
@@ -262,10 +277,14 @@ export default {
       }
     },
     getPeriod() {
-      var credit = this.items.subject_info.credit;
-      var period = credit * 2;
-      console.log("period", period);
-      return period;
+      var period = 0;
+      if (this.items.subject.credit) {
+        return this.items.subject.credit * 2;
+      } else {
+        period = this.items.subject_info.credit * 2;
+        console.log("period", period);
+        return period;
+      }
     },
     async updateGrade(data) {
       const response = await this.$store.dispatch(`grade/updateGrade`, data);
@@ -283,7 +302,7 @@ export default {
       this.total_students = data.length;
 
       var grade_list = ["4", "3.5", "3", "2.5", "2", "1.5", "1", "0"];
-      var grade_option = ["ร", "มส","รส"];
+      var grade_option = ["ร", "มส", "รส"];
       var other_score = ["3", "2", "1"];
 
       this.special_score = [];
@@ -321,16 +340,16 @@ export default {
     save() {
       console.log("approve, message", this.items.approved);
       // var save_score = (this.items.approved === "true") ? false : true;
-      var send_score = (this.items.approved === "true") ? true : false;
+      var send_score = this.items.approved === "true" ? true : false;
       if (confirm("ยืนยันการบันทึก")) {
         this.students.forEach(grade => {
           var data = {
             objectId: grade.objectId,
             staff: true
-          }
+          };
           // console.log('grade', data)
-          this.updateGrade(data)
-        })
+          this.updateGrade(data);
+        });
         var data = {
           objectId: this.items.objectId,
           approved: this.items.approved,
@@ -344,7 +363,7 @@ export default {
       }
     },
     print() {
-      window.print()
+      window.print();
     },
     back() {
       this.$router.go(-1);
@@ -357,7 +376,7 @@ export default {
 .page {
   width: 90%;
   margin: auto;
-  size: A4 portrait; 
+  size: A4 portrait;
 }
 @media print {
   .page {

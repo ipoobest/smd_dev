@@ -103,9 +103,12 @@
                 >ลงชื่อ
                 ......................................................</v-row
               >
-              <v-row justify="center" class="ml-5 mt-2"
+              <v-row v-if="teacher.teather1" justify="center" class="ml-5 mt-2"
                 >( {{ teacher.teather1 }} )</v-row
               >
+              <v-row v-else justify="center" class="ml-5 mt-2">
+               <!-- ( {{xxx}} )  -->
+              </v-row>
 
               <v-row justify="center" class="mt-5"
                 >ลงชื่อ
@@ -289,6 +292,7 @@ export default {
         `classes/getClassesByConditins`,
         data
       );
+      // console.log('response getTeacher', response.results)
       console.log("response getClasses", response.results[0].teatherName);
       return response.results[0].teatherName;
     },

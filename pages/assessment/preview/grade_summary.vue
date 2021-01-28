@@ -1,5 +1,5 @@
 <template ref="document">
-  <v-container>
+<v-container>
     <v-btn
       class="mr-5 btnBack"
       id="backButton"
@@ -34,11 +34,12 @@
         <v-col v-if="items.subject_info" cols="2">{{
           items.subject_info.sname
         }}</v-col>
-        <v-col v-else cols="2">{{ items.sname }}</v-col>
+        <v-col v-else cols="2">{{ items.subject.sname }}</v-col>
         <v-col cols="1">รหัสวิชา</v-col>
         <v-col v-if="items.subject_info" cols="2">{{
           items.subject_info.codet
         }}</v-col>
+        <v-col v-else>{{ items.subject.codet }}</v-col>
         <v-col cols="2">ภาคเรียนที่</v-col>
         <v-col cols="1">{{ items.term }}</v-col>
         <v-col cols="2">ปีการศึกษา</v-col>
@@ -53,15 +54,20 @@
         <v-col v-if="items.subject_info" cols="1">{{
           items.subject_info.credit
         }}</v-col>
+        <v-col v-else>{{ items.subject.credit }}</v-col>
         <v-col cols="2">เวลาเรียน</v-col>
-        <v-col v-if="items.subject_info" cols="1">
+        <v-col cols="1">
           {{ getPeriod() }}
         </v-col>
         <v-col cols="2">คาบ/สัปดาห์</v-col>
       </v-row>
       <v-row justify="start">
         <v-col cols="2">ชื่อาอาจารย์ผู้สอน</v-col>
-        <v-col>{{ items.teacher.name }}</v-col>
+        <v-col v-if="items.teacher">{{ items.teacher.name }}</v-col>
+        <v-col v-else
+          >{{ items.teachers.title }} {{ items.teachers.firstName }}
+          {{ items.teachers.lastName }}</v-col
+        >
       </v-row>
       <v-row justify="center" class="pt-10 pb-5">
         สรุปผลการประเมิน
@@ -269,10 +275,14 @@ export default {
       }
     },
     getPeriod() {
-      var credit = this.items.subject_info.credit;
-      var period = credit * 2;
-      console.log("period", period);
-      return period;
+      var period = 0;
+      if (this.items.subject.credit) {
+        return this.items.subject.credit * 2;
+      } else {
+        period = this.items.subject_info.credit * 2;
+        console.log("period", period);
+        return period;
+      }
     },
     summaryGrade(data) {
       this.total_students = data.length;

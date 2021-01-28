@@ -2,7 +2,7 @@
   <div>
     <v-card>
       <v-card-title>
-        แก้ไขการเรียนการสอน
+        แก้ไขห้องเรียน
         <v-spacer></v-spacer>
         <v-col cols="2">
           <v-select :items="items" v-model="pointer" label="pointer"></v-select>
@@ -24,6 +24,7 @@
 
 <script>
 export default {
+  layout: 'fix_data',
   async mounted() {
     await this.getTeach().then(result => (this.data = result));
     // console.log('items : ', this.data )
@@ -43,13 +44,13 @@ export default {
       ],
       data: [],
       pointer: "",
-      items: ["วิชา", "ครู", "นักเรียน"]
+      items: ["2563 ", "2564"]
     };
   },
   methods: {
     async getTeach() {
       const response = await this.$store.dispatch(`teach/getSubjectsPointer`);
-      // console.log("response xx", response.results[0]);
+      console.log("response xx", response.results[0]);
       return response.results;
     },
     async getSubjectId(code) {
@@ -60,7 +61,7 @@ export default {
         `subjects/getSubjectsByConditions`,
         data
       );
-      // console.log("subjectId", response.results);
+      console.log("subjectId", response.results);
       return response.results;
     },
     async updateTeach(classId, pointerId) {
@@ -99,7 +100,7 @@ export default {
         case "วิชา":
           this.data.forEach(async item => {
             const subjectId = await this.getSubjectId(item.subject_info.codet);
-            // console.log('classesId , subjectId ', item.objectId, subjectId[0].objectId)
+            console.log('classesId , subjectId ', item.objectId, subjectId[0].objectId)
             await this.updateTeach(item.objectId, subjectId[0].objectId);
           });
           this.getTeach();
@@ -107,7 +108,7 @@ export default {
         case "ครู":
           console.log("teacher");
           this.data.forEach(async item => {
-            // console.log('teacherId', item.teacher.value)
+            console.log('teacherId', item.teacher.value)
             await this.updateTeacher(item.objectId, item.teacher.value);
           });
           break;

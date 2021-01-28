@@ -2,7 +2,7 @@
   <div>
     <v-card>
       <v-card-title>
-        แก้ไขห้องเรียน
+        แก้ไขการเรียนการสอน
         <v-spacer></v-spacer>
         <v-col cols="2">
           <v-select :items="items" v-model="pointer" label="pointer"></v-select>
@@ -24,6 +24,7 @@
 
 <script>
 export default {
+  layout: 'fix_data',
   async mounted() {
     await this.getTeach().then(result => (this.data = result));
     // console.log('items : ', this.data )
@@ -43,7 +44,7 @@ export default {
       ],
       data: [],
       pointer: "",
-      items: ["2563 ", "2564"]
+      items: ["วิชา", "ครู", "นักเรียน"]
     };
   },
   methods: {

@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  layout: "assessment",
+  layout: "fix_data",
   async mounted() {
     await this.getStudent().then(result => {
       this.students = result;
