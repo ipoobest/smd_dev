@@ -27,7 +27,7 @@
             >
             <template v-slot:[`item.actions`]="{ item }">
               <v-btn class="success" @click="addScore(item)">
-                ให้คะแนน
+               ดูคะแนน 
               </v-btn> 
             </template>
           </v-data-table>
@@ -132,7 +132,7 @@ export default {
         classRoomName: item.classRoomName
       };
       const response = await this.$store.dispatch(
-        "classes/getClassesByConditions",
+        "classes/getClassesByConditins",
         conditions
       );
       console.log("response students", response.results);
@@ -213,6 +213,10 @@ export default {
     async addScore(item) {
       // เช็คก่อนว่ามมี data ใน gradeรึยัง (1)
       console.log("addScore 1", item);
+      if(item.classId == null) {
+        // console.log('xxxx')
+        this.goToPreviewGrade(item)
+      }
       this.goToPreviewScore(item);
     },
     close() {
