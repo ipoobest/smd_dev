@@ -61,7 +61,7 @@ export const actions = {
     })
   },
 
-  async getClassesByConditins ({ commit }, conditions) {
+  async getClassesByConditions ({ commit }, conditions) {
     return new Promise(async (resolve, reject) => {
       try {
         const where = JSON.stringify(conditions)

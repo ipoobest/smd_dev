@@ -42,7 +42,7 @@ export default {
         classRoomLevel: this.classes
       };
       const response = await this.$store.dispatch(
-        "classes/getClassesByConditins",
+        "classes/getClassesByConditions",
         query
       );
       // console.log('response.results', response.results)

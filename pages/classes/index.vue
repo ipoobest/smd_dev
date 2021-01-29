@@ -184,7 +184,7 @@ export default {
   methods: {
     async getListClass(classItem) {
       const response = await this.$store.dispatch(
-        `classes/getClassesByConditins`,
+        `classes/getClassesByConditions`,
         classItem
       );
       console.log("getListClass", response);

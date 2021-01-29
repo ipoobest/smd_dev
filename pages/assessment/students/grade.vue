@@ -289,7 +289,7 @@ export default {
         classRoomName: this.info.classRoomName
       };
       const response = await this.$store.dispatch(
-        `classes/getClassesByConditins`,
+        `classes/getClassesByConditions`,
         data
       );
       // console.log('response getTeacher', response.results)

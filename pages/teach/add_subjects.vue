@@ -208,7 +208,7 @@ export default {
         term: this.query.term
       };
       const response = await this.$store.dispatch(
-        `classes/getClassesByConditins`,
+        `classes/getClassesByConditions`,
         conditions
       );
       console.log("class", response);
@@ -248,7 +248,7 @@ export default {
       console.log("subject", response.results);
       return response.results;
     },
-    async getClassesByConditins() {
+    async getClassesByConditions() {
       const condition = {
         schoolYear: this.query.schoolYear,
         term: this.query.term,
@@ -256,7 +256,7 @@ export default {
         classRoomName: this.input.classRoomName
       };
       const response = await this.$store.dispatch(
-        `classes/getClassesByConditins`,
+        `classes/getClassesByConditions`,
         condition
       );
       console.log("getClassss ", response.results[0].objectId);
@@ -283,7 +283,7 @@ export default {
     async save() {
       if (this.editedIndex > -1) {
         console.log("edit");
-        const objectId = await this.getClassesByConditins();
+        const objectId = await this.getClassesByConditions();
         const data = {
           objectId: this.input.objectId,
           schoolYear: this.query.schoolYear,
@@ -312,7 +312,7 @@ export default {
         this.close();
       } else {
         console.log("save");
-        const objectId = await this.getClassesByConditins();
+        const objectId = await this.getClassesByConditions();
         const data = {
           schoolYear: this.query.schoolYear,
           term: this.query.term,

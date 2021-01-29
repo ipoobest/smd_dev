@@ -172,7 +172,7 @@ export default {
         classRoomName: item.classRoomName
       };
       const response = await this.$store.dispatch(
-        "classes/getClassesByConditins",
+        "classes/getClassesByConditions",
         conditions
       );
       console.log("response students", response.results);

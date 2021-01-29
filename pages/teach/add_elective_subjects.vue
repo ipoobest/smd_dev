@@ -202,7 +202,7 @@ export default {
         term: this.query.term
       };
       const response = await this.$store.dispatch(
-        `classes/getClassesByConditins`,
+        `classes/getClassesByConditions`,
         conditions
       );
       return response.results;
@@ -242,7 +242,7 @@ export default {
       console.log("getSubjectsFromTeach subject", response.results);
       return response.results;
     },
-    async getClassesByConditins() {
+    async getClassesByConditions() {
       const condition = {
         schoolYear: this.query.schoolYear,
         term: this.query.term,
@@ -250,7 +250,7 @@ export default {
         classRoomName: this.input.classRoomName
       };
       const response = await this.$store.dispatch(
-        `classes/getClassesByConditins`,
+        `classes/getClassesByConditions`,
         condition
       );
       return response.results[0].studentId;

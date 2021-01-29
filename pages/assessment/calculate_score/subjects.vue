@@ -171,7 +171,7 @@ export default {
         classRoomName: item.classRoomName
       };
       const response = await this.$store.dispatch(
-        "classes/getClassesByConditins",
+        "classes/getClassesByConditions",
         conditions
       );
       return response.results[0].studentId;

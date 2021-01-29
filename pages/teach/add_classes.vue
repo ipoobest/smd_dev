@@ -151,7 +151,7 @@
     },
     methods: {
       async getDataFromTeach(teacjId) {
-        const response = await  this.$store.dispatch(`teach/getClassesByConditins`, conditions)
+        const response = await  this.$store.dispatch(`teach/getClassesByConditions`, conditions)
         console.log('classes', response.results)
         return response.results
       },
@@ -160,7 +160,7 @@
           schoolYear: this.query.schoolYear,
           term: this.query.term
         }
-        const response = await  this.$store.dispatch(`classes/getClassesByConditins`, conditions)
+        const response = await  this.$store.dispatch(`classes/getClassesByConditions`, conditions)
         console.log('classes', response.results)
         return response.results
       },

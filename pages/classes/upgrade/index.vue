@@ -272,7 +272,7 @@ export default {
     },
     async getListClass(classItem) {
       const response = await this.$store.dispatch(
-        `classes/getClassesByConditins`,
+        `classes/getClassesByConditions`,
         classItem
       );
       console.log("getListClass", response);
