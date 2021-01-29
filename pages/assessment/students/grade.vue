@@ -103,19 +103,16 @@
                 >ลงชื่อ
                 ......................................................</v-row
               >
-              <v-row v-if="teacher.teather1" justify="center" class="ml-5 mt-2"
-                >( {{ teacher.teather1 }} )</v-row
+              <v-row justify="center" class="ml-5 mt-2"
+                >( {{ teacher.teacher1 }} )</v-row
               >
-              <v-row v-else justify="center" class="ml-5 mt-2">
-               <!-- ( {{xxx}} )  -->
-              </v-row>
 
               <v-row justify="center" class="mt-5"
                 >ลงชื่อ
                 ......................................................</v-row
               >
               <v-row justify="center" class="ml-5 mt-2"
-                >( {{ teacher.teather2 }} )</v-row
+                >( {{ teacher.teacher2 }} )</v-row
               >
               <v-row justify="center" class="ml-5 mt-2">อาจารย์ประจำชั้น</v-row>
             </v-col>
@@ -292,9 +289,9 @@ export default {
         `classes/getClassesByConditions`,
         data
       );
-      // console.log('response getTeacher', response.results)
-      console.log("response getClasses", response.results[0].teatherName);
-      return response.results[0].teatherName;
+      console.log('response getTeacher', response.results)
+      console.log("response getClasses", response.results[0].advisoryTeacher);
+      return response.results[0].advisoryTeacher;
     },
     async createRanking() {
       var data = {

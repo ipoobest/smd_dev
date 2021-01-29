@@ -185,8 +185,8 @@ export default {
         `classes/getClassesByConditions`,
         data
       );
-      console.log("response getClasses", response.results[0].teatherName);
-      return response.results[0].teatherName;
+      console.log("response getClasses", response.results[0].teacherName);
+      return response.results[0].teacherName;
     },
     async getRanking() {
       var condition = {

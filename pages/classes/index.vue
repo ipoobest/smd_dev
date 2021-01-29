@@ -75,7 +75,7 @@
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
                               <v-select
-                                v-model="classItem.teatherName"
+                                v-model="classItem.teacherName"
                                 :items="selectItemTeacher"
                                 outlined
                                 label="อาจารย์ประจำชั้น"
@@ -166,7 +166,7 @@ export default {
         classRoomLevel: "",
         classRoomName: "",
         studentId: [],
-        teatherName: ""
+        teacherName: ""
       },
       academicYear: {
         schoolYear: "",

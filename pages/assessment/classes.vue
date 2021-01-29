@@ -82,7 +82,7 @@ export default {
         classRoomLevel: "",
         classRoomName: "",
         studentId: [],
-        teatherName: ""
+        teacherName: ""
       },
       academicYear: {
         schoolYear: "",

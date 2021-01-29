@@ -38,7 +38,7 @@ export default {
         { text: "ปีการศึกษา", value: "schoolYear" },
         { text: "ชั้นเรียน", value: "classRoomLevel" },
         { text: "ห้องเรียน", value: "classRoomName" },
-        { text: "ครูประจำชั้น 1 (เก่า)", value: "teatherName.teather1" },
+        { text: "ครูประจำชั้น 1 (เก่า)", value: "teatherName.teacher1" },
         { text: "ครูประจำชั้น 2 (เก่า)", value: "teatherName.teather2" },
         { text: "ครูประจำชั้น 1", value: "advisoryTeacher.teacher1" },
         { text: "ครูประจำชั้น 2", value: "advisoryTeacher.teacher2" }
@@ -97,7 +97,7 @@ export default {
         var data = {
           objectId: item.objectId,
           advisoryTeacher: {
-            teacher1: item.teatherName.teather1,
+            teacher1: item.teatherName.teacher1,
             teacher2: item.teatherName.teather2
           }
         };
@@ -114,7 +114,7 @@ export default {
           classRoomName: item.classRoomName,
 
           // advisoryTeacher: {
-          //   teacher1: item.teatherName.teather1,
+          //   teacher1: item.teatherName.teacher1,
           //   teacher2: item.teatherName.teather2
           // }
         };
@@ -125,7 +125,7 @@ export default {
         //   classRoomLevel: newItem.classRoomLevel,
         //   classRoomName: newItem.classRoomName,
         //   advisoryTeacher: {
-        //     teacher1: item.teatherName.teather1,
+        //     teacher1: item.teatherName.teacher1,
         //     teacher2: item.teatherName.teather2
         //   } 
         // }
