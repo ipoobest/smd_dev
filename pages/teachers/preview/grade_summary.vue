@@ -61,7 +61,9 @@
       </v-row>
       <v-row justify="start">
         <v-col cols="2">ชื่อาอาจารย์ผู้สอน</v-col>
-        <v-col>{{ items.teacher.name }}</v-col>
+        <v-col v-if="items.teacher">{{ items.teacher.name }}</v-col>
+        <v-col v-else>{{ items.teachers.title }} {{ items.teachers.firstName }}
+              {{ items.teachers.lastName }}</v-col>
       </v-row>
       <v-row justify="center" class="pt-10 pb-5">
         สรุปผลการประเมิน
@@ -129,7 +131,9 @@
       </v-row>
       <v-row justify="start" class="pt-5">
         <v-col cols="4">ลงชื่อ อาจารย์ผู้สอน</v-col>
-        <v-col cols="3.5">( {{ items.teacher.name }} )</v-col>
+        <v-col v-if="items.teacher" cols="3.5">( {{ items.teacher.name }} )</v-col>
+        <v-col v-else cols="3.5">{{ items.teachers.title }} {{ items.teachers.firstName }}
+              {{ items.teachers.lastName }}</v-col>
         <v-col cols="1">วันที่</v-col>
         <v-col cols="2.5">{{ gatDate }}</v-col>
       </v-row>
