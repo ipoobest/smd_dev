@@ -47,8 +47,11 @@
       </v-row>
       <v-row justify="start">
         <v-col cols="2">ชั้นมัธยมศึกษาปีที่</v-col>
-        <v-col cols="1"
-          >{{ items.classRoomLevel }}/{{ items.classRoomName }}</v-col
+        <v-col v-if="items.classRoomName != `รวม`" cols="1"
+          >{{ items.classRoomLevel }}/{{ items.classRoomName }} </v-col
+        >
+        <v-col v-else cols="1"
+          >{{ items.classRoomLevel }}  </v-col
         >
         <v-col cols="2">จำนวนหน่วยกิต</v-col>
         <v-col v-if="items.subject_info" cols="1">{{
