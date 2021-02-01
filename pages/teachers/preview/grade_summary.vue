@@ -48,17 +48,16 @@
       <v-row justify="start">
         <v-col cols="2">ชั้นมัธยมศึกษาปีที่</v-col>
         <v-col v-if="items.classRoomName != `รวม`" cols="1"
-          >{{ items.classRoomLevel }}/{{ items.classRoomName }} </v-col
-        >
-        <v-col v-else cols="1"
-          >{{ items.classRoomLevel }}  </v-col
-        >
+          >{{ items.classRoomLevel }}/{{ items.classRoomName }}
+        </v-col>
+        <v-col v-else cols="1">{{ items.classRoomLevel }} </v-col>
         <v-col cols="2">จำนวนหน่วยกิต</v-col>
         <v-col v-if="items.subject_info" cols="1">{{
           items.subject_info.credit
         }}</v-col>
+        <v-col cols="1">{{ items.subject.credit }}</v-col>
         <v-col cols="2">เวลาเรียน</v-col>
-        <v-col v-if="items.subject_info" cols="1">
+        <v-col cols="1">
           {{ getPeriod() }}
         </v-col>
         <v-col cols="2">คาบ/สัปดาห์</v-col>
@@ -66,8 +65,10 @@
       <v-row justify="start">
         <v-col cols="2">ชื่อาอาจารย์ผู้สอน</v-col>
         <v-col v-if="items.teacher">{{ items.teacher.name }}</v-col>
-        <v-col v-else>{{ items.teachers.title }} {{ items.teachers.firstName }}
-              {{ items.teachers.lastName }}</v-col>
+        <v-col v-else
+          >{{ items.teachers.title }} {{ items.teachers.firstName }}
+          {{ items.teachers.lastName }}</v-col
+        >
       </v-row>
       <v-row justify="center" class="pt-10 pb-5">
         สรุปผลการประเมิน
@@ -135,9 +136,13 @@
       </v-row>
       <v-row justify="start" class="pt-5">
         <v-col cols="4">ลงชื่อ อาจารย์ผู้สอน</v-col>
-        <v-col v-if="items.teacher" cols="3.5">( {{ items.teacher.name }} )</v-col>
-        <v-col v-else cols="3.5">{{ items.teachers.title }} {{ items.teachers.firstName }}
-              {{ items.teachers.lastName }}</v-col>
+        <v-col v-if="items.teacher" cols="3.5"
+          >( {{ items.teacher.name }} )</v-col
+        >
+        <v-col v-else cols="3.5"
+          >{{ items.teachers.title }} {{ items.teachers.firstName }}
+          {{ items.teachers.lastName }}</v-col
+        >
         <v-col cols="1">วันที่</v-col>
         <v-col cols="2.5">{{ gatDate }}</v-col>
       </v-row>
@@ -192,7 +197,6 @@
 export default {
   layout: "teacher",
   middleware: "teacher",
-
   async mounted() {
     await this.getTechById(this.$route.query.id).then(
       result => (this.items = result)
@@ -225,6 +229,9 @@ export default {
           codet: "",
           credit: "",
           hour: ""
+        },
+        subject: {
+          credit: ""
         },
         teacher: {
           name: "",
@@ -270,10 +277,15 @@ export default {
       }
     },
     getPeriod() {
-      var credit = this.items.subject_info.credit;
-      var period = credit * 2;
-      console.log("period", period);
-      return period;
+      var period = 0;
+      console.log("get period :", this.items.subject.credit);
+      if (this.items.subject.credit) {
+        return this.items.subject.credit * 2;
+      } else {
+        period = this.items.subject_info.credit * 2;
+        console.log("period", period);
+        return period;
+      }
     },
     summaryGrade(data) {
       this.total_students = data.length;
