@@ -120,7 +120,9 @@ export default {
       teach: {
         teacher: {
           name: ""
-        }
+        },
+        subject_info: {},
+        subject: {}
       },
       layout: "",
       garde: [],

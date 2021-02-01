@@ -34,11 +34,12 @@
         <v-col v-if="items.subject_info" cols="2">{{
           items.subject_info.sname
         }}</v-col>
-        <v-col v-else cols="2">{{ items.sname }}</v-col>
+        <v-col v-else cols="2">{{ items.subject.sname }}</v-col>
         <v-col cols="1">รหัสวิชา</v-col>
         <v-col v-if="items.subject_info" cols="2">{{
           items.subject_info.codet
         }}</v-col>
+        <v-col v-else>{{ items.subject.codet }}</v-col>
         <v-col cols="2">ภาคเรียนที่</v-col>
         <v-col cols="1">{{ items.term }}</v-col>
         <v-col cols="2">ปีการศึกษา</v-col>
@@ -46,8 +47,11 @@
       </v-row>
       <v-row justify="start">
         <v-col cols="2">ชั้นมัธยมศึกษาปีที่</v-col>
-        <v-col cols="1"
-          >{{ items.classRoomLevel }}/{{ items.classRoomName }}</v-col
+        <v-col v-if="items.classRoomName != `รวม`" cols="1"
+          >{{ items.classRoomLevel }}/{{ items.classRoomName }} </v-col
+        >
+        <v-col v-else cols="1"
+          >{{ items.classRoomLevel }}  </v-col
         >
         <v-col cols="2">จำนวนหน่วยกิต</v-col>
         <v-col v-if="items.subject_info" cols="1">{{
