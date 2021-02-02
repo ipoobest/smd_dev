@@ -1,5 +1,5 @@
 <template ref="document">
-<v-container>
+  <v-container>
     <v-btn
       class="mr-5 btnBack"
       id="backButton"
@@ -48,11 +48,9 @@
       <v-row justify="start">
         <v-col cols="2">ชั้นมัธยมศึกษาปีที่</v-col>
         <v-col v-if="items.classRoomName != `รวม`" cols="1"
-          >{{ items.classRoomLevel }}/{{ items.classRoomName }} </v-col
-        >
-        <v-col v-else cols="1"
-          >{{ items.classRoomLevel }}  </v-col
-        >
+          >{{ items.classRoomLevel }}/{{ items.classRoomName }}
+        </v-col>
+        <v-col v-else cols="1">{{ items.classRoomLevel }} </v-col>
         <v-col cols="2">จำนวนหน่วยกิต</v-col>
         <v-col v-if="items.subject_info" cols="1">{{
           items.subject_info.credit
@@ -229,6 +227,9 @@ export default {
           name: "",
           value: ""
         },
+        subject: {
+          credit: ""
+        },
         approved: false,
         approve_message: ""
       },
@@ -279,6 +280,7 @@ export default {
     },
     getPeriod() {
       var period = 0;
+      console.log("get period :", this.items.subject.credit);
       if (this.items.subject.credit) {
         return this.items.subject.credit * 2;
       } else {

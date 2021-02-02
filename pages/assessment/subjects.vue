@@ -19,16 +19,16 @@
           </v-card-title>
           <v-data-table :headers="headers" :items="items" :search="search">
             <template v-slot:[`item.subjectInfo`]="{ item }">
-              {{item.subject.codet}} {{item.subject.sname}}
+              {{ item.subject.codet }} {{ item.subject.sname }}
             </template>
             <template v-slot:[`item.teacherName`]="{ item }"
               >{{ item.teachers.title }} {{ item.teachers.firstName }}
               {{ item.teachers.lastName }}</template
             >
             <template v-slot:[`item.actions`]="{ item }">
-              <v-btn class="success" @click="addScore(item)">
-               ดูคะแนน 
-              </v-btn> 
+              <v-btn class="success" @click="score(item)">
+                ดูคะแนน
+              </v-btn>
             </template>
           </v-data-table>
         </v-card>
@@ -54,12 +54,12 @@ export default {
   },
   data() {
     return {
-        headers: [
-        { text: 'รหัส/ชื่อวิชา', value: 'subjectInfo' },
-        { text: 'ระดับชั้น', value: 'classRoomLevel'},
-        { text: 'ห้องเรียน', value: 'classRoomName' },
-        { text: 'ครูผู้สอน', value: 'teacherName' },
-        { text: 'Actions', value: 'actions', sortable: false }
+      headers: [
+        { text: "รหัส/ชื่อวิชา", value: "subjectInfo" },
+        { text: "ระดับชั้น", value: "classRoomLevel" },
+        { text: "ห้องเรียน", value: "classRoomName" },
+        { text: "ครูผู้สอน", value: "teacherName" },
+        { text: "Actions", value: "actions", sortable: false }
       ],
       dialog: false,
       formTitle: "เกณฑ์การให้คะแนน",
@@ -76,7 +76,7 @@ export default {
       studentsNamr: [],
       rating: [],
       items: [],
-      ranking: ''
+      ranking: ""
     };
   },
   methods: {
@@ -210,14 +210,9 @@ export default {
       console.log("x y", student);
       return student;
     },
-    async addScore(item) {
-      // เช็คก่อนว่ามมี data ใน gradeรึยัง (1)
-      console.log("addScore 1", item);
-      if(item.classId == null) {
-        // console.log('xxxx')
-        this.goToPreviewGrade(item)
-      }
-      this.goToPreviewScore(item);
+    async score(item) {
+      // console.log("score ", item);
+      this.goToPreviewGrade(item);
     },
     close() {
       this.dialog = false;
@@ -228,20 +223,20 @@ export default {
       this.$router.go(-1);
       console.log("back");
     },
-    
+
     goToPreviewGrade(item) {
       this.$router.push({
         name: "assessment-preview-grade",
         query: { id: item.objectId }
       });
-    },
-    goToPreviewScore(item) {
-      console.log("item id ", item.classId);
-      this.$router.push({
-        name: "assessment-students",
-        query: { id: item.classId }
-      });
     }
+    // goToPreviewScore(item) {
+    //   console.log("item id ", item.classId);
+    //   this.$router.push({
+    //     name: "assessment-students",
+    //     query: { id: item.classId }
+    //   });
+    // }
   }
 };
 </script>
