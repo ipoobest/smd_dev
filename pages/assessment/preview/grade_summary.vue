@@ -55,7 +55,7 @@
         <v-col v-if="items.subject_info" cols="1">{{
           items.subject_info.credit
         }}</v-col>
-        <v-col v-else>{{ items.subject.credit }}</v-col>
+        <v-col cols="1">{{ items.subject.credit }}</v-col>
         <v-col cols="2">เวลาเรียน</v-col>
         <v-col cols="1">
           {{ getPeriod() }}
@@ -136,7 +136,13 @@
       </v-row>
       <v-row justify="start" class="pt-5">
         <v-col cols="4">ลงชื่อ อาจารย์ผู้สอน</v-col>
-        <v-col cols="3.5">( {{ items.teacher.name }} )</v-col>
+        <v-col v-if="items.teacher" cols="3.5"
+          >( {{ items.teacher.name }} )</v-col
+        >
+        <v-col v-else cols="3.5"
+          >{{ items.teachers.title }} {{ items.teachers.firstName }}
+          {{ items.teachers.lastName }}</v-col
+        >
         <v-col cols="1">วันที่</v-col>
         <v-col cols="2.5">{{ gatDate }}</v-col>
       </v-row>
@@ -179,7 +185,7 @@
       </div>
     </div>
     <v-row justify="center" class="mt-5">
-      <v-btn color="success" id="saveButton" @click="save">บันทึก</v-btn>
+      <!-- <v-btn color="success" id="btnSave" @click="save">บันทึก</v-btn> -->
       <v-btn color="info" class="ml-5" id="printButton" @click="print()"
         >print</v-btn
       >
@@ -188,7 +194,6 @@
 </template>
 
 <script>
-import jsPDF from "jspdf";
 export default {
   layout: "assessment",
   middleware: "assessment",
@@ -213,9 +218,11 @@ export default {
       return dateTime;
     }
   },
+
   data() {
     return {
       date: "",
+      htmlTitle: "test", //pdf file name to be downloaded //
       items: {
         subject_info: {
           sname: "",
@@ -223,17 +230,15 @@ export default {
           credit: "",
           hour: ""
         },
-        teacher: {
-          name: "",
-          value: ""
-        },
         subject: {
           credit: ""
         },
-        approved: false,
-        approve_message: ""
+        teacher: {
+          name: "",
+          value: ""
+        }
       },
-
+      classes: [],
       students: [],
       total_students: "",
       grade_num_list: [],
@@ -258,15 +263,8 @@ export default {
         conditions
       );
       // console.log("response_grade", response_grade.results.length);
-      return response_grade.results;
-    },
-    async updateTech(data) {
-      const response = this.$store.dispatch(`teach/updateTeach`, data);
-      console.log("update Teach", data, response);
 
-      this.getTechById(this.$route.query.id).then(
-        result => (this.items = result)
-      );
+      return response_grade.results;
     },
     getClasses() {
       var a = "ต้น";
@@ -313,7 +311,7 @@ export default {
         );
         this.grade_option_num_list.push(grade_filter.length);
       });
-      console.log("grade options", this.grade_option_num_list);
+      // console.log("grade options", this.grade_option_num_list);
 
       this.aptitude_score_num = [];
       this.analytical_score_num = [];
@@ -327,22 +325,6 @@ export default {
         );
         this.analytical_score_num.push(analytical_filter.length);
       });
-    },
-    save() {
-      console.log("approve, message", this.items.approved);
-      var save_score = this.items.approved === "true" ? false : true;
-      var send_score = this.items.approved === "true" ? true : false;
-      if (confirm("ยืนยันการบันทึก")) {
-        var data = {
-          objectId: this.items.objectId,
-          approved: this.items.approved,
-          approve_message: this.items.approve_message,
-          save_score: save_score,
-          send_score: send_score
-        };
-        console.log("data update", data);
-        this.updateTech(data);
-      }
     },
     print() {
       window.print();
@@ -361,10 +343,10 @@ export default {
   size: A4 portrait;
 }
 @media print {
-  header {
-    visibility: hidden;
+  .page {
+    margin-top: -5%;
   }
-  #saveButton {
+  header {
     visibility: hidden;
   }
   #backButton {
