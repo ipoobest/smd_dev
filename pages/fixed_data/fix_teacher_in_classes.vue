@@ -102,36 +102,46 @@ export default {
           }
         };
         console.log("teacher : ", data);
-        // await this.updateTeacherInClasses(data)
+        await this.updateTeacherInClasses(data);
       });
     },
     async updateTeacherNextTerm() {
-      this.items.forEach(async item => {
+      for (var i = 0; i < this.items.length; i++) {
         var data = {
           schoolYear: "2563",
           term: "2",
-          classRoomLevel: item.classRoomLevel,
-          classRoomName: item.classRoomName,
-
-          // advisoryTeacher: {
-          //   teacher1: item.teatherName.teacher1,
-          //   teacher2: item.teatherName.teather2
-          // }
+          classRoomLevel: this.items[i].classRoomLevel,
+          classRoomName: this.items[i].classRoomName
         };
-        console.log("update next term", data);
-        var newItem = await this.getNewClasses(data);
-        // var newData = {
-        //   objectId: newItem.objectId,
-        //   classRoomLevel: newItem.classRoomLevel,
-        //   classRoomName: newItem.classRoomName,
-        //   advisoryTeacher: {
-        //     teacher1: item.teatherName.teacher1,
-        //     teacher2: item.teatherName.teather2
-        //   } 
-        // }
-        // await this.updateTeacherInClasses(newData)
-        console.log('update teacher', newItem)
-      });
+        // console.log("update next term", data);
+        await this.getNewClasses(data);
+      }
+      // this.items.forEach(async item => {
+      //   var data = {
+      //     schoolYear: "2563",
+      //     term: "2",
+      //     classRoomLevel: item.classRoomLevel,
+      //     classRoomName: item.classRoomName
+
+      // advisoryTeacher: {
+      //   teacher1: item.teatherName.teacher1,
+      //   teacher2: item.teatherName.teather2
+      // }
+      // };
+      // console.log("update next term", data);
+      // var newItem = await this.getNewClasses(data);
+      // var newData = {
+      //   objectId: newItem.objectId,
+      //   classRoomLevel: newItem.classRoomLevel,
+      //   classRoomName: newItem.classRoomName,
+      //   advisoryTeacher: {
+      //     teacher1: item.teatherName.teacher1,
+      //     teacher2: item.teatherName.teather2
+      //   }
+      // }
+      // await this.updateTeacherInClasses(newData);
+      // console.log("update teacher", newItem);
+      // });
       //get classes
 
       // var newClass = this.getClasses(data)

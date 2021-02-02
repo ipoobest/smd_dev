@@ -2,19 +2,19 @@
   <v-container>
     <div>
       <v-col cols="12">
-          <v-btn
-            class="mr-5 btnBack"
-            color="primary"
-            fab
-            small
-            dark
-            @click="back"
-          >
-            <v-icon>mdi-arrow-left</v-icon>
-          </v-btn>
+        <v-btn
+          class="mr-5 btnBack"
+          color="primary"
+          fab
+          small
+          dark
+          @click="back"
+        >
+          <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
       </v-col>
       <div id="pdfDom" class="page">
-        <v-col cols="12" class="page" >
+        <v-col cols="12" class="page">
           <v-row justify="center" class="mt-5 mb-2"
             ><h3>ใบแจ้งผลการเรียน</h3></v-row
           >
@@ -39,7 +39,7 @@
               <template>
                 <thead>
                   <tr>
-                    <th >ภาคการเรียนที่</th>
+                    <th>ภาคการเรียนที่</th>
                     <th>รหัสวิชา</th>
                     <th>ชื่อวิชา</th>
                     <th>หน่วย</th>
@@ -61,81 +61,83 @@
           </v-row>
           <v-divider class="mt-2"></v-divider>
           <div style="width:90%; margin:auto;">
-          <v-row class="mt-2">
-            <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
-            <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
-            <v-col cols="2" v-if="grade">{{
-              parseFloat(grade.gpa).toFixed(3)
-            }}</v-col>
-            <v-col cols="2" v-else>0</v-col>
-            <!-- <v-col cols="2">{{ parseFloat(gpa).toFixed(3) }}</v-col> -->
-            <v-col cols="2">อยู่ลำดับที่</v-col>
-            <v-col cols="1" v-if="grade">{{ grade.rankingInRoom }}</v-col>
-            <v-col cols="2" v-else>0</v-col>
-            <v-col cols="1">จาก</v-col>
-            <v-col cols="1">{{ totalStudentInRoom.count }}</v-col>
-            <v-col cols="2">ของห้อง</v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="2">หน่วยการเรียน</v-col>
-            <v-col cols="3"
-              >{{ totalCreditInStudent }} / {{ totalCreditInClass }}
-            </v-col>
-            <v-col cols="2">อยู่ลำดับที่</v-col>
-            <v-col cols="1" v-if="grade">{{ grade.rankingInClasses }}</v-col>
-            <v-col cols="2" v-else>0</v-col>
-            <v-col cols="1">จาก</v-col>
-            <v-col cols="1">{{ totalStudentInClasses.count }}</v-col>
-            <v-col cols="2">ของระดับชั้น</v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="2">ภาคเรียนนี้ </v-col>
-            <!-- <v-col cols="2">{{totalCreditInClass}} หน่วยกิต</v-col> -->
-            <v-col cols="2"><p>ได้ / เรียน</p></v-col>
-            <!-- <v-col cols="2"> {{totalCreditInStudent}} หน่วยกิต</v-col> -->
-          </v-row>
-          <v-row style="margin-top:-30px;">
-            <v-col cols="2"> {{ gatDate }} </v-col>
-          </v-row>
-          <v-row class="mt-2">
-            <v-col cols="6">
-              <v-row justify="center"
-                >ลงชื่อ
-                ......................................................</v-row
-              >
-              <v-row justify="center" class="ml-5 mt-2"
-                >( {{ teacher.teacher1 }} )</v-row
-              >
+            <v-row class="mt-2">
+              <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
+              <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
+              <v-col cols="2" v-if="grade">{{
+                parseFloat(grade.gpa).toFixed(3)
+              }}</v-col>
+              <v-col cols="2" v-else>0</v-col>
+              <!-- <v-col cols="2">{{ parseFloat(gpa).toFixed(3) }}</v-col> -->
+              <v-col cols="2">อยู่ลำดับที่</v-col>
+              <v-col cols="1" v-if="grade">{{ grade.rankingInRoom }}</v-col>
+              <v-col cols="2" v-else>0</v-col>
+              <v-col cols="1">จาก</v-col>
+              <v-col cols="1">{{ totalStudentInRoom.count }}</v-col>
+              <v-col cols="2">ของห้อง</v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="2">หน่วยการเรียน</v-col>
+              <v-col cols="3"
+                >{{ totalCreditInStudent }} / {{ totalCreditInClass }}
+              </v-col>
+              <v-col cols="2">อยู่ลำดับที่</v-col>
+              <v-col cols="1" v-if="grade">{{ grade.rankingInClasses }}</v-col>
+              <v-col cols="2" v-else>0</v-col>
+              <v-col cols="1">จาก</v-col>
+              <v-col cols="1">{{ totalStudentInClasses.count }}</v-col>
+              <v-col cols="2">ของระดับชั้น</v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="2">ภาคเรียนนี้ </v-col>
+              <!-- <v-col cols="2">{{totalCreditInClass}} หน่วยกิต</v-col> -->
+              <v-col cols="2"><p>ได้ / เรียน</p></v-col>
+              <!-- <v-col cols="2"> {{totalCreditInStudent}} หน่วยกิต</v-col> -->
+            </v-row>
+            <v-row style="margin-top:-30px;">
+              <v-col cols="2"> {{ gatDate }} </v-col>
+            </v-row>
+            <v-row class="mt-2">
+              <v-col cols="6">
+                <v-row justify="center"
+                  >ลงชื่อ
+                  ......................................................</v-row
+                >
+                <v-row justify="center" class="ml-5 mt-2"
+                  >( {{ teacher.teacher1 }} )</v-row
+                >
 
-              <v-row justify="center" class="mt-5"
-                >ลงชื่อ
-                ......................................................</v-row
-              >
-              <v-row justify="center" class="ml-5 mt-2"
-                >( {{ teacher.teacher2 }} )</v-row
-              >
-              <v-row justify="center" class="ml-5 mt-2">อาจารย์ประจำชั้น</v-row>
-            </v-col>
-            <v-col class="test" cols="6" style="margin-top:-70px;">
-              <!-- <img height="50" src="~/assets/logo-smd.png" /> -->
-              <v-row justify="center">
-                <img height="100" src="~/assets/signature.jpg" />
-              </v-row>
-              <v-row justify="center"
-                >ลงชื่อ
-                ......................................................</v-row
-              >
-              <v-row justify="center" class="ml-5 mt-2"
-                >( อาจารย์ ไพทูล นารคร )</v-row
-              >
-              <v-row justify="center" class="ml-5 mt-2"
-                >รักษาการรองผู้อำนวยการฝ่ายมัธยมศึกษา (มอดินแดง)</v-row
-              >
-              <v-row justify="center" class="ml-5 mt-2"
-                >ปฎิบัติราชการแทนผู้อำนวยการ</v-row
-              >
-            </v-col>
-          </v-row>
+                <v-row justify="center" class="mt-5"
+                  >ลงชื่อ
+                  ......................................................</v-row
+                >
+                <v-row justify="center" class="ml-5 mt-2"
+                  >( {{ teacher.teacher2 }} )</v-row
+                >
+                <v-row justify="center" class="ml-5 mt-2"
+                  >อาจารย์ประจำชั้น</v-row
+                >
+              </v-col>
+              <v-col class="test" cols="6" style="margin-top:-70px;">
+                <!-- <img height="50" src="~/assets/logo-smd.png" /> -->
+                <v-row justify="center">
+                  <img height="100" src="~/assets/signature.jpg" />
+                </v-row>
+                <v-row justify="center"
+                  >ลงชื่อ
+                  ......................................................</v-row
+                >
+                <v-row justify="center" class="ml-5 mt-2"
+                  >( อาจารย์ ไพทูล นารคร )</v-row
+                >
+                <v-row justify="center" class="ml-5 mt-2"
+                  >รักษาการรองผู้อำนวยการฝ่ายมัธยมศึกษา (มอดินแดง)</v-row
+                >
+                <v-row justify="center" class="ml-5 mt-2"
+                  >ปฎิบัติราชการแทนผู้อำนวยการ</v-row
+                >
+              </v-col>
+            </v-row>
           </div>
         </v-col>
       </div>
@@ -157,13 +159,20 @@
         </v-col>
         <v-col cols="3">
           <!-- <v-btn color="success">บันทึก</v-btn> -->
-          <v-btn class="ml-5" color="info" dark @click="getPdf(`ใบแจ้งผลการเรียน-${route.schoolYear}-0${route.term}-${info.studentId}`)"
+          <v-btn
+            class="ml-5"
+            color="info"
+            dark
+            @click="
+              getPdf(
+                `ใบแจ้งผลการเรียน-${route.schoolYear}-0${route.term}-${info.studentId}`
+              )
+            "
             >print</v-btn
           >
         </v-col>
       </v-row>
     </div>
-
   </v-container>
 </template>
 
@@ -230,7 +239,7 @@ export default {
         studentId: "",
         classRoomLevel: "",
         classRoomName: ""
-      },
+      }
       // pdfTitle: `ใบแจ้งผลการเรียน-${this.$route.query.schoolYear}-${this.$route.term}-${this.info.classRoomLevel}-${this.info.classRoomName}-${this.info.studentId}`
     };
   },
@@ -261,15 +270,16 @@ export default {
       const data = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        classRoomLevel: this.info.classRoomLevel,
-        classRoomName: this.info.classRoomName
+        classRoomLevel: this.$route.query.classRoomLevel,
+        classRoomName: this.$route.query.classRoomName
       };
+      console.log("tacher request : ", data);
       const response = await this.$store.dispatch(
         `classes/getClassesByConditions`,
         data
       );
-      console.log('response getTeacher', response.results)
-      console.log("response getClasses", response.results[0].advisoryTeacher);
+      console.log("response getTeacher", response.results);
+      // console.log("response getClasses", response.results[0].advisoryTeacher);
       return response.results[0].advisoryTeacher;
     },
     async createRanking() {
@@ -458,7 +468,7 @@ export default {
 .page {
   width: 90%;
   margin: auto;
-  size: A4 portrait; 
+  size: A4 portrait;
 }
 @page {
   size: A4 portrait;

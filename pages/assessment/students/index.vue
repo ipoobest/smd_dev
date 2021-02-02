@@ -42,7 +42,7 @@
                   <th>{{ item.namet }}</th>
                   <th>{{ item.snamet }}</th>
                   <th>
-                    <v-btn class="success" @click="studentScore(item)" small >
+                    <v-btn class="success" @click="studentScore(item)" small>
                       ดูคะแนน
                     </v-btn>
                   </th>
@@ -59,7 +59,7 @@
 <script>
 import XLSX from "xlsx";
 export default {
-  layout: 'assessment',
+  layout: "assessment",
   middleware: "assessment",
   async mounted() {
     this.id = this.$route.query.id;
@@ -75,7 +75,7 @@ export default {
     //   });
     // },
     sortNumberStudent() {
-      return this.items.sort((a, b) => a.number - b.number );
+      return this.items.sort((a, b) => a.number - b.number);
     }
   },
   data() {
@@ -162,10 +162,16 @@ export default {
       );
     },
     async studentScore(item) {
-      console.log('item', item)
-        this.$router.push({
+      console.log("item", item);
+      this.$router.push({
         name: "assessment-students-grade",
-        query: { id: item.idstd, schoolYear: this.student.schoolYear, term: this.student.term }
+        query: {
+          id: item.idstd,
+          schoolYear: this.student.schoolYear,
+          term: this.student.term,
+          classRoomLevel: this.student.classRoomLevel,
+          classRoomName: this.student.classRoomName
+        }
       });
     },
     async getRanking() {
@@ -175,7 +181,7 @@ export default {
         classRoomLevel: this.student.classRoomLevel,
         classRoomName: this.student.classRoomName
       };
-      console.log('condition getRanking', condition)
+      console.log("condition getRanking", condition);
       const response = await this.$store.dispatch(
         `ranking/getRankingByConditions`,
         condition
@@ -184,13 +190,18 @@ export default {
       return response.results;
     },
     async exportXml() {
-        this.ranking = await this.getRanking()
-        var data = this.ranking.sort((a, b) => a.rankingInClasses - b.rankingInClasses)
-        // console.log('data sort', data)
-        const dataWS = XLSX.utils.json_to_sheet(data)
-        const wb = XLSX.utils.book_new()
-        XLSX.utils.book_append_sheet(wb, dataWS)
-        XLSX.writeFile(wb,`rankking-${this.student.schoolYear}-${this.student.term}-${this.student.classRoomLevel}/${this.student.classRoomName}.xlsx`)
+      this.ranking = await this.getRanking();
+      var data = this.ranking.sort(
+        (a, b) => a.rankingInClasses - b.rankingInClasses
+      );
+      // console.log('data sort', data)
+      const dataWS = XLSX.utils.json_to_sheet(data);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, dataWS);
+      XLSX.writeFile(
+        wb,
+        `rankking-${this.student.schoolYear}-${this.student.term}-${this.student.classRoomLevel}/${this.student.classRoomName}.xlsx`
+      );
     },
     back() {
       this.$router.go(-1);
@@ -200,7 +211,7 @@ export default {
       setTimeout(() => {
         this.index = -1;
       }, 300);
-    },
+    }
   }
 };
 </script>
