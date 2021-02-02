@@ -14,12 +14,20 @@
     </v-row>
     <v-row justify="center">
       <v-col cols="4" align="start"> วันที่ {{ gatDate }} </v-col>
-      <v-col cols="4" align="center">
+      <v-col v-if="teach.subject_info" cols="4" align="center">
         วิชา {{ teach.subject_info.sname }} รหัสวิชา
         {{ teach.subject_info.codet }}
       </v-col>
-      <v-col cols="4" align="end">
+      <v-col v-else cols="4" align="center">
+        วิชา {{ teach.subject.sname }} รหัสวิชา
+        {{ teach.subject.codet }}
+      </v-col>
+      <v-col v-if="teach.teacher" cols="4" align="end">
         อาจารย์ผู้สอน {{ teach.teacher.name }}
+      </v-col>
+      <v-col v-else cols="4" align="end">
+        อาจารย์ผู้สอน {{ teach.teachers.title }} {{ teach.teachers.firstName }}
+        {{ teach.teachers.lastName }}
       </v-col>
     </v-row>
     <v-row justify="center">
