@@ -464,15 +464,24 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .page {
   width: 90%;
   margin: auto;
   size: A4 portrait;
 }
-@page {
-  size: A4 portrait;
-  // left: 0.1;
-  // top: -5;
+@media print {
+  .page {
+    margin-top: -5%;
+  }
+  header {
+    visibility: hidden;
+  }
+  #backButton {
+    visibility: hidden;
+  }
+  #printButton {
+    visibility: hidden;
+  }
 }
 </style>

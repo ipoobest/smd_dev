@@ -270,6 +270,9 @@ export default {
       //   query: { id: item.objectId, schoolYear: item.schoolYear, term: item.term }
       // });
     },
+    print() {
+      window.print();
+    },
     back() {
       this.$router.go(-1);
     }
@@ -277,9 +280,24 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
-// v-simple-table, th, td {
-// border: 1px solid black;
-// border-collapse: collapse;
-// }
+<style lang="scss">
+.page {
+  width: 90%;
+  margin: auto;
+  size: A4 portrait;
+}
+@media print {
+  .page {
+    margin-top: -5%;
+  }
+  header {
+    visibility: hidden;
+  }
+  #backButton {
+    visibility: hidden;
+  }
+  #printButton {
+    visibility: hidden;
+  }
+}
 </style>
