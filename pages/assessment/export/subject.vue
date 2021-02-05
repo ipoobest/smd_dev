@@ -184,8 +184,9 @@ export default {
           ชื่อวิขา: item.teachInfo.sname,
           ปีการศึกษา: item.schoolYear,
           ภาคเรียน: perfixTerm + item.term,
-          ระดับชั้น: perfixLev + item.classRoomLevel,
-          ห้องเรียน: item.classRoomName,
+          ระดับชั้น: item.classRoomLevel,
+          ห้องเรียน:
+            perfixLev + item.classRoomLevel.substring(2) + item.classRoomName,
           คะแนนรวม: item.total_score,
           เกรด: item.grade,
           คุณลักษณะ: item.aptitude,
@@ -193,7 +194,7 @@ export default {
         };
         newData.push(newJson);
       });
-      // console.log("new data", newData);
+      console.log("new data", newData);
       var dataWS = XLSX.utils.json_to_sheet(newData);
       var wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, dataWS);
