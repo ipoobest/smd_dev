@@ -470,6 +470,9 @@ export default {
   margin: auto;
   size: A4 portrait;
 }
+.v-data-table td {
+  height: 20px;
+}
 @media print {
   .page {
     margin-top: -5%;

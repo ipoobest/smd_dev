@@ -11,7 +11,7 @@ export default {
         // scrollY: 140,
         // screenY: 260
         // x: 260,
-        // y: 140,
+        y: 140,
       }).then(function(canvas) {
         let pageData = canvas.toDataURL("image/jpeg", 1.0);
         let PDF = new JsPDF("p", "mm", "a4");
