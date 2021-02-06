@@ -87,7 +87,7 @@ export default {
       itemSchoolTerm: [],
       itemSubjectList: [],
       itemClassRoom: ["ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"],
-      itemClassName: ["1", "2", "3", "4"]
+      itemClassName: ["ทั้งหมด", "1", "2", "3", "4"]
     };
   },
   methods: {
@@ -115,12 +115,22 @@ export default {
       this.mapSchoolYear(response.results);
     },
     async getSubject() {
-      var data = {
-        classRoomLevel: this.classRoomLevel,
-        classRoomName: this.classRoomName,
-        schoolYear: this.schoolYear,
-        term: this.term
-      };
+      var data;
+      if (this.classRoomName == "ทั้งหมด") {
+        data = {
+          classRoomLevel: this.classRoomLevel,
+          schoolYear: this.schoolYear,
+          term: this.term
+        };
+      } else {
+        data = {
+          classRoomLevel: this.classRoomLevel,
+          classRoomName: this.classRoomName,
+          schoolYear: this.schoolYear,
+          term: this.term
+        };
+      }
+
       console.log("data get subject", data);
       var response = await this.$store.dispatch(
         `teach/getSubjectsByConditions`,
@@ -177,20 +187,20 @@ export default {
       var codeSubject = await this.getSubjectByName(querySubject);
       data.forEach(item => {
         var newJson = {
-          รหัสนักเรียน: item.studentId,
-          "ชื่อ-สกุล": item.studentName,
-          รหัสวิชา: codeSubject.code,
-          รหัสวิชาภาษาไทย: item.teachInfo.codet,
-          ชื่อวิขา: item.teachInfo.sname,
-          ปีการศึกษา: item.schoolYear,
-          ภาคเรียน: perfixTerm + item.term,
-          ระดับชั้น: item.classRoomLevel,
-          ห้องเรียน:
-            perfixLev + item.classRoomLevel.substring(2) + item.classRoomName,
-          คะแนนรวม: item.total_score,
-          เกรด: item.grade,
-          คุณลักษณะ: item.aptitude,
-          การอ่านคิดวิเคราะห์และเขียน: item.analytical_thinking
+          id: item.studentId,
+          fullname: item.studentName,
+          code: codeSubject.code,
+          codeth: item.teachInfo.codet,
+          subject: item.teachInfo.sname,
+          year: item.schoolYear,
+          term: perfixTerm + item.term,
+          class: item.classRoomLevel,
+          sec: item.classRoomName,
+          score: item.total_score,
+          grd: item.grade,
+          s10: item.aptitude,
+          s11: item.analytical_thinking,
+          lev: perfixLev + item.classRoomLevel.substring(2) + item.classRoomName
         };
         newData.push(newJson);
       });
