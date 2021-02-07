@@ -200,7 +200,7 @@ export default {
           grd: item.grade,
           s10: item.aptitude,
           s11: item.analytical_thinking,
-          lev: perfixLev + item.classRoomLevel.substring(2) + item.classRoomName
+          lev: "3" + item.classRoomLevel.substring(2) + item.classRoomName
         };
         newData.push(newJson);
       });
