@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <div>
-      <v-col cols="12">
+      <v-col cols="12" id="backButton">
         <v-btn
           class="mr-5 btnBack"
           color="primary"
@@ -59,9 +59,9 @@
               </template>
             </v-simple-table>
           </v-row>
-          <v-divider class="mt-2"></v-divider>
+          <v-divider class="mt-1"></v-divider>
           <div style="width:90%; margin:auto;">
-            <v-row class="mt-2">
+            <v-row class="mt-1">
               <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
               <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
               <v-col cols="2" v-if="grade">{{
@@ -76,7 +76,7 @@
               <v-col cols="1">{{ totalStudentInRoom.count }}</v-col>
               <v-col cols="2">ของห้อง</v-col>
             </v-row>
-            <v-row>
+            <v-row style="margin-top:-20px;">
               <v-col cols="2">หน่วยการเรียน</v-col>
               <v-col cols="3"
                 >{{ totalCreditInStudent }} / {{ totalCreditInClass }}
@@ -88,7 +88,7 @@
               <v-col cols="1">{{ totalStudentInClasses.count }}</v-col>
               <v-col cols="2">ของระดับชั้น</v-col>
             </v-row>
-            <v-row>
+            <v-row style="margin-top:-20px;">
               <v-col cols="2">ภาคเรียนนี้ </v-col>
               <!-- <v-col cols="2">{{totalCreditInClass}} หน่วยกิต</v-col> -->
               <v-col cols="2"><p>ได้ / เรียน</p></v-col>
@@ -97,7 +97,7 @@
             <v-row style="margin-top:-30px;">
               <v-col cols="2"> {{ gatDate }} </v-col>
             </v-row>
-            <v-row class="mt-2">
+            <v-row>
               <v-col cols="6">
                 <v-row justify="center"
                   >ลงชื่อ
@@ -143,7 +143,7 @@
       </div>
 
       <v-row class="btnApprove" justify="center">
-        <v-col cols="3">
+        <v-col cols="2">
           <!-- <v-btn color="success">บันทึก</v-btn> -->
           <v-btn
             v-if="!approve"
@@ -156,9 +156,6 @@
           <v-btn v-else class="ml-5" color="green" dark @click="unArrpove"
             >อนุมัติแล้ว</v-btn
           >
-        </v-col>
-        <v-col cols="3">
-          <!-- <v-btn color="success">บันทึก</v-btn> -->
           <v-btn
             class="ml-5"
             color="info"
@@ -278,7 +275,7 @@ export default {
         `classes/getClassesByConditions`,
         data
       );
-      console.log("response getTeacher", response.results);
+      // console.log("response getTeacher xxx", response.results);
       // console.log("response getClasses", response.results[0].advisoryTeacher);
       return response.results[0].advisoryTeacher;
     },
@@ -471,11 +468,12 @@ export default {
   size: A4 portrait;
 }
 .v-data-table td {
-  height: 20px;
+  height: 30px;
 }
 @media print {
   .page {
-    margin-top: -5%;
+    margin-top: -20%;
+    size: A4 portrait;
   }
   header {
     visibility: hidden;
