@@ -18,7 +18,12 @@
               ></v-select>
             </v-col>
             <v-col cols="2">
-              <v-btn class="success" :disabled="disable" @click="calGradeRaking()">คำนวนเกรด</v-btn>
+              <v-btn
+                class="success"
+                :disabled="disable"
+                @click="calGradeRaking()"
+                >คำนวนเกรด</v-btn
+              >
             </v-col>
           </v-card-title>
           <v-simple-table v-if="classesRoomLevel" width="100%">
@@ -37,10 +42,15 @@
                   <td v-if="item.subject_info">
                     {{ item.subject_info.codet }} {{ item.subject_info.sname }}
                   </td>
-                  <td v-else>{{ item.sname }}</td>
+                  <td v-else>
+                    {{ item.subject.codet }} {{ item.subject.sname }}
+                  </td>
                   <td>{{ item.classRoomLevel }}</td>
                   <td>{{ item.classRoomName }}</td>
-                  <td>{{ item.teacher.name }}</td>
+                  <td>
+                    {{ item.teachers.title }} {{ item.teachers.firstName }}
+                    {{ item.teachers.lastName }}
+                  </td>
                   <!-- <td>
                       <v-btn color="info" @click="goToPreviewGrade(item)"
                         >จัดการ</v-btn
@@ -60,7 +70,6 @@
 </template>
 
 <script>
-
 export default {
   layout: "assessment",
   middleware: "assessment",
@@ -232,7 +241,10 @@ export default {
           grade => grade.studentId == student.studentId
         );
         // console.log("student_grade_list", student_grade_list, student.studentObjectId);
-        student.gpa = this.calculateGpa(student_grade_list, student.studentObjectId);
+        student.gpa = this.calculateGpa(
+          student_grade_list,
+          student.studentObjectId
+        );
       }
       // Order by GPA
       student_ranking.sort((a, b) => (a.gpa < b.gpa ? 1 : -1));
@@ -245,7 +257,7 @@ export default {
       var classroom = Array.from(new Set(student_class)); // ทำเป็น Set เพื่อไม่ให้มีค่าซ้ำ -> แล้วแปลง Set กลับไปเป็น Array
       // จัดอันดับที่ให้ ห้องเรียน + update DB
       for (const room of classroom) {
-        console.log('room', room)
+        console.log("room", room);
         var room_ranking = student_ranking.filter(
           student => student.classRoomName == room
         );
@@ -255,7 +267,7 @@ export default {
         // console.log('ranking', room_ranking)
         // update DB
         room_ranking.forEach(async std => {
-          console.log('std', std)
+          console.log("std", std);
           // *** update ’std’ เข้าตาราง Ranking *** //
           var data = {
             classRoomLevel: std.classRoomLevel,
@@ -265,10 +277,10 @@ export default {
             rankingInClasses: std.rankingInClasses,
             rankingInRoom: std.rankingInRoom,
             schoolYear: std.schoolYear,
-            term: std.term, 
+            term: std.term,
             studentId: std.studentId
           };
-          console.log('ranking', data)
+          console.log("ranking", data);
           await this.updateRanking(data);
         });
       }
@@ -281,16 +293,21 @@ export default {
       grade_list.forEach(item => {
         var credit_float = parseFloat(item.teachInfo.credit) || 0;
         // เช็คเกรด
-        if(item.grade_option == null ) {
-          var grade_float = parseFloat(item.grade) || 0 ;
+        if (item.grade_option == null) {
+          var grade_float = parseFloat(item.grade) || 0;
           // เกรด * หน่วยกิต
-          grade +=  grade_float * credit_float;
+          grade += grade_float * credit_float;
           // หน่วยกิตทั้งหมด
-          totalCreditInStudent += credit_float
+          totalCreditInStudent += credit_float;
         }
       });
       // console.log('totalCreditInStudent (หน่วยกิตทั้งหมด)', totalCreditInStudent)
-      console.log("grade (เกรด * หน่วยกิต)", grade , totalCreditInStudent ,objectId);
+      console.log(
+        "grade (เกรด * หน่วยกิต)",
+        grade,
+        totalCreditInStudent,
+        objectId
+      );
       gpa = parseFloat(grade) / parseFloat(totalCreditInStudent);
       // console.log(
       //   "grade / totalCreditInStudent = ",
@@ -299,7 +316,6 @@ export default {
       //   gpa
       // );
       return gpa;
-    
     },
     sortByGPA(std_list, key) {
       console.log("key", std_list.length);

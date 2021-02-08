@@ -164,20 +164,20 @@ export default {
       delete obj[old_key];
       return obj;
     },
-    getClassLevel(item) {
-      var lev = "2";
-      if (item.classRoomLevel.includes("ม.4", "ม.5", "ม.6")) {
-        lev = "3";
-        return lev;
-      }
-      return lev;
-    },
+    // getClassLevel(item) {
+    //   var lev = "2";
+    //   if (item.classRoomLevel.includes("ม.4", "ม.5", "ม.6")) {
+    //     lev = "3";
+    //     return lev;
+    //   }
+    //   return lev;
+    // },
     async exportXmls() {
       var newData = [];
       var perfixTerm = this.schoolYear.substring(2);
       // var perfixLev = this.getClassLevel()
       var grade = await this.getGradebyConditions();
-      var perfixLev = this.getClassLevel(grade[0]);
+      // var perfixLev = this.getClassLevel(grade[0]);
       console.log("grade", grade, this.subject);
       var data = grade.sort((a, b) => b.total_score - a.total_score);
       var querySubject = {
