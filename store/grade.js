@@ -75,13 +75,13 @@ export const actions = {
       try {
         const where = JSON.stringify(conditions);
         const result = await this.$axios.$get(
-          `${process.env.parseUrl}/classes/${classes.grade}?where=${where}&&limit=10000&&keys=studentId,studentName,teachInfo,code,codeth,subject,schoolYear,term,classRoomLevel,classRoomName,total_score,grade,analytical_thinking,aptitude,}
+          `${process.env.parseUrl}/classes/${classes.grade}?where=${where}&&limit=10000&&keys=studentId,studentNumber,studentName,teachInfo,code,codeth,subject,schoolYear,term,classRoomLevel,classRoomName,total_score,grade,analytical_thinking,aptitude,}
           `
         );
-        console.log(
-          "grades url",
-          `${process.env.parseUrl}/classes/${classes.grade}?where=${where}`
-        );
+        // console.log(
+        //   "grades url",
+        //   `${process.env.parseUrl}/classes/${classes.grade}?where=${where}`
+        // );
         // commit('setGrade', result)
         resolve(result);
       } catch (error) {

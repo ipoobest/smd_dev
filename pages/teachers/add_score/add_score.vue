@@ -361,12 +361,13 @@ export default {
       return response.results[0].criteria;
     },
     async createGrade(students) {
+      console.log("create Grade", students);
       var values = await this.getStudent(students);
       var studentName = values[0];
       var studentId = values[1];
       var studentNumber = values[2];
 
-      // console.log('student id', values)
+      console.log("student id", values);
 
       // console.log("this.students", studentName);
       var initScore = new Array(this.rating.length);
@@ -378,22 +379,27 @@ export default {
       // console.log('this. student xxx', studentName.length)
       for (var index = 0; index < studentName.length; index++) {
         const data = {
-          teachId: this.items.objectId,
+          //pointer techId,studentObjectId
+          // teachId: this.items.objectId,
+          teach: {
+            __type: "Pointer",
+            className: "Teach",
+            objectId: this.items.objectId
+          },
           teachInfo: {
             techId: this.items.objectId,
             codet: this.items.subject.codet,
             credit: this.items.subject.credit,
             sname: this.items.subject.sname
           },
+          studentName: studentName[index],
+          studentObjectId: students[index],
           studentId: studentId[index],
           studentNumber: studentNumber[index],
-          // subject: this.items.sname,
           schoolYear: this.items.schoolYear,
           term: this.items.term,
           classRoomLevel: this.items.classRoomLevel,
           classRoomName: this.items.classRoomName,
-          studentName: studentName[index],
-          studentObjectId: students[index],
           score: initScore,
           grade_option: null,
           grade: "",
@@ -404,9 +410,9 @@ export default {
         const response = await this.$store.dispatch(`grade/createGrade`, data);
         // console.log("response create grade", response);
       }
-      this.getGradeByConditions(this.items).then(
-        result => (this.grade = result)
-      );
+      // this.getGradeByConditions(this.items).then(
+      //   result => (this.grade = result)
+      // );
     },
     async updateTech(data) {
       const response = this.$store.dispatch(`teach/updateTeach`, data);
@@ -438,8 +444,8 @@ export default {
             total_score: item.sum_score,
             status: "บันทึก"
           };
-          // console.log("score", data);
-          const response = this.$store.dispatch(`grade/updateGrade`, data);
+          console.log("score data : ", data);
+          // const response = this.$store.dispatch(`grade/updateGrade`, data);
         });
         var saveScore = {
           objectId: this.items.objectId,
@@ -461,7 +467,7 @@ export default {
         this.studentId.push(item[index].idstd);
         this.studentNumber.push(item[index].number);
       }
-      // console.log("student name", this.studentId);
+      console.log("student name", this.studentId);
       return [this.studentName, this.studentId, this.studentNumber];
     },
     mapRating(rating) {

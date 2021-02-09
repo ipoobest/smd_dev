@@ -92,19 +92,30 @@ export default {
   },
   methods: {
     async getGradebyConditions() {
-      var data = {
-        schoolYear: this.schoolYear,
-        term: this.term,
-        classRoomLevel: this.classRoomLevel,
-        classRoomName: this.classRoomName,
-        "teachInfo.sname": this.subject
-      };
+      var data;
+      if (this.classRoomName == "ทั้งหมด") {
+        data = {
+          schoolYear: this.schoolYear,
+          term: this.term,
+          classRoomLevel: this.classRoomLevel,
+          "teachInfo.sname": this.subject
+        };
+      } else {
+        data = {
+          schoolYear: this.schoolYear,
+          term: this.term,
+          classRoomLevel: this.classRoomLevel,
+          classRoomName: this.classRoomName,
+          "teachInfo.sname": this.subject
+        };
+      }
+
       console.log("data request", data);
       var response = await this.$store.dispatch(
-        `grade/getGradeByConditionsAndKeys`,
+        `grade/getGradeByConditions`,
         data
       );
-      // console.log("response grade", response.results);
+      "response grade", response.results;
       return response.results;
     },
     async getAcademicYear() {
@@ -131,12 +142,12 @@ export default {
         };
       }
 
-      console.log("data get subject", data);
+      // console.log("data get subject", data);
       var response = await this.$store.dispatch(
         `teach/getSubjectsByConditions`,
         data
       );
-      console.log("response getSubjects", response.results);
+      // console.log("response getSubjects", response.results);
       this.mapSubject(response.results);
     },
     async getSubjectByName(data) {
@@ -144,7 +155,7 @@ export default {
         `subjects/getSubjectsByConditions`,
         data
       );
-      console.log("getSubjectByName", response.results[0]);
+      // console.log("getSubjectByName", response.results[0]);
       return response.results[0];
     },
     mapSchoolYear(data) {
@@ -154,7 +165,7 @@ export default {
       });
     },
     mapSubject(data) {
-      console.log("map data", data);
+      // console.log("map data", data);
       data.forEach(item => {
         this.itemSubjectList.push(`${item.subject.sname}`);
       });
@@ -178,8 +189,14 @@ export default {
       // var perfixLev = this.getClassLevel()
       var grade = await this.getGradebyConditions();
       // var perfixLev = this.getClassLevel(grade[0]);
-      console.log("grade", grade, this.subject);
-      var data = grade.sort((a, b) => b.total_score - a.total_score);
+      // console.log("grade", grade, this.subject);
+      var data;
+      if (this.classRoomName == "ทั้งหมด") {
+        data = grade.sort((a, b) => b.total_score - a.total_score);
+      } else {
+        data = grade.sort((a, b) => a.studentNumber - b.studentNumber);
+      }
+      // console.log("data clean : ", data);
       var querySubject = {
         sname: this.subject,
         codet: data[0].teachInfo.codet
@@ -188,6 +205,7 @@ export default {
       data.forEach(item => {
         var newJson = {
           id: item.studentId,
+          studentNumber: item.studentNumber,
           fullname: item.studentName,
           code: codeSubject.code,
           codeth: item.teachInfo.codet,
@@ -204,14 +222,14 @@ export default {
         };
         newData.push(newJson);
       });
-      console.log("new data", newData);
-      // var dataWS = XLSX.utils.json_to_sheet(newData);
-      // var wb = XLSX.utils.book_new();
-      // XLSX.utils.book_append_sheet(wb, dataWS);
-      // XLSX.writeFile(
-      //   wb,
-      //   `${this.subject}-${this.schoolYear}-${this.term}-${this.classRoomLevel}.xlsx`
-      // );
+      // console.log("new data", newData);
+      var dataWS = XLSX.utils.json_to_sheet(newData);
+      var wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, dataWS);
+      XLSX.writeFile(
+        wb,
+        `${this.subject}-${this.schoolYear}-${this.term}-${this.classRoomLevel}.xlsx`
+      );
     }
   }
 };
