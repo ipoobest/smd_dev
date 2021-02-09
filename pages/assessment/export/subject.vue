@@ -99,7 +99,7 @@ export default {
         classRoomName: this.classRoomName,
         "teachInfo.sname": this.subject
       };
-      // console.log("data request", data);
+      console.log("data request", data);
       var response = await this.$store.dispatch(
         `grade/getGradeByConditionsAndKeys`,
         data
@@ -205,13 +205,13 @@ export default {
         newData.push(newJson);
       });
       console.log("new data", newData);
-      var dataWS = XLSX.utils.json_to_sheet(newData);
-      var wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, dataWS);
-      XLSX.writeFile(
-        wb,
-        `${this.subject}-${this.schoolYear}-${this.term}-${this.classRoomLevel}.xlsx`
-      );
+      // var dataWS = XLSX.utils.json_to_sheet(newData);
+      // var wb = XLSX.utils.book_new();
+      // XLSX.utils.book_append_sheet(wb, dataWS);
+      // XLSX.writeFile(
+      //   wb,
+      //   `${this.subject}-${this.schoolYear}-${this.term}-${this.classRoomLevel}.xlsx`
+      // );
     }
   }
 };

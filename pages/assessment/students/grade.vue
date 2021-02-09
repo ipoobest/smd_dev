@@ -143,7 +143,7 @@
       </div>
 
       <v-row class="btnApprove" justify="center">
-        <v-col cols="2">
+        <v-col cols="4">
           <!-- <v-btn color="success">บันทึก</v-btn> -->
           <v-btn
             v-if="!approve"

@@ -9,14 +9,15 @@ export default {
         allowTaint: false,
         useCORS: true,
       }).then(function(canvas) {
-        let pageData = canvas.toDataURL("image/jpeg", 1.0);
-        let PDF = new JsPDF("p", "mm", "a4");
+        let pageData = canvas.toDataURL("image/jpeg", 0.9);
+        let PDF = new JsPDF("p", "mm", "a2");
 
         let width = PDF.internal.pageSize.getWidth();
         let height = PDF.internal.pageSize.getHeight();
 
         PDF.addImage(pageData, "JPEG", 0, 0, width, height);
         PDF.save(title + ".pdf");
+      
       });
     };
     Vue.prototype.getPdfGradeSumary = function(title, isShowPreviewFullTime) {
