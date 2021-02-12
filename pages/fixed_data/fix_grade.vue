@@ -159,7 +159,9 @@ export default {
         data
       );
       console.log('updateGrade result', response)
-      this.getGrade()
+      
+      // this.getGrade()
+      // alert('update success')
     },
     back() {
       this.$router.push({ name: "index" });
@@ -169,6 +171,8 @@ export default {
         console.log('item grade', item)
         this.updateGrade(item)
       })
+      alert('update success')
+      this.getGrade()
     },
     checkDepartmentNumber(data) {
       if (data == "ภาษาไทย") {

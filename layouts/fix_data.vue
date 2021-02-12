@@ -92,6 +92,11 @@ export default {
           icon: `mdi-calculator`,
           title: `fix teacher in classes`,
           to: `/fixed_data/fix_teacher_in_classes`
+        }, 
+        {
+          icon: `mdi-calculator`,
+          title: `กลับหน้าหลัก`,
+          to: `/`
         },
       ],
       miniVariant: false,
