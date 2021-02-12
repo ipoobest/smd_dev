@@ -1,0 +1,41 @@
+{
+  "name": "csr-smd",
+  "version": "1.0.0",
+  "description": "My riveting Nuxt.js project",
+  "author": "mr hoikhong",
+  "private": true,
+  "scripts": {
+    "dev": "nodemon server/index.js --watch server",
+    "build": "nuxt build",
+    "start": "cross-env NODE_ENV=production node server/index.js",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "@firebase/app": "^0.6.13",
+    "@firebase/app-types": "^0.6.1",
+    "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/firebase": "^7.1.0",
+    "cross-env": "^5.2.0",
+    "dom-to-image": "^2.6.0",
+    "express": "^4.16.4",
+    "html2canvas": "^1.0.0-rc.7",
+    "html2pdf": "0.0.11",
+    "html2pdf.js": "^0.9.2",
+    "jquery": "^3.5.1",
+    "jspdf": "^2.1.1",
+    "nuxt": "^2.0.0",
+    "pdfmake": "^0.1.68",
+    "vue-html2pdf": "^1.8.0",
+    "vue-pdf": "^4.2.0",
+    "vuelidate": "^0.7.5",
+    "vuex-persist": "^2.2.0",
+    "xlsx": "^0.16.9"
+  },
+  "devDependencies": {
+    "@nuxtjs/dotenv": "^1.4.1",
+    "@nuxtjs/vuetify": "^1.11.3",
+    "cookie-universal-nuxt": "^2.1.4",
+    "nodemon": "^1.18.9",
+    "vue-loader": "^15.9.5"
+  }
+}
