@@ -73,7 +73,7 @@
                                 item-text="name"
                                 outlined
                                 label="ครูผู้สอน"
-                                require
+                                required
                                 :rules="[v => !!v || 'กรุณาเลือกครูผู้สอน']"
                               ></v-select>
                             </v-col>
@@ -281,64 +281,70 @@ export default {
       );
     },
     async save() {
-      if (this.editedIndex > -1) {
-        console.log("edit");
-        const objectId = await this.getClassesByConditions();
-        const data = {
-          objectId: this.input.objectId,
-          schoolYear: this.query.schoolYear,
-          term: this.query.term,
-          classRoomLevel: this.input.classRoomLevel,
-          classRoomName: this.input.classRoomName,
-          classId: objectId,
-          send_score: false,
-          subject: {
-            __type: "Pointer",
-            className: "Subjects",
-            objectId: this.input.subject.objectId
-          },
-          teachers: {
-            __type: "Pointer",
-            className: "_User",
-            objectId: this.input.teachers.objectId
-          },
-          department: this.input.department,
-          type: "วิชาบังคับ"
-        };
-        console.log("teach data", data);
-        await this.updateSubjectToTeach(data);
-        this.resetForm();
-        await this.getSubjectsFromTeach().then(result => (this.items = result));
-        this.close();
+      if (this.$refs.form.validate()) {
+        if (this.editedIndex > -1) {
+          console.log("edit");
+          const objectId = await this.getClassesByConditions();
+          const data = {
+            objectId: this.input.objectId,
+            schoolYear: this.query.schoolYear,
+            term: this.query.term,
+            classRoomLevel: this.input.classRoomLevel,
+            classRoomName: this.input.classRoomName,
+            classId: objectId,
+            send_score: false,
+            subject: {
+              __type: "Pointer",
+              className: "Subjects",
+              objectId: this.input.subject.objectId
+            },
+            teachers: {
+              __type: "Pointer",
+              className: "_User",
+              objectId: this.input.teachers.objectId
+            },
+            department: this.input.department,
+            type: "วิชาบังคับ"
+          };
+          console.log("teach data", data);
+          await this.updateSubjectToTeach(data);
+          this.resetForm();
+          await this.getSubjectsFromTeach().then(
+            result => (this.items = result)
+          );
+          this.close();
+        } else {
+          console.log("save");
+          const objectId = await this.getClassesByConditions();
+          const data = {
+            schoolYear: this.query.schoolYear,
+            term: this.query.term,
+            classRoomLevel: this.input.classRoomLevel,
+            classRoomName: this.input.classRoomName,
+            classId: objectId,
+            send_score: false,
+            rating: [],
+            subject: {
+              __type: "Pointer",
+              className: "Subjects",
+              objectId: this.input.subject.objectId
+            },
+            teachers: {
+              __type: "Pointer",
+              className: "_User",
+              objectId: this.input.teachers.objectId
+            },
+            department: this.input.department,
+            type: "วิชาบังคับ"
+          };
+          console.log("teach data", data);
+          await this.addSubjectToTeach(data);
+          this.resetForm();
+          await this.getSubjectsFromTeach().then(result => (this.items = result));
+          this.close();
+        }
       } else {
-        console.log("save");
-        const objectId = await this.getClassesByConditions();
-        const data = {
-          schoolYear: this.query.schoolYear,
-          term: this.query.term,
-          classRoomLevel: this.input.classRoomLevel,
-          classRoomName: this.input.classRoomName,
-          classId: objectId,
-          send_score: false,
-          rating: [],
-          subject: {
-            __type: "Pointer",
-            className: "Subjects",
-            objectId: this.input.subject.objectId
-          },
-          teachers: {
-            __type: "Pointer",
-            className: "_User",
-            objectId: this.input.teachers.objectId
-          },
-          department: this.input.department,
-          type: "วิชาบังคับ"
-        };
-        console.log("teach data", data);
-        await this.addSubjectToTeach(data);
-        this.resetForm();
-        await this.getSubjectsFromTeach().then(result => (this.items = result));
-        this.close();
+        alert("กรุณากรอกข้อมูลให้ครบ");
       }
     },
     async deleteSubject(objectId) {
@@ -358,7 +364,11 @@ export default {
         };
         this.classSubject.push(data);
       });
-      console.log("classSubject index", this.classSubject, this.classSubject.length);
+      console.log(
+        "classSubject index",
+        this.classSubject,
+        this.classSubject.length
+      );
     },
     selectInputClasses() {
       // console.log("this classes", this.classes);
@@ -369,7 +379,7 @@ export default {
       console.log("classRoomLevel index", this.classRoomLevel);
     },
     selectInputTeacher() {
-      this.itemTeachers = []
+      this.itemTeachers = [];
       for (var index = 0; index < this.teachers.length; index++) {
         const teacher = {
           name:
@@ -382,7 +392,7 @@ export default {
         };
         this.itemTeachers.push(teacher);
       }
-      console.log('option teacher : ', this.itemTeachers)
+      console.log("option teacher : ", this.itemTeachers);
     },
     addClasses(item) {
       this.$router.push({
@@ -403,8 +413,11 @@ export default {
       console.log("subjectId", this.subjectId);
     },
     editItem(item) {
-      this.editedIndex = this.items.indexOf(item)
-      console.log('object assign to input item.teachers', Object.assign({}, item.teachers))
+      this.editedIndex = this.items.indexOf(item);
+      console.log(
+        "object assign to input item.teachers",
+        Object.assign({}, item.teachers)
+      );
       this.input = Object.assign({}, item);
       this.dialog = true;
     },
@@ -423,6 +436,7 @@ export default {
       // console.log('item deprt', department)
       return department;
     },
+    validateForm() {},
     back() {
       this.$router.go(-1);
     },
@@ -430,7 +444,7 @@ export default {
       this.$refs.form.reset();
     },
     close() {
-      this.resetForm()
+      this.resetForm();
       this.dialog = false;
       this.editedIndex = -1;
     }
