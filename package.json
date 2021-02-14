@@ -33,7 +33,11 @@
   },
   "devDependencies": {
     "@nuxtjs/dotenv": "^1.4.1",
+<<<<<<< HEAD
     "@nuxtjs/vuetify": "^1.11.3",
+=======
+    "@nuxtjs/vuetify": "^1.0.0",
+>>>>>>> e051e5e1d63f1f7df91782ab414f0a2574c751f7
     "cookie-universal-nuxt": "^2.1.4",
     "nodemon": "^1.18.9",
     "vue-loader": "^15.9.5"

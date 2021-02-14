@@ -142,7 +142,7 @@ export default {
       console.log("response students", response.results[0].studentId);
       return response.results[0].studentId;
     },
-    
+
     async getStudent(data) {
       const query = {
         objectId: {
@@ -157,7 +157,6 @@ export default {
       var name = this.getStudentName(response.results);
       return name;
     },
-
     async createGrade(object) {
       const response = await this.$store.dispatch(`grade/createGrade`, object);
       console.log("response create grade", response);
@@ -169,7 +168,6 @@ export default {
       console.log("response addRatingToTach", response);
       return response;
     },
-
     addPartNumber() {
       this.part_rating = [];
       for (var index = 0; index < this.part_num; index++) {
@@ -177,7 +175,6 @@ export default {
       }
       console.log("length", this.part_point);
     },
-
     addRating(item) {
       this.dialog = true;
       this.teach = item;
@@ -187,7 +184,6 @@ export default {
       this.part_rating = item.rating;
       console.log("addrateing", item.rating);
     },
-
     getRating(item) {
       var rating = [];
       for (var index = 0; index < item.length; index++) {
@@ -196,7 +192,6 @@ export default {
       console.log("student name", rating);
       return rating;
     },
-
     getStudentName(item) {
       var studentName = [];
       for (var index = 0; index < item.length; index++) {
@@ -207,7 +202,6 @@ export default {
       console.log("student name", studentName);
       return studentName;
     },
-
     mapScoreName(name, score) {
       var student = [];
       for (var i = 0; i < name.length; i++) {
@@ -221,7 +215,6 @@ export default {
       console.log("x y", student);
       return student;
     },
-
     async score(item) {
       // console.log("score ", item);
       this.goToPreviewGrade(item);
@@ -232,7 +225,6 @@ export default {
       this.part_num = "";
       setTimeout(() => {}, 300);
     },
-
     back() {
       this.$router.go(-1);
       console.log("back");
