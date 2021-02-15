@@ -4,16 +4,24 @@
     <v-row justify="center">
       <v-col cols="3">
         <v-select
-          :disabled="true"
+          :disabled="false"
           v-model="classes"
           :items="items"
-          label="Standard"
+          label="ชั้นเรียน"
+        ></v-select>
+      </v-col>
+      <v-col cols="3">
+        <v-select
+          :disabled="false"
+          v-model="term"
+          :items="terms"
+          label="เทอม"
           @change="getStudent()"
         ></v-select>
       </v-col>
     </v-row>
     <v-row justify="center">
-      <!-- <v-btn @click="create" class="success">init</v-btn> -->
+      <v-btn @click="create" class="success">init</v-btn>
     </v-row>
   </div>
 </template>
@@ -30,7 +38,10 @@ export default {
     return {
       students: [],
       classes: "",
-      items: ["ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"]
+      term: "",
+      studentItems: [],
+      items: ["ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"],
+      terms: ["1", "2"]
     };
   },
   // 1 get student
@@ -38,18 +49,31 @@ export default {
     async getStudent() {
       var query = {
         schoolYear: "2563",
-        term: "1",
+        term: this.term,
         classRoomLevel: this.classes
       };
       const response = await this.$store.dispatch(
         "classes/getClassesByConditions",
         query
       );
-      // console.log('response.results', response.results)
-      var classes = response.results;
-      // var length = 0
-      console.log("classes", classes);
-      classes.forEach(item => {
+      // console.log("response.results", response.results);
+      this.studentItems = response.results;
+      console.log("response.results", this.studentItems);
+    },
+    async getStudentFromStudentClass(objectId) {
+      var response = await this.$store.dispatch(
+        `students/getStudentById`,
+        objectId
+      );
+      console.log("respose create success", response);
+      return response;
+    },
+    async createRanking(data) {
+      var response = await this.$store.dispatch(`ranking/createRanking`, data);
+      console.log("respose create success", response);
+    },
+    async create() {
+      this.studentItems.forEach(item => {
         item.studentId.forEach(async student => {
           //get Students by student
           var studentObject = await this.getStudentFromStudentClass(student);
@@ -69,26 +93,6 @@ export default {
           // length += 1
         });
       });
-    },
-    async getStudentFromStudentClass(objectId) {
-      var response = await this.$store.dispatch(
-        `students/getStudentById`,
-        objectId
-      );
-      console.log("respose create success", response);
-      return response;
-    },
-    async createRanking(data) {
-      var response = await this.$store.dispatch(`ranking/createRanking`, data);
-      console.log("respose create success", response);
-    },
-    async create() {
-      console.log("xxxx");
-      this.students.forEach(item => {
-        this.createRanking(item);
-        // console.log('item : ', item.studentId)
-      });
-      alert("init success");
     }
   }
 };
