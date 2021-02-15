@@ -91,7 +91,7 @@ export default {
     },
     async create() {
       if (await this.checkInit()) {
-        alert("init แล้ว");
+        alert("ชั้นเรียนนี้ทำการ init ranking แล้ว");
       } else {
         this.studentItems.forEach(item => {
           item.studentId.forEach(async student => {
@@ -109,11 +109,12 @@ export default {
               studentId: studentObject.idstd
             };
             console.log("data", data);
-            // await this.createRanking(data);
+            await this.createRanking(data);
             // length += 1
           });
         });
       }
+      alert("init ranking success");
     }
   }
 };
