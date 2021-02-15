@@ -72,27 +72,48 @@ export default {
       var response = await this.$store.dispatch(`ranking/createRanking`, data);
       console.log("respose create success", response);
     },
+    async checkInit() {
+      var conditions = {
+        schoolYear: "2563",
+        term: this.term,
+        classRoomLevel: this.classes
+      };
+      console.log("check Init", conditions);
+      var response = await this.$store.dispatch(
+        `ranking/getRankingByConditions`,
+        conditions
+      );
+      console.log("response ranking length", response.results.length);
+      if (response.results.length == 0) {
+        return false;
+      }
+      return true;
+    },
     async create() {
-      this.studentItems.forEach(item => {
-        item.studentId.forEach(async student => {
-          //get Students by student
-          var studentObject = await this.getStudentFromStudentClass(student);
-          // console.log('students xxx', `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`)
-          // console.log('student obj',item.schoolYear,item.term, item.classRoomLevel, item.classRoomName, studentObject)
-          var data = {
-            schoolYear: item.schoolYear,
-            term: item.term,
-            classRoomLevel: item.classRoomLevel,
-            classRoomName: item.classRoomName,
-            studentObjectId: student,
-            studentName: `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`,
-            studentId: studentObject.idstd
-          };
-          console.log("data", data);
-          await this.createRanking(data);
-          // length += 1
+      if (await this.checkInit()) {
+        alert("init แล้ว");
+      } else {
+        this.studentItems.forEach(item => {
+          item.studentId.forEach(async student => {
+            //get Students by student
+            var studentObject = await this.getStudentFromStudentClass(student);
+            // console.log('students xxx', `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`)
+            // console.log('student obj',item.schoolYear,item.term, item.classRoomLevel, item.classRoomName, studentObject)
+            var data = {
+              schoolYear: item.schoolYear,
+              term: item.term,
+              classRoomLevel: item.classRoomLevel,
+              classRoomName: item.classRoomName,
+              studentObjectId: student,
+              studentName: `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`,
+              studentId: studentObject.idstd
+            };
+            console.log("data", data);
+            // await this.createRanking(data);
+            // length += 1
+          });
         });
-      });
+      }
     }
   }
 };
