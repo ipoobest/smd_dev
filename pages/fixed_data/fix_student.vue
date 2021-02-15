@@ -92,6 +92,7 @@ export default {
     async create() {
       if (await this.checkInit()) {
         alert("ชั้นเรียนนี้ทำการ init ranking แล้ว");
+        return
       } else {
         this.studentItems.forEach(item => {
           item.studentId.forEach(async student => {
