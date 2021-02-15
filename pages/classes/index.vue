@@ -75,10 +75,22 @@
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
                               <v-select
-                                v-model="classItem.teacherName"
+                                v-model="classItem.teacher1"
                                 :items="selectItemTeacher"
                                 outlined
-                                label="อาจารย์ประจำชั้น"
+                                label="อาจารย์ประจำชั้น คนที่ 1"
+                                required
+                                :rules="[
+                                  v => !!v || 'กรุณาเลือก อาจารย์ประจำชั้น'
+                                ]"
+                              ></v-select>
+                            </v-col>
+                            <v-col cols="12" sm="6" md="6">
+                              <v-select
+                                v-model="classItem.teacher2"
+                                :items="selectItemTeacher"
+                                outlined
+                                label="อาจารย์ประจำชั้น คนที่ 2"
                                 required
                                 :rules="[
                                   v => !!v || 'กรุณาเลือก อาจารย์ประจำชั้น'
@@ -128,7 +140,7 @@ export default {
   middleware: "authentication",
   async mounted() {
     // this.classItem = this.$route.query
-    console.log("route params", this.$route.query);
+   
     await this.getListClass(this.$route.query).then(
       result => (this.items = result)
     );
@@ -187,7 +199,7 @@ export default {
         `classes/getClassesByConditions`,
         classItem
       );
-      console.log("getListClass", response);
+     
       return response.results;
     },
     async getListTeacher() {
@@ -210,7 +222,7 @@ export default {
       );
     },
     async deteleClasses(itemId) {
-      console.log("delete ", itemId);
+     
       const response = await this.$store.dispatch(
         `classes/deleteClass`,
         itemId
@@ -223,7 +235,7 @@ export default {
       return response.results;
     },
     selectItemTeachers() {
-      console.log("select item teacher", this.teachers);
+     
       for (var index = 0; index < this.teachers.length; index++) {
         this.selectItemTeacher.push(
           this.teachers[index].title +
@@ -235,7 +247,7 @@ export default {
       }
     },
     editItem(item) {
-      // console.log('item id ', item)
+      //
       this.editedIndex = this.items.indexOf(item);
       this.classItem = Object.assign({}, item);
 
@@ -262,17 +274,43 @@ export default {
         this.editedIndex = -1;
       }, 300);
     },
-    save() {
+    async save() {
       if (this.$refs.form.validate()) {
-        console.log("objects", this.classItem);
-        const data = { ...this.classItem, ...this.$route.query };
-        console.log("data request", data);
-        this.createClasses(data);
-        this.close();
+       
+        // const data = { ...this.classItem, ...this.$route.query };
+        const data = {
+          advisoryTeacher: {
+            teacher1: this.classItem.teacher1,
+            teacher2: this.classItem.teacher2
+          },
+          classRoomId: this.classItem.classRoomId,
+          classRoomLevel: this.classItem.classRoomLevel,
+          classRoomName: this.classItem.classRoomName,
+          schoolYear: this.$route.query.schoolYear
+        };
+       
+        //check ceate
+        const getClass = {
+          classRoomId: this.classItem.classRoomId,
+          classRoomLevel: this.classItem.classRoomLevel,
+          classRoomName: this.classItem.classRoomName,
+          schoolYear: this.$route.query.schoolYear
+        };
+        //
+        const classes = await this.getListClass(getClass);
+        //
+        if (classes.length != 0) {
+          alert("ชั้นเรียนนี้ถูกสร้างแล้ว");
+          this.close();
+          return;
+        } else {
+          this.createClasses(data);
+          this.close();
+        }
       }
     },
     addStudent(item) {
-      console.log("item id ", item.objectId);
+     
       this.$router.push({
         name: "classes-add_student",
         query: { id: item.objectId }

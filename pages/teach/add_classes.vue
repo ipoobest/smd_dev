@@ -152,7 +152,7 @@
     methods: {
       async getDataFromTeach(teacjId) {
         const response = await  this.$store.dispatch(`teach/getClassesByConditions`, conditions)
-        console.log('classes', response.results)
+        
         return response.results
       },
       async getClass() {
@@ -161,29 +161,29 @@
           term: this.query.term
         }
         const response = await  this.$store.dispatch(`classes/getClassesByConditions`, conditions)
-        console.log('classes', response.results)
+        
         return response.results
       },
       async getTeacher() {
         const response = await this.$store.dispatch(`teachers/getTeacher`)
-        console.log('teacher', response.results)
+        
         return response.results
       },
       async addClassToTeach(){
         // const response = await  this.$store.dispatch(`teach/updateClasses`, object)
-        // console.log('classes', response.results)
+        // 
       },
       async addTeacherToTeach() {
         // const response = await  this.$store.dispatch(`teach/updateTeacher`, object)
-        // console.log('classes', response.results)
+        // 
       },
       selectInputClasses() {
-        console.log('this classes', this.classes)
+        
         for (var index = 0; index < this.classes.length; index++) {
           this.classRoomLevel.push(this.classes[index].classRoomLevel)
           this.classRoomName.push(this.classes[index].classRoomName)
         }
-          console.log('classRoomLevel index', this.classRoomLevel)
+          
       },
       selectInputTeacher() {
         for (var index = 0; index < this.teachers.length; index++) {
@@ -200,7 +200,7 @@
         this.dialogCreateTeach = false
       },
       save() {
-        console.log('item save', this.input)
+        
         this.close()
       },
     }

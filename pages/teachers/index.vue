@@ -235,7 +235,7 @@ export default {
   methods: {
     async getDataFromApi() {
       const response = await this.$store.dispatch(`teachers/getTeacher`);
-      // console.log('teacher response', response)
+      // 
       return response.results;
     },
     async getUserByConditions(data) {
@@ -246,11 +246,11 @@ export default {
         `users/getUserByConditions`,
         condition
       );
-      // console.log('response getUserByTeacher Id', response.results)
+      // 
       return response;
     },
     async createUser(data, objectId) {
-      // console.log('create user teacher', data.username, data.password)
+      // 
       const user = {
         username: data.username,
         password: data.password,
@@ -258,12 +258,12 @@ export default {
         teacherId: data.teacherId,
         teacherObjectId: objectId
       };
-      // console.log('create user teacher', user)
+      // 
       const response = await this.$store.dispatch(`users/createUser`, user);
-      console.log("create result", response);
+      
     },
     async createTeacher(data) {
-      // console.log('data create', data)
+      // 
       const condition = {
         username: data.username
       };
@@ -279,7 +279,7 @@ export default {
           `teachers/createTeacher`,
           data
         );
-        // console.log('create teacher', response)
+        // 
         const objectId = response.objectId;
         this.createUser(data, objectId);
 
@@ -313,7 +313,7 @@ export default {
     },
     editItem(item) {
       this.user = item;
-      console.log("teacher id", this.user);
+      
       this.editedIndex = this.items.indexOf(item);
       this.editedItem = Object.assign({}, item);
 
@@ -321,10 +321,10 @@ export default {
     },
     async deleteItem(item) {
       const index = this.items.indexOf(item);
-      console.log("index", index);
+      
       if (confirm("ยืนยีนการลบข้อมูลครู")) {
         const userId = await this.getUserByConditions(item.teacherId);
-        console.log("userid", userId);
+        
         if (userId.results[0] != null) {
           const objectId = userId.results[0].objectId;
           await this.deleteUser(objectId);
@@ -355,9 +355,9 @@ export default {
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.editedItem);
         const userId = await this.getUserByConditions(this.user.objectId);
-        console.log("response user Id", userId);
+        
         const objectId = userId.results[0].objectId;
-        console.log("object User Id", objectId);
+        
 
         const editData = {
           objectId: this.editedItem.objectId,
@@ -372,7 +372,7 @@ export default {
           userId: objectId
         };
 
-        console.log("edit data", editData);
+        
 
         this.updateTeacher(editData);
         this.updateUser(editData);

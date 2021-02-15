@@ -41,7 +41,7 @@ export default {
     this.params = this.$route.params.id;
     this.class = this.$route.query.class;
     this.getDataFromApi().then(result => (this.items = result));
-    console.log("this.params",  this.class);
+    // 
   },
 
   data() {
@@ -68,12 +68,12 @@ export default {
       const response = await this.$store.dispatch(
         `academic_year/getAcademicYear`
       );
-      console.log("response", response);
+      // 
       return response.results;
     },
 
     subjectList(item) {
-      console.log(item);
+      // 
       if (this.class === "true") {
         this.$router.push({
           name: "assessment-classes",

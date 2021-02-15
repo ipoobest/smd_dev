@@ -150,30 +150,30 @@ export default {
   },
   mounted(){
     this.id = this.$route.params.id
-    console.log('id', this.id)
+    
     this.getDataFromApi().then((result) => (this.items = result))
   },
   methods: {
     async getDataFromApi(limit = 50, skip = 0) {
       // const response = await ClassesApi.get(limit, skip)
         const response = await this.$store.dispatch(`classes/getClasses`, this.id)
-      // console.log('res ', response.data.results)
+      // 
       this.items = response.data.results
     },
     async createClasses(data) {
-      // console.log('create Classes ', data)
+      // 
       const response = await ClassesApi.create(data)
-      // console.log('res create', response)  
+      // 
     },
     async updateClasses(data) {
-      // console.log('data update ', data)
+      // 
       const response = await ClassesApi.update(data)
-      // console.log('res ', response)
+      // 
     },
     async deteleClasses(itemId) {
-      // console.log('delete update ', itemId)
+      // 
       const response = await ClassesApi.deleteClasses(itemId)
-      // console.log('res ', response)
+      // 
     },
     async handlePagination(e) {
       if (e.page === e.pageCount) {
@@ -186,7 +186,7 @@ export default {
     },
 
     editItem(item) {
-      // console.log('item id ', item)
+      // 
       this.editedIndex = this.items.indexOf(item)
       this.editedItem = Object.assign({}, item)
 
@@ -199,7 +199,7 @@ export default {
       this.items.splice(index, 1)
     },
     close() {
-      // console.log('closd')
+      // 
       this.dialog = false
       setTimeout(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
@@ -209,7 +209,7 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.editedItem)
-        // console.log('put xx ', this.editedItem)
+        // 
         const editData = {
           objectId: this.editedItem.objectId,
           ClassesId: this.editedItem.ClassesId,
@@ -226,7 +226,7 @@ export default {
       this.close()
     },
     addStudent(item) {
-      // console.log('item id ', item)
+      // 
       this.$router.push({
         name: 'classes-id',
         params: { id: item.objectId }

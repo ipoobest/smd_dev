@@ -40,7 +40,7 @@ export default {
   mounted() {
     this.params = this.$route.params.id;
     this.getDataFromApi().then(result => (this.items = result));
-    console.log("this.params",  this.class);
+    // 
   },
 
   data() {
@@ -66,12 +66,12 @@ export default {
       const response = await this.$store.dispatch(
         `academic_year/getAcademicYear`
       );
-      console.log("response", response);
+      // 
       return response.results;
     },
 
     subjectList(item) {
-      console.log(item);
+      // 
         this.$router.push({
           name: "assessment-calculate_score-subjects",
           query: { schoolYear: item.schoolYear, term: item.term }

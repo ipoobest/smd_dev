@@ -1,10 +1,10 @@
 export default async function({ store, redirect }) {
   if (!store.state.auth.auth) {
-    console.log("auth ", store.state.auth.auth);
-    console.log("auth ddd", store.state.auth.auth.type);
+    // 
+    // 
     return redirect("/login");
   } else if (store.state.auth.auth.type != "หัวหน้ากลุ่มประเมิน") {
-    console.log("auth ddd", store.state.auth.auth.type);
+    // 
     var userType = store.state.auth.auth.type;
     var user;
     if (userType == "ครู") {

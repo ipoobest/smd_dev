@@ -330,7 +330,7 @@ export default {
   methods: {
     async getinputFromApi() {
       const response = await this.$store.dispatch(`subjects/getSubjects`);
-      console.log("subject ", response);
+      
       return response.results;
     },
     async getSubject() {
@@ -386,7 +386,7 @@ export default {
         `subjects/updateSubject`,
         input
       );
-      // console.log('updateSubject ', response)
+      // 
       this.getinputFromApi().then(result => (this.items = result));
     },
     async deleteSubject(input) {
@@ -443,7 +443,7 @@ export default {
     save() {
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.input);
-        console.log("put input user ", this.items);
+        
         // this.items = [...this.input, input]
         const editinput = {
           objectId: this.input.objectId,
@@ -471,7 +471,7 @@ export default {
             department: this.input.department,
             term: this.input.term
           };
-          // console.log("input create", data);
+          // 
           this.createSubject(data);
           this.items.push(data);
           this.close();
@@ -491,7 +491,7 @@ export default {
     },
     deleteDepartment(item) {
       if (confirm("ยืนยันการลบ")) {
-        console.log("delete item", item.objectId);
+        
         this.deleteDepartments(item.objectId);
       }
     },
@@ -500,7 +500,7 @@ export default {
       item.forEach(item => {
         department.push(item.name);
       });
-      // console.log('item deprt', department)
+      // 
       return department;
     }
   }

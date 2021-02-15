@@ -109,23 +109,23 @@ export default {
   methods: {
     async getDataFromApi(classId) {
       const response = await this.$store.dispatch(`classes/getClass`, classId);
-      console.log("response xxxid", response);
+     
       return response;
     },
     async getStudent() {
       const response = await this.$store.dispatch(`students/getStudent`);
-      console.log("response", response);
+     
       return response.results;
     },
     async getStudents(items) {
-      console.log("items", items);
+     
       const objectId = {
         $in: items
       };
       const response = await this.$store.dispatch(`students/getStudents`, {
         objectId
       });
-      console.log("response student", response);
+     
       return response.results;
     },
     async getStudentsNotIn(items) {
@@ -139,16 +139,16 @@ export default {
         `students/getStudents`,
         query
       );
-      console.log("response", response);
+     
       return response.results;
     },
     async getListClasses() {
       const response = await this.$store.dispatch(`classes/getListClasses`);
-      // console.log('classes')
+      //
       let results = response.results.map(a => a.studentId);
-      // console.log('result map ', results)
+      //
       let merged = [].concat.apply([], results);
-      // console.log('merged', merged)
+      //
       return merged;
     },
     async addStudents() {
@@ -162,7 +162,7 @@ export default {
       );
     },
     async studentScore(item) {
-      console.log("item", item);
+     
       this.$router.push({
         name: "assessment-students-grade",
         query: {
@@ -181,12 +181,12 @@ export default {
         classRoomLevel: this.student.classRoomLevel,
         classRoomName: this.student.classRoomName
       };
-      console.log("condition getRanking", condition);
+     
       const response = await this.$store.dispatch(
         `ranking/getRankingByConditions`,
         condition
       );
-      console.log("getListClass", response);
+     
       return response.results;
     },
     async exportXml() {
@@ -194,7 +194,7 @@ export default {
       var data = this.ranking.sort(
         (a, b) => a.rankingInClasses - b.rankingInClasses
       );
-      // console.log('data sort', data)
+      //
       const dataWS = XLSX.utils.json_to_sheet(data);
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, dataWS);

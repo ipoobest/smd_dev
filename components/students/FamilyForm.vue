@@ -379,11 +379,11 @@ export default {
   methods: {
     back() {
       this.tab = 'addressData'
-      console.log('black', this.tab)
+      // 
       this.$emit('saveFamily', this.familyData, this.tab)
     },
     save() {
-      console.log('go')
+      // 
       this.tab = 'withdrawData'
       this.$emit('saveFamily', this.familyData, this.tab)
     }

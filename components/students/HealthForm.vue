@@ -86,11 +86,11 @@ export default {
   methods: {
     back() {
       this.tab = 'withdrawData'
-      console.log('black', this.tab)
+      // 
       this.$emit('saveHealth', this.healthData, this.tab)
     },
     save() {
-      console.log('go')
+      // 
       this.tab = 'healthData'
       this.$emit('saveHealth', this.healthData, this.tab)
     }

@@ -31,10 +31,10 @@ export default {
   layout: "student",
   mounted() {
   // get students by idcard
-    console.log('data', this.$store.state.auth.auth.idstd)
+    
     this.getStudets(this.$store.state.auth.auth.idstd).then(result => (this.student = result))
     this.getDataFromApi().then(result => (this.items = result));
-    console.log("this.params",  this.class);
+    
   },
 
   data() {
@@ -62,7 +62,7 @@ export default {
       const response = await this.$store.dispatch(
         `academic_year/getAcademicYear`
       );
-      console.log("response", response);
+      
       return response.results;
     },
     async getStudets(id) {
@@ -73,11 +73,11 @@ export default {
         "students/getStudents",
         data
       );
-      console.log('response.results', response.results[0])
+      
       return response.results[0]
     },
     subjectList(item) {
-      // console.log(item, this.student.idstd);
+      // 
         this.$router.push({
           name: "students-grade",
           query: { id: this.student.idstd ,schoolYear: item.schoolYear, term: item.term }

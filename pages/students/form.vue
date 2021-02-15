@@ -68,19 +68,19 @@ export default {
     }
   },
   mounted() {
-    // console.log('testxxxx', this.personalData.profileBase64)
+    // 
   },
   methods: {
     async createStudent(data) {
       const response = await this.$store.dispatch(`students/createStudent`, data)
-      console.log('response', data)
+      
       // this.createUser(data.idstd, data.idstd, 'student', data.objecId)
       this.$router.replace({name: 'students'})
 
     },
     async createUser(username, password, type, objecId) {
       const response = await this.$store.dispatch(`users/createUser`,{ username, password, type, objecId })
-      console.log('response', response)
+      
       this.$router.replace({name: 'students'})
     },
     async saveData() {
@@ -91,7 +91,7 @@ export default {
           ...this.withdraw, 
           ...this.health 
       }
-      console.log('data students', this.data)
+      
       this.createStudent(this.data)
     },
     handlePersonalData(PersonalForm, tab) {
@@ -99,16 +99,16 @@ export default {
       this.personal = PersonalForm
 
       this.changeTab(tab)
-      console.log('main ', this.personal)
+      
     },
     handleAddressData(AdderessData, tab) {
       this.address = AdderessData
-      console.log('tab address ', this.address)
+      
       this.changeTab(tab)
     },
     handleFamilyData(FamilyData, tab) {
       this.family = FamilyData
-      console.log('tab FamilyData ', this.family)
+      
       this.tab = tab
       this.changeTab(this.tab)
     },
@@ -118,7 +118,7 @@ export default {
     },
     handleHealthData(HealthData, tab) {
       this.health = HealthData
-      console.log('main handleHealthData ', this.health)
+      
       this.saveData()
     },
     changeTab(tab) {

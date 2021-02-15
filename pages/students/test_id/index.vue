@@ -48,7 +48,7 @@ export default {
     await this.getStudentById(this.$route.params.id).then(result => (this.data = result))
     await this.mapPersonal()
     // this.personal = {...this.data}
-    // console.log('personal', this.personal)
+    // 
   },
   data() {
     return {
@@ -91,29 +91,29 @@ export default {
   methods: {
     async getStudentById(studentId) {
       const response = await this.$store.dispatch('students/getStudentById', studentId)
-      // console.log('response', response)
+      // 
       return response
     },
     async updateStudents(data){
-      console.log('data update async ', data)
+      
       const response = await this.$store.dispatch('students/updateStudent', data )
-      console.log('response update',response)
+      
       this.$router.push({name: 'students'})
     },
      handlePersonalData(PersonalForm, tab) {
       //todo this kept in store
       this.personal = PersonalForm
-      console.log('main ', this.personal, tab)
+      
       this.changeTab(tab)
     },
     handleAddressData(AdderessData, tab) {
       this.address = AdderessData
-      console.log('tab address ', this.address)
+      
       this.changeTab(tab)
     },
     handleFamilyData(FamilyData, tab) {
       this.family = FamilyData
-      console.log('tab FamilyData ', this.family)
+      
       this.tab = tab
       this.changeTab(this.tab)
     },
@@ -123,7 +123,7 @@ export default {
     },
     handleHealthData(HealthData, tab) {
       this.health = HealthData
-      console.log('main handleHealthData ', this.health)
+      
       this.updateData()
     },
     updateData() {
@@ -140,7 +140,7 @@ export default {
      delete editData.createdAt;
      delete editData.updatedAt;
 
-      console.log('data updateData xxx', editData)
+      
       this.updateStudents(editData)
     },
     mapPersonal() {

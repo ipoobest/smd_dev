@@ -99,7 +99,7 @@ export default {
     this.route = this.$route.query;
     await this.getGradeByConditions();
     if(this.items.length == 0) {
-      console.log('test')
+      
       return
     } else {
       this.totalCreditInClass = await this.sumCreateInClasses();
@@ -168,7 +168,7 @@ export default {
         `grade/getGradeByConditions`,
         conditions
       );
-      console.log("grade list Gpa", response.results);
+      
       this.info = response.results[0];
       this.rowSpan = response.results.length;
       this.items = response.results
@@ -185,7 +185,7 @@ export default {
         `classes/getClassesByConditions`,
         data
       );
-      console.log("response getClasses", response.results[0].teacherName);
+      
       return response.results[0].teacherName;
     },
     async getRanking() {
@@ -196,12 +196,12 @@ export default {
         classRoomName: this.info.classRoomName,
         studentId: this.$route.query.id
       };
-      console.log("ranking condition", condition);
+      
       const response = await this.$store.dispatch(
         `ranking/getRankingByConditions`,
         condition
       );
-      console.log("grade ranking", response.results[0]);
+      
       return response.results[0];
     },
     async countRankingClasses() {
@@ -210,12 +210,12 @@ export default {
         term: this.$route.query.term,
         classRoomLevel: this.info.classRoomLevel
       };
-      // console.log("ranking condition", condition);
+      // 
       const response = await this.$store.dispatch(
         `ranking/getRankingCount`,
         condition
       );
-      // console.log("grade classes", response);
+      // 
       return response;
     },
     async countRankingRoom() {
@@ -225,17 +225,17 @@ export default {
         classRoomLevel: this.info.classRoomLevel,
         classRoomName: this.info.classRoomName
       };
-      // console.log("ranking condition", condition);
+      // 
       const response = await this.$store.dispatch(
         `ranking/getRankingCount`,
         condition
       );
-      // console.log("grade room", response);
+      // 
       return response;
     },
     async updateGrade(data) {
       const response = await this.$store.dispatch(`grade/updateGrade`, data);
-      // console.log("update response", response);
+      // 
     },
     getClass() {
       if (["ม.1", "ม.2", "ม.3"].includes(this.info.classRoomLevel)) {
@@ -250,23 +250,23 @@ export default {
         if (item.grade_option != "ร") {
           sum += parseFloat(item.teachInfo.credit);
         }
-        // console.log('summ ',sum)
+        // 
       });
-      // console.log('sum create', sum)
+      // 
       return sum;
     },
     sumCreditStudent() {
       var sum = 0;
       this.items.forEach(item => {
         //  sum += parseFloat(item.teachInfo.credit);
-        // console.log(typeof item.grade);
+        // 
         if (item.grade_option == null || item.grade_option == "ผ") {
           if (item.grade != "0") {
             sum += parseFloat(item.teachInfo.credit);
           }
         }
       });
-      // console.log("sumxx", sum);
+      // 
       return sum;
     },
     async sumCreateInClasses() {
@@ -275,7 +275,7 @@ export default {
         //  sum += parseFloat(item.teachInfo.credit);
         sum += parseFloat(item.teachInfo.credit);
       });
-      // console.log('sumCreateInClasses', sum)
+      // 
       return sum;
     },
     calGPA() {
@@ -288,27 +288,22 @@ export default {
           var credit_float = parseFloat(item.teachInfo.credit) || 0;
           totalCreditInStudent += credit_float;
         }
-        // console.log('grade',grade)
+        // 
       });
-      console.log("grade", grade);
+      
       gpa = parseFloat(grade) / parseFloat(totalCreditInStudent);
-      console.log(
-        "grade / totalCreditInStudent = ",
-        grade,
-        totalCreditInStudent,
-        gpa
-      );
+      
       return gpa;
     },
 
     sortData(data) {
       var newItems = data.sort((a, b) => a.teachInfo.total_score - b.teachInfo.total_score);
-      console.log('sort items', newItems)
+      
       return newItems
     },
     print() {
       window.print(1);
-      // console.log("it ok");
+      // 
       // this.$refs.html2Pdf.generatePdf();
     },
     back() {
@@ -318,12 +313,12 @@ export default {
       //update grade by condition
       if (confirm("ยืนยันการอนุมัติ")) {
         this.items.forEach(item => {
-          //  console.log(' score a', score.objectId)
+          //  
           const data = {
             objectId: item.objectId,
             approve: true
           };
-          // console.log("data update", data);
+          // 
           this.updateGrade(data);
           this.getGradeByConditions().then(result => {
             this.items = result;
@@ -334,12 +329,12 @@ export default {
     async unArrpove() {
       if (confirm("ยืนยันการยกเลิก")) {
         this.items.forEach(item => {
-          //  console.log(' score a', score.objectId)
+          //  
           const data = {
             objectId: item.objectId,
             approve: false
           };
-          // console.log("data update", data);
+          // 
           this.updateGrade(data);
           this.getGradeByConditions().then(result => {
             this.items = result;

@@ -40,7 +40,7 @@
     mounted () {
       this.params = this.$route.params.id
       this.getDataFromApi().then(result => (this.items = result))
-      console.log('this.params', this.params)
+      
     },
     data() {
       return {
@@ -63,11 +63,11 @@
     methods: {
       async getDataFromApi() {
         const response = await this.$store.dispatch(`academic_year/getAcademicYear`)
-        console.log('response', response)
+        
         return response.results
     },
     subjectList(item) {
-      console.log(item)
+      
       this.$router.push({
         name: 'teachers-add_score-subjects',
         query: { schoolYear: item.schoolYear, term: item.term, id: this.params}

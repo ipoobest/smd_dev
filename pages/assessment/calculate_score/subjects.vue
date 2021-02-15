@@ -76,7 +76,7 @@ export default {
   async mounted() {
     this.query = this.$route.query;
     // this.teacherId = this.$store.state.auth.auth.teacherObjectId
-    // console.log("params", this.query.id);
+    // 
     // await this.getTeachByConditions().then(result => (this.items = result));
   },
   watch: {
@@ -119,7 +119,7 @@ export default {
         `teach/getTeachByConditions`,
         data
       );
-      console.log("response getTeachByConditions", response);
+      // 
       // return response.results;
     },
     async getTeachByClasses() {
@@ -134,14 +134,14 @@ export default {
         `teach/getTeachByConditions`,
         data
       );
-      console.log("response getTeachByConditions", response);
+      // 
       this.items = response.results;
-      console.log("xxx", this.items.length);
+      // 
       if (this.items.length == 0) {
         this.disable = false;
-        console.log("this disable", this.disable);
+        // 
       } else {
-        console.log("this disable", this.disable);
+        // 
       }
     },
     async getTeachByConditions(teacherId) {
@@ -154,7 +154,7 @@ export default {
         `teach/getTeachByConditions`,
         data
       );
-      console.log("response getTeachByConditions", response);
+      // 
       return response.results;
     },
     async getGradeByConditions() {
@@ -164,12 +164,12 @@ export default {
         classRoomLevel: this.classesRoomLevel,
         staff: true
       };
-      console.log("conditoin grade", conditions);
+      // 
       const response = await this.$store.dispatch(
         `grade/getGradeByConditions`,
         conditions
       );
-      console.log("response get grade", response.results);
+      // 
       return response.results;
     },
     async getStudentByTeach(item) {
@@ -195,18 +195,18 @@ export default {
         "students/getStudents",
         query
       );
-      console.log("response student test", response.results);
+      // 
       var name = this.getStudentName(response.results);
       return name;
     },
     async createGrade(object) {
       const response = await this.$store.dispatch(`grade/createGrade`, object);
-      console.log("response create grade", response);
+      // 
       return response;
     },
     async addRatingToTach(teach) {
       const response = await this.$store.dispatch(`teach/updateTeach`, teach);
-      console.log("response addRatingToTach", response);
+      // 
       return response;
     },
     async getRanking() {
@@ -219,7 +219,7 @@ export default {
         `ranking/getRankingByConditions`,
         condition
       );
-      // console.log("getRankingByConditions", response.results);
+      // 
       return response.results;
     },
     async updateRanking(data) {
@@ -227,20 +227,20 @@ export default {
         `ranking/updateRanking`,
         data
       );
-      console.log("updateRanking", response);
+      ("updateRanking", response);
       return;
     },
     async calGradeRaking() {
       var student_ranking = await this.getRanking();
       var grade_subject = await this.getGradeByConditions();
-      // console.log('student_ranking.length', student_ranking.length)
+      // 
       // คำนวณเกรดนร. ในระดับ
       for (const student of student_ranking) {
         var student_grade_list = grade_subject.filter(
           // grade => grade.studentObjectId == student.studentObjectId
           grade => grade.studentId == student.studentId
         );
-        // console.log("student_grade_list", student_grade_list, student.studentObjectId);
+        // 
         student.gpa = this.calculateGpa(
           student_grade_list,
           student.studentObjectId
@@ -257,17 +257,17 @@ export default {
       var classroom = Array.from(new Set(student_class)); // ทำเป็น Set เพื่อไม่ให้มีค่าซ้ำ -> แล้วแปลง Set กลับไปเป็น Array
       // จัดอันดับที่ให้ ห้องเรียน + update DB
       for (const room of classroom) {
-        console.log("room", room);
+        // 
         var room_ranking = student_ranking.filter(
           student => student.classRoomName == room
         );
 
         // จัดอันดับที่ให้ ห้องเรียน
         room_ranking = this.sortByGPA(room_ranking, "rankingInRoom"); // ‘rankingInRoom’ คือ ชื่อฟิล ‘ลำดับในห้อง’
-        // console.log('ranking', room_ranking)
+        // 
         // update DB
         room_ranking.forEach(async std => {
-          console.log("std", std);
+          // 
           // *** update ’std’ เข้าตาราง Ranking *** //
           var data = {
             classRoomLevel: std.classRoomLevel,
@@ -280,13 +280,13 @@ export default {
             term: std.term,
             studentId: std.studentId
           };
-          console.log("ranking", data);
+          // 
           await this.updateRanking(data);
         });
       }
     },
     calculateGpa(grade_list, objectId) {
-      console.log("grade list calculateGpa", grade_list, objectId);
+      // 
       var gpa = 0;
       var grade = 0;
       var totalCreditInStudent = 0;
@@ -301,15 +301,15 @@ export default {
           totalCreditInStudent += credit_float;
         }
       });
-      // console.log('totalCreditInStudent (หน่วยกิตทั้งหมด)', totalCreditInStudent)
-      console.log(
-        "grade (เกรด * หน่วยกิต)",
-        grade,
-        totalCreditInStudent,
-        objectId
-      );
+      // 
+      // 
+      //   "grade (เกรด * หน่วยกิต)",
+      //   grade,
+      //   totalCreditInStudent,
+      //   objectId
+      // );
       gpa = parseFloat(grade) / parseFloat(totalCreditInStudent);
-      // console.log(
+      // 
       //   "grade / totalCreditInStudent = ",
       //   grade,
       //   totalCreditInStudent,
@@ -318,7 +318,7 @@ export default {
       return gpa;
     },
     sortByGPA(std_list, key) {
-      console.log("key", std_list.length);
+      // 
       var rank = 1;
       var i;
 
@@ -331,7 +331,7 @@ export default {
         }
         // ‘rankingInRoom’ บรรทัดนี้คือ std_list[i].rankingInRoom = rank
         std_list[i][key] = rank;
-        // console.log("rank in loop : ", rank);
+        // 
       }
       return std_list;
     },
@@ -340,7 +340,7 @@ export default {
       for (var index = 0; index < this.part_num; index++) {
         this.part_rating.push({ name: "", rating: 0 });
       }
-      console.log("length", this.part_point);
+      // 
     },
     addRating(item) {
       this.dialog = true;
@@ -349,14 +349,14 @@ export default {
         this.part_num = item.rating.length;
       }
       this.part_rating = item.rating;
-      console.log("addrateing", item.rating);
+      // 
     },
     getRating(item) {
       var rating = [];
       for (var index = 0; index < item.length; index++) {
         rating.push(item[index].name + " " + item[index].rating + " " + 0);
       }
-      console.log("student name", rating);
+      // 
       return rating;
     },
     getStudentName(item) {
@@ -366,7 +366,7 @@ export default {
           item[index].tth + " " + item[index].namet + " " + item[index].snamet
         );
       }
-      console.log("student name", studentName);
+      // 
       return studentName;
     },
     mapScoreName(name, score) {
@@ -379,12 +379,12 @@ export default {
           });
         }
       }
-      console.log("x y", student);
+      // 
       return student;
     },
     async addScore(item) {
       // เช็คก่อนว่ามมี data ใน gradeรึยัง (1)
-      console.log("addScore 1", item);
+      // 
       this.goToAddScore(item);
     },
     close() {
@@ -394,7 +394,7 @@ export default {
     },
     back() {
       this.$router.go(-1);
-      console.log("back");
+      // 
     },
     goToPreviewGrade(item) {
       this.$router.push({
@@ -403,7 +403,7 @@ export default {
       });
     },
     goToPreviewScore(item) {
-      console.log("item id ", item.classId);
+      // 
       this.$router.push({
         name: "assessment-students",
         query: { id: item.classId }

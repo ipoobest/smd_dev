@@ -144,23 +144,23 @@ export default {
   methods: {
     async getDataFromApi(classId) {
       const response = await this.$store.dispatch(`classes/getClass`, classId);
-      console.log("response studen id", response);
+     
       return response;
     },
     async getStudent() {
       const response = await this.$store.dispatch(`students/getStudent`);
-      console.log("response", response);
+     
       return response.results;
     },
     async getStudents(items) {
-      console.log("items", items);
+     
       const objectId = {
         $in: items
       };
       const response = await this.$store.dispatch(`students/getStudents`, {
         objectId
       });
-      console.log("response student", response);
+     
       return response.results;
     },
     async getStudentsNotIn(items) {
@@ -170,21 +170,21 @@ export default {
           $nin: items
         }
       };
-      console.log('query student notin', query)
+     
       const response = await this.$store.dispatch(
         `students/getStudents`,
         query
       );
-      console.log("response", response);
+     
       return response.results;
     },
     async getListClasses() {
       const response = await this.$store.dispatch(`classes/getListClasses`);
-      // console.log('classes')
+      //
       let results = response.results.map(a => a.studentId);
-      // console.log('result map ', results)
+      //
       let merged = [].concat.apply([], results);
-      // console.log('merged', merged)
+      //
       return merged;
     },
     async getGradeByConditions(condition) {
@@ -192,7 +192,7 @@ export default {
         `grade/getGradeByConditions`,
         condition
       );
-      console.log('grade id', response.results)
+     
       return response.results
     },
     async addStudents() {
@@ -200,30 +200,30 @@ export default {
         objectId: this.id,
         studentId: this.studentId
       };
-      console.log('object class', object)
+     
       const response = await this.$store.dispatch(
         `classes/updateClasses`,
         object
       );
-      console.log('response', response)
+     
     },
     async deleteStudentInGrade(id){
         const response = await this.$store.dispatch(
         `grade/deleteGrade`,
         id
       );
-      console.log('response delete', response)
+     
     },
     async deleteItem(item) {
       this.studentId = []
-      console.log('item aaas', item)
+     
       const index = this.items.indexOf(item);
       if (confirm("ยืนยีนการลบนักเรียนออกจากชั้นเรียน")) {
         this.items.splice(index, 1);
         for (var i = 0; i < this.items.length; i++) {
           this.studentId.push(this.items[i].objectId);
         }
-        // console.log('item studentId', this.studentId)
+        //
         // studentId
         const data = {
           studentObjectId: item.objectId,
@@ -232,7 +232,7 @@ export default {
         }        
         var studentId = await this.getGradeByConditions(data)
         studentId.forEach(item => {
-          console.log('testxx', (item.objectId))
+         
           this.deleteStudentInGrade(item.objectId)
         })
          this.addStudents(this.studentId);
@@ -248,11 +248,11 @@ export default {
       }, 300);
     },
     save() {
-      console.log("save", this.items);
+     
       for (var index = 0; index < this.items.length; index++) {
         this.studentId.push(this.items[index].objectId);
       }
-      console.log("looper", this.studentId);
+     
       this.addStudents(this.studentId);
       this.close();
     }

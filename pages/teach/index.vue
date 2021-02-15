@@ -73,17 +73,17 @@ export default {
   methods: {
     async getDataFromApi() {
       const response = await this.$store.dispatch(`academic_year/getAcademicYear`)
-      console.log('response', response)
+      
       return response.results
     },
     back() {
       this.$router.push({name: 'index'})
     },
     async addSubject(item) {
-      // console.log('item before commit', item.schoolYear)
+      // 
       // this.$store.commit('academic_year/setSchoolYear', item.schoolYear)
       // this.$store.commit('academic_year/setTerm', item.term)
-      // console.log('item after commit', this.$store.state.academic_year.schoolYear)
+      // 
       this.$router.push({ name: 'teach-add_subjects', query: { schoolYear: item.schoolYear, term: item.term} })
     },
     async addElevtiveSubject(item) {

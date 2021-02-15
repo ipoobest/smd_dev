@@ -114,7 +114,7 @@ export default {
         `teach/getTeachByConditions`,
         data
       );
-      console.log("response", response.results);
+      
       this.mapSubject(response.results);
     },
     async getDepartmentBySubject() {
@@ -125,7 +125,7 @@ export default {
         `subjects/getSubjectsByConditions`,
         data
       );
-      console.log("response darta", response.results[0].department);
+      
       this.department = response.results[0].department;
       this.departmentNumber = this.checkDepartmentNumber(this.department);
       this.departmentList.push(response.results[0].department);
@@ -139,7 +139,7 @@ export default {
         `grade/getGradeByConditions`,
         data
       );
-      console.log('grade result', response.results)
+      
       this.items = response.results
     },
     async updateGrade(item) {
@@ -153,12 +153,12 @@ export default {
           "objectId": item.teachId
         }
       }
-      console.log('date', data)
+      
       const response = await this.$store.dispatch(
         `grade/updateGrade`,
         data
       );
-      console.log('updateGrade result', response)
+      
       
       // this.getGrade()
       // alert('update success')
@@ -168,7 +168,7 @@ export default {
     },
     updateGradeList() {
       this.items.forEach(item => {
-        console.log('item grade', item)
+        
         this.updateGrade(item)
       })
       alert('update success')

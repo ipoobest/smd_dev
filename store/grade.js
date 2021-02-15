@@ -57,10 +57,10 @@ export const actions = {
           `${process.env.parseUrl}/classes/${classes.grade}?where=${where}&&limit=10000
           `
         );
-        console.log(
-          "grades url",
-          `${process.env.parseUrl}/classes/${classes.grade}?where=${where}`
-        );
+        // console.log(
+        //   "grades url",
+        //   `${process.env.parseUrl}/classes/${classes.grade}?where=${where}`
+        // );
         // commit('setGrade', result)
         resolve(result);
       } catch (error) {

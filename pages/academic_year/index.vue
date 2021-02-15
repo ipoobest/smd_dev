@@ -128,18 +128,18 @@ export default {
   methods: {
     async getDataFromApi() {
       const response = await this.$store.dispatch(`academic_year/getAcademicYear`)
-      console.log('response', response)
+      // 
       return response.results
     },
     async createAcademicYear(data) {
       const response = await this.$store.dispatch(`academic_year/createAcademicYear`, data)
-      console.log('res create', response)
+      // 
       this.resetForm()
       this.getDataFromApi().then(result => (this.items = result))
     },
     async deteleAcademicYear(itemId) {
       const response = await this.$store.dispatch(`academic_year/deleteAcademicYear`, itemId)
-      console.log('res ', response)
+      // 
     },
     goToUpdate(){
       this.$router.push({name: 'classes-upgrade'})
