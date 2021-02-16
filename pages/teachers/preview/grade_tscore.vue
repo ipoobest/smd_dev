@@ -92,7 +92,7 @@ export default {
   methods: {
     async getTeach(id) {
       const response = await this.$store.dispatch("teach/getTeachById", id);
-      console.log("this.item", response);
+      
       this.rating = response.rating;
       this.mapRating(this.rating);
       return response;
@@ -106,19 +106,19 @@ export default {
         "grade/getGradeByConditions",
         conditions
       );
-      console.log('response_grade',response_grade)
+      
       return response_grade.results
     },
     calcScore(score_array, index) {
       var calc_score = [];
-      // console.log("calcScore index", index);
+      // 
       score_array.forEach((score, index) => {
         var result =
           (((score / this.score_array[index]) * 100) / 100) *
           this.ratio_array[index];
         // ((( คะแนนที่ได้ / คะแนนเต็ม ) x 100) / 100 ) x ร้อยละ
         calc_score.push(result.toFixed(2));
-        // console.log('คะแนนที่ผ่านการคำนวน', calc_score[index])
+        // 
       });
       return calc_score
     },
@@ -127,7 +127,7 @@ export default {
         this.ratio_array.push(item.rating);
         this.score_array.push(item.score);
       });
-      // console.log("this.ratio_array", this.ratio_array);
+      // 
     },
     back(){
       this.$router.go(-1);

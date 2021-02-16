@@ -67,12 +67,12 @@ export default {
         };
         try {
           const response = await this.$store.dispatch(`auth/login`, { data });
-          console.log("login response", response);
+          // 
           // if(response){
           //   this.$router.replace({name: 'index'})
           // }
           if (response.type == "ครู" ) {
-            // console.log('teacher login')
+            // 
             this.$router.replace({
               name: "teachers-id",
               params: { id: `${this.$store.state.auth.auth.objectId}` }

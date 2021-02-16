@@ -114,7 +114,7 @@ export default {
       const response = await this.$store.dispatch(`users/createUser`, data);
       //  const response = await this.$store.dispatch(`students/createStudent`, object)
 
-      console.log("create", response);
+      
     },
     async createStudent(object) {
       // const response = await this.$store.dispatch(`users/createUser`, object);
@@ -123,7 +123,7 @@ export default {
         object
       );
 
-      console.log("create", response);
+      
       return response;
     },
     getHeader(sheet) {
@@ -156,7 +156,7 @@ export default {
     },
     importExcel(e) {
       const files = e.target.files;
-      console.log(files);
+      
       if (!files.length) {
         return;
       } else if (!/\.(xls|xlsx)$/.test(files[0].name.toLowerCase())) {
@@ -180,7 +180,7 @@ export default {
             excellist.push(ws[i]);
           }
           this.dataArr = excellist;
-          console.log("Read results", excellist);
+          
         } catch (e) {
           return alert("Read failure!");
         }
@@ -229,7 +229,7 @@ export default {
               password: student.idcard.toString(),
               type: "นักเรียน"
             };
-            console.log("ข้อมูลนักเรียน", object);
+            
             const response_student = await this.$store.dispatch(
               `students/createStudent`,
               object

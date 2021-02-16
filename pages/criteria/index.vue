@@ -155,14 +155,14 @@ export default {
         `criteria/updateCriteria`,
         data
       );
-      console.log("response addRatingToTach", response);
+     
       if (response) {
         alert("บันทึกสำเร็จ");
       }
     },
     async getCrieria() {
       const response = await this.$store.dispatch(`criteria/getCriteria`);
-      console.log("response", response.results[0]);
+     
       return response.results[0].criteria;
     },
     updateCrieria() {
@@ -170,7 +170,7 @@ export default {
     },
     back() {
       this.$router.go(-1);
-      console.log("back");
+     
     }
   }
 };

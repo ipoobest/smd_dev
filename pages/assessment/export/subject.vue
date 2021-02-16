@@ -110,7 +110,7 @@ export default {
         };
       }
 
-      console.log("data request", data);
+      // 
       var response = await this.$store.dispatch(
         `grade/getGradeByConditions`,
         data
@@ -122,7 +122,7 @@ export default {
       var response = await this.$store.dispatch(
         `academic_year/getAcademicYear`
       );
-      // console.log("response getAcademicYear", response.results);
+      // 
       this.mapSchoolYear(response.results);
     },
     async getSubject() {
@@ -142,12 +142,12 @@ export default {
         };
       }
 
-      // console.log("data get subject", data);
+      // 
       var response = await this.$store.dispatch(
         `teach/getSubjectsByConditions`,
         data
       );
-      // console.log("response getSubjects", response.results);
+      // 
       this.mapSubject(response.results);
     },
     async getSubjectByName(data) {
@@ -155,7 +155,7 @@ export default {
         `subjects/getSubjectsByConditions`,
         data
       );
-      // console.log("getSubjectByName", response.results[0]);
+      // 
       return response.results[0];
     },
     mapSchoolYear(data) {
@@ -165,7 +165,7 @@ export default {
       });
     },
     mapSubject(data) {
-      // console.log("map data", data);
+      // 
       data.forEach(item => {
         this.itemSubjectList.push(`${item.subject.sname}`);
       });
@@ -189,14 +189,14 @@ export default {
       // var perfixLev = this.getClassLevel()
       var grade = await this.getGradebyConditions();
       // var perfixLev = this.getClassLevel(grade[0]);
-      console.log("grade", grade);
+      // 
       var data;
       if (this.classRoomName == "ทั้งหมด") {
         data = grade.sort((a, b) => b.total_score - a.total_score);
       } else {
         data = grade.sort((a, b) => a.studentNumber - b.studentNumber);
       }
-      console.log("data clean : ", data);
+      // 
       var querySubject = {
         sname: this.subject,
         // codet: data[0].teachInfo.codet
@@ -222,7 +222,7 @@ export default {
         };
         newData.push(newJson);
       });
-      console.log("new data", newData);
+      // 
       var dataWS = XLSX.utils.json_to_sheet(newData);
       var wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, dataWS);

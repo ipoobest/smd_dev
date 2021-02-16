@@ -88,14 +88,14 @@ export default {
       this.$router.push({name: 'index'})
     },
     editItem(item) {
-      // console.log('item id ', item)
+      // 
       this.$router.push({
         name: 'students-id',
         params: { id: item.objectId }
       })
     },
     deleteItem(item) {
-      console.log('delete', item.objectId)
+      
        const index = this.items.indexOf(item)
         //delete user ด้วย
       if (confirm('ยืนยีนการลบข้อมูลนักเรียน')) {

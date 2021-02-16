@@ -251,7 +251,7 @@ export default {
   methods: {
     async getTechById(id) {
       const response = await this.$store.dispatch("teach/getTeachById", id);
-      console.log("this.item", response);
+      
       return response;
     },
     async getGrade(item) {
@@ -263,7 +263,7 @@ export default {
         "grade/getGradeByConditions",
         conditions
       );
-      console.log("response_grade", response_grade);
+      
 
       return response_grade.results;
     },
@@ -283,17 +283,17 @@ export default {
         return this.items.subject.credit * 2;
       } else {
         period = this.items.subject_info.credit * 2;
-        console.log("period", period);
+        
         return period;
       }
     },
     async updateGrade(data) {
       const response = await this.$store.dispatch(`grade/updateGrade`, data);
-      console.log("update response", response);
+      
     },
     async updateTech(data) {
       const response = this.$store.dispatch(`teach/updateTeach`, data);
-      console.log("update Teach", data, response);
+      
 
       this.getTechById(this.$route.query.id).then(
         result => (this.items = result)
@@ -315,7 +315,7 @@ export default {
         this.grade_num_list.push(grade_filter.length);
       });
 
-      // console.log("xxx", this.grade_num_list);
+      // 
       this.grade_option_num_list = [];
       grade_option.forEach(grade => {
         var grade_filter = data.filter(
@@ -323,7 +323,7 @@ export default {
         );
         this.grade_option_num_list.push(grade_filter.length);
       });
-      console.log("grade options", this.grade_option_num_list);
+      
 
       this.aptitude_score_num = [];
       this.analytical_score_num = [];
@@ -339,7 +339,7 @@ export default {
       });
     },
     save() {
-      console.log("approve, message", this.items.approved);
+      
       // var save_score = (this.items.approved === "true") ? false : true;
       var send_score = this.items.approved === "true" ? true : false;
       if (confirm("ยืนยันการบันทึก")) {
@@ -348,7 +348,7 @@ export default {
             objectId: grade.objectId,
             staff: true
           };
-          // console.log('grade', data)
+          // 
           this.updateGrade(data);
         });
         var data = {
@@ -359,7 +359,7 @@ export default {
           send_score: send_score,
           send_score_assessment: true
         };
-        // console.log("data update", data);
+        // 
         this.updateTech(data);
       }
     },

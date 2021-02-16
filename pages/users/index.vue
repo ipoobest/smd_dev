@@ -298,7 +298,7 @@ export default {
         `users/getUserByConditions`,
         conditions
       );
-      // console.log('data', response.results)
+      // 
       return response.results;
     },
     async getDepartment() {
@@ -309,7 +309,7 @@ export default {
       return data
     },
     async getUserById(id) {
-      // console.log('user', id)
+      // 
       const response = await this.$store.dispatch(`users/getUserById`, id);
       return response;
     },
@@ -351,7 +351,7 @@ export default {
     },
     async deleteItem(item) {
       const index = this.items.indexOf(item);
-      // console.log('user delete', item)
+      // 
       if (confirm("ยืนยีนการลบข้อมูล")) {
         await this.deleteUser(item.objectId);
         this.items.splice(index, 1);
@@ -364,11 +364,11 @@ export default {
       }
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.editedItem);
-        // console.log('user id xx', this.user.objectId)
+        // 
         const userId = await this.getUserById(this.user.objectId);
-        // console.log('response user Id', userId)
+        // 
         const objectId = userId.objectId;
-        // console.log('object User Id', objectId)
+        // 
 
         const editData = {
           objectId: this.editedItem.objectId,
@@ -385,13 +385,13 @@ export default {
           objectId: objectId
         };
 
-        // console.log('edit data', editData)
+        // 
         this.updateUser(editData);
         this.close();
       } else {
         if (this.$refs.form.validate()) {
           const user = await this.checkUser(this.editedItem.username);
-          // console.log('resonse call this', user)
+          // 
           if (user) {
             const user = {
               userId: this.editedItem.id,
@@ -405,7 +405,7 @@ export default {
               staffType: this.editedItem.staffType,
               classes: this.editedItem.classes
             };
-            // console.log('user info', user)
+            // 
             this.createUser(user);
             this.editedItem = {};
             this.close();
@@ -420,7 +420,7 @@ export default {
       item.forEach(item => {
          items.push(item.name)
       })
-      console.log('item', items)
+      
       return items
     },
     resetForm() {

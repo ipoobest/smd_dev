@@ -95,7 +95,7 @@ export default {
     }
   },
   mounted() {
-    console.log('user', this.$store.state.auth.auth)
+    // 
   },
   methods: {
     async logout(){

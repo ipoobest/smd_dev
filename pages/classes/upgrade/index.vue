@@ -275,7 +275,7 @@ export default {
         `classes/getClassesByConditions`,
         classItem
       );
-      console.log("getListClass", response);
+     
       return response.results;
     },
     async getAcademicYear(data) {
@@ -283,7 +283,7 @@ export default {
         `academic_year/getAcademicYearByCondition`,
         data
       );
-      console.log("getAcademicYear", response.results);
+     
       return response.results;
     },
     async getStudentFromStudentClass(objectId) {
@@ -291,7 +291,7 @@ export default {
         `students/getStudentById`,
         objectId
       );
-      console.log("getStudentFromStudentClass", response);
+     
       return response;
     },
     async getRanking(data) {
@@ -299,7 +299,7 @@ export default {
         `ranking/getRankingByConditions`,
         data
       );
-      console.log("respose create success", response);
+     
       return response;
     },
     async createAcademiYear(data) {
@@ -307,7 +307,7 @@ export default {
         `academic_year/createAcademicYear`,
         data
       );
-      console.log("createAcademicYear", response.results);
+     
       return response.results;
     },
     async createClasses(data) {
@@ -317,7 +317,7 @@ export default {
       );
     },
     async deteleClasses(itemId) {
-      console.log("delete ", itemId);
+     
       const response = await this.$store.dispatch(
         `classes/deleteClass`,
         itemId
@@ -325,7 +325,7 @@ export default {
     },
     async createRanking(data) {
       var response = await this.$store.dispatch(`ranking/createRanking`, data);
-      console.log("respose create success", response);
+     
     },
     async checkAcademicYear() {
       this.ranking = true;
@@ -342,13 +342,13 @@ export default {
         const acadamicYear = await this.getAcademicYear(data);
         if (acadamicYear.length != 0) {
           // create academic year
-          // console.log('acadamicYear ok', acadamicYear.length)
+          //
           // await this.createAcademiYear(data);
           this.checkClassesUpdate();
           //3 call check update
         } else {
           //3 call check update
-          // console.log('acadamicYear okxx', acadamicYear.length)
+          //
           await this.createAcademiYear(data);
           this.checkClassesUpdate();
         }
@@ -363,9 +363,9 @@ export default {
         classRoomLevel: item.classRoomLevel,
         classRoomName: item.classRoomName
       };
-      console.log("data checkRanking", data);
+     
       var ranking = await this.getRanking(data);
-      console.log("data rankgin", ranking.results.length);
+     
 
       if (ranking.results.length != 0) {
         alert("ชั้นเรียนนี้ update ranking แล้ว");
@@ -382,7 +382,7 @@ export default {
       };
       const classes = await this.getListClass(data);
       if (classes.length != 0) {
-        // console.log("okk", classes.length);
+        //
         alert("ชั้นเรียนนี้ถูก update แล้ว");
         var newData = {
           schoolYear: this.newSchoolYear,
@@ -391,7 +391,7 @@ export default {
         };
         this.newItems = await this.getListClass(newData);
       } else {
-        // console.log("sss", classes.length);
+        //
         /// create classes
         // alert('update classes')
         this.upgradeClasses();
@@ -400,9 +400,9 @@ export default {
     async upgradeClasses() {
       // 1. check academic year update
       // 2. create academic year
-      // console.log("item update", this.items);
+      //
       this.items.forEach(async item => {
-        // console.log(`item `, item);
+        //
         var newClassRoomLevel;
         var newSchoolYear;
         if (
@@ -417,7 +417,7 @@ export default {
         }
         var newClassRoomId =
           this.newClassRoomLevel.substring(2) + "00" + item.classRoomName;
-        // console.log('new lcassroom Id', newClassRoomId)
+        //
         var data = {
           classRoomId: newClassRoomId,
           classRoomLevel: newClassRoomLevel,
@@ -427,7 +427,7 @@ export default {
           studentId: item.studentId
         };
         await this.createClasses(data);
-        // console.log("new data", data);
+        //
       });
 
       var newData = {
@@ -435,12 +435,12 @@ export default {
         term: this.newTerm,
         classRoomLevel: this.newClassRoomLevel
       };
-      // console.log('newdata', newData)
+      //
       alert('อัพเกรดสำเร็จ')
       this.newItems = await this.getListClass(newData);
     },
     editItem(item) {
-      // console.log('item id ', item)
+      //
       this.editedIndex = this.items.indexOf(item);
       this.classItem = Object.assign({}, item);
 
@@ -469,7 +469,7 @@ export default {
     },
     async initRanking(data) {
       // checkRanking
-      // console.log("data init ranking", data);
+      //
       // var classes = data;
       var length = 0;
 
@@ -484,14 +484,14 @@ export default {
           studentName: `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`,
           studentId: studentObject.idstd
         };
-        // console.log("initRanking", data);
+        //
       await this.createRanking(data);
       });
       alert('init ranking สำเร็จ');
-      // console.log("initRanking", data);
+      //
     },
     addStudent(item) {
-      // console.log("item id ", item.objectId);
+      //
       this.$router.push({
         name: "classes-add_student",
         query: { id: item.objectId }

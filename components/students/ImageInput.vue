@@ -59,7 +59,7 @@
             var formData = new FormData()
             var imageURL = URL.createObjectURL(imageFile)
             formData.append(imageFile)
-            console.log('formData', formData)
+            // 
             // Emit the FormData and image URL to the parent component
             this.$emit('input', { formData, imageURL })
           }

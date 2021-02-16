@@ -58,7 +58,7 @@ export default {
         "classes/getClassesByConditions",
         query
       );
-      // console.log("get classes : ", response.results);
+      // 
       // this.items = response.results
       return response.results;
     },
@@ -73,17 +73,17 @@ export default {
         "classes/getClassesByConditions",
         query
       );
-      // console.log("get classes : ", response.results);
+      // 
       // this.items = response.results
       return response.results[0];
     },
     async updateTeacherInClasses(data) {
-      console.log("this data teacher", data);
+      
       const response = await this.$store.dispatch(
         "classes/updateClasses",
         data
       );
-      console.log("response", response.results);
+      
     },
     async getOldClass() {
       var data = {
@@ -101,7 +101,7 @@ export default {
             teacher2: item.teatherName.teather2
           }
         };
-        console.log("teacher : ", data);
+        
         await this.updateTeacherInClasses(data);
       });
     },
@@ -113,7 +113,7 @@ export default {
           classRoomLevel: this.items[i].classRoomLevel,
           classRoomName: this.items[i].classRoomName
         };
-        // console.log("update next term", data);
+        // 
         await this.getNewClasses(data);
       }
       // this.items.forEach(async item => {
@@ -128,7 +128,7 @@ export default {
       //   teacher2: item.teatherName.teather2
       // }
       // };
-      // console.log("update next term", data);
+      // 
       // var newItem = await this.getNewClasses(data);
       // var newData = {
       //   objectId: newItem.objectId,
@@ -140,7 +140,7 @@ export default {
       //   }
       // }
       // await this.updateTeacherInClasses(newData);
-      // console.log("update teacher", newItem);
+      // 
       // });
       //get classes
 

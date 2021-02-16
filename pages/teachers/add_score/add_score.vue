@@ -274,20 +274,20 @@ export default {
         //   "objectId": item.objectId
         // }
       };
-      console.log("condition get garde", conditions);
+
       // 1 get stu array grade
       const response_grade = await this.$store.dispatch(
         "grade/getGradeByConditions",
         conditions
       );
-      console.log("grade item", response_grade.results);
-      // console.log('response xxzzzx', response_grade.results)
+
+      //
       this.score = response_grade.results;
       this.edit_mode = new Array(this.score.length);
       this.edit_mode.fill(true);
       this.grade_arr = response_grade.results;
       this.stu_grade_arr = await this.grade_arr.map(a => a.studentObjectId);
-      // console.log('response this.stu_grade_arr', this.stu_grade_arr)
+      //
 
       if (item.students) {
         this.stu_classes_arr = item.students;
@@ -298,19 +298,19 @@ export default {
           this.items.classId
         );
         this.stu_classes_arr = response_classes.studentId;
-        // console.log('stu_classes_arr', this.stu_classes_arr)
+        //
       }
       // 3 check diff
       var difference = this.stu_classes_arr.filter(
         x => !this.stu_grade_arr.includes(x)
       );
-      // console.log('diff', difference)
+      //
 
       // 4 createGrade by diff
       if (difference.length != 0) {
         this.createGrade(difference);
       } else {
-        // console.log('grade', response_grade.results)
+        //
         return response_grade.results;
       }
     },
@@ -325,11 +325,11 @@ export default {
         "teach/getSubjectsByConditions",
         conditions
       );
-      // console.log("response students", response.results[0].students);
+      //
       return response.results[0].students;
     },
     async getStudent(data) {
-      // console.log("data student", data);
+      //
       const query = {
         objectId: {
           $in: data
@@ -339,24 +339,23 @@ export default {
         "students/getStudents",
         query
       );
-      // console.log("response student test", response.results);
+      //
       var values = this.getStudentName(response.results);
       var studentName = values[0];
       var studentId = values[1];
       var studentNumber = values[2];
-      // console.log('studentName', studentName)
-      // console.log('studentId xxx', studentId)
+      //
+      //
       return [studentName, studentId, studentNumber];
     },
     async getStudentByClassId(classId) {
       const response = await this.$store.dispatch(`classes/getClass`, classId);
-      console.log("response xxxx", response.studentId);
+
       return response.studentId;
     },
     async getTechById(id) {
       const response = await this.$store.dispatch("teach/getTeachById", id);
-      console.log("this.item", response);
-      console.log("this.rating", response.rating);
+
       this.rating = response.rating;
       this.mapRating(this.rating);
       return response;
@@ -364,26 +363,26 @@ export default {
     async getCriteria() {
       // grade
       const response = await this.$store.dispatch(`criteria/getCriteria`);
-      // console.log("response", response.results[0]);
+      //
       return response.results[0].criteria;
     },
     async createGrade(students) {
-      console.log("create Grade", students);
+      //
       var values = await this.getStudent(students);
       var studentName = values[0];
       var studentId = values[1];
       var studentNumber = values[2];
 
-      console.log("student id", values);
+      //
 
-      // console.log("this.students", studentName);
+      //
       var initScore = new Array(this.rating.length);
       initScore.fill(0);
-      // console.log("init score", initScore);
+      //
       if (initScore.length == 0) {
         return;
       }
-      // console.log('this. student xxx', studentName.length)
+      //
       for (var index = 0; index < studentName.length; index++) {
         const data = {
           //pointer techId,studentObjectId
@@ -413,9 +412,8 @@ export default {
           aptitude: "",
           analytical_thinking: ""
         };
-        // console.log("date create", data);
+        //
         const response = await this.$store.dispatch(`grade/createGrade`, data);
-        console.log("response create grade", response);
       }
       this.getGradeByConditions(this.items).then(
         result => (this.grade = result)
@@ -423,7 +421,6 @@ export default {
     },
     async updateTech(data) {
       const response = this.$store.dispatch(`teach/updateTeach`, data);
-      console.log("update Teach", data);
 
       this.getTechById(this.$route.query.id).then(
         result => (this.items = result)
@@ -451,14 +448,14 @@ export default {
             total_score: item.sum_score,
             status: "บันทึก"
           };
-          console.log("score data : ", data);
+
           // const response = this.$store.dispatch(`grade/updateGrade`, data);
         });
         var saveScore = {
           objectId: this.items.objectId,
           save_score: true
         };
-        // console.log("saveScore", saveScore);
+        //
         // this.items.send_score = true
         this.updateTech(saveScore);
       }
@@ -474,7 +471,7 @@ export default {
         this.studentId.push(item[index].idstd);
         this.studentNumber.push(item[index].number);
       }
-      console.log("student name", this.studentId);
+
       return [this.studentName, this.studentId, this.studentNumber];
     },
     mapRating(rating) {
@@ -482,11 +479,10 @@ export default {
         this.ratio_array.push(item.rating);
         this.score_array.push(item.score);
       });
-      console.log("this.ratio_array", this.ratio_array);
     },
     calcScore(score_array, index) {
       var calc_score = [];
-      console.log("calcScore index", index);
+      //
       score_array.forEach((score, index) => {
         var result =
           (((score / this.score_array[index]) * 100) / 100) *
@@ -494,7 +490,7 @@ export default {
         // ((( คะแนนที่ได้ / คะแนนเต็ม ) x 100) / 100 ) x ร้อยละ
 
         calc_score.push(result);
-        // console.log('คะแนนที่ผ่านการคำนวน', calc_score)
+        //
       });
 
       console.log("calc_score", calc_score);
@@ -503,11 +499,11 @@ export default {
 
       this.score[index].sum_score = sum_score.toFixed(2);
       this.score[index].grade = this.calcGrade(sum_score.toFixed(2));
-      // console.log("this.score xx", this.score);
+      //
       return sum_score.toFixed(2);
     },
     calcGrade(score) {
-      console.log("เกณการให้คะแนน", score, this.criteria);
+      //
       if (score == 100 || score >= this.criteria.g4) {
         return 4;
       } else if (score >= this.criteria.g3_5) {
@@ -539,14 +535,13 @@ export default {
       const response = this.$store.dispatch(`grade/updateGrade`, data);
     },
     editMode(index) {
-      // console.log("index", index);
+      //
       this.$set(this.edit_mode, index, !this.edit_mode[index]);
     },
     editAllGrade() {
       this.items.save_score = false;
     },
     addScoreX() {
-      console.log("xxxx", this.score_aptitude);
       if (
         this.score_aptitude < 0 ||
         this.score_aptitude > 3 ||
@@ -561,19 +556,15 @@ export default {
         item.analytical_thinking = this.score_analytical_thinking;
       });
     },
-    logId(item) {
-      console.log(item);
-    },
-    save() {
-      console.log("this.score", this.score);
-    },
+    logId(item) {},
+    save() {},
     close() {},
     reset() {},
     back() {
       this.$router.go(-1);
     },
     previewGrade() {
-      // console.log('preview grade')
+      //
       this.$router.push({
         name: "teachers-preview-grade",
         query: { id: this.$route.query.id }

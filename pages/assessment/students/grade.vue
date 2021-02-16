@@ -255,7 +255,7 @@ export default {
         `grade/getGradeByConditions`,
         conditions
       );
-      console.log("grade list Gpa", response.results);
+      // console.log("grade list Gpa", response.results);
       this.info = response.results[0];
       this.rowSpan = response.results.length;
       this.approve = response.results[0].approve;
@@ -270,7 +270,7 @@ export default {
         classRoomLevel: this.$route.query.classRoomLevel,
         classRoomName: this.$route.query.classRoomName
       };
-      console.log("tacher request : ", data);
+      // console.log("tacher request : ", data);
       const response = await this.$store.dispatch(
         `classes/getClassesByConditions`,
         data
@@ -301,12 +301,12 @@ export default {
         classRoomName: this.info.classRoomName,
         studentId: this.$route.query.id
       };
-      console.log("ranking condition", condition);
+      // console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
         `ranking/getRankingByConditions`,
         condition
       );
-      console.log("grade ranking", response.results[0]);
+      // console.log("grade ranking", response.results[0]);
       return response.results[0];
     },
     async countRankingClasses() {
@@ -315,12 +315,12 @@ export default {
         term: this.$route.query.term,
         classRoomLevel: this.info.classRoomLevel
       };
-      console.log("ranking condition", condition);
+      // console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
         `ranking/getRankingCount`,
         condition
       );
-      console.log("grade classes", response);
+      // console.log("grade classes", response);
       return response;
     },
     async countRankingRoom() {
@@ -330,17 +330,17 @@ export default {
         classRoomLevel: this.info.classRoomLevel,
         classRoomName: this.info.classRoomName
       };
-      console.log("ranking condition", condition);
+      // console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
         `ranking/getRankingCount`,
         condition
       );
-      console.log("grade room", response);
+      // console.log("grade room", response);
       return response;
     },
     async updateGrade(data) {
       const response = await this.$store.dispatch(`grade/updateGrade`, data);
-      console.log("update response", response);
+      // console.log("update response", response);
     },
     getClass() {
       if (["ม.1", "ม.2", "ม.3"].includes(this.info.classRoomLevel)) {
@@ -364,14 +364,14 @@ export default {
       var sum = 0;
       this.items.forEach(item => {
         //  sum += parseFloat(item.teachInfo.credit);
-        console.log(typeof item.grade);
+        // console.log(typeof item.grade);
         if (item.grade_option == null || item.grade_option == "ผ") {
           if (item.grade != "0") {
             sum += parseFloat(item.teachInfo.credit);
           }
         }
       });
-      console.log("sumxx", sum);
+      // console.log("sumxx", sum);
       return sum;
     },
     async sumCreateInClasses() {
@@ -395,14 +395,14 @@ export default {
         }
         // console.log('grade',grade)
       });
-      console.log("grade", grade);
+      // console.log("grade", grade);
       gpa = parseFloat(grade) / parseFloat(totalCreditInStudent);
-      console.log(
-        "grade / totalCreditInStudent = ",
-        grade,
-        totalCreditInStudent,
-        gpa
-      );
+      // console.log(
+      //   "grade / totalCreditInStudent = ",
+      //   grade,
+      //   totalCreditInStudent,
+      //   gpa
+      // );
       return gpa;
     },
 
@@ -410,7 +410,7 @@ export default {
       var newItems = data.sort(
         (a, b) => a.department_number - b.department_number
       );
-      console.log("sort items", newItems);
+      // console.log("sort items", newItems);
       return newItems;
     },
     print() {

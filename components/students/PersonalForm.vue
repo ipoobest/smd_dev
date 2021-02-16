@@ -294,7 +294,7 @@ export default {
     }
   },
   mounted () {
-    console.log('props', this.personalData)
+    // console.log('props', this.personalData)
     // this.profileBase64 = this.personalData.this.profileBase64
   },
   data() {
@@ -321,7 +321,7 @@ export default {
           const reader = new FileReader
           reader.readAsDataURL(this.profile)
           reader.onload = () => {
-            console.log('reader', reader.result)
+            // console.log('reader', reader.result)
             this.personalData.profileBase64 =  reader.result
           }
           reader.onerror = error => console.log(error)
@@ -332,7 +332,7 @@ export default {
     async removeprofile() {
       if(confirm(`ต้องการลบโลโก้`)) {
         this.profile = ``
-        console.log('personalData', this.personalData.profileBase64)
+        // console.log('personalData', this.personalData.profileBase64)
         this.personalData.profileBase64 = ``
       }
     },

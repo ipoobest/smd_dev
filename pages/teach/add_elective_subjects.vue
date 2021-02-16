@@ -163,7 +163,7 @@ export default {
       for (var i = 0; i < this.subjects.length; i++) {
         this.selectSubjects.push(this.subjects[i].sname);
       }
-      console.log("looper", this.selectSubjects);
+      
     }
   },
   data() {
@@ -226,7 +226,7 @@ export default {
         `subjects/getSubjectsByConditions`,
         conditions
       );
-      console.log("response subject", response);
+      
       return response.results;
     },
     async getSubjectsFromTeach() {
@@ -239,7 +239,7 @@ export default {
         `teach/getSubjectsByConditions`,
         condition
       );
-      console.log("getSubjectsFromTeach subject", response.results);
+      
       return response.results;
     },
     async getClassesByConditions() {
@@ -291,7 +291,7 @@ export default {
         },
         type: "วิชาเลือกเสรี"
       };
-      console.log("teach data", data);
+      
       this.addSubjectToTeach(data);
       this.resetForm();
       this.close();
@@ -301,7 +301,7 @@ export default {
         `teach/deleteSubjectInTeach`,
         objectId
       );
-      // console.log('response', response)
+      // 
     },
     selectInputSubjects() {
       this.classSubject = [];
@@ -312,15 +312,15 @@ export default {
         };
         this.classSubject.push(data);
       });
-      console.log("classSubject index", this.classSubject);
+      
     },
     selectInputClasses() {
-      console.log("this classes", this.classes);
+      
       for (var index = 0; index < this.classes.length; index++) {
         this.classRoomLevel.push(this.classes[index].classRoomLevel);
         this.classRoomName.push(this.classes[index].classRoomName);
       }
-      console.log("classRoomLevel index", this.classRoomLevel);
+      
     },
     selectInputTeacher() {
       for (var index = 0; index < this.teachers.length; index++) {
@@ -340,9 +340,9 @@ export default {
       var subject_name = this.subjects.filter(
         subject => subject.objectId == this.input.subject_id
       );
-      console.log("subject_name", subject_name);
+      
       this.subjectInfo = {id: subject_name[0].objectId , codet: subject_name[0].codet,sname: subject_name[0].sname, credit: subject_name[0].credit, hour: subject_name[0].hour};
-      console.log('subject infoxx', this.subjectInfo )
+      
     },
     addClasses(item) {
       this.$router.push({
@@ -355,7 +355,7 @@ export default {
       });
     },
     addStudent(item) {
-      console.log("item id ", item.objectId);
+      
       this.$router.push({
         name: "teach-add_students_to_elective_subject",
         query: { id: item.objectId }
@@ -373,7 +373,7 @@ export default {
       item.forEach(item => {
         department.push(item.name);
       });
-      console.log("item deprt", department);
+      
       return department;
     },
     back() {

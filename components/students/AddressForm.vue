@@ -68,11 +68,11 @@ export default {
   methods: {
     back() {
       this.tab = 'personalData'
-      console.log('black')
+      // 
       this.$emit('saveAddress', this.addressData, this.tab)
     },
     save() {
-      console.log('go')
+      // 
       this.tab = 'familyData'
       this.$emit('saveAddress', this.addressData, this.tab)
     }

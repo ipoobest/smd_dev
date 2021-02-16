@@ -250,7 +250,7 @@ export default {
   methods: {
     async getTechById(id) {
       const response = await this.$store.dispatch("teach/getTeachById", id);
-      console.log("this.item", response);
+      
       return response;
     },
     async getGrade(item) {
@@ -262,7 +262,7 @@ export default {
         "grade/getGradeByConditions",
         conditions
       );
-      // console.log("response_grade", response_grade.results.length);
+      // 
 
       return response_grade.results;
     },
@@ -278,12 +278,12 @@ export default {
     },
     getPeriod() {
       var period = 0;
-      console.log("get period :", this.items.subject.credit);
+      
       if (this.items.subject.credit) {
         return this.items.subject.credit * 2;
       } else {
         period = this.items.subject_info.credit * 2;
-        console.log("period", period);
+        
         return period;
       }
     },
@@ -303,7 +303,7 @@ export default {
         this.grade_num_list.push(grade_filter.length);
       });
 
-      // console.log("xxx", this.grade_num_list);
+      // 
       this.grade_option_num_list = [];
       grade_option.forEach(grade => {
         var grade_filter = data.filter(
@@ -311,7 +311,7 @@ export default {
         );
         this.grade_option_num_list.push(grade_filter.length);
       });
-      // console.log("grade options", this.grade_option_num_list);
+      // 
 
       this.aptitude_score_num = [];
       this.analytical_score_num = [];

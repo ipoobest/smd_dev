@@ -44,7 +44,7 @@ export default {
   async mounted() {
     this.query = this.$route.query;
     // this.teacherId = this.$store.state.auth.auth.teacherObjectId
-    // console.log("params", this.query.id);
+    // 
     await this.getTeachByConditions().then(result => (this.items = result));
   },
   watch: {
@@ -90,7 +90,7 @@ export default {
         `teach/getTeachByConditions`,
         data
       );
-      console.log("response getTeachByConditions", response);
+      // 
       return response.results;
     },
 
@@ -104,12 +104,12 @@ export default {
         `teach/getTeachByConditions`,
         data
       );
-      console.log("response getTeachByConditions", response);
+      // 
       return response.results;
     },
 
     async getGradeByConditions(item) {
-      console.log("where item", item);
+      // 
 
       const conditions = {
         subject: item.sname,
@@ -123,7 +123,7 @@ export default {
         `grade/getGradeByConditions`,
         conditions
       );
-      console.log("response get grade", response.results);
+      // 
       return response.results;
     },
 
@@ -138,8 +138,8 @@ export default {
         "classes/getClassesByConditins",
         conditions
       );
-      console.log("response students", response.results);
-      console.log("response students", response.results[0].studentId);
+      // 
+      // 
       return response.results[0].studentId;
     },
 
@@ -153,19 +153,19 @@ export default {
         "students/getStudents",
         query
       );
-      console.log("response student test", response.results);
+      // 
       var name = this.getStudentName(response.results);
       return name;
     },
     async createGrade(object) {
       const response = await this.$store.dispatch(`grade/createGrade`, object);
-      console.log("response create grade", response);
+      // 
       return response;
     },
 
     async addRatingToTach(teach) {
       const response = await this.$store.dispatch(`teach/updateTeach`, teach);
-      console.log("response addRatingToTach", response);
+      // 
       return response;
     },
     addPartNumber() {
@@ -173,7 +173,7 @@ export default {
       for (var index = 0; index < this.part_num; index++) {
         this.part_rating.push({ name: "", rating: 0 });
       }
-      console.log("length", this.part_point);
+      // 
     },
     addRating(item) {
       this.dialog = true;
@@ -182,14 +182,14 @@ export default {
         this.part_num = item.rating.length;
       }
       this.part_rating = item.rating;
-      console.log("addrateing", item.rating);
+      // 
     },
     getRating(item) {
       var rating = [];
       for (var index = 0; index < item.length; index++) {
         rating.push(item[index].name + " " + item[index].rating + " " + 0);
       }
-      console.log("student name", rating);
+      // 
       return rating;
     },
     getStudentName(item) {
@@ -199,7 +199,7 @@ export default {
           item[index].tth + " " + item[index].namet + " " + item[index].snamet
         );
       }
-      console.log("student name", studentName);
+      // 
       return studentName;
     },
     mapScoreName(name, score) {
@@ -212,11 +212,11 @@ export default {
           });
         }
       }
-      console.log("x y", student);
+      // 
       return student;
     },
     async score(item) {
-      // console.log("score ", item);
+      // 
       this.goToPreviewGrade(item);
     },
     
@@ -227,7 +227,7 @@ export default {
     },
     back() {
       this.$router.go(-1);
-      console.log("back");
+      // 
     },
 
     goToPreviewGrade(item) {
@@ -237,7 +237,7 @@ export default {
       });
     }
     // goToPreviewScore(item) {
-    //   console.log("item id ", item.classId);
+    //   
     //   this.$router.push({
     //     name: "assessment-students",
     //     query: { id: item.classId }

@@ -173,7 +173,7 @@ export default {
         `teach/getTeachByConditions`,
         data
       );
-      console.log("response getTeachByConditions", response.results);
+      
       return response.results;
     },
     async getGradeList() {
@@ -184,25 +184,25 @@ export default {
         `grade/getGradeByConditions`,
         conditions
       );
-      console.log("getGradeList", response);
+      
       return response.results;
     },
     async getCriteria() {
       // grade
       const response = await this.$store.dispatch(`criteria/getCriteria`);
-      console.log("response", response.results[0]);
+      
       return response.results[0].criteria;
     },
     async addRatingToTach(teach) {
       const response = await this.$store.dispatch(`teach/updateTeach`, teach);
-      console.log("response addRatingToTach", response);
+      
       if (response) {
         alert("บันทึกสำเร็จ");
       }
     },
     async getRating(item) {
-      console.log("criteria", this.grade);
-      console.log("this rating", item[0].rating);
+      
+      
       if (item[0].rating) {
         this.part_num = item[0].rating.length;
         this.part_rating = item[0].rating;
@@ -216,9 +216,9 @@ export default {
         objectId: objectId,
         score: score_array
       };
-      console.log("score", data);
+      
       const response = await this.$store.dispatch(`grade/updateGrade`, data);
-      console.log("response");
+      
     },
     saveScoringCriteria() {
       const data = {
@@ -233,7 +233,7 @@ export default {
           g1: this.grade.g1
         }
       };
-      console.log("คะแนน", data);
+      
       this.addRatingToTach(data);
     },
     editMode() {
@@ -250,7 +250,7 @@ export default {
     },
     back() {
       this.$router.go(-1);
-      console.log("back");
+      
     },
     deleteRating(index) {
       // const index = this.part_rating.indexOf(item);
@@ -260,11 +260,11 @@ export default {
           objectId: this.$route.query.id,
           rating: this.part_rating
         };
-        console.log('teach delete', teach)
+        
         // this.addRatingToTach(teach);
         this.grade_list.forEach(grade => {
           var grade_id = grade.objectId;
-          console.log('update grade.score', grade.score)
+          
           // update score ตารางเกรด
           // this.updateGrade(grade.objectId, grade.score);
           grade.score.splice(index, 1);
@@ -291,7 +291,7 @@ export default {
         sum_array.push(parseInt(item.rating));
       });
       sum = sum_array.reduce((a, b) => a + b);
-      console.log("add rating", sum);
+      
       if (sum != 100) {
         alert('กรุณาทำสัดส่วนให้เท่ากับ 100')
         this.part_rating.splice(-1,1);
@@ -301,14 +301,14 @@ export default {
           objectId: this.$route.query.id,
           rating: this.part_rating
         };
-        console.log('part_rating', teach.rating.length)
+        
         var arr_score = Array(teach.rating.length).fill(0);
-        console.log('new score', arr_score)
+        
         this.addRatingToTach(teach);
         this.grade_list.forEach(grade => {
           var grade_id = grade.objectId;
           grade.score = arr_score
-          // console.log('save', grade.objectId, grade.score)
+          // 
           this.updateGrade(grade.objectId, grade.score);
         });
       }      

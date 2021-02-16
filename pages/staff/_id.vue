@@ -41,7 +41,7 @@
       this.params = this.$route.params.id
       this.getDataFromApi().then(result => (this.items = result))
       // this.checkClasses()
-      console.log('this.params', this.params)
+      
     },
     data() {
       return {
@@ -65,11 +65,11 @@
     methods: {
       async getDataFromApi() {
         const response = await this.$store.dispatch(`academic_year/getAcademicYear`)
-        console.log('response', response)
+        
         return response.results
     },
     subjectList(item) {
-      console.log(item)
+      
       this.$router.push({
         name: 'staff-subjects',
         query: { schoolYear: item.schoolYear, term: item.term}
@@ -77,7 +77,7 @@
     },
     checkClasses() {
       var data = this.$store.state.auth.auth
-      console.log('data class', data.classes)
+      
       if(data.classes == "ม.ต้น") {
         this.class = ['1','2','3']
       } else {
@@ -86,7 +86,7 @@
     },
     test() {
      var x = this.$store.state.auth.auth
-     console.log('xx', x)
+     
     }
   }
 }

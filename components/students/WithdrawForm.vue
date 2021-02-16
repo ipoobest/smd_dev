@@ -60,11 +60,11 @@ export default {
   methods: {
     back() {
       this.tab = 'familyData'
-      console.log('black', this.tab)
+      // 
       this.$emit('saveWithdraw', this.withdrawData, this.tab)
     },
     save() {
-      console.log('go')
+      // 
       this.tab = 'healthData'
       this.$emit('saveWithdraw', this.withdrawData, this.tab)
     }

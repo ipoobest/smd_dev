@@ -156,7 +156,7 @@ export default {
       for (var i = 0; i < this.subjects.length; i++) {
         this.selectSubjects.push(this.subjects[i].sname);
       }
-      console.log("looper", this.selectSubjects);
+      
     },
     formTitle() {
       return this.editedIndex === -1 ? "สร้าง" : "แก้ไข";
@@ -211,7 +211,7 @@ export default {
         `classes/getClassesByConditions`,
         conditions
       );
-      console.log("class", response);
+      
       return response.results;
     },
     async getTeacher() {
@@ -245,7 +245,7 @@ export default {
         `teach/getSubjectsByConditions`,
         condition
       );
-      console.log("subject", response.results);
+      
       return response.results;
     },
     async getClassesByConditions() {
@@ -259,9 +259,9 @@ export default {
         `classes/getClassesByConditions`,
         condition
       );
-      console.log("getClassss ", response.results[0].objectId);
+      
       return response.results[0].objectId;
-      // console.log('getClass by con : ', response.results)
+      // 
       // return response.results
     },
     async getDepartment() {
@@ -270,9 +270,9 @@ export default {
       return response.results;
     },
     async addSubjectToTeach(data) {
-      console.log("create teach data", data);
+      
       const response = await this.$store.dispatch(`teach/createTeach`, data);
-      console.log("response create teach", response);
+      
     },
     async updateSubjectToTeach(data) {
       const response = await this.$store.dispatch(`teach/updateTeach`, data);
@@ -283,7 +283,7 @@ export default {
     async save() {
       if (this.$refs.form.validate()) {
         if (this.editedIndex > -1) {
-          console.log("edit");
+          
           const objectId = await this.getClassesByConditions();
           const data = {
             objectId: this.input.objectId,
@@ -306,7 +306,7 @@ export default {
             department: this.input.department,
             type: "วิชาบังคับ"
           };
-          console.log("teach data", data);
+          
           await this.updateSubjectToTeach(data);
           this.resetForm();
           await this.getSubjectsFromTeach().then(
@@ -314,7 +314,7 @@ export default {
           );
           this.close();
         } else {
-          console.log("save");
+          
           const objectId = await this.getClassesByConditions();
           const data = {
             schoolYear: this.query.schoolYear,
@@ -337,7 +337,7 @@ export default {
             department: this.input.department,
             type: "วิชาบังคับ"
           };
-          console.log("teach data", data);
+          
           await this.addSubjectToTeach(data);
           this.resetForm();
           await this.getSubjectsFromTeach().then(result => (this.items = result));
@@ -353,7 +353,7 @@ export default {
         objectId
       );
       await this.getSubjectsFromTeach().then(result => (this.items = result));
-      // console.log('response', response)
+      // 
     },
     selectInputSubjects() {
       this.classSubject = [];
@@ -364,19 +364,15 @@ export default {
         };
         this.classSubject.push(data);
       });
-      console.log(
-        "classSubject index",
-        this.classSubject,
-        this.classSubject.length
-      );
+      
     },
     selectInputClasses() {
-      // console.log("this classes", this.classes);
+      // 
       for (var index = 0; index < this.classes.length; index++) {
         this.classRoomLevel.push(this.classes[index].classRoomLevel);
         this.classRoomName.push(this.classes[index].classRoomName);
       }
-      console.log("classRoomLevel index", this.classRoomLevel);
+      
     },
     selectInputTeacher() {
       this.itemTeachers = [];
@@ -392,7 +388,7 @@ export default {
         };
         this.itemTeachers.push(teacher);
       }
-      console.log("option teacher : ", this.itemTeachers);
+      
     },
     addClasses(item) {
       this.$router.push({
@@ -410,14 +406,10 @@ export default {
       );
       // this.subjectInfo = { codet: subject_name[0].codet,sname: subject_name[0].sname, credit: subject_name[0].credit, hour: subject_name[0].hour};
       this.subjectId = subject_name[0].objectId;
-      console.log("subjectId", this.subjectId);
+      
     },
     editItem(item) {
       this.editedIndex = this.items.indexOf(item);
-      console.log(
-        "object assign to input item.teachers",
-        Object.assign({}, item.teachers)
-      );
       this.input = Object.assign({}, item);
       this.dialog = true;
     },
@@ -433,7 +425,7 @@ export default {
       item.forEach(item => {
         department.push(item.name);
       });
-      // console.log('item deprt', department)
+      // 
       return department;
     },
     validateForm() {},

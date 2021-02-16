@@ -66,7 +66,7 @@ export default {
   async mounted() {
     this.query = this.$route.query;
     // this.teacherId = this.$store.state.auth.auth.teacherObjectId
-    console.log("params", this.query.id);
+    
     await this.getTeachByConditions(this.query.id).then(
       result => (this.items = result)
     );
@@ -119,12 +119,12 @@ export default {
           objectId: teacherId
         }
       };
-      console.log("tesacher id", teacherId);
+      
       const response = await this.$store.dispatch(
         `teach/getTeachByConditions`,
         data
       );
-      console.log("response getTeachByConditions", response);
+      
         return response.results;
     },
     // async getTeachByConditionsFixed(teacherId) {
@@ -138,16 +138,16 @@ export default {
     //       objectId: teacherId
     //     }
     //   };
-    //   console.log("tesacher id", teacherId);
+    //   
     //   const response = await this.$store.dispatch(
     //     `teach/getTeachByConditions`,
     //     data
     //   );
-    //   console.log("response getTeachByConditions zzz", response);
+    //   
     //   return response.results;
     // },
     async getGradeByConditions(item) {
-      console.log("where item", item);
+      
 
       const conditions = {
         subject: item.sname,
@@ -161,7 +161,7 @@ export default {
         `grade/getGradeByConditions`,
         conditions
       );
-      console.log("response get grade", response.results);
+      
       return response.results;
     },
     async getStudentByTeach(item) {
@@ -175,8 +175,8 @@ export default {
         "classes/getClassesByConditions",
         conditions
       );
-      console.log("response students", response.results);
-      console.log("response students", response.results[0].studentId);
+      
+      
       return response.results[0].studentId;
     },
     async getStudent(data) {
@@ -189,18 +189,18 @@ export default {
         "students/getStudents",
         query
       );
-      console.log("response student test", response.results);
+      
       var name = this.getStudentName(response.results);
       return name;
     },
     async createGrade(object) {
       const response = await this.$store.dispatch(`grade/createGrade`, object);
-      console.log("response create grade", response);
+      
       return response;
     },
     async addRatingToTach(teach) {
       const response = await this.$store.dispatch(`teach/updateTeach`, teach);
-      console.log("response addRatingToTach", response);
+      
       return response;
     },
     addPartNumber() {
@@ -208,7 +208,7 @@ export default {
       for (var index = 0; index < this.part_num; index++) {
         this.part_rating.push({ name: "", rating: 0 });
       }
-      console.log("length", this.part_point);
+      
     },
     addRating(item) {
       this.dialog = true;
@@ -217,14 +217,14 @@ export default {
         this.part_num = item.rating.length;
       }
       this.part_rating = item.rating;
-      console.log("addrateing", item.rating);
+      
     },
     getRating(item) {
       var rating = [];
       for (var index = 0; index < item.length; index++) {
         rating.push(item[index].name + " " + item[index].rating + " " + 0);
       }
-      console.log("student name", rating);
+      
       return rating;
     },
     getStudentName(item) {
@@ -234,7 +234,7 @@ export default {
           item[index].tth + " " + item[index].namet + " " + item[index].snamet
         );
       }
-      console.log("student name", studentName);
+      
       return studentName;
     },
     mapScoreName(name, score) {
@@ -247,12 +247,12 @@ export default {
           });
         }
       }
-      console.log("x y", student);
+      
       return student;
     },
     async addScore(item) {
       // เช็คก่อนว่ามมี data ใน gradeรึยัง (1)
-      console.log("addScore 1", item);
+      
       this.goToAddScore(item);
     },
     save() {
@@ -265,7 +265,7 @@ export default {
         objectId: this.teach.objectId,
         rating: this.part_rating
       };
-      console.log("item ob", teach);
+      
       this.addRatingToTach(teach);
       this.close();
     },
@@ -276,7 +276,7 @@ export default {
     },
     back() {
       this.$router.go(-1);
-      console.log("back");
+      
     },
     goToAddScore(item) {
       this.$router.push({

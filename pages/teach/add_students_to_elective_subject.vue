@@ -135,7 +135,7 @@ export default {
       return response.results
     },
     async getStudents(items) {
-      console.log('items', items)
+      // console.log('items', items)
       const objectId = {
         $in: items,
       }
@@ -159,7 +159,7 @@ export default {
       const response = await this.$store.dispatch(`students/getStudents`, 
         query
       )
-      console.log('response', response)
+      // console.log('response', response)
       return response.results
     },
     async addStudents() {
@@ -167,7 +167,7 @@ export default {
         objectId: this.$route.query.id,
         students: this.studentId
       }
-      console.log('object put', object)
+      // console.log('object put', object)
       const response = await this.$store.dispatch(
         `teach/updateTeach`,
         object
@@ -196,11 +196,11 @@ export default {
       }, 300)
     },
     save() {
-      console.log('save',this.items)
+      // console.log('save',this.items)
       for (var index = 0; index < this.items.length; index++) {
         this.studentId.push(this.items[index].objectId)
       }
-      console.log('looper', this.studentId)
+      // console.log('looper', this.studentId)
       this.addStudents(this.studentId)
       this.close()
     }
