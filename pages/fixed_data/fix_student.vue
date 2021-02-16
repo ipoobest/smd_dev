@@ -89,32 +89,54 @@ export default {
       }
       return true;
     },
+    async initRanking() {
+      console.log("init ranking");
+      for (var item of this.studentItems) {
+        for (var student of item.studentId) {
+          var studentObject = await this.getStudentFromStudentClass(student);
+          // console.log('student obj',item.schoolYear,item.term, item.classRoomLevel, item.classRoomName, studentObject)
+          var data = {
+            schoolYear: item.schoolYear,
+            term: item.term,
+            classRoomLevel: item.classRoomLevel,
+            classRoomName: item.classRoomName,
+            studentObjectId: student,
+            studentName: `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`,
+            studentId: studentObject.idstd
+          };
+          console.log("data", data);
+          await this.createRanking(data);
+        }
+      }
+      alert("init ranking success");
+    },
     async create() {
       if (await this.checkInit()) {
         alert("ชั้นเรียนนี้ทำการ init ranking แล้ว");
       } else {
-        this.studentItems.forEach(item => {
-          item.studentId.forEach(async student => {
-            //get Students by student
-            var studentObject = await this.getStudentFromStudentClass(student);
-            // console.log('students xxx', `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`)
-            // console.log('student obj',item.schoolYear,item.term, item.classRoomLevel, item.classRoomName, studentObject)
-            var data = {
-              schoolYear: item.schoolYear,
-              term: item.term,
-              classRoomLevel: item.classRoomLevel,
-              classRoomName: item.classRoomName,
-              studentObjectId: student,
-              studentName: `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`,
-              studentId: studentObject.idstd
-            };
-            console.log("data", data);
-            await this.createRanking(data);
-            // length += 1
-          });
-        });
+        this.initRanking();
+        // this.studentItems.forEach(item => {
+        //   item.studentId.forEach(async student => {
+        //     //get Students by student
+        //     var studentObject = await this.getStudentFromStudentClass(student);
+        //     // console.log('students xxx', `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`)
+        //     // console.log('student obj',item.schoolYear,item.term, item.classRoomLevel, item.classRoomName, studentObject)
+        //     var data = {
+        //       schoolYear: item.schoolYear,
+        //       term: item.term,
+        //       classRoomLevel: item.classRoomLevel,
+        //       classRoomName: item.classRoomName,
+        //       studentObjectId: student,
+        //       studentName: `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`,
+        //       studentId: studentObject.idstd
+        //     };
+        //     console.log("data", data);
+        //     await this.createRanking(data);
+        // length += 1
+        //   });
+        // });
       }
-      alert("init ranking success");
+      // alert("init ranking success");
     }
   }
 };
