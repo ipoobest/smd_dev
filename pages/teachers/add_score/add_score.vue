@@ -129,7 +129,7 @@
               />
             </td>
             <td>{{ calcScore(item_score.score, score_index) }}</td>
-
+            
             <td v-if="edit_mode[score_index]">
               <template v-if="item_score.grade_option">{{
                 item_score.grade_option
@@ -502,7 +502,7 @@ export default {
       return sum_score.toFixed(2);
     },
     calcGrade(score) {
-      // 
+      console.log('score xx :' , score)
       if (score == 100 || score >= this.criteria.g4) {
         return 4;
       } else if (score >= this.criteria.g3_5) {

@@ -27,7 +27,7 @@ export default {
   layout: 'fix_data',
   async mounted() {
     await this.getTeach().then(result => (this.data = result));
-    // 
+    // console.log('items : ', this.data )
   },
   data() {
     return {
@@ -50,7 +50,7 @@ export default {
   methods: {
     async getTeach() {
       const response = await this.$store.dispatch(`teach/getSubjectsPointer`);
-      // 
+      // console.log("response xx", response.results[0]);
       return response.results;
     },
     async getSubjectId(code) {
@@ -61,7 +61,7 @@ export default {
         `subjects/getSubjectsByConditions`,
         data
       );
-      // 
+      // console.log("subjectId", response.results);
       return response.results;
     },
     async updateTeach(classId, pointerId) {
@@ -74,7 +74,7 @@ export default {
         }
       };
       const response = await this.$store.dispatch(`teach/updateTeach`, data);
-      
+      console.log("response", response);
       return;
     },
     async updateTeacher(classId, pointerId) {
@@ -87,33 +87,33 @@ export default {
         }
       };
       const response = await this.$store.dispatch(`teach/updateTeach`, data);
-      
+      console.log("response", response);
     },
     async updateStudent(data) {
 
       const response = await this.$store.dispatch(`teach/updateTeach`, data);
-      
+      console.log('success')
     },
     update() {
-      
+      console.log("this.pointer", this.pointer);
       switch (this.pointer) {
         case "วิชา":
           this.data.forEach(async item => {
             const subjectId = await this.getSubjectId(item.subject_info.codet);
-            // 
+            // console.log('classesId , subjectId ', item.objectId, subjectId[0].objectId)
             await this.updateTeach(item.objectId, subjectId[0].objectId);
           });
           this.getTeach();
           break;
         case "ครู":
-          
+          console.log("teacher");
           this.data.forEach(async item => {
-            // 
+            // console.log('teacherId', item.teacher.value)
             await this.updateTeacher(item.objectId, item.teacher.value);
           });
           break;
         case "นักเรียน":
-          
+          console.log("นักเรียน");
           this.data.forEach(async item => {
             var studentPointer = [];
             if (item.students) {
@@ -133,10 +133,10 @@ export default {
                   objects: studentPointer
                 }
               }
-              
-              await this.updateStudent(data)
+              console.log("studenId นักเรียน", data);
+              // await this.updateStudent(data)
             }
-            
+            console.log("-------------------");
           });
           break;
         default:
