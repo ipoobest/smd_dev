@@ -215,7 +215,7 @@ export default {
     await this.getGradeByConditions(this.items).then(
       result => (this.grade_list = result)
     );
-    // await this.getCriteria().then(result => (this.criteria = result));
+    await this.getCriteria().then(result => (this.criteria = result));
   },
   computed: {
     sortNumberStudent() {
@@ -267,20 +267,20 @@ export default {
     async getGradeByConditions(item) {
       const conditions = {
         // "teachInfo.teachId": item.objectId
-        teachId: item.objectId 
+        teachId: item.objectId
         // teach: {
         //   "__type": "Pointer",
         //   "className": "Teach",
         //   "objectId": item.objectId
         // }
       };
-      console.log('condition get garde', conditions)
+      console.log("condition get garde", conditions);
       // 1 get stu array grade
       const response_grade = await this.$store.dispatch(
         "grade/getGradeByConditions",
         conditions
       );
-      console.log("gred item", response_grade);
+      console.log("grade item", response_grade.results);
       // console.log('response xxzzzx', response_grade.results)
       this.score = response_grade.results;
       this.edit_mode = new Array(this.score.length);
@@ -486,23 +486,28 @@ export default {
     },
     calcScore(score_array, index) {
       var calc_score = [];
-      // console.log("calcScore index", index);
+      console.log("calcScore index", index);
       score_array.forEach((score, index) => {
         var result =
           (((score / this.score_array[index]) * 100) / 100) *
           this.ratio_array[index];
         // ((( คะแนนที่ได้ / คะแนนเต็ม ) x 100) / 100 ) x ร้อยละ
+
         calc_score.push(result);
         // console.log('คะแนนที่ผ่านการคำนวน', calc_score)
       });
+
+      console.log("calc_score", calc_score);
       var sum_score = calc_score.reduce((a, b) => a + b);
+      console.log("sum_score xxx", sum_score);
+
       this.score[index].sum_score = sum_score.toFixed(2);
       this.score[index].grade = this.calcGrade(sum_score.toFixed(2));
       // console.log("this.score xx", this.score);
       return sum_score.toFixed(2);
     },
     calcGrade(score) {
-      // console.log('เกณการให้คะแนน', score)
+      console.log("เกณการให้คะแนน", score, this.criteria);
       if (score == 100 || score >= this.criteria.g4) {
         return 4;
       } else if (score >= this.criteria.g3_5) {
