@@ -1,15 +1,25 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" :clipped="clipped" fixed app >
+    <v-navigation-drawer
+      v-model="drawer"
+      :mini-variant="miniVariant"
+      :clipped="clipped"
+      fixed
+      app
+    >
       <v-list dense>
-        <template v-for="(item, i) in items" >
-          <template v-if="item.childs" >
+        <template v-for="(item, i) in items">
+          <template v-if="item.childs">
             <v-list-group :prepend-icon="item.icon" :key="i" no-action>
-              <template v-slot:activator >
+              <template v-slot:activator>
                 <v-list-item-title v-text="item.title" />
               </template>
 
-              <v-list-item v-for="(child, key) in item.childs" v-bind:key="key" :to="child.to" >
+              <v-list-item
+                v-for="(child, key) in item.childs"
+                v-bind:key="key"
+                :to="child.to"
+              >
                 <v-list-item-title v-text="child.title" />
                 <v-list-item-icon>
                   <v-icon v-text="child.icon" />
@@ -18,8 +28,12 @@
             </v-list-group>
           </template>
 
-          <template v-else >
-            <v-list-item v-bind:key="i" :to="item.to" v-if="(item.admin == true) ? admin : true">
+          <template v-else>
+            <v-list-item
+              v-bind:key="i"
+              :to="item.to"
+              v-if="item.admin == true ? admin : true"
+            >
               <v-list-item-action>
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-item-action>
@@ -31,13 +45,15 @@
         </template>
       </v-list>
     </v-navigation-drawer>
-    
-    <v-app-bar :clipped-left="clipped" fixed app >
+
+    <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      {{this.$store.state.auth.auth.title}} {{this.$store.state.auth.auth.firstName}} {{this.$store.state.auth.auth.lastName}}
-      <v-btn icon @click="logout" >
+      {{ this.$store.state.auth.auth.title }}
+      {{ this.$store.state.auth.auth.firstName }}
+      {{ this.$store.state.auth.auth.lastName }}
+      <v-btn icon @click="logout">
         <v-icon>mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
@@ -48,7 +64,7 @@
       </v-container>
     </v-content>
 
-    <v-footer :fixed="fixed" app >
+    <v-footer :fixed="fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
@@ -56,16 +72,16 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       clipped: true,
       drawer: true,
       fixed: true,
       items: [
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
-          to: '/'
+          icon: "mdi-apps",
+          title: "Welcome",
+          to: "/"
         },
         // {
         //   icon: `mdi-account`,
@@ -75,7 +91,7 @@ export default {
         {
           icon: `mdi-format-align-justify`,
           title: `ปีการศึกษา`,
-          to: `/academic_year`,
+          to: `/academic_year`
         },
         {
           icon: `mdi-book-plus`,
@@ -98,6 +114,11 @@ export default {
           to: `/subjects`
         },
         {
+          icon: `mdi-calculator`,
+          title: `เกรด`,
+          to: `/grade_summary`
+        },
+        {
           icon: `mdi-book-open-page-variant`,
           title: `เกณฑ์การตัดเกรด`,
           to: `/criteria`
@@ -115,7 +136,7 @@ export default {
               icon: `mdi-account-arrow-right-outline`,
               title: `นักเรียน`,
               to: `/imports/students`
-            },
+            }
             // {
             //   icon: `mdi-application-import`,
             //   title: `วิชาเรียน`,
@@ -127,14 +148,14 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'ระบบตัดเกรด'
-    }
+      title: "ระบบตัดเกรด"
+    };
   },
   methods: {
-    async logout(){
-       await this.$store.dispatch(`auth/logout`)
-       this.$router.replace({name: 'login'})
+    async logout() {
+      await this.$store.dispatch(`auth/logout`);
+      this.$router.replace({ name: "login" });
     }
   }
-}
+};
 </script>

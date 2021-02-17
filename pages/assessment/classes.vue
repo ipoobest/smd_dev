@@ -47,7 +47,7 @@ export default {
   layout: "assessment",
   async mounted() {
     // this.classItem = this.$route.query
-    // 
+    //
     await this.getListClass(this.$route.query).then(
       result => (this.items = result)
     );
@@ -104,7 +104,7 @@ export default {
         `classes/getClassesByConditions`,
         classItem
       );
-      // 
+      //
       return response.results;
     },
     async getRanking() {
@@ -117,7 +117,7 @@ export default {
         `ranking/getRankingByConditions`,
         condition
       );
-      // 
+      //
       return response.results;
     },
     back() {
@@ -136,17 +136,14 @@ export default {
     },
 
     listStudent(item) {
-      // 
+      //
       this.$router.push({
         name: "assessment-students",
         query: { id: item.objectId }
       });
     },
-    resetForm() {
-      this.$refs.form.reset();
-    },
     async exportXml() {
-      // 
+      //
       if (this.classesExport == "0") {
         alert("กรุณาเลือกระดับชั้น");
       } else {
@@ -154,7 +151,7 @@ export default {
         var data = this.ranking.sort(
           (a, b) => a.rankingInClasses - b.rankingInClasses
         );
-        // 
+        //
         const dataWS = XLSX.utils.json_to_sheet(data);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, dataWS);
