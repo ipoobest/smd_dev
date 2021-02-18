@@ -56,21 +56,19 @@ export default {
         "classes/getClassesByConditions",
         query
       );
-      // 
+      //
       this.studentItems = response.results;
-      
     },
     async getStudentFromStudentClass(objectId) {
       var response = await this.$store.dispatch(
         `students/getStudentById`,
         objectId
       );
-      
+
       return response;
     },
     async createRanking(data) {
       var response = await this.$store.dispatch(`ranking/createRanking`, data);
-      
     },
     async checkInit() {
       var conditions = {
@@ -78,44 +76,46 @@ export default {
         term: this.term,
         classRoomLevel: this.classes
       };
-      
+
       var response = await this.$store.dispatch(
         `ranking/getRankingByConditions`,
         conditions
       );
-      
+
       if (response.results.length == 0) {
         return false;
       }
       return true;
     },
+    async initRanking() {
+      console.log("init ranking");
+      for (var item of this.studentItems) {
+        for (var student of item.studentId) {
+          var studentObject = await this.getStudentFromStudentClass(student);
+          // console.log('student obj',item.schoolYear,item.term, item.classRoomLevel, item.classRoomName, studentObject)
+          var data = {
+            schoolYear: item.schoolYear,
+            term: item.term,
+            classRoomLevel: item.classRoomLevel,
+            classRoomName: item.classRoomName,
+            studentObjectId: student,
+            studentName: `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`,
+            studentId: studentObject.idstd
+          };
+          console.log("data", data);
+          await this.createRanking(data);
+        }
+      }
+      alert("init ranking success");
+    },
     async create() {
       if (await this.checkInit()) {
         alert("ชั้นเรียนนี้ทำการ init ranking แล้ว");
-        return
+        return;
       } else {
-        this.studentItems.forEach(item => {
-          item.studentId.forEach(async student => {
-            //get Students by student
-            var studentObject = await this.getStudentFromStudentClass(student);
-            // 
-            // 
-            var data = {
-              schoolYear: item.schoolYear,
-              term: item.term,
-              classRoomLevel: item.classRoomLevel,
-              classRoomName: item.classRoomName,
-              studentObjectId: student,
-              studentName: `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`,
-              studentId: studentObject.idstd
-            };
-            
-            await this.createRanking(data);
-            // length += 1
-          });
-        });
+        this.initRanking();
       }
-      alert("init ranking success");
+      // alert("init ranking success");
     }
   }
 };

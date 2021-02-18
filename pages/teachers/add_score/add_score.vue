@@ -12,8 +12,8 @@
         <v-text-field
           v-model="score_aptitude"
           :rules="[
-            v => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
-            v => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3'
+            (v) => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
+            (v) => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3',
           ]"
           label="คุณลักษณะ"
           outlined
@@ -23,8 +23,8 @@
         <v-text-field
           v-model="score_analytical_thinking"
           :rules="[
-            v => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
-            v => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3'
+            (v) => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
+            (v) => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3',
           ]"
           label="การคิดการอ่าน"
           outlined
@@ -93,10 +93,10 @@
                 :max="score_array[index]"
                 :min="0"
                 :rules="[
-                  v => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
-                  v =>
+                  (v) => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
+                  (v) =>
                     v <= parseInt(score_array[index]) ||
-                    `กรุณากรอกคะแนนให้น้อยกว่า ${score_array[index]}`
+                    `กรุณากรอกคะแนนให้น้อยกว่า ${score_array[index]}`,
                 ]"
                 hide-details="auto"
                 :disabled="items.save_score"
@@ -108,8 +108,8 @@
                 :max="3"
                 :min="0"
                 :rules="[
-                  v => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
-                  v => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3'
+                  (v) => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
+                  (v) => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3',
                 ]"
                 :disabled="items.save_score"
                 hide-details="auto"
@@ -121,15 +121,15 @@
                 :max="3"
                 :min="0"
                 :rules="[
-                  v => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
-                  v => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3'
+                  (v) => v >= 0 || 'กรุณากรอกคะแนนให้มากกว่า 0',
+                  (v) => v <= 3 || 'กรุณากรอกคะแนนให้น้อยกว่า 3',
                 ]"
                 :disabled="items.save_score"
                 hide-details="auto"
               />
             </td>
             <td>{{ calcScore(item_score.score, score_index) }}</td>
-            
+
             <td v-if="edit_mode[score_index]">
               <template v-if="item_score.grade_option">{{
                 item_score.grade_option
@@ -210,17 +210,17 @@ export default {
   layout: "teacher",
   async mounted() {
     await this.getTechById(this.$route.query.id).then(
-      result => (this.items = result)
+      (result) => (this.items = result)
     );
     await this.getGradeByConditions(this.items).then(
-      result => (this.grade_list = result)
+      (result) => (this.grade_list = result)
     );
-    // await this.getCriteria().then(result => (this.criteria = result));
+    await this.getCriteria().then((result) => (this.criteria = result));
   },
   computed: {
     sortNumberStudent() {
       return this.score.sort((a, b) => a.studentNumber - b.studentNumber);
-    }
+    },
   },
 
   data() {
@@ -229,11 +229,11 @@ export default {
       edit_mode: [],
       rating: [],
       form: {
-        score_id: []
+        score_id: [],
       },
       data: "",
       items: {
-        save_score: false
+        save_score: false,
       },
       score: [],
       studentName: [],
@@ -259,35 +259,35 @@ export default {
         { text: "มผ", value: "มผ" },
         { text: "ร", value: "ร" },
         { text: "รส", value: "รส" },
-        { text: "มส", value: "มส" }
-      ]
+        { text: "มส", value: "มส" },
+      ],
     };
   },
   methods: {
     async getGradeByConditions(item) {
       const conditions = {
         // "teachInfo.teachId": item.objectId
-        teachId: item.objectId 
+        teachId: item.objectId,
         // teach: {
         //   "__type": "Pointer",
         //   "className": "Teach",
         //   "objectId": item.objectId
         // }
       };
-      
+
       // 1 get stu array grade
       const response_grade = await this.$store.dispatch(
         "grade/getGradeByConditions",
         conditions
       );
-      
-      // 
+
+      //
       this.score = response_grade.results;
       this.edit_mode = new Array(this.score.length);
       this.edit_mode.fill(true);
       this.grade_arr = response_grade.results;
-      this.stu_grade_arr = await this.grade_arr.map(a => a.studentObjectId);
-      // 
+      this.stu_grade_arr = await this.grade_arr.map((a) => a.studentObjectId);
+      //
 
       if (item.students) {
         this.stu_classes_arr = item.students;
@@ -298,19 +298,19 @@ export default {
           this.items.classId
         );
         this.stu_classes_arr = response_classes.studentId;
-        // 
+        //
       }
       // 3 check diff
       var difference = this.stu_classes_arr.filter(
-        x => !this.stu_grade_arr.includes(x)
+        (x) => !this.stu_grade_arr.includes(x)
       );
-      // 
+      //
 
       // 4 createGrade by diff
       if (difference.length != 0) {
         this.createGrade(difference);
       } else {
-        // 
+        //
         return response_grade.results;
       }
     },
@@ -319,44 +319,43 @@ export default {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
         classRoomLevel: this.$route.query.classRoomLevel,
-        classRoomName: this.$route.query.classRoomName
+        classRoomName: this.$route.query.classRoomName,
       };
       const response = await this.$store.dispatch(
         "teach/getSubjectsByConditions",
         conditions
       );
-      // 
+      //
       return response.results[0].students;
     },
     async getStudent(data) {
-      // 
+      //
       const query = {
         objectId: {
-          $in: data
-        }
+          $in: data,
+        },
       };
       const response = await this.$store.dispatch(
         "students/getStudents",
         query
       );
-      // 
+      //
       var values = this.getStudentName(response.results);
       var studentName = values[0];
       var studentId = values[1];
       var studentNumber = values[2];
-      // 
-      // 
+      //
+      //
       return [studentName, studentId, studentNumber];
     },
     async getStudentByClassId(classId) {
       const response = await this.$store.dispatch(`classes/getClass`, classId);
-      
+
       return response.studentId;
     },
     async getTechById(id) {
       const response = await this.$store.dispatch("teach/getTeachById", id);
-      
-      
+
       this.rating = response.rating;
       this.mapRating(this.rating);
       return response;
@@ -364,26 +363,26 @@ export default {
     async getCriteria() {
       // grade
       const response = await this.$store.dispatch(`criteria/getCriteria`);
-      // 
+      //
       return response.results[0].criteria;
     },
     async createGrade(students) {
-      // 
+      //
       var values = await this.getStudent(students);
       var studentName = values[0];
       var studentId = values[1];
       var studentNumber = values[2];
 
-      // 
+      //
 
-      // 
+      //
       var initScore = new Array(this.rating.length);
       initScore.fill(0);
-      // 
+      //
       if (initScore.length == 0) {
         return;
       }
-      // 
+      //
       for (var index = 0; index < studentName.length; index++) {
         const data = {
           //pointer techId,studentObjectId
@@ -391,7 +390,7 @@ export default {
           teach: {
             __type: "Pointer",
             className: "Teach",
-            objectId: this.items.objectId
+            objectId: this.items.objectId,
           },
           // teachInfo: {
           //   techId: this.items.objectId,
@@ -411,29 +410,27 @@ export default {
           grade_option: null,
           grade: "",
           aptitude: "",
-          analytical_thinking: ""
+          analytical_thinking: "",
         };
-        // 
+        //
         const response = await this.$store.dispatch(`grade/createGrade`, data);
-        
       }
       this.getGradeByConditions(this.items).then(
-        result => (this.grade = result)
+        (result) => (this.grade = result)
       );
     },
     async updateTech(data) {
       const response = this.$store.dispatch(`teach/updateTeach`, data);
-      
 
       this.getTechById(this.$route.query.id).then(
-        result => (this.items = result)
+        (result) => (this.items = result)
       );
     },
     async sendGrade() {
       if (confirm("ยืนยันการส่ง")) {
         var sentScore = {
           objectId: this.items.objectId,
-          send_score: true
+          send_score: true,
         };
         this.items.send_score = true;
         this.updateTech(sentScore);
@@ -441,7 +438,7 @@ export default {
     },
     async updateGrade() {
       if (confirm("ยืนยันการบันทึก")) {
-        this.score.forEach(item => {
+        this.score.forEach((item) => {
           var data = {
             objectId: item.objectId,
             score: item.score,
@@ -449,16 +446,16 @@ export default {
             analytical_thinking: item.analytical_thinking,
             grade: item.grade.toString(),
             total_score: item.sum_score,
-            status: "บันทึก"
+            status: "บันทึก",
           };
-          
+
           // const response = this.$store.dispatch(`grade/updateGrade`, data);
         });
         var saveScore = {
           objectId: this.items.objectId,
-          save_score: true
+          save_score: true,
         };
-        // 
+        //
         // this.items.send_score = true
         this.updateTech(saveScore);
       }
@@ -474,35 +471,39 @@ export default {
         this.studentId.push(item[index].idstd);
         this.studentNumber.push(item[index].number);
       }
-      
+
       return [this.studentName, this.studentId, this.studentNumber];
     },
     mapRating(rating) {
-      rating.forEach(item => {
+      rating.forEach((item) => {
         this.ratio_array.push(item.rating);
         this.score_array.push(item.score);
       });
-      
     },
     calcScore(score_array, index) {
       var calc_score = [];
-      // 
+      //
       score_array.forEach((score, index) => {
         var result =
           (((score / this.score_array[index]) * 100) / 100) *
           this.ratio_array[index];
         // ((( คะแนนที่ได้ / คะแนนเต็ม ) x 100) / 100 ) x ร้อยละ
+
         calc_score.push(result);
-        // 
+        //
       });
+
+      console.log("calc_score", calc_score);
       var sum_score = calc_score.reduce((a, b) => a + b);
+      console.log("sum_score xxx", sum_score);
+
       this.score[index].sum_score = sum_score.toFixed(2);
       this.score[index].grade = this.calcGrade(sum_score.toFixed(2));
-      // 
+      //
       return sum_score.toFixed(2);
     },
     calcGrade(score) {
-      console.log('score xx :' , score)
+      //
       if (score == 100 || score >= this.criteria.g4) {
         return 4;
       } else if (score >= this.criteria.g3_5) {
@@ -527,21 +528,20 @@ export default {
         objectId: item.objectId,
         grade: item.grade.toString(),
         grade_option: item.grade_option,
-        score: item.score
+        score: item.score,
       };
 
       this.$set(this.edit_mode, index, !this.edit_mode[index]);
       const response = this.$store.dispatch(`grade/updateGrade`, data);
     },
     editMode(index) {
-      // 
+      //
       this.$set(this.edit_mode, index, !this.edit_mode[index]);
     },
     editAllGrade() {
       this.items.save_score = false;
     },
     addScoreX() {
-      
       if (
         this.score_aptitude < 0 ||
         this.score_aptitude > 3 ||
@@ -551,42 +551,38 @@ export default {
         alert("กรุณากรอกข้อมูลให้ถูกต้อง");
         return;
       }
-      this.score.forEach(item => {
+      this.score.forEach((item) => {
         item.aptitude = this.score_aptitude;
         item.analytical_thinking = this.score_analytical_thinking;
       });
     },
-    logId(item) {
-      
-    },
-    save() {
-      
-    },
+    logId(item) {},
+    save() {},
     close() {},
     reset() {},
     back() {
       this.$router.go(-1);
     },
     previewGrade() {
-      // 
+      //
       this.$router.push({
         name: "teachers-preview-grade",
-        query: { id: this.$route.query.id }
+        query: { id: this.$route.query.id },
       });
       // this.$router.push({name: 'subjects-id', params: { id: `${item.objectId}`}})
     },
     previewSummary() {
       this.$router.push({
         name: "teachers-preview-grade_summary",
-        query: { id: this.$route.query.id }
+        query: { id: this.$route.query.id },
       });
     },
     previewTscore() {
       this.$router.push({
         name: "teachers-preview-grade_tscore",
-        query: { id: this.$route.query.id }
+        query: { id: this.$route.query.id },
       });
-    }
-  }
+    },
+  },
 };
 </script>

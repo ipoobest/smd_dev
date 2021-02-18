@@ -113,10 +113,11 @@ export default {
           title: `วิชา`,
           to: `/subjects`,
         },
+
         {
           icon: `mdi-calculator`,
-          title: `คะแนนรวม`,
-          to: `/grade_sumary`,
+          title: `เกรด`,
+          to: `/grade_summary`,
         },
         {
           icon: `mdi-book-open-page-variant`,
