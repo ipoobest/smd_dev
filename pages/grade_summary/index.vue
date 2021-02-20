@@ -35,11 +35,12 @@
                             dense
                             outlined
                             required
-                            @change="getClasses()"
                             :rules="[(v) => !!v || 'ระดับชั้น']"
                           ></v-select
                         ></v-col>
-                        <v-col><v-btn @click="search()">ค้นหา</v-btn></v-col>
+                        <v-col
+                          ><v-btn @click="getClasses()">ค้นหา</v-btn></v-col
+                        >
                       </v-row>
                     </v-container>
                   </v-form>
@@ -63,7 +64,7 @@
                       color="success"
                       dark
                       class="mr-2"
-                      @click="grade(item)"
+                      @click="grade(item, classRoomLevel)"
                     >
                       ดูคะแนน</v-btn
                     >
@@ -139,16 +140,15 @@ export default {
         return;
       }
     },
-    grade(item) {
-      console.log("item grade", this.classRoomLevel, item);
-      // this.$router.push({
-      //   name: "grade_summary-grade",
-      //   query: {
-      //     schoolYear: item.schoolYear,
-      //     classRoomLevel: item.classRoomLevel,
-      //     classRoomName: item.classRoomName,
-      //   },
-      // });
+    grade(classRoomName, classRoomLevel) {
+      this.$router.push({
+        name: "grade_summary-grade",
+        query: {
+          schoolYear: this.schoolYear,
+          classRoomLevel: classRoomLevel,
+          classRoomName: classRoomName,
+        },
+      });
     },
     back() {
       this.$router.push({ name: "index" });
