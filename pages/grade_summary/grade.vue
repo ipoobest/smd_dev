@@ -12,7 +12,7 @@
             ปีการศึกษา {{ query.schoolYear }} เทอม {{ query.term }} ชั้น
             {{ query.classRoomLevel }} ห้อง {{ query.classRoomName }}
           </v-card-title>
-          <v-data-table :headers="headers" :items="items">
+          <v-data-table :headers="headers" :items="grade">
             <template v-slot:[`item.actions`]="{ item }">
               <v-btn color="success" dark class="mr-2" @click="grade(item)">
                 ดูคะแนน</v-btn
@@ -34,6 +34,7 @@ export default {
       this.items = result;
     });
     console.log("query", this.query);
+    this.grade = await this.calGpa(this.items);
     // this.getDataFromApi().then(result => (this.academicYearItems = result));
   },
   watch: {
@@ -44,7 +45,7 @@ export default {
   data() {
     return {
       headers: [
-        { text: "เลขที่", value: "", align: "center" },
+        { text: "เลขที่", value: "studentNumber", align: "center" },
         { text: "รหัส", value: "studentId", align: "center  " },
         {
           text: "ชื่อ-นามสกุล",
@@ -54,13 +55,13 @@ export default {
         },
         {
           text: "GPA เทอม 1",
-          value: "gpa",
+          value: "term1",
           sortable: false,
           align: "center",
         },
         {
           text: "GPA เทอม 2",
-          value: "",
+          value: "term2",
           sortable: false,
           align: "center",
         },
@@ -69,9 +70,58 @@ export default {
       dialogCreateYear: false,
       schoolYear: "",
       term: "",
+      grade: [],
       items: [],
       title: `เกรดรวม`,
       query: "",
+      mockData: [
+        {
+          classRoomLevel: "ม.1",
+          classRoomName: "1",
+          createdAt: "2021-02-15T04:11:40.885Z",
+          gpa: 1.8484848484848484,
+          objectId: "9raAoUoB8o",
+          rankingInClasses: 130,
+          rankingInRoom: 31,
+          schoolYear: "2563",
+          studentId: "633014",
+          studentName: "เด็กชาย ชยพล ราชภักดี",
+          studentObjectId: "1qI9nv1ByY",
+          term: "1",
+        },
+        {
+          classRoomLevel: "ม.1",
+          classRoomName: "1",
+          createdAt: "2021-02-15T04:11:40.885Z",
+          gpa: 2.883,
+          objectId: "9raAoUoB8o",
+          rankingInClasses: 130,
+          rankingInRoom: 31,
+          schoolYear: "2563",
+          studentId: "633014",
+          studentName: "เด็กชาย ชยพล ราชภักดี",
+          studentObjectId: "1qI9nv1ByY",
+          term: "2",
+        },
+        //  {
+        //   classRoomLevel: "ม.1",
+        //   classRoomName: "1",
+        //   createdAt: "2021-02-15T04:11:40.885Z",
+        //   gpa: {
+        //     term1: "2.22",
+        //     term2: "2.23",
+        //     total: "xxxx"
+        //   },
+        //   objectId: "9raAoUoB8o",
+        //   rankingInClasses: 130,
+        //   rankingInRoom: 31,
+        //   schoolYear: "2563",
+        //   studentId: "633014",
+        //   studentName: "เด็กชาย ชยพล ราชภักดี",
+        //   studentObjectId: "1qI9nv1ByY",
+
+        // },
+      ],
     };
   },
   methods: {
@@ -105,12 +155,33 @@ export default {
       console.log("response result", response.results);
       return response.results;
     },
-    search() {
-      if (this.$refs.form.validate()) {
-        this.getClasses().then((result) => (this.items = result));
-      } else {
-        return;
-      }
+    calGpa(data) {
+      var newObj = [];
+      data.forEach((data) => {
+        var obj = newObj.find((item) => item.studentId == data.studentId);
+
+        var term_key = "";
+        if (data.term == "1") {
+          term_key = "term1";
+        } else {
+          term_key = "term2";
+        }
+
+        if (!obj) {
+          var newData = {
+            studentNumber: data.index++,
+            studentId: data.studentId,
+            studentName: data.studentName,
+          };
+          newData[term_key] = parseFloat(data.gpa).toFixed(3);
+          newObj.push(newData);
+        } else {
+          obj[term_key] = data.gpa;
+        }
+      });
+      console.log("new obj", newObj);
+      return newObj;
+      // to do merge merge json and cal GPA THIS
     },
     grade(item) {
       console.log("item grade", item);
