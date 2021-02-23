@@ -174,16 +174,18 @@ export default {
       var newObj = [];
       data.forEach((data) => {
         var obj = newObj.find((item) => item.studentId == data.studentId);
-
+        console.log("obj", obj);
         if (!obj) {
           var newData = {
             studentNumber: data.studentNumber,
             studentId: data.studentId,
             studentName: data.studentName,
           };
+          console.log("trhis 1");
           newData["term" + data.term] = parseFloat(data.gpa).toFixed(3);
           newObj.push(newData);
         } else {
+          console.log("trhis 21");
           obj["term" + data.term] = parseFloat(data.gpa).toFixed(3);
         }
       });

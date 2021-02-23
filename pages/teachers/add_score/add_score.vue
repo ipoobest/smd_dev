@@ -265,6 +265,7 @@ export default {
   },
   methods: {
     async getGradeByConditions(item) {
+      console.log("get grade", item.objectId);
       const conditions = {
         // "teachInfo.teachId": item.objectId
         teachId: item.objectId,
@@ -449,7 +450,7 @@ export default {
             status: "บันทึก",
           };
 
-          // const response = this.$store.dispatch(`grade/updateGrade`, data);
+          const response = this.$store.dispatch(`grade/updateGrade`, data);
         });
         var saveScore = {
           objectId: this.items.objectId,
@@ -530,9 +531,9 @@ export default {
         grade_option: item.grade_option,
         score: item.score,
       };
-
       this.$set(this.edit_mode, index, !this.edit_mode[index]);
       const response = this.$store.dispatch(`grade/updateGrade`, data);
+      console.log("response", response);
     },
     editMode(index) {
       //
