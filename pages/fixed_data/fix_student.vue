@@ -30,7 +30,7 @@
 export default {
   layout: "fix_data",
   async mounted() {
-    await this.getStudent().then(result => {
+    await this.getStudent().then((result) => {
       this.students = result;
     });
   },
@@ -41,7 +41,7 @@ export default {
       term: "",
       studentItems: [],
       items: ["ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"],
-      terms: ["1", "2"]
+      terms: ["1", "2"],
     };
   },
   // 1 get student
@@ -50,7 +50,7 @@ export default {
       var query = {
         schoolYear: "2563",
         term: this.term,
-        classRoomLevel: this.classes
+        classRoomLevel: this.classes,
       };
       const response = await this.$store.dispatch(
         "classes/getClassesByConditions",
@@ -74,7 +74,7 @@ export default {
       var conditions = {
         schoolYear: "2563",
         term: this.term,
-        classRoomLevel: this.classes
+        classRoomLevel: this.classes,
       };
 
       var response = await this.$store.dispatch(
@@ -92,7 +92,14 @@ export default {
       for (var item of this.studentItems) {
         for (var student of item.studentId) {
           var studentObject = await this.getStudentFromStudentClass(student);
-          // console.log('student obj',item.schoolYear,item.term, item.classRoomLevel, item.classRoomName, studentObject)
+          // console.log(
+          //   "student obj",
+          //   item.schoolYear,
+          //   item.term,
+          //   item.classRoomLevel,
+          //   item.classRoomName,
+          //   studentObject
+          // );
           var data = {
             schoolYear: item.schoolYear,
             term: item.term,
@@ -100,9 +107,10 @@ export default {
             classRoomName: item.classRoomName,
             studentObjectId: student,
             studentName: `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`,
-            studentId: studentObject.idstd
+            studentId: studentObject.idstd,
+            studentNumber: studentObject.number,
           };
-          console.log("data", data);
+          // console.log("data", data);
           await this.createRanking(data);
         }
       }
@@ -116,8 +124,8 @@ export default {
         this.initRanking();
       }
       // alert("init ranking success");
-    }
-  }
+    },
+  },
 };
 </script>
 

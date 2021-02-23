@@ -177,7 +177,7 @@ export default {
 
         if (!obj) {
           var newData = {
-            studentNumber: "",
+            studentNumber: data.studentNumber,
             studentId: data.studentId,
             studentName: data.studentName,
           };
