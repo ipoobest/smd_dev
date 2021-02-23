@@ -13,6 +13,9 @@
             {{ query.classRoomLevel }} ห้อง {{ query.classRoomName }}
           </v-card-title>
           <v-data-table :headers="headers" :items="grade">
+            <template v-slot:[`item.totalGrade`]="{ item }">
+              {{ calTotalGrade(item.term1, item.term2) }}
+            </template>
             <template v-slot:[`item.actions`]="{ item }">
               <v-btn color="success" dark class="mr-2" @click="grade(item)">
                 ดูคะแนน</v-btn
@@ -65,7 +68,12 @@ export default {
           sortable: false,
           align: "center",
         },
-        { text: "GPA รวม", value: "", sortable: false, align: "center" },
+        {
+          text: "GPA รวม",
+          value: "totalGrade",
+          sortable: false,
+          align: "center",
+        },
       ],
       dialogCreateYear: false,
       schoolYear: "",
@@ -125,6 +133,13 @@ export default {
     };
   },
   methods: {
+    calTotalGrade(grade1, grade2) {
+      if (!grade1 || !grade2) {
+        return "";
+      }
+      var resutl = (parseFloat(grade1) + parseFloat(grade2)) / 2;
+      return resutl;
+    },
     async getClasses() {
       var condition = {
         schoolYear: this.schoolYear,
@@ -160,35 +175,21 @@ export default {
       data.forEach((data) => {
         var obj = newObj.find((item) => item.studentId == data.studentId);
 
-        var term_key = "";
-        if (data.term == "1") {
-          term_key = "term1";
-        } else {
-          term_key = "term2";
-        }
-
         if (!obj) {
           var newData = {
-            studentNumber: data.index++,
+            studentNumber: "",
             studentId: data.studentId,
             studentName: data.studentName,
           };
-          newData[term_key] = parseFloat(data.gpa).toFixed(3);
+          newData["term" + data.term] = parseFloat(data.gpa).toFixed(3);
           newObj.push(newData);
         } else {
-          obj[term_key] = data.gpa;
+          obj["term" + data.term] = parseFloat(data.gpa).toFixed(3);
         }
       });
       console.log("new obj", newObj);
       return newObj;
       // to do merge merge json and cal GPA THIS
-    },
-    grade(item) {
-      console.log("item grade", item);
-      // this.$router.push({
-      //   name: "grade_summary-grade",
-      //   query: { id: item.objectId },
-      // });
     },
     back() {
       this.$router.push({ name: "index" });
