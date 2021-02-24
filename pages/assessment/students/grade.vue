@@ -26,16 +26,18 @@
           >
           <v-row class="mt-3" justify="center">
             <v-col cols="2">ชื่อ-นามสกุล</v-col>
-            <v-col cols="3">{{ info.studentName }}</v-col>
+            <v-col cols="3"
+              >{{ info.tth }} {{ info.namet }} {{ info.snamet }}</v-col
+            >
             <v-col cols="2">เลขประจำตัว</v-col>
-            <v-col cols="1">{{ info.studentId }}</v-col>
+            <v-col cols="1">{{ info.idstd }}</v-col>
             <v-col cols="1">ชั้น</v-col>
             <v-col cols="2"
-              >{{ info.classRoomLevel }}/{{ info.classRoomName }}</v-col
+              >{{ route.classRoomLevel }}/{{ route.classRoomName }}</v-col
             >
           </v-row>
           <v-row class="mt-5" justify="center">
-            <v-simple-table style="width:90%">
+            <v-simple-table style="width: 90%">
               <template>
                 <thead>
                   <tr>
@@ -60,7 +62,7 @@
             </v-simple-table>
           </v-row>
           <v-divider class="mt-1"></v-divider>
-          <div style="width:90%; margin:auto;">
+          <div style="width: 90%; margin: auto">
             <v-row class="mt-1">
               <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
               <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
@@ -76,7 +78,7 @@
               <v-col cols="1">{{ totalStudentInRoom.count }}</v-col>
               <v-col cols="2">ของห้อง</v-col>
             </v-row>
-            <v-row style="margin-top:-20px;">
+            <v-row style="margin-top: -20px">
               <v-col cols="2">หน่วยการเรียน</v-col>
               <v-col cols="3"
                 >{{ totalCreditInStudent }} / {{ totalCreditInClass }}
@@ -88,13 +90,13 @@
               <v-col cols="1">{{ totalStudentInClasses.count }}</v-col>
               <v-col cols="2">ของระดับชั้น</v-col>
             </v-row>
-            <v-row style="margin-top:-20px;">
+            <v-row style="margin-top: -20px">
               <v-col cols="2">ภาคเรียนนี้ </v-col>
               <!-- <v-col cols="2">{{totalCreditInClass}} หน่วยกิต</v-col> -->
               <v-col cols="2"><p>ได้ / เรียน</p></v-col>
               <!-- <v-col cols="2"> {{totalCreditInStudent}} หน่วยกิต</v-col> -->
             </v-row>
-            <v-row style="margin-top:-30px;">
+            <v-row style="margin-top: -30px">
               <v-col cols="2"> {{ gatDate }} </v-col>
             </v-row>
             <v-row>
@@ -118,7 +120,7 @@
                   >อาจารย์ประจำชั้น</v-row
                 >
               </v-col>
-              <v-col class="test" cols="6" style="margin-top:-70px;">
+              <v-col class="test" cols="6" style="margin-top: -70px">
                 <!-- <img height="50" src="~/assets/logo-smd.png" /> -->
                 <v-row justify="center">
                   <img height="100" src="~/assets/signature.jpg" />
@@ -177,12 +179,13 @@
 import VueHtml2pdf from "vue-html2pdf";
 export default {
   components: {
-    VueHtml2pdf
+    VueHtml2pdf,
   },
   layout: "assessment",
   middleware: "assessment",
   async mounted() {
     this.route = this.$route.query;
+    this.info = await this.getStudent(this.route);
     await this.getGradeByConditions();
     this.totalCreditInClass = await this.sumCreateInClasses();
     this.totalCreditInStudent = await this.sumCreditStudent();
@@ -198,16 +201,15 @@ export default {
   computed: {
     gatDate() {
       var dt = new Date();
-      var dateTime = `${dt
-        .getDate()
-        .toString()
-        .padStart(2, "0")}/${(dt.getMonth() + 1)
+      var dateTime = `${dt.getDate().toString().padStart(2, "0")}/${(
+        dt.getMonth() + 1
+      )
         .toString()
         .padStart(2, "0")}/${(dt.getFullYear() + 543)
         .toString()
         .padStart(4, "0")} `;
       return dateTime;
-    }
+    },
   },
   data() {
     return {
@@ -222,10 +224,11 @@ export default {
       studentObjectId: "",
       classes: "",
       teach: "",
+      studentInfo: "",
       grade: {
         gpa: 0,
         rankingInRoom: 0,
-        rankingInClasses: 0
+        rankingInClasses: 0,
       },
       teacher: "",
       save: false,
@@ -235,8 +238,8 @@ export default {
         studentName: "",
         studentId: "",
         classRoomLevel: "",
-        classRoomName: ""
-      }
+        classRoomName: "",
+      },
       // pdfTitle: `ใบแจ้งผลการเรียน-${this.$route.query.schoolYear}-${this.$route.term}-${this.info.classRoomLevel}-${this.info.classRoomName}-${this.info.studentId}`
     };
   },
@@ -249,26 +252,42 @@ export default {
         studentId: this.$route.query.id,
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        staff: true
+        staff: true,
       };
       const response = await this.$store.dispatch(
         `grade/getGradeByConditions`,
         conditions
       );
-      // console.log("grade list Gpa", response.results);
-      this.info = response.results[0];
+      console.log("grade list Gpa", response.results);
+      // this.info = response.results[0];
       this.rowSpan = response.results.length;
-      this.approve = response.results[0].approve;
-      this.studentObjectId = response.results[0].studentObjectId;
-      this.items = this.sortData(response.results);
+      if (this.rowSpan == 0) {
+        console.log("sss");
+      } else {
+        this.approve = response.results[0].approve;
+        this.studentObjectId = response.results[0].studentObjectId;
+        this.items = this.sortData(response.results);
+      }
+
       // return response.results;
+    },
+    async getStudent(item) {
+      var condition = {
+        idstd: item.id,
+      };
+      const response = await this.$store.dispatch(
+        `students/getStudents`,
+        condition
+      );
+      console.log("response result student", response.results[0]);
+      return response.results[0];
     },
     async getTeacher() {
       const data = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
         classRoomLevel: this.$route.query.classRoomLevel,
-        classRoomName: this.$route.query.classRoomName
+        classRoomName: this.$route.query.classRoomName,
       };
       // console.log("tacher request : ", data);
       const response = await this.$store.dispatch(
@@ -286,7 +305,7 @@ export default {
         classRoomLevel: this.info.classRoomLevel,
         classRoomName: this.info.classRoomName,
         grade: this.grade,
-        studentId: this.$route.id
+        studentId: this.$route.id,
       };
       const response = await this.$store.dispatch(
         `ranking/createRanking`,
@@ -299,7 +318,7 @@ export default {
         term: this.$route.query.term,
         classRoomLevel: this.info.classRoomLevel,
         classRoomName: this.info.classRoomName,
-        studentId: this.$route.query.id
+        studentId: this.$route.query.id,
       };
       // console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
@@ -313,7 +332,7 @@ export default {
       var condition = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        classRoomLevel: this.info.classRoomLevel
+        classRoomLevel: this.info.classRoomLevel,
       };
       // console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
@@ -328,7 +347,7 @@ export default {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
         classRoomLevel: this.info.classRoomLevel,
-        classRoomName: this.info.classRoomName
+        classRoomName: this.info.classRoomName,
       };
       // console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
@@ -350,44 +369,56 @@ export default {
       }
     },
     sumCredit() {
-      var sum = 0;
-      this.items.forEach(item => {
-        if (item.grade_option != "ร") {
-          sum += parseFloat(item.teachInfo.credit);
-        }
-        // console.log('summ ',sum)
-      });
-      // console.log('sum create', sum)
-      return sum;
-    },
-    sumCreditStudent() {
-      var sum = 0;
-      this.items.forEach(item => {
-        //  sum += parseFloat(item.teachInfo.credit);
-        // console.log(typeof item.grade);
-        if (item.grade_option == null || item.grade_option == "ผ") {
-          if (item.grade != "0") {
+      if (!this.items) {
+        return;
+      } else {
+        var sum = 0;
+        this.items.forEach((item) => {
+          if (item.grade_option != "ร") {
             sum += parseFloat(item.teachInfo.credit);
           }
-        }
-      });
-      // console.log("sumxx", sum);
-      return sum;
+          // console.log('summ ',sum)
+        });
+        // console.log('sum create', sum)
+        return sum;
+      }
+    },
+    sumCreditStudent() {
+      if (!this.items) {
+        return;
+      } else {
+        var sum = 0;
+        this.items.forEach((item) => {
+          //  sum += parseFloat(item.teachInfo.credit);
+          // console.log(typeof item.grade);
+          if (item.grade_option == null || item.grade_option == "ผ") {
+            if (item.grade != "0") {
+              sum += parseFloat(item.teachInfo.credit);
+            }
+          }
+        });
+        // console.log("sumxx", sum);
+        return sum;
+      }
     },
     async sumCreateInClasses() {
-      var sum = 0;
-      this.items.forEach(item => {
-        //  sum += parseFloat(item.teachInfo.credit);
-        sum += parseFloat(item.teachInfo.credit);
-      });
-      // console.log('sumCreateInClasses', sum)
-      return sum;
+      if (!this.items) {
+        return;
+      } else {
+        var sum = 0;
+        this.items.forEach((item) => {
+          //  sum += parseFloat(item.teachInfo.credit);
+          sum += parseFloat(item.teachInfo.credit);
+        });
+        // console.log('sumCreateInClasses', sum)
+        return sum;
+      }
     },
     calGPA() {
       var gpa = 0;
       var grade = 0;
       var totalCreditInStudent = 0;
-      this.items.forEach(item => {
+      this.items.forEach((item) => {
         if (item.grade_option == null) {
           grade += parseFloat(item.grade) * parseFloat(item.teachInfo.credit);
           var credit_float = parseFloat(item.teachInfo.credit) || 0;
@@ -424,15 +455,15 @@ export default {
     async arrpove() {
       //update grade by condition
       if (confirm("ยืนยันการอนุมัติ")) {
-        this.items.forEach(item => {
+        this.items.forEach((item) => {
           //  console.log(' score a', score.objectId)
           const data = {
             objectId: item.objectId,
-            approve: true
+            approve: true,
           };
           // console.log("data update", data);
           this.updateGrade(data);
-          this.getGradeByConditions().then(result => {
+          this.getGradeByConditions().then((result) => {
             this.items = result;
           });
         });
@@ -443,21 +474,21 @@ export default {
     },
     async unArrpove() {
       if (confirm("ยืนยันการยกเลิก")) {
-        this.items.forEach(item => {
+        this.items.forEach((item) => {
           //  console.log(' score a', score.objectId)
           const data = {
             objectId: item.objectId,
-            approve: false
+            approve: false,
           };
           // console.log("data update", data);
           this.updateGrade(data);
-          this.getGradeByConditions().then(result => {
+          this.getGradeByConditions().then((result) => {
             this.items = result;
           });
         });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

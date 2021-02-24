@@ -76,7 +76,7 @@ export default {
     // },
     sortNumberStudent() {
       return this.items.sort((a, b) => a.number - b.number);
-    }
+    },
   },
   data() {
     return {
@@ -90,7 +90,7 @@ export default {
         { text: "รหัสประจำตัว", value: "idstd" },
         { text: "ชื่อ", value: "namet" },
         { text: "นามสกุล", value: "snamet" },
-        { text: "actions", value: "actions", sortable: false }
+        { text: "actions", value: "actions", sortable: false },
       ],
       items: [],
       singleSelect: false,
@@ -102,50 +102,49 @@ export default {
         objectId: "",
         classRoomLevel: "",
         classRoomName: "",
-        term: ""
-      }
+        term: "",
+      },
     };
   },
   methods: {
     async getDataFromApi(classId) {
       const response = await this.$store.dispatch(`classes/getClass`, classId);
-     
+      console.log("response getdata from api", response.results);
       return response;
     },
     async getStudent() {
       const response = await this.$store.dispatch(`students/getStudent`);
-     
+      console.log("get student 1", response.results);
       return response.results;
     },
     async getStudents(items) {
-     
       const objectId = {
-        $in: items
+        $in: items,
       };
       const response = await this.$store.dispatch(`students/getStudents`, {
-        objectId
+        objectId,
       });
-     
+      console.log("get student 2", response.results);
       return response.results;
     },
     async getStudentsNotIn(items) {
       const query = {
         class: this.student.classRoomLevel,
         objectId: {
-          $nin: items
-        }
+          $nin: items,
+        },
       };
       const response = await this.$store.dispatch(
         `students/getStudents`,
         query
       );
-     
+
       return response.results;
     },
     async getListClasses() {
       const response = await this.$store.dispatch(`classes/getListClasses`);
       //
-      let results = response.results.map(a => a.studentId);
+      let results = response.results.map((a) => a.studentId);
       //
       let merged = [].concat.apply([], results);
       //
@@ -154,7 +153,7 @@ export default {
     async addStudents() {
       const object = {
         objectId: this.id,
-        studentId: this.studentId
+        studentId: this.studentId,
       };
       const response = await this.$store.dispatch(
         `classes/updateClasses`,
@@ -162,7 +161,6 @@ export default {
       );
     },
     async studentScore(item) {
-     
       this.$router.push({
         name: "assessment-students-grade",
         query: {
@@ -170,8 +168,8 @@ export default {
           schoolYear: this.student.schoolYear,
           term: this.student.term,
           classRoomLevel: this.student.classRoomLevel,
-          classRoomName: this.student.classRoomName
-        }
+          classRoomName: this.student.classRoomName,
+        },
       });
     },
     async getRanking() {
@@ -179,14 +177,14 @@ export default {
         schoolYear: this.student.schoolYear,
         term: this.student.term,
         classRoomLevel: this.student.classRoomLevel,
-        classRoomName: this.student.classRoomName
+        classRoomName: this.student.classRoomName,
       };
-     
+
       const response = await this.$store.dispatch(
         `ranking/getRankingByConditions`,
         condition
       );
-     
+
       return response.results;
     },
     async exportXml() {
@@ -211,8 +209,8 @@ export default {
       setTimeout(() => {
         this.index = -1;
       }, 300);
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -174,7 +174,7 @@ export default {
       var newObj = [];
       data.forEach((data) => {
         var obj = newObj.find((item) => item.studentId == data.studentId);
-        console.log("obj", obj);
+
         if (!obj) {
           var newData = {
             studentNumber: data.studentNumber,
