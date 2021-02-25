@@ -35,7 +35,7 @@
   </v-layout>
 </template>
 
-<script>
+<>
 export default {
   layout: "assessment",
   middleware: "assessment",
@@ -243,6 +243,6 @@ export default {
     // }
   },
 };
-</script>
+</>
 
 <style lang="scss" scoped></style>

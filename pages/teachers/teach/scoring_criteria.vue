@@ -42,7 +42,7 @@
                                 type="number"
                                 required
                                 :rules="[
-                                  v => !!v || 'กรุณากรอก จำนวนการเก็บคะแนน'
+                                  (v) => !!v || 'กรุณากรอก จำนวนการเก็บคะแนน',
                                 ]"
                               />
                             </v-col>
@@ -112,12 +112,17 @@
                 <td v-if="item.subject_info">
                   {{ item.subject_info.codet }} {{ item.subject_info.sname }}
                 </td>
-                <td v-else>{{ item.subject.codet }} {{item.subject.sname}}</td>
+                <td v-else>
+                  {{ item.teachInfo.codet }} {{ item.teachInfo.sname }}
+                </td>
                 <th>{{ item.classRoomLevel }}</th>
                 <th>{{ item.classRoomName }}</th>
                 <th v-if="item.teacher">{{ item.teacher.name }}</th>
-                <th v-else>{{ item.teachers.title }} {{ item.teachers.firstName }}
-              {{ item.teachers.lastName }}
+                <th v-else>
+                  {{ item.teachers.title }} {{ item.teachers.firstName }}
+                  {{ item.teachers.lastName }}
+                </th>
+
                 <th>
                   <v-btn color="info" @click="goToAddScore(item)">
                     จัดการ
@@ -142,24 +147,23 @@ export default {
   async mounted() {
     this.query = this.$route.query;
     // this.teacherId = this.$store.state.auth.auth.teacherObjectId
-    
+
     await this.getTeachByConditions(this.query.id).then(
-      result => (this.items = result)
+      (result) => (this.items = result)
     );
     if (this.items.length == 0) {
-      
       await this.getTeachByConditionsFixed(this.query.id).then(
-        result => (this.items = result)
+        (result) => (this.items = result)
       );
     }
     // get rating
     // this.part_rating = this.items.rating
-    // 
+    //
   },
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
   },
   data() {
     return {
@@ -182,9 +186,9 @@ export default {
         { text: "ระดับชั้น", value: "classRoomLevel", align: "center" },
         { text: "ห้องเรียน", value: "classRoomName", align: "center" },
         { text: "ครูผู้สอน", value: "teacher.name", align: "center" },
-        { text: "Actions", value: "actions", sortable: false, align: "center" }
+        { text: "Actions", value: "actions", sortable: false, align: "center" },
       ],
-      items: []
+      items: [],
     };
   },
   methods: {
@@ -196,14 +200,14 @@ export default {
         teachers: {
           __type: "Pointer",
           className: "_User",
-          objectId: teacherId
-        }
+          objectId: teacherId,
+        },
       };
       const response = await this.$store.dispatch(
         `teach/getTeachByConditions`,
         data
       );
-      
+
       return response.results;
     },
     async getTeachByConditionsFixed(teacherId) {
@@ -213,33 +217,31 @@ export default {
         teachers: {
           __type: "Pointer",
           className: "_User",
-          objectId: teacherId
-        }
+          objectId: teacherId,
+        },
       };
-      
+
       const response = await this.$store.dispatch(
         `teach/getTeachByConditions`,
         data
       );
-      
+
       return response.results;
     },
     async getGradeByConditions(item) {
-      
-
       const conditions = {
         subject: item.sname,
         schoolYear: item.schoolYear,
         term: item.term,
         classRoomLevel: item.classRoomLevel,
         classRoomName: item.classRoomName,
-        "teacher.id": item.teacher.value
+        "teacher.id": item.teacher.value,
       };
       const response = await this.$store.dispatch(
         `grade/getGradeByConditions`,
         conditions
       );
-      
+
       return response.results;
     },
     async getStudentByTeach(item) {
@@ -247,37 +249,37 @@ export default {
         schoolYear: item.schoolYear,
         term: item.term,
         classRoomLevel: item.classRoomLevel,
-        classRoomName: item.classRoomName
+        classRoomName: item.classRoomName,
       };
       const response = await this.$store.dispatch(
         "classes/getClassesByConditions",
         conditions
       );
-      
+
       return response.results[0].studentId;
     },
     async getStudent(data) {
       const query = {
         objectId: {
-          $in: data
-        }
+          $in: data,
+        },
       };
       const response = await this.$store.dispatch(
         "students/getStudents",
         query
       );
-      
+
       var name = this.getStudentName(response.results);
       return name;
     },
     async createGrade(object) {
       const response = await this.$store.dispatch(`grade/createGrade`, object);
-      
+
       return response;
     },
     async addRatingToTach(teach) {
       const response = await this.$store.dispatch(`teach/updateTeach`, teach);
-      
+
       return response;
     },
     addPartNumber() {
@@ -285,7 +287,6 @@ export default {
       for (var index = 0; index < this.part_num; index++) {
         this.part_rating.push({ name: "", rating: 0 });
       }
-      
     },
     addRating(item) {
       this.dialog = true;
@@ -294,14 +295,13 @@ export default {
         this.part_num = item.rating.length;
       }
       this.part_rating = item.rating;
-      
     },
     getRating(item) {
       var rating = [];
       for (var index = 0; index < item.length; index++) {
         rating.push(item[index].name + " " + item[index].rating + " " + 0);
       }
-      
+
       return rating;
     },
     getStudentName(item) {
@@ -311,7 +311,7 @@ export default {
           item[index].tth + " " + item[index].namet + " " + item[index].snamet
         );
       }
-      
+
       return studentName;
     },
     mapScoreName(name, score) {
@@ -320,23 +320,23 @@ export default {
         for (var j = 0; j < score.length; j++) {
           student.push({
             name: name[i],
-            score: score[j]
+            score: score[j],
           });
         }
       }
-      
+
       return student;
     },
     async addScore(item) {
       // เช็คก่อนว่ามมี data ใน gradeรึยัง (1)
       var grade = await this.getGradeByConditions(item);
-      
+
       if (grade.length == 0) {
         await this.getStudentByTeach(item).then(
-          result => (this.studentsId = result)
+          (result) => (this.studentsId = result)
         );
         await this.getStudent(this.studentsId).then(
-          result => (this.studentName = result)
+          (result) => (this.studentName = result)
         );
         var scores = this.mapScoreName(this.studentName, item.rating);
         // ได้รายชื่อนักเรียนแล้ว -> เอารายชื่อนักเรียนไปรวมกับ rating สร้าง grade object
@@ -348,11 +348,11 @@ export default {
           classRoomName: item.classRoomName,
           teacher: {
             id: item.teacher.value,
-            name: item.teacher.name
+            name: item.teacher.name,
           },
-          students: scores
+          students: scores,
         };
-        
+
         var response = await this.createGrade(data);
         // เอารายชื่อนักเรียนไปรวมกับ rating
         if (response) {
@@ -363,16 +363,16 @@ export default {
       }
     },
     save() {
-      var rating = this.part_rating.map(result => parseInt(result.rating));
+      var rating = this.part_rating.map((result) => parseInt(result.rating));
 
       var sum = rating.reduce((a, b) => a + b);
       sum != 100 ? alert("กรุณาทำให้ผลรวม") : null;
 
       const teach = {
         objectId: this.teach.objectId,
-        rating: this.part_rating
+        rating: this.part_rating,
       };
-      
+
       this.addRatingToTach(teach);
       this.close();
     },
@@ -383,21 +383,20 @@ export default {
     },
     back() {
       this.$router.go(-1);
-      
     },
     goToAddScore(item) {
       this.$router.push({
         name: "teachers-teach-add_scoring_criteria",
         query: {
-          id: item.objectId
+          id: item.objectId,
           // schoolYear: item.schoolYear,
           // term: item.term,
           // classRoomLevel: item.classRoomLevel,
           // classRoomName: item.classRoomName
-        }
+        },
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

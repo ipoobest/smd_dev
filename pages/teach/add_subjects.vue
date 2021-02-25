@@ -161,7 +161,7 @@ export default {
   data() {
     return {
       headers: [
-        { text: "วิชา", value: "subject.sname" },
+        { text: "วิชา", value: "teachInfo.sname" },
         { text: "ชั้นเรียน", value: "classRoomLevel" },
         { text: "ห้องเรียน", value: "classRoomName" },
         { text: "ครูผู้สอน", value: "teacherName" },
@@ -241,7 +241,7 @@ export default {
         `teach/getSubjectsByConditions`,
         condition
       );
-
+      console.log("reponse", response.results);
       return response.results;
     },
     async getClassesByConditions() {
