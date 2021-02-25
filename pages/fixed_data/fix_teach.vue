@@ -71,7 +71,7 @@ export default {
         ? item.subject_info.codet
         : item.subject.codet;
       var credit_subject = item.subject_info
-        ? item.subject_info.codet
+        ? item.subject_info.credit
         : item.subject.credit;
 
       const data = {
