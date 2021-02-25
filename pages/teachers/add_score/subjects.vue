@@ -41,7 +41,7 @@
                     {{ item.subject_info.codet }} {{ item.subject_info.sname }}
                   </td>
                   <td v-else>
-                    {{ item.subject.codet }} {{ item.subject.sname }}
+                    {{ item.teachInfo.codet }} {{ item.teachInfo.sname }}
                   </td>
                   <td>{{ item.classRoomLevel }}</td>
                   <td>{{ item.classRoomName }}</td>
@@ -126,7 +126,7 @@ export default {
         `teach/getTeachByConditions`,
         data
       );
-
+      console.log("teach", response.results);
       return response.results;
     },
     // async getTeachByConditionsFixed(teacherId) {
