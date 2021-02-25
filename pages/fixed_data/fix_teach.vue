@@ -64,21 +64,27 @@ export default {
       return response.results;
     },
     async updateTeach(item) {
+      var subject_name = item.subject_info
+        ? item.subject_info.sname
+        : item.subject.sname;
+      var code_thai = item.subject_info
+        ? item.subject_info.codet
+        : item.subject.codet;
+      var credit_subject = item.subject_info
+        ? item.subject_info.codet
+        : item.subject.credit;
+
       const data = {
         objectId: item.objectId,
-        // subject: {
-        //   __type: "Pointer",
-        //   className: "Subjects",
-        //   objectId: pointerId,
-        // },
         teachInfo: {
-          sname: item.subject_info.sname,
-          codet: item.subject_info.codet,
-          credit: item.subject_info.credit,
+          sname: subject_name,
+          codet: code_thai,
+          credit: credit_subject,
         },
       };
+      console.log("update teach", data);
       const response = await this.$store.dispatch(`teach/updateTeach`, data);
-      console.log("response", response);
+      // console.log("response", response);
       return;
     },
     async updateTeacher(classId, pointerId) {
@@ -101,14 +107,8 @@ export default {
       console.log("this.pointer", this.pointer);
       switch (this.pointer) {
         case "วิชา":
+          // console.log("this data, ", this.data);
           this.data.forEach(async (item) => {
-            // console.log("item subject", item);
-            // // const subjectId = await this.getSubjectId(item.subject_info.codet);
-            // console.log(
-            //   "classesId , subjectId ",
-            //   item.objectId,
-            //   subjectId[0].objectId
-            // );
             await this.updateTeach(item);
           });
           this.getTeach();
