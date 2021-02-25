@@ -281,7 +281,7 @@ export default {
         "grade/getGradeByConditions",
         conditions
       );
-
+      console.log("get grade item", response_grade);
       //
       this.score = response_grade.results;
       this.edit_mode = new Array(this.score.length);
@@ -392,6 +392,11 @@ export default {
             __type: "Pointer",
             className: "Teach",
             objectId: this.items.objectId,
+          },
+          subject: {
+            __type: "Pointer",
+            className: "Subjects",
+            objectId: this.items.subject.objectId,
           },
           // teachInfo: {
           //   techId: this.items.objectId,

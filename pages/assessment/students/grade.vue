@@ -51,8 +51,8 @@
                 <tbody>
                   <tr v-for="(item, index) in items" :key="index">
                     <td>{{ route.term }}/{{ route.schoolYear }}</td>
-                    <td>{{ item.teachInfo.codet }}</td>
-                    <td>{{ item.teachInfo.sname }}</td>
+                    <td>{{ item.info.codet }}</td>
+                    <td>{{ item.info.sname }}</td>
                     <td>{{ parseFloat(item.teachInfo.credit).toFixed(1) }}</td>
                     <td v-if="item.grade_option">{{ item.grade_option }}</td>
                     <td v-else>{{ parseFloat(item.grade).toFixed(1) }}</td>
@@ -441,7 +441,7 @@ export default {
       var newItems = data.sort(
         (a, b) => a.department_number - b.department_number
       );
-      // console.log("sort items", newItems);
+      console.log("sort items", newItems);
       return newItems;
     },
     print() {

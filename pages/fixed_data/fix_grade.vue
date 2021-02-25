@@ -38,7 +38,11 @@
               <v-col cols="1"
                 ><v-btn color="success" @click="getGrade()">GET</v-btn></v-col
               >
-              <v-col cols="1"><v-btn color="info" @click="updateGradeList()">update</v-btn></v-col>
+              <v-col cols="1"
+                ><v-btn color="info" @click="updateGradeList()"
+                  >update</v-btn
+                ></v-col
+              >
             </v-row>
           </v-col>
           <v-data-table :headers="headers" :items="items" :search="search">
@@ -75,12 +79,12 @@
 <script>
 export default {
   // middleware: 'authentication',
-  layout: 'fix_data',
+  layout: "fix_data",
   mounted() {},
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
   },
   data() {
     return {
@@ -90,7 +94,6 @@ export default {
         { text: "ชื่อ", value: "studentName", align: "center  " },
         { text: "กลุ่มสาระวิชา", value: "department", align: "center  " },
         { text: "หมายเลข", value: "department_number", align: "center  " },
-
       ],
       dialogCreateYear: false,
       items: [],
@@ -102,30 +105,30 @@ export default {
       departmentNumber: "",
       classes: ["ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"],
       subjectList: [],
-      departmentList: []
+      departmentList: [],
     };
   },
   methods: {
     async getSubjectByTeach() {
       var data = {
-        classRoomLevel: this.classRoomLevel
+        classRoomLevel: this.classRoomLevel,
       };
       const response = await this.$store.dispatch(
         `teach/getTeachByConditions`,
         data
       );
-      
+
       this.mapSubject(response.results);
     },
     async getDepartmentBySubject() {
       var data = {
-        sname: this.subject
+        sname: this.subject,
       };
       const response = await this.$store.dispatch(
         `subjects/getSubjectsByConditions`,
         data
       );
-      
+
       this.department = response.results[0].department;
       this.departmentNumber = this.checkDepartmentNumber(this.department);
       this.departmentList.push(response.results[0].department);
@@ -139,27 +142,28 @@ export default {
         `grade/getGradeByConditions`,
         data
       );
-      
-      this.items = response.results
+
+      this.items = response.results;
     },
     async updateGrade(item) {
+      console.log("item grade", item);
       var data = {
         objectId: item.objectId,
         department: this.department,
         department_number: this.departmentNumber,
         teach: {
-          "__type":"Pointer",
-          "className": "Teach",
-          "objectId": item.teachId
-        }
-      }
-      
-      const response = await this.$store.dispatch(
-        `grade/updateGrade`,
-        data
-      );
-      
-      
+          __type: "Pointer",
+          className: "Teach",
+          objectId: item.teachId,
+        },
+      };
+
+      console.log("data requert update", data);
+      // const response = await this.$store.dispatch(
+      //   `grade/updateGrade`,
+      //   data
+      // );
+
       // this.getGrade()
       // alert('update success')
     },
@@ -167,21 +171,20 @@ export default {
       this.$router.push({ name: "index" });
     },
     updateGradeList() {
-      this.items.forEach(item => {
-        
-        this.updateGrade(item)
-      })
-      alert('update success')
-      this.getGrade()
+      this.items.forEach((item) => {
+        this.updateGrade(item);
+      });
+      // alert("update success");
+      this.getGrade();
     },
     checkDepartmentNumber(data) {
       if (data == "ภาษาไทย") {
         return 1;
       }
-      if (data == "คณิตศาสตร์" ) {
+      if (data == "คณิตศาสตร์") {
         return 2;
       }
-      if (data == "วิทยาศาสตร์")  {
+      if (data == "วิทยาศาสตร์") {
         return 3;
       }
       if (data == "สังคมศึกษา ศาสนา และวัฒนธรรม") {
@@ -206,7 +209,7 @@ export default {
     mapSubject(data) {
       var itemSubject = [];
       var itemDepartment = [];
-      data.forEach(item => {
+      data.forEach((item) => {
         itemSubject.push(item.subject.sname);
       });
       this.subjectList = [...new Set(itemSubject)];
@@ -214,15 +217,15 @@ export default {
     async addSubject(item) {
       this.$router.push({
         name: "teach-add_subjects",
-        query: { schoolYear: item.schoolYear, term: item.term }
+        query: { schoolYear: item.schoolYear, term: item.term },
       });
     },
     async addElevtiveSubject(item) {
       this.$router.push({
         name: "teach-add_elective_subjects",
-        query: { schoolYear: item.schoolYear, term: item.term }
+        query: { schoolYear: item.schoolYear, term: item.term },
       });
-    }
-  }
+    },
+  },
 };
 </script>

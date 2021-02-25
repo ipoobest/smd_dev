@@ -24,10 +24,10 @@
 
 <script>
 export default {
-  layout: 'fix_data',
+  layout: "fix_data",
   async mounted() {
-    await this.getTeach().then(result => (this.data = result));
-    // console.log('items : ', this.data )
+    await this.getTeach().then((result) => (this.data = result));
+    console.log("items : ", this.data);
   },
   data() {
     return {
@@ -38,24 +38,23 @@ export default {
         { text: "วิชา(pointer)", value: "subject.sname" },
         { text: "ครูผู้สอน", value: "teacher.name" },
         { text: "ครูผู้สอน(pointer)", value: "teachers.firstName" },
-        { text: "กลุ่มสาระ", value: "department" }
-
+        { text: "กลุ่มสาระ", value: "department" },
         // { text: "นักเรียน(pointer)", value: "classRoomName" }
       ],
       data: [],
       pointer: "",
-      items: ["วิชา", "ครู", "นักเรียน"]
+      items: ["วิชา", "ครู", "นักเรียน"],
     };
   },
   methods: {
     async getTeach() {
       const response = await this.$store.dispatch(`teach/getSubjectsPointer`);
-      // console.log("response xx", response.results[0]);
+      console.log("response getTeach", response.results[0]);
       return response.results;
     },
     async getSubjectId(code) {
       const data = {
-        codet: code
+        codet: code,
       };
       const response = await this.$store.dispatch(
         `subjects/getSubjectsByConditions`,
@@ -64,14 +63,18 @@ export default {
       // console.log("subjectId", response.results);
       return response.results;
     },
-    async updateTeach(classId, pointerId) {
+    async updateTeach(item) {
       const data = {
-        objectId: classId,
+        objectId: item.objectId,
+        // subject: {
+        //   __type: "Pointer",
+        //   className: "Subjects",
+        //   objectId: pointerId,
+        // },
         subject: {
-          __type: "Pointer",
-          className: "Subjects",
-          objectId: pointerId
-        }
+          sname: item.subject_info.sname,
+          codet: item.subject_info.codet,
+        },
       };
       const response = await this.$store.dispatch(`teach/updateTeach`, data);
       console.log("response", response);
@@ -83,46 +86,50 @@ export default {
         teachers: {
           __type: "Pointer",
           className: "_User",
-          objectId: pointerId
-        }
+          objectId: pointerId,
+        },
       };
       const response = await this.$store.dispatch(`teach/updateTeach`, data);
       console.log("response", response);
     },
     async updateStudent(data) {
-
       const response = await this.$store.dispatch(`teach/updateTeach`, data);
-      console.log('success')
+      console.log("success");
     },
     update() {
       console.log("this.pointer", this.pointer);
       switch (this.pointer) {
         case "วิชา":
-          this.data.forEach(async item => {
-            const subjectId = await this.getSubjectId(item.subject_info.codet);
-            // console.log('classesId , subjectId ', item.objectId, subjectId[0].objectId)
+          this.data.forEach(async (item) => {
+            console.log("item subject", item);
+            // const subjectId = await this.getSubjectId(item.subject_info.codet);
+            console.log(
+              "classesId , subjectId ",
+              item.objectId,
+              subjectId[0].objectId
+            );
             await this.updateTeach(item.objectId, subjectId[0].objectId);
           });
           this.getTeach();
           break;
         case "ครู":
           console.log("teacher");
-          this.data.forEach(async item => {
+          this.data.forEach(async (item) => {
             // console.log('teacherId', item.teacher.value)
             await this.updateTeacher(item.objectId, item.teacher.value);
           });
           break;
         case "นักเรียน":
           console.log("นักเรียน");
-          this.data.forEach(async item => {
+          this.data.forEach(async (item) => {
             var studentPointer = [];
             if (item.students) {
               var studentId = item.students;
-              studentId.forEach(id => {
+              studentId.forEach((id) => {
                 var students = {
                   __type: "Pointer",
                   className: "Students",
-                  objectId: id
+                  objectId: id,
                 };
                 studentPointer.push(students);
               });
@@ -130,9 +137,9 @@ export default {
                 objectId: item.objectId,
                 student: {
                   __op: "AddRelation",
-                  objects: studentPointer
-                }
-              }
+                  objects: studentPointer,
+                },
+              };
               console.log("studenId นักเรียน", data);
               // await this.updateStudent(data)
             }
@@ -142,7 +149,7 @@ export default {
         default:
           alert("กรุณาเลือก pointer");
       }
-    }
-  }
+    },
+  },
 };
 </script>
