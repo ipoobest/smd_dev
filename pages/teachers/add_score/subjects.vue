@@ -126,7 +126,7 @@ export default {
         `teach/getTeachByConditions`,
         data
       );
-      console.log("teach", response.results);
+      // console.log("teach", response.results);
       return response.results;
     },
     // async getTeachByConditionsFixed(teacherId) {

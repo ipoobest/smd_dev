@@ -19,16 +19,14 @@
           </v-card-title>
           <v-data-table :headers="headers" :items="items" :search="search">
             <template v-slot:[`item.subjectInfo`]="{ item }">
-              {{ item.subject.codet }} {{ item.subject.sname }}
+              {{ item.teachInfo.codet }} {{ item.teachInfo.sname }}
             </template>
             <template v-slot:[`item.teacherName`]="{ item }"
               >{{ item.teachers.title }} {{ item.teachers.firstName }}
               {{ item.teachers.lastName }}</template
             >
             <template v-slot:[`item.actions`]="{ item }">
-              <v-btn class="success" @click="score(item)">
-                ดูคะแนน
-              </v-btn>
+              <v-btn class="success" @click="score(item)"> ดูคะแนน </v-btn>
             </template>
           </v-data-table>
         </v-card>
@@ -44,13 +42,13 @@ export default {
   async mounted() {
     this.query = this.$route.query;
     // this.teacherId = this.$store.state.auth.auth.teacherObjectId
-    // 
-    await this.getTeachByConditions().then(result => (this.items = result));
+    //
+    await this.getTeachByConditions().then((result) => (this.items = result));
   },
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
   },
   data() {
     return {
@@ -59,7 +57,7 @@ export default {
         { text: "ระดับชั้น", value: "classRoomLevel" },
         { text: "ห้องเรียน", value: "classRoomName" },
         { text: "ครูผู้สอน", value: "teacherName" },
-        { text: "Actions", value: "actions", sortable: false }
+        { text: "Actions", value: "actions", sortable: false },
       ],
       dialog: false,
       formTitle: "เกณฑ์การให้คะแนน",
@@ -76,7 +74,7 @@ export default {
       studentsNamr: [],
       rating: [],
       items: [],
-      ranking: ""
+      ranking: "",
     };
   },
   methods: {
@@ -84,13 +82,13 @@ export default {
       const data = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        approved: "true"
+        approved: "true",
       };
       const response = await this.$store.dispatch(
         `teach/getTeachByConditions`,
         data
       );
-      // 
+      //
       return response.results;
     },
 
@@ -98,18 +96,18 @@ export default {
       const data = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        "teacher.value": teacherId
+        "teacher.value": teacherId,
       };
       const response = await this.$store.dispatch(
         `teach/getTeachByConditions`,
         data
       );
-      // 
+      //
       return response.results;
     },
 
     async getGradeByConditions(item) {
-      // 
+      //
 
       const conditions = {
         subject: item.sname,
@@ -117,13 +115,13 @@ export default {
         term: item.term,
         classRoomLevel: item.classRoomLevel,
         classRoomName: item.classRoomName,
-        "teacher.id": item.teacher.value
+        "teacher.id": item.teacher.value,
       };
       const response = await this.$store.dispatch(
         `grade/getGradeByConditions`,
         conditions
       );
-      // 
+      //
       return response.results;
     },
 
@@ -132,40 +130,40 @@ export default {
         schoolYear: item.schoolYear,
         term: item.term,
         classRoomLevel: item.classRoomLevel,
-        classRoomName: item.classRoomName
+        classRoomName: item.classRoomName,
       };
       const response = await this.$store.dispatch(
         "classes/getClassesByConditins",
         conditions
       );
-      // 
-      // 
+      //
+      //
       return response.results[0].studentId;
     },
 
     async getStudent(data) {
       const query = {
         objectId: {
-          $in: data
-        }
+          $in: data,
+        },
       };
       const response = await this.$store.dispatch(
         "students/getStudents",
         query
       );
-      // 
+      //
       var name = this.getStudentName(response.results);
       return name;
     },
     async createGrade(object) {
       const response = await this.$store.dispatch(`grade/createGrade`, object);
-      // 
+      //
       return response;
     },
 
     async addRatingToTach(teach) {
       const response = await this.$store.dispatch(`teach/updateTeach`, teach);
-      // 
+      //
       return response;
     },
     addPartNumber() {
@@ -173,7 +171,7 @@ export default {
       for (var index = 0; index < this.part_num; index++) {
         this.part_rating.push({ name: "", rating: 0 });
       }
-      // 
+      //
     },
     addRating(item) {
       this.dialog = true;
@@ -182,14 +180,14 @@ export default {
         this.part_num = item.rating.length;
       }
       this.part_rating = item.rating;
-      // 
+      //
     },
     getRating(item) {
       var rating = [];
       for (var index = 0; index < item.length; index++) {
         rating.push(item[index].name + " " + item[index].rating + " " + 0);
       }
-      // 
+      //
       return rating;
     },
     getStudentName(item) {
@@ -199,7 +197,7 @@ export default {
           item[index].tth + " " + item[index].namet + " " + item[index].snamet
         );
       }
-      // 
+      //
       return studentName;
     },
     mapScoreName(name, score) {
@@ -208,18 +206,18 @@ export default {
         for (var j = 0; j < score.length; j++) {
           student.push({
             name: name[i],
-            score: score[j]
+            score: score[j],
           });
         }
       }
-      // 
+      //
       return student;
     },
     async score(item) {
-      // 
+      //
       this.goToPreviewGrade(item);
     },
-    
+
     close() {
       this.dialog = false;
       this.part_num = "";
@@ -227,23 +225,23 @@ export default {
     },
     back() {
       this.$router.go(-1);
-      // 
+      //
     },
 
     goToPreviewGrade(item) {
       this.$router.push({
         name: "assessment-preview-grade",
-        query: { id: item.objectId }
+        query: { id: item.objectId },
       });
-    }
+    },
     // goToPreviewScore(item) {
-    //   
+    //
     //   this.$router.push({
     //     name: "assessment-students",
     //     query: { id: item.classId }
     //   });
     // }
-  }
+  },
 };
 </script>
 
