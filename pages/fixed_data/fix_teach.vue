@@ -71,9 +71,10 @@ export default {
         //   className: "Subjects",
         //   objectId: pointerId,
         // },
-        subject: {
+        teachInfo: {
           sname: item.subject_info.sname,
           codet: item.subject_info.codet,
+          credit: item.subject_info.credit,
         },
       };
       const response = await this.$store.dispatch(`teach/updateTeach`, data);
@@ -101,14 +102,14 @@ export default {
       switch (this.pointer) {
         case "วิชา":
           this.data.forEach(async (item) => {
-            console.log("item subject", item);
-            // const subjectId = await this.getSubjectId(item.subject_info.codet);
-            console.log(
-              "classesId , subjectId ",
-              item.objectId,
-              subjectId[0].objectId
-            );
-            await this.updateTeach(item.objectId, subjectId[0].objectId);
+            // console.log("item subject", item);
+            // // const subjectId = await this.getSubjectId(item.subject_info.codet);
+            // console.log(
+            //   "classesId , subjectId ",
+            //   item.objectId,
+            //   subjectId[0].objectId
+            // );
+            await this.updateTeach(item);
           });
           this.getTeach();
           break;

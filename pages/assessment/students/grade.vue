@@ -51,8 +51,8 @@
                 <tbody>
                   <tr v-for="(item, index) in items" :key="index">
                     <td>{{ route.term }}/{{ route.schoolYear }}</td>
-                    <td>{{ item.info.codet }}</td>
-                    <td>{{ item.info.sname }}</td>
+                    <td>{{ item.teach.teachInfo.codet }}</td>
+                    <td>{{ item.teach.teachInfo.sname }}</td>
                     <td>{{ parseFloat(item.teachInfo.credit).toFixed(1) }}</td>
                     <td v-if="item.grade_option">{{ item.grade_option }}</td>
                     <td v-else>{{ parseFloat(item.grade).toFixed(1) }}</td>
