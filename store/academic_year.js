@@ -46,23 +46,7 @@ export const actions = {
     return new Promise(async (resolve, reject) => {
       try {
         const result = this.$axios.$get(
-          `${process.env.parseUrl}/classes/${classes.academicYear}`
-        );
-
-        commit("setAcademicYear", result);
-        resolve(result);
-      } catch (error) {
-        console.log({ error });
-        commit(`setError`, error);
-        reject(error);
-      }
-    });
-  },
-  async getAcademicYear({ commit }) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const result = this.$axios.$get(
-          `${process.env.parseUrl}/classes/${classes.academicYear}`
+          `${process.env.parseUrl}/classes/${classes.academicYear}?order=-createdAt`
         );
 
         commit("setAcademicYear", result);
