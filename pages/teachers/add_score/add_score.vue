@@ -74,9 +74,12 @@
           </tr>
         </thead>
         <tbody>
-          <v-col v-if="rating.length == 0" justify="center">
-            <v-row>
+          <v-col v-if="rating.length == 0">
+            <v-row justify="">
               <h2>กรุณาเพิ่มเกณฑ์การให้คะแนน</h2>
+              <v-btn color="error" @click="addCriteria()"
+                >เพิ่มเกณฑ์การให้คะแนน</v-btn
+              >
             </v-row>
           </v-col>
           <tr
@@ -162,7 +165,9 @@
       </template>
     </v-simple-table>
 
-    <h3 v-else>กรุณาเพิ่มเกณฑ์การให้คะแนน</h3>
+    <div v-else>
+      <h3>กรุณาเพิ่มเกณฑ์การให้คะแนน</h3>
+    </div>
 
     <v-row justify="center">
       <!-- <v-btn color="orange" dark class="mr-2">reset form</v-btn> -->
@@ -562,10 +567,12 @@ export default {
         item.analytical_thinking = this.score_analytical_thinking;
       });
     },
-    logId(item) {},
-    save() {},
-    close() {},
-    reset() {},
+    addCriteria() {
+      this.$router.push({
+        name: "teachers-teach-add_scoring_criteria",
+        query: { id: this.$route.query.id },
+      });
+    },
     back() {
       this.$router.go(-1);
     },
