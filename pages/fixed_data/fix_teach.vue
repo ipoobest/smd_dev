@@ -64,6 +64,8 @@ export default {
       return response.results;
     },
     async updateTeach(item) {
+      console.log("update item", item);
+      var subject_objectId = item.subject.objectId;
       var subject_name = item.subject_info
         ? item.subject_info.sname
         : item.subject.sname;
@@ -77,12 +79,13 @@ export default {
       const data = {
         objectId: item.objectId,
         teachInfo: {
+          objectId_subject: subject_objectId,
           sname: subject_name,
           codet: code_thai,
           credit: credit_subject,
         },
       };
-      console.log("update teach", data);
+      // console.log("update teach", data);
       const response = await this.$store.dispatch(`teach/updateTeach`, data);
       // console.log("response", response);
       return;

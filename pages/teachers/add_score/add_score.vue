@@ -75,7 +75,7 @@
         </thead>
         <tbody>
           <v-col v-if="rating.length == 0">
-            <v-row justify="">
+            <v-row justify="center">
               <h2>กรุณาเพิ่มเกณฑ์การให้คะแนน</h2>
               <v-btn color="error" @click="addCriteria()"
                 >เพิ่มเกณฑ์การให้คะแนน</v-btn
@@ -364,6 +364,7 @@ export default {
 
       this.rating = response.rating;
       this.mapRating(this.rating);
+      console.log("response", response);
       return response;
     },
     async getCriteria() {
@@ -390,6 +391,8 @@ export default {
       }
       //
       for (var index = 0; index < studentName.length; index++) {
+        console.log("thisssss", this.items);
+
         const data = {
           //pointer techId,studentObjectId
           teachId: this.items.objectId,
@@ -401,13 +404,13 @@ export default {
           subject: {
             __type: "Pointer",
             className: "Subjects",
-            objectId: this.items.subject.objectId,
+            objectId: this.items.teachInfo.objectId_subject,
           },
           // teachInfo: {
           //   techId: this.items.objectId,
           //   codet: this.items.subject.codet,
           //   credit: this.items.subject.credit,
-          //   sname: this.items.subject.sname
+          //   sname: this.items.subject.sname,
           // },
           studentName: studentName[index],
           studentObjectId: students[index],
@@ -423,7 +426,7 @@ export default {
           aptitude: "",
           analytical_thinking: "",
         };
-        //
+        console.log("create grade data",data);
         const response = await this.$store.dispatch(`grade/createGrade`, data);
       }
       this.getGradeByConditions(this.items).then(

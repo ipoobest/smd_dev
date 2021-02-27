@@ -142,7 +142,7 @@ export default {
         `grade/getGradeByConditions`,
         data
       );
-
+      console.log("get grade", response.results);
       this.items = response.results;
     },
     async updateGrade(item) {
@@ -156,16 +156,18 @@ export default {
           className: "Teach",
           objectId: item.teachId,
         },
+        subject: {
+          __type: "Pointer",
+          className: "Subjects",
+          objectId: item.objectId,
+        },
       };
 
-      console.log("data requert update", data);
-      // const response = await this.$store.dispatch(
-      //   `grade/updateGrade`,
-      //   data
-      // );
+      // console.log("data requert update", data);
+      const response = await this.$store.dispatch(`grade/updateGrade`, data);
 
-      // this.getGrade()
-      // alert('update success')
+      this.getGrade();
+      alert("update success");
     },
     back() {
       this.$router.push({ name: "index" });
@@ -210,7 +212,7 @@ export default {
       var itemSubject = [];
       var itemDepartment = [];
       data.forEach((item) => {
-        itemSubject.push(item.subject.sname);
+        itemSubject.push(item.teachInfo.sname);
       });
       this.subjectList = [...new Set(itemSubject)];
     },

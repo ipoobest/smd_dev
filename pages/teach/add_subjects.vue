@@ -45,7 +45,7 @@
                           <v-row>
                             <v-col cols="12" sm="6" md="6">
                               <v-select
-                                v-model="input.subject.objectId"
+                                v-model="input.teachInfo.objectId_subject"
                                 @change="editSubjectName"
                                 :items="classSubject"
                                 outlined
@@ -183,6 +183,7 @@ export default {
         term: "",
       },
       input: {
+        teachInfo: {},
         subject: {},
         teachers: {},
         classSubject: "",
@@ -322,6 +323,7 @@ export default {
             send_score: false,
             rating: [],
             teachInfo: {
+              objectId_subject: this.input.teachInfo.objectId_subject,
               sname: this.subjectId.sname,
               codet: this.subjectId.codet,
               credit: this.subjectId.credit,
@@ -339,7 +341,7 @@ export default {
             department: this.input.department,
             type: "วิชาบังคับ",
           };
-          // console.log("data", data);
+          console.log("data", data);
           await this.addSubjectToTeach(data);
           this.resetForm();
           await this.getSubjectsFromTeach().then(
@@ -403,12 +405,14 @@ export default {
     },
     editSubjectName() {
       var subject_name = this.subjects.filter(
-        (subject) => subject.objectId == this.input.subject.objectId
+        (subject) => subject.objectId == this.input.teachInfo.objectId_subject
       );
+      console.log("ssssss", subject_name[0]);
       // this.subjectInfo = { codet: subject_name[0].codet,sname: subject_name[0].sname, credit: subject_name[0].credit, hour: subject_name[0].hour};
       this.subjectId = subject_name[0];
     },
     editItem(item) {
+      console.log("this item edit", item);
       this.editedIndex = this.items.indexOf(item);
       this.input = Object.assign({}, item);
       this.dialog = true;
