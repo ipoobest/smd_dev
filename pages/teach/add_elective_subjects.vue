@@ -20,7 +20,12 @@
               ></v-text-field>
             </v-col>
           </v-card-title>
-          <v-simple-table :search="search" align="center">
+          <v-data-table
+            :search="search"
+            align="center"
+            :headers="headers"
+            :items="subjectsInTerm"
+          >
             <template v-slot:top>
               <v-toolbar flat color="white">
                 <v-spacer></v-spacer>
@@ -48,7 +53,7 @@
                                 outlined
                                 label="วิชา"
                                 required
-                                :rules="[v => !!v || 'กรุณาเลือกวิชา']"
+                                :rules="[(v) => !!v || 'กรุณาเลือกวิชา']"
                               ></v-select>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
@@ -58,7 +63,9 @@
                                 outlined
                                 label="กลุ่มสาระวิชา"
                                 required
-                                :rules="[v => !!v || 'กรุณาเลือกกลุ่มสาระวิชา']"
+                                :rules="[
+                                  (v) => !!v || 'กรุณาเลือกกลุ่มสาระวิชา',
+                                ]"
                               ></v-select>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
@@ -70,7 +77,7 @@
                                 outlined
                                 label="ครูผู้สอน"
                                 require
-                                :rules="[v => !!v || 'กรุณาเลือกครูผู้สอน']"
+                                :rules="[(v) => !!v || 'กรุณาเลือกครูผู้สอน']"
                               ></v-select>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
@@ -80,7 +87,7 @@
                                 outlined
                                 label="ระดับชั้น"
                                 required
-                                :rules="[v => !!v || 'กรุณาเลือกระดับชั้น']"
+                                :rules="[(v) => !!v || 'กรุณาเลือกระดับชั้น']"
                               ></v-select>
                             </v-col>
                           </v-row>
@@ -105,7 +112,7 @@
                 </v-dialog>
               </v-toolbar>
             </template>
-            <thead>
+            <!-- <thead>
               <tr>
                 <th>รหัส/ชื่อวิขา</th>
                 <th>ระดับชั้น</th>
@@ -118,11 +125,16 @@
                 <td v-if="item.subject_info">
                   {{ item.subject_info.codet }} {{ item.subject_info.sname }}
                 </td>
-                <td v-else>{{item.subject.codet}} {{item.subject.sname}}</td>
-                <!-- <td v-else>{{ item.sname }}</td> -->
+                <td v-else>
+                  {{ item.subject.codet }} {{ item.subject.sname }}
+                </td>
+                 <td v-else>{{ item.sname }}</td> 
                 <td>{{ item.classRoomLevel }}</td>
                 <td v-if="item.teacher">{{ item.teacher.name }}</td>
-                <td v-else> {{item.teachers.title}} {{item.teachers.firstName}} {{item.teachers.lastName}}</td>
+                <td v-else>
+                  {{ item.teachers.title }} {{ item.teachers.firstName }}
+                  {{ item.teachers.lastName }}
+                </td>
                 <td>
                   <v-btn color="info" @click="addStudent(item)">
                     เพิ่มรายชื่อนักเรียน
@@ -132,8 +144,16 @@
                   </v-btn>
                 </td>
               </tr>
-            </tbody>
-          </v-simple-table>
+            </tbody> -->
+            <template v-slot:[`item.teacherName`]="{ item }"
+              >{{ item.teachers.title }} {{ item.teachers.firstName }}
+              {{ item.teachers.lastName }}</template
+            >
+            <template v-slot:[`item.actions`]="{ item }">
+              <v-btn color="info" @click="editItem(item)"> แก้ไข </v-btn>
+              <v-btn color="error" @click="deleteItem(item)"> ลบ </v-btn>
+            </template>
+          </v-data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -146,13 +166,15 @@ export default {
   async mounted() {
     this.query = this.$route.query;
     await this.getSubjectsFromTeach().then(
-      result => (this.subjectsInTerm = result)
+      (result) => (this.subjectsInTerm = result)
     );
 
-    await this.getSubjects().then(result => (this.subjects = result));
-    await this.getClass().then(result => (this.classes = result));
-    await this.getTeacher().then(result => (this.teachers = result));
-    await this.getDepartment().then(result => (this.selectDepartment = result));
+    await this.getSubjects().then((result) => (this.subjects = result));
+    await this.getClass().then((result) => (this.classes = result));
+    await this.getTeacher().then((result) => (this.teachers = result));
+    await this.getDepartment().then(
+      (result) => (this.selectDepartment = result)
+    );
 
     await this.selectInputSubjects();
     await this.selectInputClasses();
@@ -163,12 +185,18 @@ export default {
       for (var i = 0; i < this.subjects.length; i++) {
         this.selectSubjects.push(this.subjects[i].sname);
       }
-      
-    }
+    },
   },
   data() {
     return {
       title: "การจัดการวิชา",
+      headers: [
+        { text: "วิชา", value: "teachInfo.sname" },
+        { text: "ชั้นเรียน", value: "classRoomLevel" },
+        { text: "ห้องเรียน", value: "classRoomName" },
+        { text: "ครูผู้สอน", value: "teacherName" },
+        { text: "Actions", value: "actions", sortable: false, align: "center" },
+      ],
       search: "",
       dialogAddStudents: false,
       dialogCreateTeach: false,
@@ -181,25 +209,25 @@ export default {
       selectDepartment: [],
       query: {
         schoolYear: "",
-        term: ""
+        term: "",
       },
       input: {
         classSubject: "",
         classRoomLevel: "",
         classRoomName: "",
-        teacher: []
+        teacher: [],
       },
       classSubject: [],
       classRoomLevel: [],
       classRoomName: [],
-      itemTeachers: []
+      itemTeachers: [],
     };
   },
   methods: {
     async getClass() {
       const conditions = {
         schoolYear: this.query.schoolYear,
-        term: this.query.term
+        term: this.query.term,
       };
       const response = await this.$store.dispatch(
         `classes/getClassesByConditions`,
@@ -209,7 +237,7 @@ export default {
     },
     async getTeacher() {
       var conditions = {
-        type: "ครู"
+        type: "ครู",
       };
       const response = await this.$store.dispatch(
         `users/getUserByConditions`,
@@ -220,26 +248,26 @@ export default {
     async getSubjects() {
       var conditions = {
         type: "วิชาเลือก",
-        term: this.query.term
+        term: this.query.term,
       };
       const response = await this.$store.dispatch(
         `subjects/getSubjectsByConditions`,
         conditions
       );
-      
+
       return response.results;
     },
     async getSubjectsFromTeach() {
       const condition = {
         schoolYear: this.query.schoolYear,
         term: this.query.term,
-        type: "วิชาเลือกเสรี"
+        type: "วิชาเลือกเสรี",
       };
       const response = await this.$store.dispatch(
         `teach/getSubjectsByConditions`,
         condition
       );
-      
+
       return response.results;
     },
     async getClassesByConditions() {
@@ -247,7 +275,7 @@ export default {
         schoolYear: this.query.schoolYear,
         term: this.query.term,
         classRoomLevel: this.input.classRoomLevel,
-        classRoomName: this.input.classRoomName
+        classRoomName: this.input.classRoomName,
       };
       const response = await this.$store.dispatch(
         `classes/getClassesByConditions`,
@@ -263,7 +291,7 @@ export default {
     async addSubjectToTeach(data) {
       const response = await this.$store.dispatch(`teach/createTeach`, data);
       await this.getSubjectsFromTeach().then(
-        result => (this.subjectsInTerm = result)
+        (result) => (this.subjectsInTerm = result)
       );
     },
     async addSubject() {
@@ -282,16 +310,16 @@ export default {
         subject: {
           __type: "Pointer",
           className: "Subjects",
-          objectId: this.subjectInfo.id
+          objectId: this.subjectInfo.id,
         },
         teachers: {
           __type: "Pointer",
           className: "_User",
-          objectId: this.input.teacher.value
+          objectId: this.input.teacher.value,
         },
-        type: "วิชาเลือกเสรี"
+        type: "วิชาเลือกเสรี",
       };
-      
+
       this.addSubjectToTeach(data);
       this.resetForm();
       this.close();
@@ -301,26 +329,23 @@ export default {
         `teach/deleteSubjectInTeach`,
         objectId
       );
-      // 
+      //
     },
     selectInputSubjects() {
       this.classSubject = [];
-      this.subjects.forEach(subject => {
+      this.subjects.forEach((subject) => {
         var data = {
           text: subject.codet + " " + subject.sname,
-          value: subject.objectId
+          value: subject.objectId,
         };
         this.classSubject.push(data);
       });
-      
     },
     selectInputClasses() {
-      
       for (var index = 0; index < this.classes.length; index++) {
         this.classRoomLevel.push(this.classes[index].classRoomLevel);
         this.classRoomName.push(this.classes[index].classRoomName);
       }
-      
     },
     selectInputTeacher() {
       for (var index = 0; index < this.teachers.length; index++) {
@@ -331,18 +356,23 @@ export default {
             this.teachers[index].firstName +
             " " +
             this.teachers[index].lastName,
-          value: this.teachers[index].objectId
+          value: this.teachers[index].objectId,
         };
         this.itemTeachers.push(teacher);
       }
     },
     editSubjectName() {
       var subject_name = this.subjects.filter(
-        subject => subject.objectId == this.input.subject_id
+        (subject) => subject.objectId == this.input.subject_id
       );
-      
-      this.subjectInfo = {id: subject_name[0].objectId , codet: subject_name[0].codet,sname: subject_name[0].sname, credit: subject_name[0].credit, hour: subject_name[0].hour};
-      
+
+      this.subjectInfo = {
+        id: subject_name[0].objectId,
+        codet: subject_name[0].codet,
+        sname: subject_name[0].sname,
+        credit: subject_name[0].credit,
+        hour: subject_name[0].hour,
+      };
     },
     addClasses(item) {
       this.$router.push({
@@ -350,15 +380,14 @@ export default {
         query: {
           classId: item.objectId,
           schoolYear: this.query.schoolYear,
-          term: this.query.term
-        }
+          term: this.query.term,
+        },
       });
     },
     addStudent(item) {
-      
       this.$router.push({
         name: "teach-add_students_to_elective_subject",
-        query: { id: item.objectId }
+        query: { id: item.objectId },
       });
     },
     deleteItem(item) {
@@ -370,10 +399,10 @@ export default {
     },
     mapDepartment(item) {
       var department = [];
-      item.forEach(item => {
+      item.forEach((item) => {
         department.push(item.name);
       });
-      
+
       return department;
     },
     back() {
@@ -384,7 +413,7 @@ export default {
     },
     close() {
       this.dialogCreateTeach = false;
-    }
-  }
+    },
+  },
 };
 </script>

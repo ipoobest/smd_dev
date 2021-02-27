@@ -51,11 +51,11 @@
                 <tbody>
                   <tr v-for="(item, index) in items" :key="index">
                     <td>{{ route.term }}/{{ route.schoolYear }}</td>
-                    <td>{{ item.teach.teachInfo.codet }}</td>
-                    <td>{{ item.teach.teachInfo.sname }}</td>
+                    <td>{{ item.teachInfo.codet }}</td>
+                    <td>{{ item.teachInfo.sname }}</td>
                     <!-- <td>{{ parseFloat(item.teachInfo.credit).toFixed(1) }}</td> -->
                     <td>
-                      {{ parseFloat(item.teach.teachInfo.credit).toFixed(1) }}
+                      {{ parseFloat(item.teachInfo.credit).toFixed(1) }}
                     </td>
                     <td v-if="item.grade_option">{{ item.grade_option }}</td>
                     <td v-else>{{ parseFloat(item.grade).toFixed(1) }}</td>
@@ -68,7 +68,7 @@
           <div style="width: 90%; margin: auto">
             <v-row class="mt-1">
               <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
-              <v-col cols="2" v-if="grade.gpa">{{
+              <v-col cols="2" v-if="grade">{{
                 parseFloat(grade.gpa).toFixed(3)
               }}</v-col>
               <v-col cols="2" v-else>0</v-col>
@@ -228,7 +228,7 @@ export default {
       teach: "",
       studentInfo: "",
       grade: {
-        gpa: 0,
+        gpa: "0",
         rankingInRoom: 0,
         rankingInClasses: 0,
       },
@@ -296,7 +296,7 @@ export default {
         `classes/getClassesByConditions`,
         data
       );
-      // console.log("response getTeacher xxx", response.results);
+      console.log("response getTeacher xxx", response.results);
       // console.log("response getClasses", response.results[0].advisoryTeacher);
       return response.results[0].advisoryTeacher;
     },
@@ -377,7 +377,7 @@ export default {
         var sum = 0;
         this.items.forEach((item) => {
           if (item.grade_option != "ร") {
-            sum += parseFloat(item.teach.teachInfo.credit);
+            sum += parseFloat(item.teachInfo.credit);
           }
           // console.log('summ ',sum)
         });
@@ -395,7 +395,7 @@ export default {
           // console.log(typeof item.grade);
           if (item.grade_option == null || item.grade_option == "ผ") {
             if (item.grade != "0") {
-              sum += parseFloat(item.teach.teachInfo.credit);
+              sum += parseFloat(item.teachInfo.credit);
             }
           }
         });
@@ -410,7 +410,7 @@ export default {
         var sum = 0;
         this.items.forEach((item) => {
           //  sum += parseFloat(item.teachInfo.credit);
-          sum += parseFloat(item.teach.teachInfo.credit);
+          sum += parseFloat(item.teachInfo.credit);
         });
         // console.log('sumCreateInClasses', sum)
         return sum;
