@@ -35,14 +35,13 @@
   </v-layout>
 </template>
 
-<>
+<script>
 export default {
   layout: "assessment",
   middleware: "assessment",
   async mounted() {
     this.query = this.$route.query;
     // this.teacherId = this.$store.state.auth.auth.teacherObjectId
-    //
     await this.getTeachByConditions().then((result) => (this.items = result));
   },
   watch: {
@@ -88,7 +87,7 @@ export default {
         `teach/getTeachByConditions`,
         data
       );
-      //
+      console.log("resonse item", response.results);
       return response.results;
     },
 
@@ -136,8 +135,7 @@ export default {
         "classes/getClassesByConditins",
         conditions
       );
-      //
-      //
+
       return response.results[0].studentId;
     },
 
@@ -203,7 +201,7 @@ export default {
     mapScoreName(name, score) {
       var student = [];
       for (var i = 0; i < name.length; i++) {
-        for (var j = 0; j < score.length; j++) {
+        for (var j = 0; j < this.score.length; j++) {
           student.push({
             name: name[i],
             score: score[j],
@@ -225,7 +223,6 @@ export default {
     },
     back() {
       this.$router.go(-1);
-      //
     },
 
     goToPreviewGrade(item) {
@@ -234,15 +231,16 @@ export default {
         query: { id: item.objectId },
       });
     },
-    // goToPreviewScore(item) {
-    //
-    //   this.$router.push({
-    //     name: "assessment-students",
-    //     query: { id: item.classId }
-    //   });
-    // }
+    goToPreviewScore(item) {
+      this.$router.push({
+        name: "assessment-students",
+        query: { id: item.classId },
+      });
+    },
   },
 };
-</>
+</script>
+
+
 
 <style lang="scss" scoped></style>

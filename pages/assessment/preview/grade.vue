@@ -19,8 +19,8 @@
         {{ teach.subject_info.codet }}
       </v-col>
       <v-col v-else cols="4" align="center">
-        วิชา {{ teach.subject.sname }} รหัสวิชา
-        {{ teach.subject.codet }}
+        วิชา {{ teach.teachInfo.sname }} รหัสวิชา
+        {{ teach.teachInfo.codet }}
       </v-col>
       <v-col v-if="teach.teacher" cols="4" align="end">
         อาจารย์ผู้สอน {{ teach.teacher.name }}
@@ -31,7 +31,7 @@
       </v-col>
     </v-row>
     <v-row justify="center">
-      <v-simple-table style="width:100%">
+      <v-simple-table style="width: 100%">
         <thead>
           <tr>
             <th>ที่</th>
@@ -86,7 +86,7 @@
       <v-btn class="mt-3 info" @click="preview">ปพ.5</v-btn>
       <v-btn
         v-if="!teach.assessment"
-        class="mt-3 ml-5 orange "
+        class="mt-3 ml-5 orange"
         dark
         @click="approve"
         >อนุมัติ</v-btn
@@ -107,17 +107,16 @@ export default {
   async mounted() {
     // check user type and user layout
     await this.getTeach(this.$route.query.id).then(
-      result => (this.teach = result)
+      (result) => (this.teach = result)
     );
-    this.getGrade(this.teach).then(result => (this.score = result));
+    this.getGrade(this.teach).then((result) => (this.score = result));
   },
   computed: {
     gatDate() {
       var dt = new Date();
-      var dateTime = `${dt
-        .getDate()
-        .toString()
-        .padStart(2, "0")}/${(dt.getMonth() + 1)
+      var dateTime = `${dt.getDate().toString().padStart(2, "0")}/${(
+        dt.getMonth() + 1
+      )
         .toString()
         .padStart(2, "0")}/${(dt.getFullYear() + 543)
         .toString()
@@ -132,18 +131,18 @@ export default {
         if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
         return 0;
       });
-    }
+    },
   },
   data() {
     return {
       teach: {
         teacher: {
-          name: ""
+          name: "",
         },
         subject_info: {
           sname: "",
-          codet: ""
-        }
+          codet: "",
+        },
       },
       currentSort: "total_score",
       currentSortDir: "desc",
@@ -153,106 +152,106 @@ export default {
       score: [],
       processScore: [],
       ratio_array: [],
-      score_array: []
+      score_array: [],
     };
   },
   methods: {
     async getTeach(id) {
       const response = await this.$store.dispatch("teach/getTeachById", id);
-      // 
+      //
       this.rating = response.rating;
       this.mapRating(this.rating);
       return response;
     },
     async getGrade(item) {
       const conditions = {
-        teachId: item.objectId
+        teachId: item.objectId,
       };
       // 1 get stu array grade
       const response_grade = await this.$store.dispatch(
         "grade/getGradeByConditions",
         conditions
       );
-      // 
+      //
       return response_grade.results;
     },
     async updateGrade(data) {
       const response = await this.$store.dispatch(`grade/updateGrade`, data);
-      // 
+      //
     },
     calcScore(score_array, index) {
       var calc_score = [];
-      // 
+      //
       score_array.forEach((score, index) => {
         var result =
           (((score / this.score_array[index]) * 100) / 100) *
           this.ratio_array[index];
         // ((( คะแนนที่ได้ / คะแนนเต็ม ) x 100) / 100 ) x ร้อยละ
         calc_score.push(result.toFixed(2));
-        // 
+        //
       });
       return calc_score;
     },
     mapRating(rating) {
-      rating.forEach(item => {
+      rating.forEach((item) => {
         this.ratio_array.push(item.rating);
         this.score_array.push(item.score);
       });
-      // 
+      //
     },
     preview() {
       this.$router.push({
         name: "assessment-preview-grade_summary",
-        query: { id: this.$route.query.id }
+        query: { id: this.$route.query.id },
       });
     },
     async approve() {
       if (confirm("ยืนยันการอนุมัติ")) {
         // this.score.forEach(score => {
-        //   //  
+        //   //
         //   const data = {
         //     objectId: score.objectId,
         //     approve: true
         //   };
-        //   
+        //
         //   this.updateGrade(data);
         // });
         //updateTeach
-        // 
+        //
         const teachData = {
           objectId: this.teach.objectId,
-          assessment: true
+          assessment: true,
         };
         const response = await this.$store.dispatch(
           `teach/updateTeach`,
           teachData
         );
         await this.getTeach(this.$route.query.id).then(
-          result => (this.teach = result)
+          (result) => (this.teach = result)
         );
       }
     },
     async unApprove() {
       if (confirm("ยืนยันการยกเลิก")) {
         // this.score.forEach(score => {
-        //   //  
+        //   //
         //   const data = {
         //     objectId: score.objectId,
         //     approve: false
         //   };
-        //   
+        //
         //   this.updateGrade(data);
         // });
         const teachData = {
           objectId: this.teach.objectId,
-          assessment: false
+          assessment: false,
         };
         const response = await this.$store.dispatch(
           `teach/updateTeach`,
           teachData
         );
         await this.getTeach(this.$route.query.id).then(
-          result => (this.teach = result)
+          (result) => (this.teach = result)
         );
       }
     },
@@ -263,7 +262,7 @@ export default {
       this.currentSort = s;
     },
     listStudent(item) {
-      // 
+      //
       // this.$router.push({
       //    name: "assessment-students-grade",
       //   query: { id: item.objectId, schoolYear: item.schoolYear, term: item.term }
@@ -274,8 +273,8 @@ export default {
     },
     back() {
       this.$router.go(-1);
-    }
-  }
+    },
+  },
 };
 </script>
 

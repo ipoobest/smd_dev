@@ -68,8 +68,7 @@
           <div style="width: 90%; margin: auto">
             <v-row class="mt-1">
               <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
-              <!-- TODO กลับมาแก้เรื่อง คำนวนเกรดเฉลี่ย assessment/calculate_score/subject function calculateGpa-->
-              <v-col cols="2" v-if="grade">{{
+              <v-col cols="2" v-if="grade.gpa">{{
                 parseFloat(grade.gpa).toFixed(3)
               }}</v-col>
               <v-col cols="2" v-else>0</v-col>
@@ -328,7 +327,7 @@ export default {
         `ranking/getRankingByConditions`,
         condition
       );
-      // console.log("grade ranking", response.results[0]);
+      console.log("grade ranking", response.results[0]);
       return response.results[0];
     },
     async countRankingClasses() {
@@ -378,11 +377,11 @@ export default {
         var sum = 0;
         this.items.forEach((item) => {
           if (item.grade_option != "ร") {
-            sum += parseFloat(item.teachInfo.credit);
+            sum += parseFloat(item.teach.teachInfo.credit);
           }
           // console.log('summ ',sum)
         });
-        // console.log('sum create', sum)
+        console.log("sum create", sum);
         return sum;
       }
     },
@@ -396,11 +395,11 @@ export default {
           // console.log(typeof item.grade);
           if (item.grade_option == null || item.grade_option == "ผ") {
             if (item.grade != "0") {
-              sum += parseFloat(item.teachInfo.credit);
+              sum += parseFloat(item.teach.teachInfo.credit);
             }
           }
         });
-        // console.log("sumxx", sum);
+        console.log("sumxx", sum);
         return sum;
       }
     },
@@ -411,7 +410,7 @@ export default {
         var sum = 0;
         this.items.forEach((item) => {
           //  sum += parseFloat(item.teachInfo.credit);
-          sum += parseFloat(item.teachInfo.credit);
+          sum += parseFloat(item.teach.teachInfo.credit);
         });
         // console.log('sumCreateInClasses', sum)
         return sum;
