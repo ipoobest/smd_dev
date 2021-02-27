@@ -82,54 +82,6 @@ export default {
       items: [],
       title: `เกรดรวม`,
       query: "",
-      mockData: [
-        {
-          classRoomLevel: "ม.1",
-          classRoomName: "1",
-          createdAt: "2021-02-15T04:11:40.885Z",
-          gpa: 1.8484848484848484,
-          objectId: "9raAoUoB8o",
-          rankingInClasses: 130,
-          rankingInRoom: 31,
-          schoolYear: "2563",
-          studentId: "633014",
-          studentName: "เด็กชาย ชยพล ราชภักดี",
-          studentObjectId: "1qI9nv1ByY",
-          term: "1",
-        },
-        {
-          classRoomLevel: "ม.1",
-          classRoomName: "1",
-          createdAt: "2021-02-15T04:11:40.885Z",
-          gpa: 2.883,
-          objectId: "9raAoUoB8o",
-          rankingInClasses: 130,
-          rankingInRoom: 31,
-          schoolYear: "2563",
-          studentId: "633014",
-          studentName: "เด็กชาย ชยพล ราชภักดี",
-          studentObjectId: "1qI9nv1ByY",
-          term: "2",
-        },
-        //  {
-        //   classRoomLevel: "ม.1",
-        //   classRoomName: "1",
-        //   createdAt: "2021-02-15T04:11:40.885Z",
-        //   gpa: {
-        //     term1: "2.22",
-        //     term2: "2.23",
-        //     total: "xxxx"
-        //   },
-        //   objectId: "9raAoUoB8o",
-        //   rankingInClasses: 130,
-        //   rankingInRoom: 31,
-        //   schoolYear: "2563",
-        //   studentId: "633014",
-        //   studentName: "เด็กชาย ชยพล ราชภักดี",
-        //   studentObjectId: "1qI9nv1ByY",
-
-        // },
-      ],
     };
   },
   methods: {
@@ -182,11 +134,15 @@ export default {
             studentName: data.studentName,
           };
           console.log("trhis 1");
-          newData["term" + data.term] = parseFloat(data.gpa).toFixed(3);
+          newData["term" + data.term] = data.gpa
+            ? parseFloat(data.gpa).toFixed(3)
+            : 0;
           newObj.push(newData);
         } else {
           console.log("trhis 21");
-          obj["term" + data.term] = parseFloat(data.gpa).toFixed(3);
+          obj["term" + data.term] = data.gpa
+            ? parseFloat(data.gpa).toFixed(3)
+            : 0;
         }
       });
       console.log("new obj", newObj);

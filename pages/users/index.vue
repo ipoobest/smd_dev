@@ -17,7 +17,7 @@
               hide-details
             ></v-text-field>
           </v-card-title>
-          <v-simple-table  :items="items" :search="search">
+          <v-data-table :items="items" :search="search" :headers="headers">
             <template v-slot:top>
               <v-toolbar flat color="white">
                 <h4>ข้อมูลผู้ใช้</h4>
@@ -44,7 +44,7 @@
                                 outlined
                                 label="username"
                                 required
-                                :rules="[v => !!v || 'กรุณากรอก username']"
+                                :rules="[(v) => !!v || 'กรุณากรอก username']"
                               ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="4" md="4">
@@ -54,7 +54,7 @@
                                 type="password"
                                 label="password"
                                 required
-                                :rules="[v => !!v || 'กรุณากรอก password']"
+                                :rules="[(v) => !!v || 'กรุณากรอก password']"
                               ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="4" md="4">
@@ -65,7 +65,7 @@
                                 label="re-password"
                                 required
                                 :rules="[
-                                  v => !!v || 'กรุณากรอก password อีกครั้ง'
+                                  (v) => !!v || 'กรุณากรอก password อีกครั้ง',
                                 ]"
                               ></v-text-field>
                             </v-col>
@@ -75,7 +75,7 @@
                                 outlined
                                 label="รหัสประจำตัว"
                                 required
-                                :rules="[v => !!v || 'กรุณากรอกรหัสประจำตัว']"
+                                :rules="[(v) => !!v || 'กรุณากรอกรหัสประจำตัว']"
                               ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
@@ -85,7 +85,7 @@
                                 outlined
                                 label="ตำแหน่ง"
                                 required
-                                :rules="[v => !!v || 'กรุณากรอกตำแหน่ง']"
+                                :rules="[(v) => !!v || 'กรุณากรอกตำแหน่ง']"
                               ></v-select>
                             </v-col>
                             <v-col cols="12" sm="6" md="4">
@@ -95,7 +95,7 @@
                                 outlined
                                 label="คำนำหน้า"
                                 required
-                                :rules="[v => !!v || 'กรุณากรอกคำนำหน้า']"
+                                :rules="[(v) => !!v || 'กรุณากรอกคำนำหน้า']"
                               ></v-select>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
@@ -104,7 +104,7 @@
                                 outlined
                                 label="ชื่อ"
                                 required
-                                :rules="[v => !!v || 'กรุณากรอกชื่อ']"
+                                :rules="[(v) => !!v || 'กรุณากรอกชื่อ']"
                               ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
@@ -113,7 +113,7 @@
                                 outlined
                                 label="นามสกุล"
                                 required
-                                :rules="[v => !!v || 'กรุณากรอกนามสกุล']"
+                                :rules="[(v) => !!v || 'กรุณากรอกนามสกุล']"
                               ></v-text-field>
                             </v-col>
                             <v-col cols="12" sm="6" md="6">
@@ -124,7 +124,7 @@
                                 label="ประเภทผู้ใช้งาน"
                                 required
                                 :rules="[
-                                  v => !!v || 'กรุณาเลือกประเภทผู้ใช้งาน'
+                                  (v) => !!v || 'กรุณาเลือกประเภทผู้ใช้งาน',
                                 ]"
                               ></v-select>
                             </v-col>
@@ -141,9 +141,9 @@
                                 label="หัวหน้ากลุ่มสาระวิชา"
                                 required
                                 :rules="[
-                                  v =>
+                                  (v) =>
                                     !!v ||
-                                    'กรุณาเลือกประเภทหัวหน้ากลุ่มสาระวิชา'
+                                    'กรุณาเลือกประเภทหัวหน้ากลุ่มสาระวิชา',
                                 ]"
                               ></v-select>
                             </v-col>
@@ -159,7 +159,7 @@
                                 outlined
                                 label="ระดับชั้น"
                                 required
-                                :rules="[v => !!v || 'กรุณาเลือกระดับชั้น']"
+                                :rules="[(v) => !!v || 'กรุณาเลือกระดับชั้น']"
                               ></v-select>
                             </v-col>
                           </v-row>
@@ -178,7 +178,18 @@
                 </v-dialog>
               </v-toolbar>
             </template>
-            <thead>
+            <template v-slot:[`item.userName`]="{ item }"
+              >{{ item.title }} {{ item.firstName }}
+              {{ item.lastName }}</template
+            >
+            <template v-slot:[`item.userType`]="{ item }">
+              {{ item.type }} {{ item.staffType }}
+            </template>
+            <template v-slot:[`item.actions`]="{ item }">
+              <v-btn color="info" @click="editItem(item)"> แก้ไข </v-btn>
+              <v-btn color="error" @click="deleteItem(item)"> ลบ </v-btn>
+            </template>
+            <!-- <thead>
               <tr>
                 <th>หมายเลขประจำตัว</th>
                 <th>ตำแหน่ง</th>
@@ -190,25 +201,25 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item , index) in items" :key="index">
-                <th>{{item.userId}}</th>
-                <th>{{item.position}}</th>
-                <th>{{item.title}}</th>
-                <th>{{item.firstName}}</th>
-                <th>{{item.lastName}}</th>
-                <th v-if="item.type == 'หัวหน้ากลุ่มสาระ'">{{item.type}} {{item.staffType}}</th>
-                <th v-else>{{item.type}}</th>
+              <tr v-for="(item, index) in items" :key="index">
+                <th>{{ item.userId }}</th>
+                <th>{{ item.position }}</th>
+                <th>{{ item.title }}</th>
+                <th>{{ item.firstName }}</th>
+                <th>{{ item.lastName }}</th>
+                <th v-if="item.type == 'หัวหน้ากลุ่มสาระ'">
+                  {{ item.type }} {{ item.staffType }}
+                </th>
+                <th v-else>{{ item.type }}</th>
                 <th>
                   <v-btn class="mr-2 info" @click="editItem(item)">
                     แก้ไข
                   </v-btn>
-                  <v-btn class="error" @click="deleteItem(item)">
-                    ลบ
-                  </v-btn>
+                  <v-btn class="error" @click="deleteItem(item)"> ลบ </v-btn>
                 </th>
               </tr>
-            </tbody>
-          </v-simple-table>
+            </tbody> -->
+          </v-data-table>
         </v-card>
       </v-col>
     </v-row>
@@ -220,11 +231,18 @@ export default {
   middleware: "admin",
   mounted() {
     // get user not in type student
-    this.getDataFromApi().then(result => (this.items = result));
-    this.getDepartment().then(result=> (this.selectItemStaffType = result))
+    this.getDataFromApi().then((result) => (this.items = result));
+    this.getDepartment().then((result) => (this.selectItemStaffType = result));
   },
   data() {
     return {
+      headers: [
+        { text: "หมายเลขประจำตัว", value: "userId" },
+        { text: "ตำแหน่ง", value: "position" },
+        { text: "ชื่อ-นามสกุล", value: "userName" },
+        { text: "ประเภทผู้ใช้งาน", value: "userType" },
+        { text: "Actions", value: "actions", sortable: false, align: "center" },
+      ],
       dialog: false,
       submitted: false,
       user: "",
@@ -243,7 +261,7 @@ export default {
         firstName: "",
         lastName: "",
         type: "",
-        staffType: ""
+        staffType: "",
         // type: 'teacher'
       },
       selectItemPosition: [
@@ -261,65 +279,63 @@ export default {
         "ศาสตราจารย์เกียรติคุณ",
         "ผู้ช่วยศาสตราจารย์",
         "รองสาสตราจารย์",
-        "ศาสตราจารย์"
+        "ศาสตราจารย์",
       ],
       selectItemTitle: ["ดร.", "อาจารย์", "นาย", "นาง", "นางสาว"],
       selectItemUserType: [
         "ครู",
         "หัวหน้ากลุ่มสาระ",
         "หัวหน้ากลุ่มประเมิน",
-        "กลุ่มงานทะเบียน"
+        "กลุ่มงานทะเบียน",
       ],
       selectItemStaffType: [],
       selectItemClasses: [
         { text: "ม.ต้น", value: ["ม.1", "ม.2", "ม.3"] },
-        { text: "ม.ปลาย", value: ["ม.4", "ม.5", "ม.6"] }
-      ]
+        { text: "ม.ปลาย", value: ["ม.4", "ม.5", "ม.6"] },
+      ],
     };
   },
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "สร้าง" : "แก้ไข";
-    }
+    },
   },
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
   },
   methods: {
     async getDataFromApi() {
       const conditions = {
         type: {
-          $ne: "นักเรียน"
-        }
+          $ne: "นักเรียน",
+        },
       };
       const response = await this.$store.dispatch(
         `users/getUserByConditions`,
         conditions
       );
-      // 
+      //
       return response.results;
     },
     async getDepartment() {
-       const response = await this.$store.dispatch(
-        `department/getDepartment`
-      );
-      var data =  this.mapDepartments(response.results)
-      return data
+      const response = await this.$store.dispatch(`department/getDepartment`);
+      var data = this.mapDepartments(response.results);
+      return data;
     },
     async getUserById(id) {
-      // 
+      //
       const response = await this.$store.dispatch(`users/getUserById`, id);
       return response;
     },
     async createUser(data) {
       const response = await this.$store.dispatch(`users/createUser`, data);
-      this.getDataFromApi().then(result => (this.items = result));
+      this.getDataFromApi().then((result) => (this.items = result));
     },
     async checkUser(username) {
       const condition = {
-        username
+        username,
       };
       const user = await this.$store.dispatch(
         `users/getUserByConditions`,
@@ -335,10 +351,10 @@ export default {
       const user = {
         username: data.username,
         password: data.password,
-        objectId: data.userId
+        objectId: data.userId,
       };
       const response = await this.$store.dispatch(`users/updateUser`, data);
-      this.getDataFromApi().then(result => (this.items = result));
+      this.getDataFromApi().then((result) => (this.items = result));
     },
     async deleteUser(itemId) {
       const response = await this.$store.dispatch(`users/deleteUser`, itemId);
@@ -351,7 +367,7 @@ export default {
     },
     async deleteItem(item) {
       const index = this.items.indexOf(item);
-      // 
+      //
       if (confirm("ยืนยีนการลบข้อมูล")) {
         await this.deleteUser(item.objectId);
         this.items.splice(index, 1);
@@ -364,11 +380,11 @@ export default {
       }
       if (this.editedIndex > -1) {
         Object.assign(this.items[this.editedIndex], this.editedItem);
-        // 
+        //
         const userId = await this.getUserById(this.user.objectId);
-        // 
+        //
         const objectId = userId.objectId;
-        // 
+        //
 
         const editData = {
           objectId: this.editedItem.objectId,
@@ -382,16 +398,16 @@ export default {
           type: this.editedItem.type,
           staffType: this.editedItem.staffType,
           classes: this.editedItem.classes,
-          objectId: objectId
+          objectId: objectId,
         };
 
-        // 
+        //
         this.updateUser(editData);
         this.close();
       } else {
         if (this.$refs.form.validate()) {
           const user = await this.checkUser(this.editedItem.username);
-          // 
+          //
           if (user) {
             const user = {
               userId: this.editedItem.id,
@@ -403,9 +419,9 @@ export default {
               password: this.editedItem.password,
               type: this.editedItem.type,
               staffType: this.editedItem.staffType,
-              classes: this.editedItem.classes
+              classes: this.editedItem.classes,
             };
-            // 
+            //
             this.createUser(user);
             this.editedItem = {};
             this.close();
@@ -416,12 +432,12 @@ export default {
       }
     },
     mapDepartments(item) {
-      var items = []
-      item.forEach(item => {
-         items.push(item.name)
-      })
-      
-      return items
+      var items = [];
+      item.forEach((item) => {
+        items.push(item.name);
+      });
+
+      return items;
     },
     resetForm() {
       this.$refs.form.reset();
@@ -436,7 +452,7 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       }, 300);
-    }
-  }
+    },
+  },
 };
 </script>
