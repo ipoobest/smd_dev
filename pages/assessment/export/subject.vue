@@ -91,6 +91,7 @@ export default {
   methods: {
     async getGradebyConditions() {
       var data;
+      var result;
       if (this.classRoomName == "ทั้งหมด") {
         data = {
           schoolYear: this.schoolYear,
@@ -108,13 +109,40 @@ export default {
         };
       }
 
-      //
       var response = await this.$store.dispatch(
         `grade/getGradeByConditions`,
         data
       );
-      "response grade", response.results;
-      return response.results;
+      result = response.results;
+      console.log("result length", result.length);
+      if (result.length == 0) {
+        if (this.classRoomName == "ทั้งหมด") {
+          console.log("xxxx");
+          data = {
+            schoolYear: this.schoolYear,
+            term: this.term,
+            classRoomLevel: this.classRoomLevel,
+            "subject.sname": this.subject,
+          };
+        } else {
+          console.log("yyy");
+          data = {
+            schoolYear: this.schoolYear,
+            term: this.term,
+            classRoomLevel: this.classRoomLevel,
+            classRoomName: this.classRoomName,
+            "subject.sname": this.sname,
+          };
+        }
+        console.log("data get grade", data);
+        var response = await this.$store.dispatch(
+          `grade/getGradeByConditions`,
+          data
+        );
+        return response.results;
+      } else {
+        return result;
+      }
     },
     async getAcademicYear() {
       var response = await this.$store.dispatch(
@@ -149,6 +177,7 @@ export default {
       this.mapSubject(response.results);
     },
     async getSubjectByName(data) {
+      console.log("data query", data);
       var response = await this.$store.dispatch(
         `subjects/getSubjectsByConditions`,
         data
@@ -186,6 +215,7 @@ export default {
       var perfixTerm = this.schoolYear.substring(2);
       // var perfixLev = this.getClassLevel()
       var grade = await this.getGradebyConditions();
+      // console.log("grade", grade);
       // var perfixLev = this.getClassLevel(grade[0]);
       //
       var data;
@@ -200,6 +230,7 @@ export default {
         // codet: data[0].teachInfo.codet
       };
       var codeSubject = await this.getSubjectByName(querySubject);
+      console.log("code subject", codeSubject);
       data.forEach((item) => {
         var newJson = {
           id: item.studentId,
@@ -218,17 +249,17 @@ export default {
           s11: item.analytical_thinking,
           lev: "3" + item.classRoomLevel.substring(2) + item.classRoomName,
         };
-        console.log("new json", newJson);
+        // console.log("new json", newJson);
         newData.push(newJson);
       });
-      console.log("new data", newData);
-      // var dataWS = XLSX.utils.json_to_sheet(newData);
-      // var wb = XLSX.utils.book_new();
-      // XLSX.utils.book_append_sheet(wb, dataWS);
-      // XLSX.writeFile(
-      //   wb,
-      //   `${this.subject}-${this.schoolYear}-${this.term}-${this.classRoomLevel}.xlsx`
-      // );
+      // console.log("new data", newData);
+      var dataWS = XLSX.utils.json_to_sheet(newData);
+      var wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, dataWS);
+      XLSX.writeFile(
+        wb,
+        `${this.subject}-${this.schoolYear}-${this.term}-${this.classRoomLevel}.xlsx`
+      );
     },
   },
 };
