@@ -58,7 +58,6 @@ export const actions = {
         const result = this.$axios.$get(
           `${process.env.parseUrl}/classes/${classes.ranking}?where=${where}&limit=1000`
         );
-
         commit("setRanking", result);
         resolve(result);
       } catch (error) {

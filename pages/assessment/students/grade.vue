@@ -181,7 +181,7 @@
 import VueHtml2pdf from "vue-html2pdf";
 export default {
   components: {
-    VueHtml2pdf,
+    VueHtml2pdf
   },
   layout: "assessment",
   middleware: "assessment",
@@ -203,15 +203,16 @@ export default {
   computed: {
     gatDate() {
       var dt = new Date();
-      var dateTime = `${dt.getDate().toString().padStart(2, "0")}/${(
-        dt.getMonth() + 1
-      )
+      var dateTime = `${dt
+        .getDate()
+        .toString()
+        .padStart(2, "0")}/${(dt.getMonth() + 1)
         .toString()
         .padStart(2, "0")}/${(dt.getFullYear() + 543)
         .toString()
         .padStart(4, "0")} `;
       return dateTime;
-    },
+    }
   },
   data() {
     return {
@@ -230,7 +231,7 @@ export default {
       grade: {
         gpa: "0",
         rankingInRoom: 0,
-        rankingInClasses: 0,
+        rankingInClasses: 0
       },
       teacher: "",
       save: false,
@@ -240,8 +241,8 @@ export default {
         studentName: "",
         studentId: "",
         classRoomLevel: "",
-        classRoomName: "",
-      },
+        classRoomName: ""
+      }
       // pdfTitle: `ใบแจ้งผลการเรียน-${this.$route.query.schoolYear}-${this.$route.term}-${this.info.classRoomLevel}-${this.info.classRoomName}-${this.info.studentId}`
     };
   },
@@ -254,7 +255,7 @@ export default {
         studentId: this.$route.query.id,
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        staff: true,
+        staff: true
       };
       const response = await this.$store.dispatch(
         `grade/getGradeByConditions`,
@@ -275,7 +276,7 @@ export default {
     },
     async getStudent(item) {
       var condition = {
-        idstd: item.id,
+        idstd: item.id
       };
       const response = await this.$store.dispatch(
         `students/getStudents`,
@@ -289,7 +290,7 @@ export default {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
         classRoomLevel: this.$route.query.classRoomLevel,
-        classRoomName: this.$route.query.classRoomName,
+        classRoomName: this.$route.query.classRoomName
       };
       // console.log("tacher request : ", data);
       const response = await this.$store.dispatch(
@@ -307,7 +308,7 @@ export default {
         classRoomLevel: this.info.classRoomLevel,
         classRoomName: this.info.classRoomName,
         grade: this.grade,
-        studentId: this.$route.id,
+        studentId: this.$route.id
       };
       const response = await this.$store.dispatch(
         `ranking/createRanking`,
@@ -320,9 +321,9 @@ export default {
         term: this.$route.query.term,
         classRoomLevel: this.info.classRoomLevel,
         classRoomName: this.info.classRoomName,
-        studentId: this.$route.query.id,
+        studentId: this.$route.query.id
       };
-      // console.log("ranking condition", condition);
+      console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
         `ranking/getRankingByConditions`,
         condition
@@ -334,29 +335,29 @@ export default {
       var condition = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        classRoomLevel: this.info.classRoomLevel,
+        classRoomLevel: this.$route.query.classRoomLevel
       };
-      // console.log("ranking condition", condition);
+      console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
         `ranking/getRankingCount`,
         condition
       );
-      // console.log("grade classes", response);
+      console.log("grade classes count", response);
       return response;
     },
     async countRankingRoom() {
       var condition = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        classRoomLevel: this.info.classRoomLevel,
-        classRoomName: this.info.classRoomName,
+        classRoomLevel: this.$route.query.classRoomLevel,
+        classRoomName: this.$route.query.classRoomName
       };
-      // console.log("ranking condition", condition);
+      console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
         `ranking/getRankingCount`,
         condition
       );
-      // console.log("grade room", response);
+      console.log("grade room", response);
       return response;
     },
     async updateGrade(data) {
@@ -375,7 +376,7 @@ export default {
         return;
       } else {
         var sum = 0;
-        this.items.forEach((item) => {
+        this.items.forEach(item => {
           if (item.grade_option != "ร") {
             sum += parseFloat(item.teachInfo.credit);
           }
@@ -390,7 +391,7 @@ export default {
         return;
       } else {
         var sum = 0;
-        this.items.forEach((item) => {
+        this.items.forEach(item => {
           //  sum += parseFloat(item.teachInfo.credit);
           // console.log(typeof item.grade);
           if (item.grade_option == null || item.grade_option == "ผ") {
@@ -408,7 +409,7 @@ export default {
         return;
       } else {
         var sum = 0;
-        this.items.forEach((item) => {
+        this.items.forEach(item => {
           //  sum += parseFloat(item.teachInfo.credit);
           sum += parseFloat(item.teachInfo.credit);
         });
@@ -420,7 +421,7 @@ export default {
       var gpa = 0;
       var grade = 0;
       var totalCreditInStudent = 0;
-      this.items.forEach((item) => {
+      this.items.forEach(item => {
         if (item.grade_option == null) {
           grade += parseFloat(item.grade) * parseFloat(item.teachInfo.credit);
           var credit_float = parseFloat(item.teachInfo.credit) || 0;
@@ -457,15 +458,15 @@ export default {
     async arrpove() {
       //update grade by condition
       if (confirm("ยืนยันการอนุมัติ")) {
-        this.items.forEach((item) => {
+        this.items.forEach(item => {
           //  console.log(' score a', score.objectId)
           const data = {
             objectId: item.objectId,
-            approve: true,
+            approve: true
           };
           // console.log("data update", data);
           this.updateGrade(data);
-          this.getGradeByConditions().then((result) => {
+          this.getGradeByConditions().then(result => {
             this.items = result;
           });
         });
@@ -476,21 +477,21 @@ export default {
     },
     async unArrpove() {
       if (confirm("ยืนยันการยกเลิก")) {
-        this.items.forEach((item) => {
+        this.items.forEach(item => {
           //  console.log(' score a', score.objectId)
           const data = {
             objectId: item.objectId,
-            approve: false,
+            approve: false
           };
           // console.log("data update", data);
           this.updateGrade(data);
-          this.getGradeByConditions().then((result) => {
+          this.getGradeByConditions().then(result => {
             this.items = result;
           });
         });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
