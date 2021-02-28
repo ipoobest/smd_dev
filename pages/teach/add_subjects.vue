@@ -328,11 +328,6 @@ export default {
               codet: this.subjectId.codet,
               credit: this.subjectId.credit,
             },
-            // subject: {
-            //   __type: "Pointer",
-            //   className: "Subjects",
-            //   objectId: this.input.subject.objectId
-            // },
             teachers: {
               __type: "Pointer",
               className: "_User",

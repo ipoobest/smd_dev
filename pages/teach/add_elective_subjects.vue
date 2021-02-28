@@ -150,7 +150,7 @@
               {{ item.teachers.lastName }}</template
             >
             <template v-slot:[`item.actions`]="{ item }">
-              <v-btn color="info" @click="editItem(item)"> แก้ไข </v-btn>
+              <!-- <v-btn color="info" @click="editItem(item)"> แก้ไข </v-btn> -->
               <v-btn color="error" @click="deleteItem(item)"> ลบ </v-btn>
             </template>
           </v-data-table>
@@ -361,6 +361,7 @@ export default {
         this.itemTeachers.push(teacher);
       }
     },
+
     editSubjectName() {
       var subject_name = this.subjects.filter(
         (subject) => subject.objectId == this.input.subject_id
@@ -389,6 +390,12 @@ export default {
         name: "teach-add_students_to_elective_subject",
         query: { id: item.objectId },
       });
+    },
+    editItem(item) {
+      console.log("this item edit", item);
+      this.editedIndex = this.items.indexOf(item);
+      this.input = Object.assign({}, item);
+      this.dialog = true;
     },
     deleteItem(item) {
       const index = this.subjectsInTerm.indexOf(item);
