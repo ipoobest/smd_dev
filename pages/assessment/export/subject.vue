@@ -81,6 +81,7 @@ export default {
       classRoomLevel: "",
       classRoomName: "",
       subject: "",
+      itesm: "",
       itemSchoolYear: [],
       itemSchoolTerm: [],
       itemSubjectList: [],
@@ -173,7 +174,7 @@ export default {
         `teach/getSubjectsByConditions`,
         data
       );
-      //
+      console.log("response data subject", response.results);
       this.mapSubject(response.results);
     },
     async getSubjectByName(data) {
@@ -193,9 +194,18 @@ export default {
     },
     mapSubject(data) {
       //
-      data.forEach((item) => {
-        this.itemSubjectList.push(`${item.subject.sname}`);
-      });
+      if (data.sname) {
+        data.forEach((item) => {
+          this.itemSubjectList.push(`${item.subject.sname}`);
+        });
+      } else {
+        data.forEach((item) => {
+          if (item.teachInfo) {
+            this.itemSubjectList.push(`${item.teachInfo.sname}`);
+          }
+          // this.itemSubjectList.push(`${item.teachInfo.sname}`);
+        });
+      }
     },
     keyRename(obj, old_key, new_key) {
       obj[new_key] = obj[old_key];
@@ -224,21 +234,30 @@ export default {
       } else {
         data = grade.sort((a, b) => a.studentNumber - b.studentNumber);
       }
-      //
+      console.log("data", data);
       var querySubject = {
         sname: this.subject,
         // codet: data[0].teachInfo.codet
       };
       var codeSubject = await this.getSubjectByName(querySubject);
       console.log("code subject", codeSubject);
+      var codeT;
+      var subjectName;
       data.forEach((item) => {
+        if (item.subject) {
+          codeT = item.subject.codet;
+          subjectName = item.subject.sname;
+        } else {
+          codeT = item.teachInfo.codet;
+          subjectName = item.teachInfo.sname;
+        }
         var newJson = {
           id: item.studentId,
           studentNumber: item.studentNumber,
           fullname: item.studentName,
           code: codeSubject.code,
-          codeth: item.teachInfo.codet,
-          subject: item.teachInfo.sname,
+          codeth: codeT,
+          subject: subjectName,
           year: item.schoolYear,
           term: perfixTerm + item.term,
           class: item.classRoomLevel,
@@ -252,14 +271,18 @@ export default {
         // console.log("new json", newJson);
         newData.push(newJson);
       });
-      // console.log("new data", newData);
-      // var dataWS = XLSX.utils.json_to_sheet(newData);
-      // var wb = XLSX.utils.book_new();
-      // XLSX.utils.book_append_sheet(wb, dataWS);
-      // XLSX.writeFile(
-      //   wb,
-      //   `${this.subject}-${this.schoolYear}-${this.term}-${this.classRoomLevel}.xlsx`
-      // );
+      console.log("new data", newData);
+      if (newData.length == 0) {
+        alert("ยังไม่มีข้อมูลของวิชานี้");
+      } else {
+        var dataWS = XLSX.utils.json_to_sheet(newData);
+        var wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, dataWS);
+        XLSX.writeFile(
+          wb,
+          `${this.subject}-${this.schoolYear}-${this.term}-${this.classRoomLevel}.xlsx`
+        );
+      }
     },
   },
 };
