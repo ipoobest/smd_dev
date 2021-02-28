@@ -19,9 +19,7 @@
         <h3>แบบบันทึกผลการพัฒนาคุณภาพผู้เรียน(ปพ.5)</h3>
       </v-row>
       <v-row justify="center">
-        <h3>
-          โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น (มอดินแดง) ระดับมัธยมศึกษา
-        </h3>
+        <h3>โรงเรียนสาธิตมหาวิทยาลัยขอนแก่น (มอดินแดง) ระดับมัธยมศึกษา</h3>
       </v-row>
       <v-row justify="center">
         <h3>อำเภอเมืองขอนแก่น จังหวัดขอนแก่น</h3>
@@ -31,15 +29,11 @@
       </v-row>
       <v-row justify="start" class="pt-10">
         <v-col cols="1">ชื่อวิชา</v-col>
-        <v-col v-if="items.subject_info" cols="2">{{
-          items.subject_info.sname
-        }}</v-col>
-        <v-col v-else cols="2">{{ items.subject.sname }}</v-col>
+        <v-col v-if="items.subject" cols="2">{{ items.subject.sname }}</v-col>
+        <v-col v-else cols="2">{{ items.teachInfo.sname }}</v-col>
         <v-col cols="1">รหัสวิชา</v-col>
-        <v-col v-if="items.subject_info" cols="2">{{
-          items.subject_info.codet
-        }}</v-col>
-        <v-col v-else>{{ items.subject.codet }}</v-col>
+        <v-col v-if="items.subject" cols="2">{{ items.subject.codet }}</v-col>
+        <v-col v-else>{{ items.teachInfo.codet }}</v-col>
         <v-col cols="2">ภาคเรียนที่</v-col>
         <v-col cols="1">{{ items.term }}</v-col>
         <v-col cols="2">ปีการศึกษา</v-col>
@@ -52,10 +46,7 @@
         </v-col>
         <v-col v-else cols="1">{{ items.classRoomLevel }} </v-col>
         <v-col cols="2">จำนวนหน่วยกิต</v-col>
-        <v-col v-if="items.subject_info" cols="1">{{
-          items.subject_info.credit
-        }}</v-col>
-        <v-col cols="1">{{ items.subject.credit }}</v-col>
+        <v-col cols="1" v-if="items.subject">{{ items.subject.credit }}</v-col>
         <v-col cols="2">เวลาเรียน</v-col>
         <v-col cols="1">
           {{ getPeriod() }}
@@ -70,11 +61,9 @@
           {{ items.teachers.lastName }}</v-col
         >
       </v-row>
-      <v-row justify="center" class="pt-10 pb-5">
-        สรุปผลการประเมิน
-      </v-row>
+      <v-row justify="center" class="pt-10 pb-5"> สรุปผลการประเมิน </v-row>
       <v-row justify="center">
-        <v-simple-table style="width:100%">
+        <v-simple-table style="width: 100%">
           <thead>
             <tr>
               <th>จำนวนนักเรียนที่ลงทะเบียน</th>
@@ -131,9 +120,7 @@
           </tbody>
         </v-simple-table>
       </v-row>
-      <v-row justify="center" class="pt-10">
-        การอนุมัติผลการเรียน
-      </v-row>
+      <v-row justify="center" class="pt-10"> การอนุมัติผลการเรียน </v-row>
       <v-row justify="start" class="pt-5">
         <v-col cols="4">ลงชื่อ อาจารย์ผู้สอน</v-col>
         <v-col v-if="items.teacher" cols="3.5"
@@ -160,9 +147,7 @@
         <v-col cols="1">วันที่</v-col>
         <v-col cols="2.5">{{ gatDate }}</v-col>
       </v-row>
-      <v-row justify="center" class="pt-10 pb-10">
-        สำหรับงานทะเบียน
-      </v-row>
+      <v-row justify="center" class="pt-10 pb-10"> สำหรับงานทะเบียน </v-row>
       <div style="border-style: solid" class="pa-5">
         <v-row>
           <v-col cols="2">ตรวจสอบข้อมูล </v-col>
@@ -199,24 +184,23 @@ export default {
   middleware: "teacher",
   async mounted() {
     await this.getTechById(this.$route.query.id).then(
-      result => (this.items = result)
+      (result) => (this.items = result)
     );
-    await this.getGrade(this.items).then(result => (this.students = result));
+    await this.getGrade(this.items).then((result) => (this.students = result));
     await this.summaryGrade(this.students);
   },
   computed: {
     gatDate() {
       var dt = new Date();
-      var dateTime = `${dt
-        .getDate()
-        .toString()
-        .padStart(2, "0")}/${(dt.getMonth() + 1)
+      var dateTime = `${dt.getDate().toString().padStart(2, "0")}/${(
+        dt.getMonth() + 1
+      )
         .toString()
         .padStart(2, "0")}/${(dt.getFullYear() + 543)
         .toString()
         .padStart(4, "0")} `;
       return dateTime;
-    }
+    },
   },
 
   data() {
@@ -224,19 +208,22 @@ export default {
       date: "",
       htmlTitle: "test", //pdf file name to be downloaded //
       items: {
-        subject_info: {
+        subject: {
+          credit: "0",
+        },
+        teachInfo: {
           sname: "",
           codet: "",
           credit: "",
-          hour: ""
+          hour: "",
         },
         subject: {
-          credit: ""
+          credit: "",
         },
         teacher: {
           name: "",
-          value: ""
-        }
+          value: "",
+        },
       },
       classes: [],
       students: [],
@@ -244,26 +231,26 @@ export default {
       grade_num_list: [],
       grade_option_num_list: [],
       aptitude_score_num: [],
-      analytical_score_num: []
+      analytical_score_num: [],
     };
   },
   methods: {
     async getTechById(id) {
       const response = await this.$store.dispatch("teach/getTeachById", id);
-      
+
       return response;
     },
     async getGrade(item) {
       const conditions = {
-        teachId: item.objectId
+        teachId: item.objectId,
       };
       // 1 get stu array grade
       const response_grade = await this.$store.dispatch(
         "grade/getGradeByConditions",
         conditions
       );
-      // 
-
+      //
+      console.log("items", response_grade.results);
       return response_grade.results;
     },
     getClasses() {
@@ -278,12 +265,12 @@ export default {
     },
     getPeriod() {
       var period = 0;
-      
-      if (this.items.subject.credit) {
+
+      if (this.items.subject) {
         return this.items.subject.credit * 2;
       } else {
-        period = this.items.subject_info.credit * 2;
-        
+        period = this.items.teachInfo.credit * 2;
+
         return period;
       }
     },
@@ -296,32 +283,34 @@ export default {
 
       this.special_score = [];
       this.grade_num_list = [];
-      grade_list.forEach(grade => {
+      grade_list.forEach((grade) => {
         var grade_filter = data.filter(
-          student => student.grade == grade && !student.grade_option
+          (student) => student.grade == grade && !student.grade_option
         );
         this.grade_num_list.push(grade_filter.length);
       });
 
-      // 
+      //
       this.grade_option_num_list = [];
-      grade_option.forEach(grade => {
+      grade_option.forEach((grade) => {
         var grade_filter = data.filter(
-          student => student.grade_option == grade
+          (student) => student.grade_option == grade
         );
         this.grade_option_num_list.push(grade_filter.length);
       });
-      // 
+      //
 
       this.aptitude_score_num = [];
       this.analytical_score_num = [];
 
-      other_score.forEach(score => {
-        var aptitude_filter = data.filter(student => student.aptitude == score);
+      other_score.forEach((score) => {
+        var aptitude_filter = data.filter(
+          (student) => student.aptitude == score
+        );
         this.aptitude_score_num.push(aptitude_filter.length);
 
         var analytical_filter = this.students.filter(
-          student => student.analytical_thinking == score
+          (student) => student.analytical_thinking == score
         );
         this.analytical_score_num.push(analytical_filter.length);
       });
@@ -331,8 +320,8 @@ export default {
     },
     back() {
       this.$router.go(-1);
-    }
-  }
+    },
+  },
 };
 </script>
 
