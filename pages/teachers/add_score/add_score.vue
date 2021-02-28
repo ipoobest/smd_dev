@@ -426,7 +426,7 @@ export default {
           aptitude: "",
           analytical_thinking: "",
         };
-        console.log("create grade data",data);
+        console.log("create grade data", data);
         const response = await this.$store.dispatch(`grade/createGrade`, data);
       }
       this.getGradeByConditions(this.items).then(
