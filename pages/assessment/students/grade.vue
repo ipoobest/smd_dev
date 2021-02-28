@@ -51,10 +51,15 @@
                 <tbody>
                   <tr v-for="(item, index) in items" :key="index">
                     <td>{{ route.term }}/{{ route.schoolYear }}</td>
-                    <td>{{ item.teachInfo.codet }}</td>
-                    <td>{{ item.teachInfo.sname }}</td>
+                    <td v-if="item.subject">{{ item.subject.codet }}</td>
+                    <td v-else>{{ item.teachInfo.codet }}</td>
+                    <td v-if="item.subject">{{ item.subject.sname }}</td>
+                    <td v-else>{{ item.teachInfo.sname }}</td>
                     <!-- <td>{{ parseFloat(item.teachInfo.credit).toFixed(1) }}</td> -->
-                    <td>
+                    <td v-if="item.subject">
+                      {{ parseFloat(item.subject.credit).toFixed(1) }}
+                    </td>
+                    <td v-else>
                       {{ parseFloat(item.teachInfo.credit).toFixed(1) }}
                     </td>
                     <td v-if="item.grade_option">{{ item.grade_option }}</td>
@@ -68,13 +73,13 @@
           <div style="width: 90%; margin: auto">
             <v-row class="mt-1">
               <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
-              <v-col cols="2" v-if="grade">{{
+              <v-col cols="2" v-if="grade.gpa">{{
                 parseFloat(grade.gpa).toFixed(3)
               }}</v-col>
               <v-col cols="2" v-else>0</v-col>
               <!-- <v-col cols="2">{{ parseFloat(gpa).toFixed(3) }}</v-col> -->
               <v-col cols="2">อยู่ลำดับที่</v-col>
-              <v-col cols="1" v-if="grade">{{ grade.rankingInRoom }}</v-col>
+              <v-col cols="1" v-if="grade.gpa">{{ grade.rankingInRoom }}</v-col>
               <v-col cols="2" v-else>0</v-col>
               <v-col cols="1">จาก</v-col>
               <v-col cols="1">{{ totalStudentInRoom.count }}</v-col>
@@ -86,7 +91,9 @@
                 >{{ totalCreditInStudent }} / {{ totalCreditInClass }}
               </v-col>
               <v-col cols="2">อยู่ลำดับที่</v-col>
-              <v-col cols="1" v-if="grade">{{ grade.rankingInClasses }}</v-col>
+              <v-col cols="1" v-if="grade.gpa">{{
+                grade.rankingInClasses
+              }}</v-col>
               <v-col cols="2" v-else>0</v-col>
               <v-col cols="1">จาก</v-col>
               <v-col cols="1">{{ totalStudentInClasses.count }}</v-col>
@@ -223,7 +230,7 @@ export default {
       teach: "",
       studentInfo: "",
       grade: {
-        gpa: "0",
+        gpa: 0,
         rankingInRoom: 0,
         rankingInClasses: 0,
       },
@@ -390,7 +397,11 @@ export default {
           // console.log(typeof item.grade);
           if (item.grade_option == null || item.grade_option == "ผ") {
             if (item.grade != "0") {
-              sum += parseFloat(item.teachInfo.credit);
+              if (item.subject) {
+                sum += parseFloat(item.subject.credit);
+              } else {
+                sum += parseFloat(item.teachInfo.credit);
+              }
             }
           }
         });
@@ -404,8 +415,11 @@ export default {
       } else {
         var sum = 0;
         this.items.forEach((item) => {
-          //  sum += parseFloat(item.teachInfo.credit);
-          sum += parseFloat(item.teachInfo.credit);
+          if (item.subject) {
+            sum += parseFloat(item.subject.credit);
+          } else {
+            sum += parseFloat(item.teachInfo.credit);
+          }
         });
         // console.log('sumCreateInClasses', sum)
         return sum;

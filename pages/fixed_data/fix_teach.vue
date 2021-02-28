@@ -34,7 +34,7 @@ export default {
       headers: [
         { text: "ชั้นเรียน", value: "classRoomLevel" },
         { text: "ห้องเรียน", value: "classRoomName" },
-        { text: "ชื่อวิชา", value: "subject_info.sname" },
+        { text: "ชื่อวิชา", value: "teachInfo.sname" },
         { text: "วิชา(pointer)", value: "subject.sname" },
         { text: "ครูผู้สอน", value: "teacher.name" },
         { text: "ครูผู้สอน(pointer)", value: "teachers.firstName" },

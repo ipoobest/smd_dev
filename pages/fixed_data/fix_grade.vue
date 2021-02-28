@@ -117,7 +117,7 @@ export default {
         `teach/getTeachByConditions`,
         data
       );
-
+      console.log("response subject", response.results);
       this.mapSubject(response.results);
     },
     async getDepartmentBySubject() {
@@ -138,6 +138,7 @@ export default {
         classRoomLevel: this.classRoomLevel,
         "teachInfo.sname": this.subject,
       };
+      console.log("getGrade to fixed", data);
       const response = await this.$store.dispatch(
         `grade/getGradeByConditions`,
         data
@@ -163,17 +164,18 @@ export default {
         },
       };
 
-      // console.log("data requert update", data);
+      console.log("data requert update", data);
       const response = await this.$store.dispatch(`grade/updateGrade`, data);
 
-      this.getGrade();
-      alert("update success");
+      // this.getGrade();
+      // alert("update success");
     },
     back() {
       this.$router.push({ name: "index" });
     },
     updateGradeList() {
       this.items.forEach((item) => {
+        // console.log("item update", item);
         this.updateGrade(item);
       });
       // alert("update success");
@@ -212,7 +214,7 @@ export default {
       var itemSubject = [];
       var itemDepartment = [];
       data.forEach((item) => {
-        itemSubject.push(item.teachInfo.sname);
+        itemSubject.push(item.subject.sname);
       });
       this.subjectList = [...new Set(itemSubject)];
     },
