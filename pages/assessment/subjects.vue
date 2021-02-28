@@ -87,13 +87,10 @@ export default {
         `teach/getTeachByConditions`,
         data
       );
-      console.log("items", response.results);
       return response.results;
     },
 
     async getGradeByConditions(item) {
-      //
-
       const conditions = {
         subject: item.sname,
         schoolYear: item.schoolYear,
@@ -106,7 +103,6 @@ export default {
         `grade/getGradeByConditions`,
         conditions
       );
-      //
       return response.results;
     },
 
@@ -226,7 +222,5 @@ export default {
   },
 };
 </script>
-
-
 
 <style lang="scss" scoped></style>

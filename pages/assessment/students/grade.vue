@@ -324,7 +324,7 @@ export default {
         classRoomName: this.info.classRoomName,
         studentId: this.$route.query.id,
       };
-      // console.log("ranking condition", condition);
+      console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
         `ranking/getRankingByConditions`,
         condition
@@ -336,29 +336,29 @@ export default {
       var condition = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        classRoomLevel: this.info.classRoomLevel,
+        classRoomLevel: this.$route.query.classRoomLevel,
       };
-      // console.log("ranking condition", condition);
+      console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
         `ranking/getRankingCount`,
         condition
       );
-      // console.log("grade classes", response);
+      console.log("grade classes count", response);
       return response;
     },
     async countRankingRoom() {
       var condition = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        classRoomLevel: this.info.classRoomLevel,
-        classRoomName: this.info.classRoomName,
+        classRoomLevel: this.$route.query.classRoomLevel,
+        classRoomName: this.$route.query.classRoomName,
       };
-      // console.log("ranking condition", condition);
+      console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
         `ranking/getRankingCount`,
         condition
       );
-      // console.log("grade room", response);
+      console.log("grade room", response);
       return response;
     },
     async updateGrade(data) {
