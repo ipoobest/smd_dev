@@ -15,7 +15,7 @@
     <v-row justify="center">
       <v-col cols="4" align="start"> วันที่ {{ gatDate }} </v-col>
       <v-col v-if="teach.subject" cols="4" align="center">
-        วิชา {{ teach.subject }} รหัสวิชา
+        วิชา {{ teach.subject.sname }} รหัสวิชา
         {{ teach.subject.codet }}
       </v-col>
       <v-col v-else cols="4" align="center">
