@@ -42,12 +42,12 @@ export default {
   async mounted() {
     this.query = this.$route.query;
     // this.teacherId = this.$store.state.auth.auth.teacherObjectId
-    await this.getTeachByConditions().then((result) => (this.items = result));
+    await this.getTeachByConditions().then(result => (this.items = result));
   },
   watch: {
     dialog(val) {
       val || this.close();
-    },
+    }
   },
   data() {
     return {
@@ -56,7 +56,7 @@ export default {
         { text: "ระดับชั้น", value: "classRoomLevel" },
         { text: "ห้องเรียน", value: "classRoomName" },
         { text: "ครูผู้สอน", value: "teacherName" },
-        { text: "Actions", value: "actions", sortable: false },
+        { text: "Actions", value: "actions", sortable: false }
       ],
       dialog: false,
       formTitle: "เกณฑ์การให้คะแนน",
@@ -73,7 +73,7 @@ export default {
       studentsNamr: [],
       rating: [],
       items: [],
-      ranking: "",
+      ranking: ""
     };
   },
   methods: {
@@ -81,46 +81,28 @@ export default {
       const data = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        approved: "true",
+        approved: "true"
       };
       const response = await this.$store.dispatch(
         `teach/getTeachByConditions`,
         data
       );
-      console.log("resonse item", response.results);
+      // console.log("get grade", response.results);
       return response.results;
     },
-
-    async getTeachByConditions(teacherId) {
-      const data = {
-        schoolYear: this.$route.query.schoolYear,
-        term: this.$route.query.term,
-        "teacher.value": teacherId,
-      };
-      const response = await this.$store.dispatch(
-        `teach/getTeachByConditions`,
-        data
-      );
-      //
-      return response.results;
-    },
-
     async getGradeByConditions(item) {
-      //
-
       const conditions = {
         subject: item.sname,
         schoolYear: item.schoolYear,
         term: item.term,
         classRoomLevel: item.classRoomLevel,
         classRoomName: item.classRoomName,
-        "teacher.id": item.teacher.value,
+        "teacher.id": item.teacher.value
       };
       const response = await this.$store.dispatch(
         `grade/getGradeByConditions`,
         conditions
       );
-      //
       return response.results;
     },
 
@@ -129,7 +111,7 @@ export default {
         schoolYear: item.schoolYear,
         term: item.term,
         classRoomLevel: item.classRoomLevel,
-        classRoomName: item.classRoomName,
+        classRoomName: item.classRoomName
       };
       const response = await this.$store.dispatch(
         "classes/getClassesByConditins",
@@ -142,8 +124,8 @@ export default {
     async getStudent(data) {
       const query = {
         objectId: {
-          $in: data,
-        },
+          $in: data
+        }
       };
       const response = await this.$store.dispatch(
         "students/getStudents",
@@ -204,7 +186,7 @@ export default {
         for (var j = 0; j < this.score.length; j++) {
           student.push({
             name: name[i],
-            score: score[j],
+            score: score[j]
           });
         }
       }
@@ -228,19 +210,17 @@ export default {
     goToPreviewGrade(item) {
       this.$router.push({
         name: "assessment-preview-grade",
-        query: { id: item.objectId },
+        query: { id: item.objectId }
       });
     },
     goToPreviewScore(item) {
       this.$router.push({
         name: "assessment-students",
-        query: { id: item.classId },
+        query: { id: item.classId }
       });
-    },
-  },
+    }
+  }
 };
 </script>
-
-
 
 <style lang="scss" scoped></style>
