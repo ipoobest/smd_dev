@@ -145,6 +145,10 @@
                 </td>
               </tr>
             </tbody> -->
+            <template v-slot:[`item.subjectName`]="{ item }">
+              <div v-if="item.teachInfo">{{ item.teachInfo.sname }}</div>
+              <div v-else>{{ item.subject.sname }}</div></template
+            >
             <template v-slot:[`item.teacherName`]="{ item }"
               >{{ item.teachers.title }} {{ item.teachers.firstName }}
               {{ item.teachers.lastName }}</template
@@ -191,7 +195,7 @@ export default {
     return {
       title: "การจัดการวิชา",
       headers: [
-        { text: "วิชา", value: "teachInfo.sname" },
+        { text: "วิชา", value: "subjectName" },
         { text: "ชั้นเรียน", value: "classRoomLevel" },
         { text: "ห้องเรียน", value: "classRoomName" },
         { text: "ครูผู้สอน", value: "teacherName" },
