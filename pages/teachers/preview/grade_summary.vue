@@ -47,6 +47,7 @@
         <v-col v-else cols="1">{{ items.classRoomLevel }} </v-col>
         <v-col cols="2">จำนวนหน่วยกิต</v-col>
         <v-col cols="1" v-if="items.subject">{{ items.subject.credit }}</v-col>
+        <v-col cols="1" v-else>{{ items.teachInfo.credit }}</v-col>
         <v-col cols="2">เวลาเรียน</v-col>
         <v-col cols="1">
           {{ getPeriod() }}

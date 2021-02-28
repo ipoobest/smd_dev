@@ -14,17 +14,20 @@
     </v-row>
     <v-row justify="center">
       <v-col cols="4" align="start"> วันที่ {{ gatDate }} </v-col>
-      <v-col cols="4" align="center">
-        วิชา {{ teach.subject.sname }} รหัสวิชา
+      <v-col v-if="teach.subject" cols="4" align="center">
+        วิชา {{ teach.subject }} รหัสวิชา
         {{ teach.subject.codet }}
       </v-col>
-      <v-col  cols="4" align="end" >
-        อาจารย์ผู้สอน {{ teach.teachers.title }} {{ teach.teachers.firstName}} {{ teach.teachers.lastName }}
+      <v-col v-else cols="4" align="center">
+        วิชา {{ teach.teachInfo.sname }} รหัสวิชา
+        {{ teach.teachInfo.codet }}</v-col
+      >
+      <v-col cols="4" align="end">
+        อาจารย์ผู้สอน {{ teach.teachers.title }} {{ teach.teachers.firstName }}
+        {{ teach.teachers.lastName }}
       </v-col>
     </v-row>
-    <v-row
-      v-if="teach.send_score_assessment" 
-      class="mb-5 pl-5">
+    <v-row v-if="teach.send_score_assessment" class="mb-5 pl-5">
       <div v-if="teach.assessment">
         <h3 v-if="teach.assessment" class="green--text">อนุมัติ</h3>
         <h3 v-else class="red--text">ไม่อนุมัติ</h3>
@@ -34,12 +37,12 @@
       </div>
     </v-row>
     <v-row justify="center">
-      <v-simple-table style="width:100%">
+      <v-simple-table style="width: 100%">
         <thead>
           <tr>
             <th>ที่</th>
             <th>รหัส</th>
-            <th  @click="sorts('studentNumber')">เลขที่</th>
+            <th @click="sorts('studentNumber')">เลขที่</th>
             <th>ชื่อ-สกุล</th>
             <th class="text-left" v-for="item in rating" :key="item.name">
               {{ item.name }} , {{ item.score }} คะแนน
@@ -83,21 +86,20 @@
 <script>
 export default {
   layout: "staff",
-  middleware: 'staff',
+  middleware: "staff",
   async mounted() {
     // check user type and user layout
     await this.getTeach(this.$route.query.id).then(
-      result => (this.teach = result)
+      (result) => (this.teach = result)
     );
-    this.getGrade(this.teach).then(result => (this.score = result));
+    this.getGrade(this.teach).then((result) => (this.score = result));
   },
   computed: {
     gatDate() {
       var dt = new Date();
-      var dateTime = `${dt
-        .getDate()
-        .toString()
-        .padStart(2, "0")}/${(dt.getMonth() + 1)
+      var dateTime = `${dt.getDate().toString().padStart(2, "0")}/${(
+        dt.getMonth() + 1
+      )
         .toString()
         .padStart(2, "0")}/${(dt.getFullYear() + 543)
         .toString()
@@ -112,7 +114,7 @@ export default {
         if (a[this.currentSort] > b[this.currentSort]) return 1 * modifier;
         return 0;
       });
-    }
+    },
   },
   data() {
     return {
@@ -120,12 +122,12 @@ export default {
         teachers: {
           title: "",
           firstName: "",
-          lastName: ""
+          lastName: "",
         },
         subject: {
           sname: "",
-          codet: ""
-        }
+          codet: "",
+        },
       },
       currentSort: "total_score",
       currentSortDir: "desc",
@@ -135,72 +137,70 @@ export default {
       score: [],
       processScore: [],
       ratio_array: [],
-      score_array: []
+      score_array: [],
     };
   },
   methods: {
     async getTeach(id) {
+      console.log("idxx", id);
       const response = await this.$store.dispatch("teach/getTeachById", id);
-      
+
       this.rating = response.rating;
       this.mapRating(this.rating);
+      console.log("response teacj", response);
       return response;
     },
     async getGrade(item) {
       const conditions = {
-        teachId: item.objectId
+        teachId: item.objectId,
       };
       // 1 get stu array grade
       const response_grade = await this.$store.dispatch(
         "grade/getGradeByConditions",
         conditions
       );
-      
+
       return response_grade.results;
     },
     calcScore(score_array, index) {
       var calc_score = [];
-      // 
+      //
       score_array.forEach((score, index) => {
         var result =
           (((score / this.score_array[index]) * 100) / 100) *
           this.ratio_array[index];
         // ((( คะแนนที่ได้ / คะแนนเต็ม ) x 100) / 100 ) x ร้อยละ
         calc_score.push(result.toFixed(2));
-        // 
+        //
       });
       return calc_score;
     },
     sorts(s) {
-      
       if (s === this.currentSort) {
         this.currentSortDir = this.currentSortDir === "asc" ? "desc" : "asc";
       }
       this.currentSort = s;
     },
     mapRating(rating) {
-      rating.forEach(item => {
+      rating.forEach((item) => {
         this.ratio_array.push(item.rating);
         this.score_array.push(item.score);
       });
-      // 
+      //
     },
     preview() {
       this.$router.push({
         name: "staff-preview-grade_summary",
-        query: { id: this.$route.query.id }
+        query: { id: this.$route.query.id },
       });
     },
     sendGrade() {
-      
-      this.score.forEach(item => {
-        
-      })
+      this.score.forEach((item) => {});
     },
     back() {
       this.$router.go(-1);
-    }
-  }
+    },
+  },
 };
 </script>
 
