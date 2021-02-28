@@ -37,15 +37,15 @@
             >
           </v-row>
           <v-row class="mt-5" justify="center">
-            <v-simple-table style="width: 90%">
+            <v-simple-table dense style="width: 90%">
               <template>
                 <thead>
-                  <tr>
-                    <th>ภาคการเรียนที่</th>
-                    <th>รหัสวิชา</th>
-                    <th>ชื่อวิชา</th>
-                    <th>หน่วย</th>
-                    <th>ระดับ</th>
+                  <tr style="font-weight: bold">
+                    <td>ภาคการเรียนที่</td>
+                    <td>รหัสวิชา</td>
+                    <td>ชื่อวิชา</td>
+                    <td>หน่วย</td>
+                    <td>ระดับ</td>
                   </tr>
                 </thead>
                 <tbody>
@@ -64,7 +64,7 @@
               </template>
             </v-simple-table>
           </v-row>
-          <v-divider class="mt-1"></v-divider>
+          <v-row class="mt-5" justify="center"></v-row>
           <div style="width: 90%; margin: auto">
             <v-row class="mt-1">
               <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
@@ -103,24 +103,20 @@
             </v-row>
             <v-row>
               <v-col cols="6">
-                <v-row justify="center"
-                  >ลงชื่อ
-                  ......................................................</v-row
+                <v-row class="mt-2" justify="center"
+                  >ลงชื่อ......................................................</v-row
                 >
-                <v-row justify="center" class="ml-5 mt-2"
+                <v-row justify="center" class="mt-2"
                   >( {{ teacher.teacher1 }} )</v-row
                 >
 
-                <v-row justify="center" class="mt-5"
-                  >ลงชื่อ
-                  ......................................................</v-row
+                <v-row justify="center" class="mt-10"
+                  >ลงชื่อ......................................................</v-row
                 >
-                <v-row justify="center" class="ml-5 mt-2"
+                <v-row justify="center" class="mt-2"
                   >( {{ teacher.teacher2 }} )</v-row
                 >
-                <v-row justify="center" class="ml-5 mt-2"
-                  >อาจารย์ประจำชั้น</v-row
-                >
+                <v-row justify="center" class="mt-4">อาจารย์ประจำชั้น</v-row>
               </v-col>
               <v-col class="test" cols="6" style="margin-top: -70px">
                 <!-- <img height="50" src="~/assets/logo-smd.png" /> -->
@@ -128,16 +124,15 @@
                   <img height="100" src="~/assets/signature.jpg" />
                 </v-row>
                 <v-row justify="center"
-                  >ลงชื่อ
-                  ......................................................</v-row
+                  >ลงชื่อ......................................................</v-row
                 >
-                <v-row justify="center" class="ml-5 mt-2"
+                <v-row justify="center" class="mt-2"
                   >( อาจารย์ ไพทูล นารคร )</v-row
                 >
-                <v-row justify="center" class="ml-5 mt-2"
+                <v-row justify="center" class="mt-2"
                   >รักษาการรองผู้อำนวยการฝ่ายมัธยมศึกษา (มอดินแดง)</v-row
                 >
-                <v-row justify="center" class="ml-5 mt-2"
+                <v-row justify="center" class="mt-2"
                   >ปฎิบัติราชการแทนผู้อำนวยการ</v-row
                 >
               </v-col>
@@ -147,7 +142,7 @@
       </div>
 
       <v-row class="btnApprove" justify="center">
-        <v-col cols="4">
+        <v-col cols="4" align="center">
           <!-- <v-btn color="success">บันทึก</v-btn> -->
           <v-btn
             v-if="!approve"
@@ -502,6 +497,7 @@ export default {
 }
 .v-data-table td {
   height: 30px;
+  border-bottom: none !important;
 }
 @media print {
   .page {

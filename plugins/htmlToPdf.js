@@ -8,14 +8,15 @@ export default {
       html2Canvas(document.querySelector("#pdfDom"), {
         allowTaint: false,
         useCORS: true,
+        scale: 2
       }).then(function(canvas) {
-        let pageData = canvas.toDataURL("image/jpeg", 0.9);
+        let pageData = canvas.toDataURL("image/png", 0.9);
         let PDF = new JsPDF("p", "mm", "a2");
 
-        let width = PDF.internal.pageSize.getWidth();
-        let height = PDF.internal.pageSize.getHeight();
+        let width = 320;
+        let height = 370;
 
-        PDF.addImage(pageData, "JPEG", 0, 0, width, height);
+        PDF.addImage(pageData, "PNG", 55, 40, width, height);
         PDF.save(title + ".pdf");
       
       });

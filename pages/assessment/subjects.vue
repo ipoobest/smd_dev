@@ -87,21 +87,7 @@ export default {
         `teach/getTeachByConditions`,
         data
       );
-      console.log("resonse item", response.results);
-      return response.results;
-    },
-
-    async getTeachByConditions(teacherId) {
-      const data = {
-        schoolYear: this.$route.query.schoolYear,
-        term: this.$route.query.term,
-        "teacher.value": teacherId,
-      };
-      const response = await this.$store.dispatch(
-        `teach/getTeachByConditions`,
-        data
-      );
-      //
+      console.log("items", response.results);
       return response.results;
     },
 

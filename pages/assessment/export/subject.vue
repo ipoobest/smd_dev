@@ -56,9 +56,7 @@
           ></v-select>
         </v-col>
         <v-col cols="2">
-          <v-btn class="success" @click="exportXmls()">
-            export
-          </v-btn>
+          <v-btn class="success" @click="exportXmls()"> export </v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -87,7 +85,7 @@ export default {
       itemSchoolTerm: [],
       itemSubjectList: [],
       itemClassRoom: ["ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"],
-      itemClassName: ["ทั้งหมด", "1", "2", "3", "4"]
+      itemClassName: ["ทั้งหมด", "1", "2", "3", "4"],
     };
   },
   methods: {
@@ -98,7 +96,7 @@ export default {
           schoolYear: this.schoolYear,
           term: this.term,
           classRoomLevel: this.classRoomLevel,
-          "teachInfo.sname": this.subject
+          "teachInfo.sname": this.subject,
         };
       } else {
         data = {
@@ -106,11 +104,11 @@ export default {
           term: this.term,
           classRoomLevel: this.classRoomLevel,
           classRoomName: this.classRoomName,
-          "teachInfo.sname": this.subject
+          "teachInfo.sname": this.subject,
         };
       }
 
-      // 
+      //
       var response = await this.$store.dispatch(
         `grade/getGradeByConditions`,
         data
@@ -122,7 +120,7 @@ export default {
       var response = await this.$store.dispatch(
         `academic_year/getAcademicYear`
       );
-      // 
+      //
       this.mapSchoolYear(response.results);
     },
     async getSubject() {
@@ -131,23 +129,23 @@ export default {
         data = {
           classRoomLevel: this.classRoomLevel,
           schoolYear: this.schoolYear,
-          term: this.term
+          term: this.term,
         };
       } else {
         data = {
           classRoomLevel: this.classRoomLevel,
           classRoomName: this.classRoomName,
           schoolYear: this.schoolYear,
-          term: this.term
+          term: this.term,
         };
       }
 
-      // 
+      //
       var response = await this.$store.dispatch(
         `teach/getSubjectsByConditions`,
         data
       );
-      // 
+      //
       this.mapSubject(response.results);
     },
     async getSubjectByName(data) {
@@ -155,18 +153,18 @@ export default {
         `subjects/getSubjectsByConditions`,
         data
       );
-      // 
+      console.log("get subject", response.results);
       return response.results[0];
     },
     mapSchoolYear(data) {
-      data.forEach(item => {
+      data.forEach((item) => {
         this.itemSchoolYear.push(item.schoolYear),
           this.itemSchoolTerm.push(item.term);
       });
     },
     mapSubject(data) {
-      // 
-      data.forEach(item => {
+      //
+      data.forEach((item) => {
         this.itemSubjectList.push(`${item.subject.sname}`);
       });
     },
@@ -189,20 +187,20 @@ export default {
       // var perfixLev = this.getClassLevel()
       var grade = await this.getGradebyConditions();
       // var perfixLev = this.getClassLevel(grade[0]);
-      // 
+      //
       var data;
       if (this.classRoomName == "ทั้งหมด") {
         data = grade.sort((a, b) => b.total_score - a.total_score);
       } else {
         data = grade.sort((a, b) => a.studentNumber - b.studentNumber);
       }
-      // 
+      //
       var querySubject = {
         sname: this.subject,
         // codet: data[0].teachInfo.codet
       };
       var codeSubject = await this.getSubjectByName(querySubject);
-      data.forEach(item => {
+      data.forEach((item) => {
         var newJson = {
           id: item.studentId,
           studentNumber: item.studentNumber,
@@ -218,20 +216,21 @@ export default {
           grd: item.grade,
           s10: item.aptitude,
           s11: item.analytical_thinking,
-          lev: "3" + item.classRoomLevel.substring(2) + item.classRoomName
+          lev: "3" + item.classRoomLevel.substring(2) + item.classRoomName,
         };
+        console.log("new json", newJson);
         newData.push(newJson);
       });
-      // 
-      var dataWS = XLSX.utils.json_to_sheet(newData);
-      var wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, dataWS);
-      XLSX.writeFile(
-        wb,
-        `${this.subject}-${this.schoolYear}-${this.term}-${this.classRoomLevel}.xlsx`
-      );
-    }
-  }
+      console.log("new data", newData);
+      // var dataWS = XLSX.utils.json_to_sheet(newData);
+      // var wb = XLSX.utils.book_new();
+      // XLSX.utils.book_append_sheet(wb, dataWS);
+      // XLSX.writeFile(
+      //   wb,
+      //   `${this.subject}-${this.schoolYear}-${this.term}-${this.classRoomLevel}.xlsx`
+      // );
+    },
+  },
 };
 </script>
 
