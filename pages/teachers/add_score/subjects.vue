@@ -114,19 +114,19 @@ export default {
       const data = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        // "teacher.value": teacherId
+        // "teacher.value": teacherId,
         teachers: {
           __type: "Pointer",
           className: "_User",
           objectId: teacherId,
         },
       };
-
+      console.log("teacher reqauest", data);
       const response = await this.$store.dispatch(
         `teach/getTeachByConditions`,
         data
       );
-      // console.log("teach", response.results);
+      console.log("teach", response.results);
       return response.results;
     },
     // async getTeachByConditionsFixed(teacherId) {
@@ -161,7 +161,7 @@ export default {
         `grade/getGradeByConditions`,
         conditions
       );
-
+      console.log("respo", response.results);
       return response.results;
     },
     async getStudentByTeach(item) {
