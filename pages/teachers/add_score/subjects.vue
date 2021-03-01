@@ -37,8 +37,8 @@
               </thead>
               <tbody>
                 <tr v-for="item in items" :key="item.index">
-                  <td v-if="item.subject_info">
-                    {{ item.subject_info.codet }} {{ item.subject_info.sname }}
+                  <td v-if="item.subject">
+                    {{ item.subject.codet }} {{ item.subject.sname }}
                   </td>
                   <td v-else>
                     {{ item.teachInfo.codet }} {{ item.teachInfo.sname }}
