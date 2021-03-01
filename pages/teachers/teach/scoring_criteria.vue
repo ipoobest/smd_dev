@@ -109,8 +109,8 @@
             </thead>
             <tbody>
               <tr v-for="(item, index) in items" :key="index">
-                <td v-if="item.subject_info">
-                  {{ item.subject_info.codet }} {{ item.subject_info.sname }}
+                <td v-if="item.subject">
+                  {{ item.subject.codet }} {{ item.subject.sname }}
                 </td>
                 <td v-else>
                   {{ item.teachInfo.codet }} {{ item.teachInfo.sname }}
