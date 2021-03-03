@@ -87,7 +87,7 @@ export default {
       };
       // console.log("update teach", data);
       const response = await this.$store.dispatch(`teach/updateTeach`, data);
-      // console.log("response", response);
+      console.log("response", response);
       return;
     },
     async updateTeacher(classId, pointerId) {

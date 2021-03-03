@@ -54,7 +54,7 @@ export const actions = {
           }
         });
         const result = this.$axios.$get(
-          `${process.env.parseUrl}/classes/${classes.teach}?include=subject,teachers&limit=1000`
+          `${process.env.parseUrl}/classes/${classes.teach}?include=subject,teachers&limit=2000`
         );
 
         commit("setSubjects", result);

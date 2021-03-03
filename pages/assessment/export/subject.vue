@@ -49,6 +49,8 @@
         <v-col cols="3">
           <v-select
             v-model="subject"
+            item-text="sname"
+            item-value="objectId"
             :items="itemSubjectList"
             dense
             outlined
@@ -69,9 +71,7 @@ export default {
   layout: "assessment",
   middleware: "assessment",
   async mounted() {
-    // await this.getGradebyConditions().then(result => (this.grade = result))
     this.getAcademicYear();
-    // this.getSubject();
   },
   data() {
     return {
@@ -91,14 +91,16 @@ export default {
   },
   methods: {
     async getGradebyConditions() {
+      console.log("this subject", this.subject);
       var data;
       var result;
       if (this.classRoomName == "ทั้งหมด") {
+        console.log("xxx");
         data = {
           schoolYear: this.schoolYear,
           term: this.term,
           classRoomLevel: this.classRoomLevel,
-          "teachInfo.sname": this.subject,
+          teachId: this.subject,
         };
       } else {
         data = {
@@ -106,33 +108,43 @@ export default {
           term: this.term,
           classRoomLevel: this.classRoomLevel,
           classRoomName: this.classRoomName,
-          "teachInfo.sname": this.subject,
+          teachId: this.subject,
         };
       }
+
+      console.log("request grade", data);
 
       var response = await this.$store.dispatch(
         `grade/getGradeByConditions`,
         data
       );
       result = response.results;
+
       console.log("result length", result.length);
       if (result.length == 0) {
         if (this.classRoomName == "ทั้งหมด") {
-          console.log("xxxx");
           data = {
             schoolYear: this.schoolYear,
             term: this.term,
             classRoomLevel: this.classRoomLevel,
-            "subject.sname": this.subject,
+            // "teachInfo.sname": this.subject.objectId,
+            teach: {
+              __type: "Pointer",
+              className: "Teach",
+              objectId: this.subject,
+            },
           };
         } else {
-          console.log("yyy");
           data = {
             schoolYear: this.schoolYear,
             term: this.term,
             classRoomLevel: this.classRoomLevel,
             classRoomName: this.classRoomName,
-            "subject.sname": this.sname,
+            subject: {
+              __type: "Pointer",
+              className: "Subjects",
+              objectId: this.subject,
+            },
           };
         }
         console.log("data get grade", data);
@@ -193,33 +205,26 @@ export default {
       });
     },
     mapSubject(data) {
-      //
-      if (data.sname) {
-        data.forEach((item) => {
-          this.itemSubjectList.push(`${item.subject.sname}`);
-        });
-      } else {
-        data.forEach((item) => {
-          if (item.teachInfo) {
-            this.itemSubjectList.push(`${item.teachInfo.sname}`);
-          }
-          // this.itemSubjectList.push(`${item.teachInfo.sname}`);
-        });
+      console.log("data".data);
+      const map = new Map();
+      for (var item of data) {
+        if (!map.has(item.subject.sname)) {
+          map.set(item.subject.sname, true);
+          this.itemSubjectList.push({
+            objectId: `${item.objectId}`,
+            sname: `${item.teachInfo}`
+              ? `${item.teachInfo.sname}`
+              : `${item.subject.sname}`,
+          });
+        }
       }
+      console.log("itemSubjectList", this.itemSubjectList);
     },
     keyRename(obj, old_key, new_key) {
       obj[new_key] = obj[old_key];
       delete obj[old_key];
       return obj;
     },
-    // getClassLevel(item) {
-    //   var lev = "2";
-    //   if (item.classRoomLevel.includes("ม.4", "ม.5", "ม.6")) {
-    //     lev = "3";
-    //     return lev;
-    //   }
-    //   return lev;
-    // },
     async exportXmls() {
       var newData = [];
       var perfixTerm = this.schoolYear.substring(2);
@@ -227,7 +232,6 @@ export default {
       var grade = await this.getGradebyConditions();
       // console.log("grade", grade);
       // var perfixLev = this.getClassLevel(grade[0]);
-      //
       var data;
       if (this.classRoomName == "ทั้งหมด") {
         data = grade.sort((a, b) => b.total_score - a.total_score);
@@ -235,19 +239,16 @@ export default {
         data = grade.sort((a, b) => a.studentNumber - b.studentNumber);
       }
       console.log("data", data);
-      var querySubject = {
-        sname: this.subject,
-        // codet: data[0].teachInfo.codet
-      };
-      var codeSubject = await this.getSubjectByName(querySubject);
-      console.log("code subject", codeSubject);
+      var code;
       var codeT;
       var subjectName;
       data.forEach((item) => {
         if (item.subject) {
+          code = item.subject.code;
           codeT = item.subject.codet;
           subjectName = item.subject.sname;
         } else {
+          code = item.teachInfo.code;
           codeT = item.teachInfo.codet;
           subjectName = item.teachInfo.sname;
         }
@@ -255,7 +256,7 @@ export default {
           id: item.studentId,
           studentNumber: item.studentNumber,
           fullname: item.studentName,
-          code: codeSubject.code,
+          code: code,
           codeth: codeT,
           subject: subjectName,
           year: item.schoolYear,
@@ -271,7 +272,7 @@ export default {
         // console.log("new json", newJson);
         newData.push(newJson);
       });
-      console.log("new data", newData);
+      // console.log("new data", newData);
       if (newData.length == 0) {
         alert("ยังไม่มีข้อมูลของวิชานี้");
       } else {

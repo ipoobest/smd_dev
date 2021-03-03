@@ -91,8 +91,8 @@ module.exports = {
     extend(config, ctx) {}
   },
   env: {
-    parseUrl: `https://api-smd.kaensom.com/parse`,
-    // parseUrl: `http://api-smd2.kaensom.com/parse`,
+    // parseUrl: `https://api-smd.kaensom.com/parse`,
+    parseUrl: `http://api-smd2.kaensom.com/parse`,
     parseAppId: `37151b935e618517d2467aaa4e10f8ed`,
     parseMasterKey: `905de41c9fb82aa9f8a964d8781b935c`
   }
