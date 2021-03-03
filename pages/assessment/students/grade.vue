@@ -73,7 +73,7 @@
           <div style="width: 90%; margin: auto">
             <v-row class="mt-1">
               <v-col cols="3">คะแนนเฉลี่ยภาคเรียนนี้</v-col>
-              <v-col cols="2" v-if="grade.gpa">{{
+              <v-col cols="2" v-if="grade">{{
                 parseFloat(grade.gpa).toFixed(3)
               }}</v-col>
               <v-col cols="2" v-else>0</v-col>
@@ -196,7 +196,7 @@ export default {
     this.teacher = await this.getTeacher();
     // this.gpa = this.calGPA();
     this.totalCredit = this.sumCredit();
-    this.getClass();
+    await this.getClass();
     // console.log('this.query', this.$route.query)
     this.grade = await this.getRanking();
     this.totalStudentInClasses = await this.countRankingClasses();
@@ -258,12 +258,13 @@ export default {
         term: this.$route.query.term,
         staff: true,
       };
+      console.log("request grade", conditions);
       const response = await this.$store.dispatch(
         `grade/getGradeByConditions`,
         conditions
       );
       console.log("grade list Gpa", response.results);
-      // this.info = response.results[0];
+      this.info = response.results[0];
       this.rowSpan = response.results.length;
       if (this.rowSpan == 0) {
         console.log("sss");
@@ -366,11 +367,13 @@ export default {
       // console.log("update response", response);
     },
     getClass() {
+      console.log("classRoomLevel xxx", this.info);
       if (["ม.1", "ม.2", "ม.3"].includes(this.info.classRoomLevel)) {
         this.classes = "ระดับมัธยมศึกษาตอนต้น";
       } else {
         this.classes = "ระดับมัธยมศึกษาตอนปลาย";
       }
+      console.log("this classes", this.classes);
     },
     sumCredit() {
       if (!this.items) {

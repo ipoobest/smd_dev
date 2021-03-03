@@ -235,7 +235,7 @@ export default {
     async calGradeRaking() {
       var student_ranking = await this.getRanking();
       var grade_subject = await this.getGradeByConditions();
-      //
+      console.log("stu ranking, grade subj", student_ranking, grade_subject);
       // คำนวณเกรดนร. ในระดับ
       for (const student of student_ranking) {
         var student_grade_list = grade_subject.filter(
@@ -296,7 +296,8 @@ export default {
       var grade = 0;
       var totalCreditInStudent = 0;
       grade_list.forEach((item) => {
-        var credit_float = parseFloat(item.teachInfo.credit) || 0;
+        var credit_float =
+          parseFloat(item.subject.credit) || parseFloat(item.teachInfo.credit);
         // เช็คเกรด
         if (item.grade_option == null) {
           var grade_float = parseFloat(item.grade) || 0;
@@ -320,6 +321,7 @@ export default {
       //   totalCreditInStudent,
       //   gpa
       // );
+      console.log("gpa", gpa);
       return gpa;
     },
     sortByGPA(std_list, key) {
