@@ -443,10 +443,11 @@ export default {
     },
 
     sortData(data) {
+      console.log("data sort", data);
       var newItems = data.sort(
         (a, b) => a.department_number - b.department_number
       );
-      // console.log("sort items", newItems);
+      console.log("sort items", newItems);
       return newItems;
     },
     print() {

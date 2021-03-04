@@ -270,9 +270,8 @@ export default {
   },
   methods: {
     async getGradeByConditions(item) {
-      console.log("get grade", item.objectId);
+      // console.log("get grade", item.objectId);
       const conditions = {
-        // "teachInfo.teachId": item.objectId
         teachId: item.objectId,
         // teach: {
         //   "__type": "Pointer",
@@ -350,8 +349,6 @@ export default {
       var studentName = values[0];
       var studentId = values[1];
       var studentNumber = values[2];
-      //
-      //
       return [studentName, studentId, studentNumber];
     },
     async getStudentByClassId(classId) {
@@ -364,7 +361,7 @@ export default {
 
       this.rating = response.rating;
       this.mapRating(this.rating);
-      console.log("response", response);
+      console.log("response teach", response);
       return response;
     },
     async getCriteria() {
@@ -406,12 +403,8 @@ export default {
             className: "Subjects",
             objectId: this.items.teachInfo.objectId_subject,
           },
-          // teachInfo: {
-          //   techId: this.items.objectId,
-          //   codet: this.items.subject.codet,
-          //   credit: this.items.subject.credit,
-          //   sname: this.items.subject.sname,
-          // },
+          department: this.items.department,
+          department_number: this.checkDepartmentNumber(this.items.department),
           studentName: studentName[index],
           studentObjectId: students[index],
           studentId: studentId[index],
@@ -426,12 +419,13 @@ export default {
           aptitude: "",
           analytical_thinking: "",
         };
-        console.log("create grade data", data);
+        // console.log("create grade data", data);
         const response = await this.$store.dispatch(`grade/createGrade`, data);
       }
       this.getGradeByConditions(this.items).then(
         (result) => (this.grade = result)
       );
+      return;
     },
     async updateTech(data) {
       const response = this.$store.dispatch(`teach/updateTeach`, data);
@@ -507,9 +501,9 @@ export default {
         //
       });
 
-      console.log("calc_score", calc_score);
+      // console.log("calc_score", calc_score);
       var sum_score = calc_score.reduce((a, b) => a + b);
-      console.log("sum_score xxx", sum_score);
+      // console.log("sum_score xxx", sum_score);
 
       this.score[index].sum_score = sum_score.toFixed(2);
       this.score[index].grade = this.calcGrade(sum_score.toFixed(2));
@@ -534,6 +528,28 @@ export default {
         return 1;
       } else {
         return 0;
+      }
+    },
+    checkDepartmentNumber(data) {
+      switch (data) {
+        case "ภาษาไทย":
+          return 1;
+        case "คณิตศาสตร์":
+          return 2;
+        case "วิทยาศาสตร์":
+          return 3;
+        case "สังคมศึกษา ศาสนา และวัฒนธรรม":
+          return 4;
+        case "สุขศึกษาและพลศึกษา":
+          return 5;
+        case "ศิลปะ":
+          return 6;
+        case "การงานอาชีพและเทคโนโลยี":
+          return 7;
+        case "ภาษาต่างประเทศ":
+          return 8;
+        case "กิจกรรมพัฒนาผู้เรียน":
+          return 9;
       }
     },
     fixedGrade(index) {

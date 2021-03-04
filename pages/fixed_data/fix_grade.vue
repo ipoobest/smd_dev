@@ -182,33 +182,53 @@ export default {
       this.getGrade();
     },
     checkDepartmentNumber(data) {
-      if (data == "ภาษาไทย") {
-        return 1;
+      switch (data) {
+        case "ภาษาไทย":
+          return 1;
+        case "คณิตศาสตร์":
+          return 2;
+        case "วิทยาศาสตร์":
+          return 3;
+        case "สังคมศึกษา ศาสนา และวัฒนธรรม":
+          return 4;
+        case "สุขศึกษาและพลศึกษา":
+          return 5;
+        case "ศิลปะ":
+          return 6;
+        case "การงานอาชีพและเทคโนโลยี":
+          return 7;
+        case "ภาษาต่างประเทศ":
+          return 8;
+        case "กิจกรรมพัฒนาผู้เรียน":
+          return 9;
       }
-      if (data == "คณิตศาสตร์") {
-        return 2;
-      }
-      if (data == "วิทยาศาสตร์") {
-        return 3;
-      }
-      if (data == "สังคมศึกษา ศาสนา และวัฒนธรรม") {
-        return 4;
-      }
-      if (data == "สุขศึกษาและพลศึกษา") {
-        return 5;
-      }
-      if (data == "ศิลปะ") {
-        return 6;
-      }
-      if (data == "การงานอาชีพและเทคโนโลยี") {
-        return 7;
-      }
-      if (data == "ภาษาต่างประเทศ") {
-        return 8;
-      }
-      if (data == "กิจกรรมพัฒนาผู้เรียน") {
-        return 9;
-      }
+      // if (data == "ภาษาไทย") {
+      //   return 1;
+      // }
+      // if (data == "คณิตศาสตร์") {
+      //   return 2;
+      // }
+      // if (data == "วิทยาศาสตร์") {
+      //   return 3;
+      // }
+      // if (data == "สังคมศึกษา ศาสนา และวัฒนธรรม") {
+      //   return 4;
+      // }
+      // if (data == "สุขศึกษาและพลศึกษา") {
+      //   return 5;
+      // }
+      // if (data == "ศิลปะ") {
+      //   return 6;
+      // }
+      // if (data == "การงานอาชีพและเทคโนโลยี") {
+      //   return 7;
+      // }
+      // if (data == "ภาษาต่างประเทศ") {
+      //   return 8;
+      // }
+      // if (data == "กิจกรรมพัฒนาผู้เรียน") {
+      //   return 9;
+      // }
     },
     mapSubject(data) {
       var itemSubject = [];

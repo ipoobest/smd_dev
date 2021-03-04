@@ -307,6 +307,9 @@ export default {
               objectId: this.input.teachers.objectId,
             },
             department: this.input.department,
+            department_numner: this.checkDepartmentNumber(
+              this.input.department
+            ),
             type: "วิชาบังคับ",
           };
 
@@ -430,6 +433,28 @@ export default {
       });
       //
       return department;
+    },
+    checkDepartmentNumber(data) {
+      switch (data) {
+        case "ภาษาไทย":
+          return 1;
+        case "คณิตศาสตร์":
+          return 2;
+        case "วิทยาศาสตร์":
+          return 3;
+        case "สังคมศึกษา ศาสนา และวัฒนธรรม":
+          return 4;
+        case "สุขศึกษาและพลศึกษา":
+          return 5;
+        case "ศิลปะ":
+          return 6;
+        case "การงานอาชีพและเทคโนโลยี":
+          return 7;
+        case "ภาษาต่างประเทศ":
+          return 8;
+        case "กิจกรรมพัฒนาผู้เรียน":
+          return 9;
+      }
     },
     validateForm() {},
     back() {

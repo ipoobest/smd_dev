@@ -78,6 +78,7 @@ export default {
 
       const data = {
         objectId: item.objectId,
+        department_numner: this.checkDepartmentNumber(item.department),
         teachInfo: {
           objectId_subject: subject_objectId,
           sname: subject_name,
@@ -152,6 +153,28 @@ export default {
           break;
         default:
           alert("กรุณาเลือก pointer");
+      }
+    },
+    checkDepartmentNumber(data) {
+      switch (data) {
+        case "ภาษาไทย":
+          return 1;
+        case "คณิตศาสตร์":
+          return 2;
+        case "วิทยาศาสตร์":
+          return 3;
+        case "สังคมศึกษา ศาสนา และวัฒนธรรม":
+          return 4;
+        case "สุขศึกษาและพลศึกษา":
+          return 5;
+        case "ศิลปะ":
+          return 6;
+        case "การงานอาชีพและเทคโนโลยี":
+          return 7;
+        case "ภาษาต่างประเทศ":
+          return 8;
+        case "กิจกรรมพัฒนาผู้เรียน":
+          return 9;
       }
     },
   },
