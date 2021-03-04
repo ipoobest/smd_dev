@@ -80,7 +80,7 @@
               <v-col cols="2" v-else>0</v-col>
               <!-- <v-col cols="2">{{ parseFloat(gpa).toFixed(3) }}</v-col> -->
               <v-col cols="2">อยู่ลำดับที่</v-col>
-              <v-col cols="1" v-if="grade.gpa">{{ grade.rankingInRoom }}</v-col>
+              <v-col cols="1" v-if="grade">{{ grade.rankingInRoom }}</v-col>
               <v-col cols="2" v-else>0</v-col>
               <v-col cols="1">จาก</v-col>
               <v-col cols="1">{{ totalStudentInRoom.count }}</v-col>
@@ -92,9 +92,7 @@
                 >{{ totalCreditInStudent }} / {{ totalCreditInClass }}
               </v-col>
               <v-col cols="2">อยู่ลำดับที่</v-col>
-              <v-col cols="1" v-if="grade.gpa">{{
-                grade.rankingInClasses
-              }}</v-col>
+              <v-col cols="1" v-if="grade">{{ grade.rankingInClasses }}</v-col>
               <v-col cols="2" v-else>0</v-col>
               <v-col cols="1">จาก</v-col>
               <v-col cols="1">{{ totalStudentInClasses.count }}</v-col>
@@ -242,13 +240,16 @@ export default {
       totalStudentInRoom: 0,
       studentInfo: {
         tth: "",
+        name: "",
+        sname: "",
+      },
+      info: {
+        tth: "",
         studentName: "",
         studentId: "",
         classRoomLevel: "",
         classRoomName: "",
       },
-      info: {},
-      // pdfTitle: `ใบแจ้งผลการเรียน-${this.$route.query.schoolYear}-${this.$route.term}-${this.info.classRoomLevel}-${this.info.classRoomName}-${this.info.studentId}`
     };
   },
   methods: {
@@ -271,7 +272,7 @@ export default {
       this.info = response.results[0];
       this.rowSpan = response.results.length;
       if (this.rowSpan == 0) {
-        console.log("sss");
+        return;
       } else {
         this.approve = response.results[0].approve;
         this.studentObjectId = response.results[0].studentObjectId;
@@ -307,26 +308,12 @@ export default {
       // console.log("response getClasses", response.results[0].advisoryTeacher);
       return response.results[0].advisoryTeacher;
     },
-    async createRanking() {
-      var data = {
-        schoolYear: this.$route.query.schoolYear,
-        term: this.$route.query.term,
-        classRoomLevel: this.info.classRoomLevel,
-        classRoomName: this.info.classRoomName,
-        grade: this.grade,
-        studentId: this.$route.id,
-      };
-      const response = await this.$store.dispatch(
-        `ranking/createRanking`,
-        data
-      );
-    },
     async getRanking() {
       var condition = {
         schoolYear: this.$route.query.schoolYear,
         term: this.$route.query.term,
-        classRoomLevel: this.info.classRoomLevel,
-        classRoomName: this.info.classRoomName,
+        classRoomLevel: this.$route.query.classRoomLevel,
+        classRoomName: this.$route.query.classRoomName,
         studentId: this.$route.query.id,
       };
       console.log("ranking condition", condition);
@@ -334,7 +321,7 @@ export default {
         `ranking/getRankingByConditions`,
         condition
       );
-      // console.log("grade ranking", response.results[0]);
+      console.log("grade ranking", response.results);
       return response.results[0];
     },
     async countRankingClasses() {
@@ -343,12 +330,12 @@ export default {
         term: this.$route.query.term,
         classRoomLevel: this.$route.query.classRoomLevel,
       };
-      console.log("ranking condition", condition);
+      // console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
         `ranking/getRankingCount`,
         condition
       );
-      console.log("grade classes count", response);
+      // console.log("grade classes count", response);
       return response;
     },
     async countRankingRoom() {
@@ -358,12 +345,12 @@ export default {
         classRoomLevel: this.$route.query.classRoomLevel,
         classRoomName: this.$route.query.classRoomName,
       };
-      console.log("ranking condition", condition);
+      // console.log("ranking condition", condition);
       const response = await this.$store.dispatch(
         `ranking/getRankingCount`,
         condition
       );
-      console.log("grade room", response);
+      // console.log("grade room", response);
       return response;
     },
     async updateGrade(data) {
@@ -372,7 +359,7 @@ export default {
     },
     getClass() {
       // console.log("classRoomLevel xxx", this.info);
-      if (["ม.1", "ม.2", "ม.3"].includes(this.info.classRoomLevel)) {
+      if (["ม.1", "ม.2", "ม.3"].includes(this.$route.query.classRoomLevel)) {
         this.classes = "ระดับมัธยมศึกษาตอนต้น";
       } else {
         this.classes = "ระดับมัธยมศึกษาตอนปลาย";
