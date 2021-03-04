@@ -27,10 +27,11 @@
           <v-row class="mt-3" justify="center">
             <v-col cols="2">ชื่อ-นามสกุล</v-col>
             <v-col cols="3"
-              >{{ info.tth }} {{ info.namet }} {{ info.snamet }}</v-col
+              >{{ studentInfo.tth }} {{ studentInfo.namet }}
+              {{ studentInfo.snamet }}</v-col
             >
             <v-col cols="2">เลขประจำตัว</v-col>
-            <v-col cols="1">{{ info.idstd }}</v-col>
+            <v-col cols="1">{{ studentInfo.idstd }}</v-col>
             <v-col cols="1">ชั้น</v-col>
             <v-col cols="2"
               >{{ route.classRoomLevel }}/{{ route.classRoomName }}</v-col
@@ -189,7 +190,8 @@ export default {
   middleware: "assessment",
   async mounted() {
     this.route = this.$route.query;
-    this.info = await this.getStudent(this.route);
+    this.studentInfo = await this.getStudent(this.route);
+    console.log("this.info", this.studentInfo);
     await this.getGradeByConditions();
     this.totalCreditInClass = await this.sumCreateInClasses();
     this.totalCreditInStudent = await this.sumCreditStudent();
@@ -238,12 +240,14 @@ export default {
       save: false,
       totalStudentInClasses: 0,
       totalStudentInRoom: 0,
-      info: {
+      studentInfo: {
+        tth: "",
         studentName: "",
         studentId: "",
         classRoomLevel: "",
         classRoomName: "",
       },
+      info: {},
       // pdfTitle: `ใบแจ้งผลการเรียน-${this.$route.query.schoolYear}-${this.$route.term}-${this.info.classRoomLevel}-${this.info.classRoomName}-${this.info.studentId}`
     };
   },
@@ -263,7 +267,7 @@ export default {
         `grade/getGradeByConditions`,
         conditions
       );
-      console.log("grade list Gpa", response.results);
+      // console.log("grade list Gpa", response.results);
       this.info = response.results[0];
       this.rowSpan = response.results.length;
       if (this.rowSpan == 0) {
@@ -284,7 +288,7 @@ export default {
         `students/getStudents`,
         condition
       );
-      console.log("response result student", response.results[0]);
+      // console.log("response result student", response.results[0]);
       return response.results[0];
     },
     async getTeacher() {
@@ -299,7 +303,7 @@ export default {
         `classes/getClassesByConditions`,
         data
       );
-      console.log("response getTeacher xxx", response.results);
+      // console.log("response getTeacher xxx", response.results);
       // console.log("response getClasses", response.results[0].advisoryTeacher);
       return response.results[0].advisoryTeacher;
     },
@@ -330,7 +334,7 @@ export default {
         `ranking/getRankingByConditions`,
         condition
       );
-      console.log("grade ranking", response.results[0]);
+      // console.log("grade ranking", response.results[0]);
       return response.results[0];
     },
     async countRankingClasses() {
@@ -367,13 +371,13 @@ export default {
       // console.log("update response", response);
     },
     getClass() {
-      console.log("classRoomLevel xxx", this.info);
+      // console.log("classRoomLevel xxx", this.info);
       if (["ม.1", "ม.2", "ม.3"].includes(this.info.classRoomLevel)) {
         this.classes = "ระดับมัธยมศึกษาตอนต้น";
       } else {
         this.classes = "ระดับมัธยมศึกษาตอนปลาย";
       }
-      console.log("this classes", this.classes);
+      // console.log("this classes", this.classes);
     },
     sumCredit() {
       if (!this.items) {
@@ -386,7 +390,7 @@ export default {
           }
           // console.log('summ ',sum)
         });
-        console.log("sum create", sum);
+        // console.log("sum create", sum);
         return sum;
       }
     },
@@ -408,7 +412,7 @@ export default {
             }
           }
         });
-        console.log("sumxx", sum);
+        // console.log("sumxx", sum);
         return sum;
       }
     },
@@ -455,7 +459,7 @@ export default {
       var newItems = data.sort(
         (a, b) => a.department_number - b.department_number
       );
-      console.log("sort items", newItems);
+      // console.log("sort items", newItems);
       return newItems;
     },
     print() {
