@@ -44,6 +44,26 @@
                 ></v-col
               >
             </v-row>
+            <v-row>
+              <v-col cols="3">
+                <v-select
+                  v-model="classRoomLevel"
+                  :items="classes"
+                  dense
+                  outlined
+                  label="ระดับชั้น"
+              /></v-col>
+              <v-col cols="1"
+                ><v-btn color="success" @click="getGradeInClass()"
+                  >GET</v-btn
+                ></v-col
+              >
+              <v-col cols="1"
+                ><v-btn color="info" @click="updateGradeInClass()"
+                  >update</v-btn
+                ></v-col
+              >
+            </v-row>
           </v-col>
           <v-data-table :headers="headers" :items="items" :search="search">
             <template v-slot:top>
@@ -92,7 +112,7 @@ export default {
         { text: "ปีการศึกษา", value: "schoolYear", align: "center" },
         { text: "เทอม", value: "term", align: "center  " },
         { text: "ชื่อ", value: "studentName", align: "center  " },
-        { text: "กลุ่มสาระวิชา", value: "department", align: "center  " },
+        { text: "กลุ่มสาระวิชา", value: "subject.sname", align: "center  " },
         { text: "หมายเลข", value: "department_number", align: "center  " },
       ],
       dialogCreateYear: false,
@@ -146,6 +166,19 @@ export default {
       console.log("get grade", response.results);
       this.items = response.results;
     },
+    async getGradeInClass() {
+      const data = {
+        classRoomLevel: this.classRoomLevel,
+        term: "2",
+      };
+      console.log("getGrade to fixed", data);
+      const response = await this.$store.dispatch(
+        `grade/getGradeByConditions`,
+        data
+      );
+      console.log("get grade", response.results);
+      this.items = response.results;
+    },
     async updateGrade(item) {
       console.log("item grade", item);
       var data = {
@@ -180,6 +213,18 @@ export default {
       });
       // alert("update success");
       this.getGrade();
+    },
+    updateGradeInClass() {
+      this.items.forEach((item) => {
+        var data = {
+          objectId: item.objectId,
+          department_number: this.checkDepartmentNumber(
+            item.subject.department
+          ),
+        };
+        console.log("updateGradeInClass data", data);
+        // const response = await this.$store.dispatch(`grade/updateGrade`, data);
+      });
     },
     checkDepartmentNumber(data) {
       switch (data) {
