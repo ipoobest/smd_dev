@@ -222,11 +222,11 @@ export default {
             this.checkDepartmentNumber(item.subject.department)
           ),
         };
-        // console.log("updateGradeInClass data", data);
+        console.log("updateGradeInClass data", data);
         const response = await this.$store.dispatch(`grade/updateGrade`, data);
         // console.log("response update", response);
       });
-      this.updateGradeList();
+      this.getGradeInClass();
     },
     checkDepartmentNumber(data) {
       switch (data) {
