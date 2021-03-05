@@ -215,16 +215,18 @@ export default {
       this.getGrade();
     },
     updateGradeInClass() {
-      this.items.forEach((item) => {
+      this.items.forEach(async (item) => {
         var data = {
           objectId: item.objectId,
-          department_number: this.checkDepartmentNumber(
-            item.subject.department
+          department_number: parseInt(
+            this.checkDepartmentNumber(item.subject.department)
           ),
         };
-        console.log("updateGradeInClass data", data);
-        // const response = await this.$store.dispatch(`grade/updateGrade`, data);
+        // console.log("updateGradeInClass data", data);
+        const response = await this.$store.dispatch(`grade/updateGrade`, data);
+        // console.log("response update", response);
       });
+      this.updateGradeList();
     },
     checkDepartmentNumber(data) {
       switch (data) {
