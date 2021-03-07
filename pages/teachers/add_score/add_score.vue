@@ -194,17 +194,6 @@
           >แก้ไข</v-btn
         >
       </div>
-      <!-- <div v-else>
-         <v-btn
-          class="success mt-5 mr-5"
-          v-if="!items.save_score"
-          @click="updateGrade"
-          >บันทึก</v-btn
-        >
-        <v-btn v-if="!items.save_score" class="orange mt-5 mr-5" @click="editAllGrade" dark 
-          >แก้ไข</v-btn
-        >
-      </div> -->
     </v-row>
   </v-container>
 </template>

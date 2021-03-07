@@ -151,7 +151,7 @@ export default {
       });
     },
     back() {
-      this.$router.push({ name: "index" });
+      this.$router.go(-1);
     },
     resetForm() {
       this.$refs.form.reset();

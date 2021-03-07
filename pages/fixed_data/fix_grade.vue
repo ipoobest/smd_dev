@@ -53,6 +53,14 @@
                   outlined
                   label="ระดับชั้น"
               /></v-col>
+              <v-col cols="3">
+                <v-select
+                  v-model="classRoomName"
+                  :items="Room"
+                  dense
+                  outlined
+                  label="ห้องเรียน"
+              /></v-col>
               <v-col cols="1"
                 ><v-btn color="success" @click="getGradeInClass()"
                   >GET</v-btn
@@ -71,24 +79,6 @@
                 <v-spacer></v-spacer>
               </v-toolbar>
             </template>
-            <!-- <template v-slot:[`item.actions`]="{ item }">
-              <v-btn
-                color="success"
-                dark
-                class="mr-2"
-                @click="addSubject(item)"
-              >
-                จัดการวิชาบังคับ
-              </v-btn>
-              <v-btn
-                color="info"
-                dark
-                class="mr-2"
-                @click="addElevtiveSubject(item)"
-              >
-                จัดการวิชาเลือกเสรี
-              </v-btn>
-            </template> -->
           </v-data-table>
         </v-card>
       </v-col>
@@ -112,7 +102,11 @@ export default {
         { text: "ปีการศึกษา", value: "schoolYear", align: "center" },
         { text: "เทอม", value: "term", align: "center  " },
         { text: "ชื่อ", value: "studentName", align: "center  " },
-        { text: "กลุ่มสาระวิชา", value: "subject.sname", align: "center  " },
+        {
+          text: "กลุ่มสาระวิชา",
+          value: "subject.department",
+          align: "center  ",
+        },
         { text: "หมายเลข", value: "department_number", align: "center  " },
       ],
       dialogCreateYear: false,
@@ -120,10 +114,12 @@ export default {
       search: ``,
       title: `เกรด`,
       classRoomLevel: "",
+      classRoomName: "",
       subject: "",
       department: "",
       departmentNumber: "",
       classes: ["ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"],
+      Room: ["1", "2", "3", "4", "5"],
       subjectList: [],
       departmentList: [],
     };
@@ -169,6 +165,7 @@ export default {
     async getGradeInClass() {
       const data = {
         classRoomLevel: this.classRoomLevel,
+        classRoomName: this.classRoomName,
         term: "2",
       };
       console.log("getGrade to fixed", data);
@@ -214,19 +211,32 @@ export default {
       // alert("update success");
       this.getGrade();
     },
-    updateGradeInClass() {
-      this.items.forEach(async (item) => {
+    async updateGradeInClass() {
+      for (var index = 0; index < this.items.length; index++) {
+        console.log("index item", this.items[index].subject.department);
         var data = {
-          objectId: item.objectId,
-          department_number: parseInt(
-            this.checkDepartmentNumber(item.subject.department)
+          objectId: this.items[index].objectId,
+          department_number: this.checkDepartmentNumber(
+            this.items[index].subject.department
           ),
         };
-        console.log("updateGradeInClass data", data);
+        // console.log("data update", data);
         const response = await this.$store.dispatch(`grade/updateGrade`, data);
-        // console.log("response update", response);
-      });
+        console.log("response update", response);
+      }
       this.getGradeInClass();
+      // this.items.forEach(async (item) => {
+      //   var data = {
+      //     objectId: item.objectId,
+      //     department_number: this.checkDepartmentNumber(
+      //       item.subject.department
+      //     ),
+      //   };
+      //   console.log("updateGradeInClass data", data);
+      //   const response = await this.$store.dispatch(`grade/updateGrade`, data);
+      //   console.log("response update", response);
+      // });
+      // this.getGradeInClass();
     },
     checkDepartmentNumber(data) {
       switch (data) {

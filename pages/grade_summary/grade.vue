@@ -89,8 +89,8 @@ export default {
       if (!grade1 || !grade2) {
         return "";
       }
-      var resutl = (parseFloat(grade1) + parseFloat(grade2)) / 2;
-      return resutl;
+      var result = (parseFloat(grade1) + parseFloat(grade2)) / 2;
+      return result.toFixed(3);
     },
     async getClasses() {
       var condition = {
@@ -115,6 +115,7 @@ export default {
         classRoomLevel: this.query.classRoomLevel,
         classRoomName: this.query.classRoomName,
       };
+      console.log("condition", condition);
       const response = await this.$store.dispatch(
         `ranking/getRankingByConditions`,
         condition
@@ -123,6 +124,7 @@ export default {
       return response.results;
     },
     calGpa(data) {
+      console.log("data ddd", data);
       var newObj = [];
       data.forEach((data) => {
         var obj = newObj.find((item) => item.studentId == data.studentId);
@@ -150,7 +152,7 @@ export default {
       // to do merge merge json and cal GPA THIS
     },
     back() {
-      this.$router.push({ name: "index" });
+      this.$router.go(-1);
     },
     resetForm() {
       this.$refs.form.reset();

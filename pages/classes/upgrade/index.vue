@@ -37,7 +37,7 @@
                           single-line
                           hide-details
                           require
-                          :rules="[v => !!v || 'กรุณากรอกข้อมูล ปีการศึกษา']"
+                          :rules="[(v) => !!v || 'กรุณากรอกข้อมูล ปีการศึกษา']"
                         ></v-text-field>
                       </v-col>
                       <v-col cols="4">
@@ -46,7 +46,7 @@
                           :items="itemLevel"
                           label="ระดับชั้น"
                           require
-                          :rules="[v => !!v || 'กรุณาเลือกข้ออมูล ระดับชั้น']"
+                          :rules="[(v) => !!v || 'กรุณาเลือกข้ออมูล ระดับชั้น']"
                           single-line
                           hide-details
                         ></v-select>
@@ -58,7 +58,7 @@
                           label="เทอม"
                           single-line
                           require
-                          :rules="[v => !!v || 'กรุณาเลือกข้ออมูล เทอม']"
+                          :rules="[(v) => !!v || 'กรุณาเลือกข้ออมูล เทอม']"
                           hide-details
                         ></v-select>
                       </v-col>
@@ -78,7 +78,7 @@
                 <v-col
                   v-if="
                     (classRoomLevel == 'ม.3' || classRoomLevel == 'ม.6') &&
-                      term == '2'
+                    term == '2'
                   "
                   cols="5"
                 >
@@ -91,7 +91,7 @@
                         ><v-text-field
                           v-model="newSchoolYear"
                           label="ปีการศึกษา"
-                          :rules="[v => !!v || 'กรุณากรอกข้อมูล ปีการศึกษา']"
+                          :rules="[(v) => !!v || 'กรุณากรอกข้อมูล ปีการศึกษา']"
                           require
                           single-line
                           hide-details
@@ -102,7 +102,7 @@
                           v-model="newClassRoomLevel"
                           :items="itemLevel"
                           label="ระดับชั้น"
-                          :rules="[v => !!v || 'กรุณาเลือกข้ออมูล ระดับชั้น']"
+                          :rules="[(v) => !!v || 'กรุณาเลือกข้ออมูล ระดับชั้น']"
                           require
                           single-line
                           hide-details
@@ -112,7 +112,7 @@
                         ><v-select
                           v-model="newTerm"
                           label="เทอม"
-                          :rules="[v => !!v || 'กรุณาเลือกข้ออมูล เทอม']"
+                          :rules="[(v) => !!v || 'กรุณาเลือกข้ออมูล เทอม']"
                           :items="itemTerm"
                           require
                           single-line
@@ -139,9 +139,7 @@
               <v-btn color="info" @click="addStudent(item)">
                 รายชื่อนักเรียน
               </v-btn>
-              <v-btn color="error" @click="deleteItem(item)">
-                ลบ
-              </v-btn>
+              <v-btn color="error" @click="deleteItem(item)"> ลบ </v-btn>
             </template>
           </v-data-table>
         </v-card>
@@ -189,9 +187,7 @@
               <v-btn color="info" @click="addStudent(item)">
                 รายชื่อนักเรียน
               </v-btn>
-              <v-btn color="error" @click="deleteItem(item)">
-                ลบ
-              </v-btn>
+              <v-btn color="error" @click="deleteItem(item)"> ลบ </v-btn>
             </template>
           </v-data-table>
         </v-card>
@@ -206,12 +202,12 @@ export default {
   computed: {
     formTitle() {
       return this.editedIndex === -1 ? "เพิ่มชั้นเรียน" : "แก้ไข";
-    }
+    },
   },
   watch: {
     dialog(val) {
       val || this.close();
-    }
+    },
   },
   data() {
     return {
@@ -223,7 +219,7 @@ export default {
         { text: "รหัสห้อง", value: "classRoomId", align: "center" },
         { text: "ระดับชั้น", value: "classRoomLevel", align: "center" },
         { text: "ห้อง", value: "classRoomName", align: "center" },
-        { text: "Actions", value: "actions", sortable: false, align: "center" }
+        { text: "Actions", value: "actions", sortable: false, align: "center" },
       ],
       items: [],
       newItems: [],
@@ -238,11 +234,11 @@ export default {
         classRoomLevel: "",
         classRoomName: "",
         studentId: [],
-        teacherName: ""
+        teacherName: "",
       },
       academicYear: {
         schoolYear: "",
-        term: ""
+        term: "",
       },
       selectAcademic: [],
       teachers: [],
@@ -255,7 +251,7 @@ export default {
       newTerm: "",
       itemTerm: ["1", "2"],
       itemLevel: ["ม.1", "ม.2", "ม.3", "ม.4", "ม.5", "ม.6"],
-      selectItemTeacher: []
+      selectItemTeacher: [],
     };
   },
   methods: {
@@ -265,7 +261,7 @@ export default {
         var data = {
           schoolYear: this.schoolYear,
           term: this.term,
-          classRoomLevel: this.classRoomLevel
+          classRoomLevel: this.classRoomLevel,
         };
         this.items = await this.getListClass(data);
       }
@@ -275,7 +271,7 @@ export default {
         `classes/getClassesByConditions`,
         classItem
       );
-     
+
       return response.results;
     },
     async getAcademicYear(data) {
@@ -283,7 +279,7 @@ export default {
         `academic_year/getAcademicYearByCondition`,
         data
       );
-     
+
       return response.results;
     },
     async getStudentFromStudentClass(objectId) {
@@ -291,7 +287,7 @@ export default {
         `students/getStudentById`,
         objectId
       );
-     
+
       return response;
     },
     async getRanking(data) {
@@ -299,7 +295,7 @@ export default {
         `ranking/getRankingByConditions`,
         data
       );
-     
+
       return response;
     },
     async createAcademiYear(data) {
@@ -307,7 +303,7 @@ export default {
         `academic_year/createAcademicYear`,
         data
       );
-     
+
       return response.results;
     },
     async createClasses(data) {
@@ -317,7 +313,6 @@ export default {
       );
     },
     async deteleClasses(itemId) {
-     
       const response = await this.$store.dispatch(
         `classes/deleteClass`,
         itemId
@@ -325,7 +320,6 @@ export default {
     },
     async createRanking(data) {
       var response = await this.$store.dispatch(`ranking/createRanking`, data);
-     
     },
     async checkAcademicYear() {
       this.ranking = true;
@@ -337,7 +331,7 @@ export default {
         // 2. get academtiYear
         var data = {
           schoolYear: this.newSchoolYear,
-          term: this.newTerm
+          term: this.newTerm,
         };
         const acadamicYear = await this.getAcademicYear(data);
         if (acadamicYear.length != 0) {
@@ -361,11 +355,10 @@ export default {
         schoolYear: item.schoolYear,
         term: item.term,
         classRoomLevel: item.classRoomLevel,
-        classRoomName: item.classRoomName
+        classRoomName: item.classRoomName,
       };
-     
+
       var ranking = await this.getRanking(data);
-     
 
       if (ranking.results.length != 0) {
         alert("ชั้นเรียนนี้ update ranking แล้ว");
@@ -378,7 +371,7 @@ export default {
       var data = {
         schoolYear: this.newSchoolYear,
         term: this.newTerm,
-        classRoomLevel: this.newClassRoomLevel
+        classRoomLevel: this.newClassRoomLevel,
       };
       const classes = await this.getListClass(data);
       if (classes.length != 0) {
@@ -387,7 +380,7 @@ export default {
         var newData = {
           schoolYear: this.newSchoolYear,
           term: this.newTerm,
-          classRoomLevel: this.newClassRoomLevel
+          classRoomLevel: this.newClassRoomLevel,
         };
         this.newItems = await this.getListClass(newData);
       } else {
@@ -401,7 +394,7 @@ export default {
       // 1. check academic year update
       // 2. create academic year
       //
-      this.items.forEach(async item => {
+      this.items.forEach(async (item) => {
         //
         var newClassRoomLevel;
         var newSchoolYear;
@@ -424,7 +417,7 @@ export default {
           classRoomName: item.classRoomName,
           schoolYear: newSchoolYear,
           term: this.newTerm,
-          studentId: item.studentId
+          studentId: item.studentId,
         };
         await this.createClasses(data);
         //
@@ -433,10 +426,10 @@ export default {
       var newData = {
         schoolYear: this.newSchoolYear,
         term: this.newTerm,
-        classRoomLevel: this.newClassRoomLevel
+        classRoomLevel: this.newClassRoomLevel,
       };
       //
-      alert('อัพเกรดสำเร็จ')
+      alert("อัพเกรดสำเร็จ");
       this.newItems = await this.getListClass(newData);
     },
     editItem(item) {
@@ -473,7 +466,7 @@ export default {
       // var classes = data;
       var length = 0;
 
-      data.studentId.forEach(async item => {
+      data.studentId.forEach(async (item) => {
         var studentObject = await this.getStudentFromStudentClass(item);
         var data = {
           schoolYear: this.newSchoolYear,
@@ -482,24 +475,25 @@ export default {
           classRoomName: `${studentObject.room}`,
           studentObjectId: item,
           studentName: `${studentObject.tth} ${studentObject.namet} ${studentObject.snamet}`,
-          studentId: studentObject.idstd
+          studentId: studentObject.idstd,
+          studentNumber: studentObject.number,
         };
         //
-      await this.createRanking(data);
+        await this.createRanking(data);
       });
-      alert('init ranking สำเร็จ');
+      alert("init ranking สำเร็จ");
       //
     },
     addStudent(item) {
       //
       this.$router.push({
         name: "classes-add_student",
-        query: { id: item.objectId }
+        query: { id: item.objectId },
       });
     },
     resetForm() {
       this.$refs.form.reset();
-    }
-  }
+    },
+  },
 };
 </script>

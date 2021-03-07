@@ -268,7 +268,7 @@ export default {
         `grade/getGradeByConditions`,
         conditions
       );
-      // console.log("grade list Gpa", response.results);
+      console.log("grade list Gpa", response.results);
       this.info = response.results[0];
       this.rowSpan = response.results.length;
       if (this.rowSpan == 0) {
