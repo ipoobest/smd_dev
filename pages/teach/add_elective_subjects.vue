@@ -249,7 +249,7 @@ export default {
         `teach/getSubjectsByConditions`,
         condition
       );
-      // console.log("response get subject", response.results);
+      console.log("response get subject", response.results);
       return response.results;
     },
     async getClassesByConditions() {
@@ -329,7 +329,7 @@ export default {
             teachers: {
               __type: "Pointer",
               className: "_User",
-              objectId: this.input.teachers.objectId.value,
+              objectId: this.input.teachers.objectId,
             },
             type: "วิชาเลือกเสรี",
           };

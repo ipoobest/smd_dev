@@ -246,7 +246,7 @@ export default {
         `teach/getSubjectsByConditions`,
         condition
       );
-      console.log("reponse", response.results);
+      // console.log("reponse", response.results);
       return response.results;
     },
     async getClassesByConditions() {
