@@ -291,15 +291,10 @@ export default {
             classRoomName: this.input.classRoomName,
             classId: objectId,
             send_score: false,
-            // subject: {
-            //   __type: "Pointer",
-            //   className: "Subjects",
-            //   objectId: this.input.subject.objectId,
-            // },
             teachInfo: {
-              sname: this.subjectId.sname,
-              codet: this.subjectId.codet,
-              credit: this.subjectId.credit,
+              sname: this.subjectInfo.sname,
+              codet: this.subjectInfo.codet,
+              credit: this.subjectInfo.credit,
             },
             teachers: {
               __type: "Pointer",
@@ -331,9 +326,9 @@ export default {
             rating: [],
             teachInfo: {
               objectId_subject: this.input.teachInfo.objectId_subject,
-              sname: this.subjectId.sname,
-              codet: this.subjectId.codet,
-              credit: this.subjectId.credit,
+              sname: this.subjectInfo.sname,
+              codet: this.subjectInfo.codet,
+              credit: this.subjectInfo.credit,
             },
             teachers: {
               __type: "Pointer",
@@ -409,14 +404,13 @@ export default {
       var subject_name = this.subjects.filter(
         (subject) => subject.objectId == this.input.teachInfo.objectId_subject
       );
-      console.log("ssssss", subject_name[0]);
+      // console.log("ssssss", subject_name[0]);
       // this.subjectInfo = { codet: subject_name[0].codet,sname: subject_name[0].sname, credit: subject_name[0].credit, hour: subject_name[0].hour};
-      this.subjectId = subject_name[0];
+      this.subjectInfo = subject_name[0];
     },
     editItem(item) {
-      console.log("this item edit", item);
       this.editedIndex = this.items.indexOf(item);
-      this.input = Object.assign({}, item);
+      this.input = JSON.parse(JSON.stringify(item));
       this.dialog = true;
     },
     deleteItem(item) {
