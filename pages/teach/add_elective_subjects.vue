@@ -249,7 +249,7 @@ export default {
         `teach/getSubjectsByConditions`,
         condition
       );
-      console.log("response get subject", response.results);
+      // console.log("response get subject", response.results);
       return response.results;
     },
     async getClassesByConditions() {
@@ -333,7 +333,7 @@ export default {
             },
             type: "วิชาเลือกเสรี",
           };
-          console.log("data create", data);
+          // console.log("data create", data);
           await this.addSubjectToTeach(data);
           this.resetForm();
           await this.getSubjectsFromTeach().then(
@@ -406,7 +406,7 @@ export default {
       });
     },
     editItem(item) {
-      console.log("edit item", item);
+      // console.log("edit item", item);
       this.editedIndex = this.subjectsInTerm.indexOf(item);
       this.input = JSON.parse(JSON.stringify(item));
       this.dialog = true;
