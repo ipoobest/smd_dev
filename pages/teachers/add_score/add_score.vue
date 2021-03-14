@@ -31,7 +31,7 @@
         ></v-text-field>
       </v-col>
       <v-col md="2">
-        <v-btn @click="addScoreX">เพิ่ม</v-btn>
+        <v-btn @click="addScore">เพิ่ม</v-btn>
       </v-col>
     </v-row>
     <v-row
@@ -153,12 +153,17 @@
                 @click="editMode(score_index)"
                 >แก้ไข</v-btn
               >
+
               <v-btn
                 v-else
                 class="success mt-5 mr-3"
                 @click="fixedGrade(score_index)"
                 >บันทึก</v-btn
               >
+
+              <v-btn class="error mt-5 mr-3" @click="deleteItem(item_score)"
+                >ลบ
+              </v-btn>
             </td>
           </tr>
         </tbody>
@@ -274,7 +279,7 @@ export default {
         "grade/getGradeByConditions",
         conditions
       );
-      console.log("get grade item", response_grade);
+      // console.log("get grade item", response_grade);
       //
       this.score = response_grade.results;
       this.edit_mode = new Array(this.score.length);
@@ -457,6 +462,9 @@ export default {
         this.updateTech(saveScore);
       }
     },
+    async deleteGrade(item) {
+      const response = this.$store.dispatch(`grade/deleteGrade`, item);
+    },
     getStudentName(item) {
       this.studentName = [];
       this.studentId = [];
@@ -560,7 +568,20 @@ export default {
     editAllGrade() {
       this.items.save_score = false;
     },
-    addScoreX() {
+    deleteItem(item_score) {
+      if (confirm("ยืนยันกาลบ")) {
+        // console.log("item delete", item.objectId);
+        this.deleteGrade(item.objectId);
+        this.score.splice(
+          this.score.findIndex((item) => item.objectId === item_score.objectId),
+          1
+        );
+        // this.deleteGrade(item.objectId);
+      } else {
+        return;
+      }
+    },
+    addScore() {
       if (
         this.score_aptitude < 0 ||
         this.score_aptitude > 3 ||
