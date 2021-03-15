@@ -571,7 +571,7 @@ export default {
     deleteItem(item_score) {
       if (confirm("ยืนยันกาลบ")) {
         // console.log("item delete", item.objectId);
-        this.deleteGrade(item.objectId);
+        this.deleteGrade(item_score.objectId);
         this.score.splice(
           this.score.findIndex((item) => item.objectId === item_score.objectId),
           1
