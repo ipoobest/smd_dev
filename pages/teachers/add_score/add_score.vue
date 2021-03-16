@@ -213,9 +213,9 @@ export default {
     await this.getTechById(this.$route.query.id).then(
       (result) => (this.items = result)
     );
-    await this.getGradeByConditions(this.items).then(
-      (result) => (this.grade_list = result)
-    );
+    // console.log("this.$route.query.id", this.$route.query.id);
+    // console.log("getGradeByConditions.id", this.items.objectId);
+    await this.getGradeByConditions(this.items);
     await this.getCriteria().then((result) => (this.criteria = result));
   },
   computed: {
@@ -266,14 +266,8 @@ export default {
   },
   methods: {
     async getGradeByConditions(item) {
-      // console.log("get grade", item.objectId);
       const conditions = {
         teachId: item.objectId,
-        // teach: {
-        //   "__type": "Pointer",
-        //   "className": "Teach",
-        //   "objectId": item.objectId
-        // }
       };
 
       // 1 get stu array grade
@@ -281,12 +275,11 @@ export default {
         "grade/getGradeByConditions",
         conditions
       );
-      console.log("get grade item", response_grade);
+
       this.score = response_grade.results;
       this.edit_mode = new Array(this.score.length);
       this.edit_mode.fill(true);
       this.grade_arr = response_grade.results;
-      console.log("grade_arr", this.grade_arr);
       this.stu_grade_arr = await this.grade_arr.map((a) => a.studentObjectId);
 
       if (item.students) {
@@ -337,10 +330,11 @@ export default {
       );
       //
       var values = this.getStudentName(response.results);
-      var studentName = values[0];
-      var studentId = values[1];
-      var studentNumber = values[2];
-      return [studentName, studentId, studentNumber];
+      // var studentName = values[0];
+      // var studentId = values[1];
+      // var studentNumber = values[2];
+      // return [studentName, studentId, studentNumber];
+      return values;
     },
     async getStudentByClassId(classId) {
       const response = await this.$store.dispatch(`classes/getClass`, classId);
@@ -352,7 +346,7 @@ export default {
 
       this.rating = response.rating;
       this.mapRating(this.rating);
-      // console.log("response teach", response);
+      console.log("response teach", response);
       return response;
     },
     async getCriteria() {
@@ -363,16 +357,16 @@ export default {
     async createGrade(students) {
       //
       var values = await this.getStudent(students);
-      var studentName = values[0];
-      var studentId = values[1];
-      var studentNumber = values[2];
+      // var studentName = values[0];
+      // var studentId = values[1];
+      // var studentNumber = values[2];
 
       var initScore = new Array(this.rating.length);
       initScore.fill(0);
       if (initScore.length == 0) {
         return;
       }
-      for (var index = 0; index < studentName.length; index++) {
+      for (var index = 0; index < values.length; index++) {
         // console.log("thisssss", this.items);
         const data = {
           //pointer techId,studentObjectId
@@ -389,10 +383,10 @@ export default {
           },
           department: this.items.department,
           department_number: this.checkDepartmentNumber(this.items.department),
-          studentName: studentName[index],
-          studentObjectId: students[index],
-          studentId: studentId[index],
-          studentNumber: studentNumber[index],
+          studentName: values[index].full_name,
+          studentObjectId: values[index].objectId,
+          studentId: values[index].idstd,
+          studentNumber: values[index].number,
           schoolYear: this.items.schoolYear,
           term: this.items.term,
           classRoomLevel: this.items.classRoomLevel,
@@ -403,12 +397,13 @@ export default {
           aptitude: "",
           analytical_thinking: "",
         };
-        // console.log("create grade data", data);
+        console.log("create grade data", data);
         const response = await this.$store.dispatch(`grade/createGrade`, data);
+        console.log("create grade data response", response);
       }
-      this.getGradeByConditions(this.items).then(
-        (result) => (this.grade = result)
-      );
+      // this.getGradeByConditions(this.items).then(
+      //   (result) => (this.grade = result)
+      // );
       return;
     },
     async updateTech(data) {
@@ -460,15 +455,18 @@ export default {
       this.studentName = [];
       this.studentId = [];
       this.studentNumber = [];
+      this.stuObject = [];
       for (var index = 0; index < item.length; index++) {
-        this.studentName.push(
-          item[index].tth + " " + item[index].namet + " " + item[index].snamet
-        );
-        this.studentId.push(item[index].idstd);
-        this.studentNumber.push(item[index].number);
+        item[index].full_name =
+          item[index].tth + " " + item[index].namet + " " + item[index].snamet;
+        // this.studentName.push(
+        //   item[index].tth + " " + item[index].namet + " " + item[index].snamet
+        // );
+        // this.studentId.push(item[index].idstd);
+        // this.studentNumber.push(item[index].number);
       }
 
-      return [this.studentName, this.studentId, this.studentNumber];
+      return item;
     },
     mapRating(rating) {
       rating.forEach((item) => {
@@ -562,15 +560,21 @@ export default {
     async deleteItem(item_score) {
       console.log("item delete", item_score);
 
-      if (confirm("ยืนยันกาลบ")) {
-        await this.deleteGrade(item_score);
-        this.score.splice(
-          this.score.findIndex((item) => item.objectId === item_score),
-          1
-        );
-      } else {
-        return;
-      }
+      await this.deleteGrade(item_score);
+      this.score.splice(
+        this.score.findIndex((item) => item.objectId === item_score),
+        1
+      );
+
+      // if (confirm("ยืนยันกาลบ")) {
+      //   await this.deleteGrade(item_score);
+      //   this.score.splice(
+      //     this.score.findIndex((item) => item.objectId === item_score),
+      //     1
+      //   );
+      // } else {
+      //   return;
+      // }
     },
     addScore() {
       if (
