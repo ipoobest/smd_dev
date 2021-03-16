@@ -161,7 +161,9 @@
                 >บันทึก</v-btn
               >
 
-              <v-btn class="error mt-5 mr-3" @click="deleteItem(item_score)"
+              <v-btn
+                class="error mt-5 mr-3"
+                @click="deleteItem(item_score.objectId)"
                 >ลบ
               </v-btn>
             </td>
@@ -279,14 +281,13 @@ export default {
         "grade/getGradeByConditions",
         conditions
       );
-      // console.log("get grade item", response_grade);
-      //
+      console.log("get grade item", response_grade);
       this.score = response_grade.results;
       this.edit_mode = new Array(this.score.length);
       this.edit_mode.fill(true);
       this.grade_arr = response_grade.results;
+      console.log("grade_arr", this.grade_arr);
       this.stu_grade_arr = await this.grade_arr.map((a) => a.studentObjectId);
-      //
 
       if (item.students) {
         this.stu_classes_arr = item.students;
@@ -297,19 +298,16 @@ export default {
           this.items.classId
         );
         this.stu_classes_arr = response_classes.studentId;
-        //
       }
       // 3 check diff
       var difference = this.stu_classes_arr.filter(
         (x) => !this.stu_grade_arr.includes(x)
       );
-      //
 
       // 4 createGrade by diff
       if (difference.length != 0) {
         this.createGrade(difference);
       } else {
-        //
         return response_grade.results;
       }
     },
@@ -324,11 +322,10 @@ export default {
         "teach/getSubjectsByConditions",
         conditions
       );
-      //
+
       return response.results[0].students;
     },
     async getStudent(data) {
-      //
       const query = {
         objectId: {
           $in: data,
@@ -355,13 +352,12 @@ export default {
 
       this.rating = response.rating;
       this.mapRating(this.rating);
-      console.log("response teach", response);
+      // console.log("response teach", response);
       return response;
     },
     async getCriteria() {
       // grade
       const response = await this.$store.dispatch(`criteria/getCriteria`);
-      //
       return response.results[0].criteria;
     },
     async createGrade(students) {
@@ -371,19 +367,13 @@ export default {
       var studentId = values[1];
       var studentNumber = values[2];
 
-      //
-
-      //
       var initScore = new Array(this.rating.length);
       initScore.fill(0);
-      //
       if (initScore.length == 0) {
         return;
       }
-      //
       for (var index = 0; index < studentName.length; index++) {
-        console.log("thisssss", this.items);
-
+        // console.log("thisssss", this.items);
         const data = {
           //pointer techId,studentObjectId
           teachId: this.items.objectId,
@@ -457,13 +447,14 @@ export default {
           objectId: this.items.objectId,
           save_score: true,
         };
-        //
         // this.items.send_score = true
         this.updateTech(saveScore);
       }
     },
     async deleteGrade(item) {
-      const response = this.$store.dispatch(`grade/deleteGrade`, item);
+      console.log("item +", item);
+      const response = await this.$store.dispatch(`grade/deleteGrade`, item);
+      console.log("response delete", response);
     },
     getStudentName(item) {
       this.studentName = [];
@@ -568,15 +559,15 @@ export default {
     editAllGrade() {
       this.items.save_score = false;
     },
-    deleteItem(item_score) {
+    async deleteItem(item_score) {
+      console.log("item delete", item_score);
+
       if (confirm("ยืนยันกาลบ")) {
-        // console.log("item delete", item.objectId);
-        this.deleteGrade(item_score.objectId);
+        await this.deleteGrade(item_score);
         this.score.splice(
-          this.score.findIndex((item) => item.objectId === item_score.objectId),
+          this.score.findIndex((item) => item.objectId === item_score),
           1
         );
-        // this.deleteGrade(item.objectId);
       } else {
         return;
       }
