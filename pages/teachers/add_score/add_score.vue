@@ -404,6 +404,7 @@ export default {
       // this.getGradeByConditions(this.items).then(
       //   (result) => (this.grade = result)
       // );
+      await this.getGradeByConditions(this.items);
       return;
     },
     async updateTech(data) {
