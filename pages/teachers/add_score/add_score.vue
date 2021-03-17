@@ -557,7 +557,7 @@ export default {
             objectId: item.teachId,
             students: student_list,
           };
-          console.log("data update", data);
+          // console.log("data update", data);
           this.updateTech(data);
           await this.deleteGrade(item.objectId);
           this.score.splice(
@@ -566,11 +566,11 @@ export default {
           );
         } else {
           // update student in class
-          // await this.deleteGrade(item.objectId);
-          // this.score.splice(
-          //   this.score.findIndex((item) => item.objectId === item.objectId),
-          //   1
-          // );
+          await this.deleteGrade(item.objectId);
+          this.score.splice(
+            this.score.findIndex((item) => item.objectId === item.objectId),
+            1
+          );
         }
       }
     },

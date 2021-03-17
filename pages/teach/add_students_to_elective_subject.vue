@@ -22,7 +22,8 @@
               <v-toolbar flat color="white">
                 <v-divider class="mx-4" inset vertical></v-divider>
                 <p>
-                  วิชา {{ classInfo.sname }} ชั้น {{ classInfo.classRoomLevel }}
+                  วิชา {{ classInfo.teachInfo.sname }} ชั้น
+                  {{ classInfo.classRoomLevel }}
                 </p>
                 <v-spacer></v-spacer>
                 <v-dialog v-model="dialog" max-width="700px">
@@ -124,7 +125,9 @@ export default {
         classRoomName: "",
         term: "",
       },
-      classInfo: "",
+      classInfo: {
+        teachInfo: "",
+      },
     };
   },
   methods: {
@@ -176,6 +179,13 @@ export default {
       // console.log('response', response)
       return response.results;
     },
+    async getGrade(data) {
+      const response = await this.$store.dispatch(
+        `grade/getGradeByConditions`,
+        data
+      );
+      return response.results[0];
+    },
     async addStudents() {
       const object = {
         objectId: this.$route.query.id,
@@ -184,16 +194,27 @@ export default {
       // console.log('object put', object)
       const response = await this.$store.dispatch(`teach/updateTeach`, object);
     },
+    async deleteGrade(gradeId) {
+      const response = await this.$store.dispatch(`grade/deleteGrade`, gradeId);
+      return;
+    },
     async deleteItem(item) {
-      // console.log('delete id', item.objectId)
       const index = this.items.indexOf(item);
       if (confirm("ยืนยีนการลบนักเรียนออกจากชั้นเรียน")) {
         this.items.splice(index, 1);
-        // console.log('item delete', this.items.length, this.items)
+        console.log("item delete", this.items.length, this.items);
         for (var i = 0; i < this.items.length; i++) {
           this.studentId.push(this.items[i].objectId);
         }
         // console.log('item push', this.studentId)
+        // 1 get grade by condition ->this.classInfo
+        var data = {
+          teachId: this.classInfo.objectId,
+          studentObjectId: item.objectId,
+        };
+        // 2 delete grade by
+        var grade = await this.getGrade(data);
+        await this.deleteGrade(grade.objectId);
         this.addStudents(this.studentId);
       }
     },
