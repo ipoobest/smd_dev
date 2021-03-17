@@ -161,9 +161,7 @@
                 >บันทึก</v-btn
               >
 
-              <v-btn
-                class="error mt-5 mr-3"
-                @click="deleteItem(item_score.objectId)"
+              <v-btn class="error mt-5 mr-3" @click="deleteItem(item_score)"
                 >ลบ
               </v-btn>
             </td>
@@ -281,7 +279,7 @@ export default {
       this.edit_mode.fill(true);
       this.grade_arr = response_grade.results;
       this.stu_grade_arr = await this.grade_arr.map((a) => a.studentObjectId);
-
+      console.log("this.stu_grade_arr", this.stu_grade_arr);
       if (item.students) {
         this.stu_classes_arr = item.students;
       } else {
@@ -330,10 +328,6 @@ export default {
       );
       //
       var values = this.getStudentName(response.results);
-      // var studentName = values[0];
-      // var studentId = values[1];
-      // var studentNumber = values[2];
-      // return [studentName, studentId, studentNumber];
       return values;
     },
     async getStudentByClassId(classId) {
@@ -355,11 +349,7 @@ export default {
       return response.results[0].criteria;
     },
     async createGrade(students) {
-      //
       var values = await this.getStudent(students);
-      // var studentName = values[0];
-      // var studentId = values[1];
-      // var studentNumber = values[2];
 
       var initScore = new Array(this.rating.length);
       initScore.fill(0);
@@ -397,13 +387,10 @@ export default {
           aptitude: "",
           analytical_thinking: "",
         };
-        console.log("create grade data", data);
+        // console.log("create grade data", data);
         const response = await this.$store.dispatch(`grade/createGrade`, data);
-        console.log("create grade data response", response);
+        // console.log("create grade data response", response);
       }
-      // this.getGradeByConditions(this.items).then(
-      //   (result) => (this.grade = result)
-      // );
       await this.getGradeByConditions(this.items);
       return;
     },
@@ -460,11 +447,6 @@ export default {
       for (var index = 0; index < item.length; index++) {
         item[index].full_name =
           item[index].tth + " " + item[index].namet + " " + item[index].snamet;
-        // this.studentName.push(
-        //   item[index].tth + " " + item[index].namet + " " + item[index].snamet
-        // );
-        // this.studentId.push(item[index].idstd);
-        // this.studentNumber.push(item[index].number);
       }
 
       return item;
@@ -558,24 +540,39 @@ export default {
     editAllGrade() {
       this.items.save_score = false;
     },
-    async deleteItem(item_score) {
-      console.log("item delete", item_score);
-
-      await this.deleteGrade(item_score);
-      this.score.splice(
-        this.score.findIndex((item) => item.objectId === item_score),
-        1
-      );
-
-      // if (confirm("ยืนยันกาลบ")) {
-      //   await this.deleteGrade(item_score);
-      //   this.score.splice(
-      //     this.score.findIndex((item) => item.objectId === item_score),
-      //     1
-      //   );
-      // } else {
-      //   return;
-      // }
+    async deleteItem(item) {
+      console.log("item delete", item);
+      console.log("item teach", this.items);
+      if (confirm("ยืนยันกาลบ")) {
+        if (this.items.type === "วิชาเลือกเสรี") {
+          // console.log("student_list", this.items);
+          var student_list = this.items.students;
+          var index = student_list.indexOf(item.studentObjectId);
+          if (index > -1) {
+            student_list.splice(index, 1);
+          }
+          // console.log("delet student_list", student_list);
+          // update teach
+          var data = {
+            objectId: item.teachId,
+            students: student_list,
+          };
+          console.log("data update", data);
+          this.updateTech(data);
+          await this.deleteGrade(item.objectId);
+          this.score.splice(
+            this.score.findIndex((items) => items.objectId === item.objectId),
+            1
+          );
+        } else {
+          // update student in class
+          // await this.deleteGrade(item.objectId);
+          // this.score.splice(
+          //   this.score.findIndex((item) => item.objectId === item.objectId),
+          //   1
+          // );
+        }
+      }
     },
     addScore() {
       if (
